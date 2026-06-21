@@ -1,0 +1,1439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CompTIA A+ 5.6 — Troubleshoot Printer Issues</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --surface2: #f5f4f0;
+    --border: #e5e2d9;
+    --border2: #d4d0c4;
+    --text: #1a1a18;
+    --muted: #6b6860;
+    --accent: #c0392b;
+    --accent2: #2c3e6b;
+    --accent3: #1a6b3a;
+    --accent4: #b5590a;
+    --accent-light: #fdf2f1;
+    --accent2-light: #f0f2f8;
+    --accent3-light: #f0f8f3;
+    --accent4-light: #fdf5ed;
+    --serif: 'Crimson Pro', Georgia, serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── TOP NAV ── */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .top-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .nav-home {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+  .nav-home:hover { color: var(--accent2); }
+  .nav-home::before {
+    content: '←';
+    font-size: 12px;
+  }
+  .nav-sep {
+    font-size: 12px;
+    color: var(--border2);
+    flex-shrink: 0;
+  }
+  .nav-current {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nav-current strong {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    margin-right: 6px;
+  }
+  .top-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .nav-prev, .nav-next {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 4px 9px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    white-space: nowrap;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .nav-prev:hover, .nav-next:hover {
+    border-color: var(--border2);
+    color: var(--accent2);
+  }
+  .nav-prev::before { content: '← '; }
+  .nav-next::after  { content: ' →'; }
+
+  .nav-end {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--accent3);
+  padding: 4px 9px;
+  border: 1px solid var(--accent3);
+  border-radius: 3px;
+  opacity: 0.8;
+}
+
+  @media (max-width: 600px) {
+    .top-nav { padding: 0 16px; }
+    .nav-current { display: none; }
+    .nav-sep { display: none; }
+  } 
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  .page { max-width: 860px; margin: 0 auto; padding: 0 40px 80px; }
+
+  /* HEADER */
+  .book-header {
+    border-bottom: 3px double var(--border2);
+    padding: 56px 0 32px;
+    margin-bottom: 48px;
+  }
+  .book-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .book-eyebrow span {
+    background: var(--accent);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-right: 10px;
+    font-size: 10px;
+  }
+  .book-title {
+    font-family: var(--serif);
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+  .book-subtitle {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .book-subtitle span { display: flex; align-items: center; gap: 6px; }
+  .book-subtitle span::before { content: '·'; color: var(--border2); }
+  .book-subtitle span:first-child::before { display: none; }
+
+  /* HEADINGS */
+  h2.chapter {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 600;
+    margin: 52px 0 6px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    letter-spacing: -0.01em;
+  }
+  h2.chapter .ch-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+    letter-spacing: 0.1em;
+    font-weight: 400;
+  }
+  h3.section {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    margin: 36px 0 12px;
+  }
+  h3.section::before { content: '§ '; color: var(--muted); font-weight: 300; }
+
+  p { margin-bottom: 16px; }
+
+  /* CALLOUTS */
+  .callout {
+    border-left: 3px solid;
+    padding: 14px 20px;
+    margin: 24px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 15.5px;
+  }
+  .callout p { margin-bottom: 6px; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout-title {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px !important;
+  }
+  .callout-exam { border-color: var(--accent); background: var(--accent-light); }
+  .callout-exam .callout-title { color: var(--accent); }
+  .callout-info { border-color: var(--accent2); background: var(--accent2-light); }
+  .callout-info .callout-title { color: var(--accent2); }
+  .callout-tip { border-color: var(--accent3); background: var(--accent3-light); }
+  .callout-tip .callout-title { color: var(--accent3); }
+  .callout-warn { border-color: var(--accent4); background: var(--accent4-light); }
+  .callout-warn .callout-title { color: var(--accent4); }
+
+  /* TABLES */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+    font-family: var(--sans);
+    margin: 16px 0 24px;
+  }
+  .data-table thead th {
+    background: var(--surface2);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 9px 13px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .data-table tbody tr { border-bottom: 1px solid var(--border); }
+  .data-table tbody tr:last-child { border-bottom: none; }
+  .data-table td { padding: 9px 13px; vertical-align: top; line-height: 1.5; }
+  .data-table td:first-child {
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 13.5px;
+  }
+  .data-table tbody tr:hover { background: rgba(0,0,0,0.01); }
+
+  /* PROCESS FLOW */
+  .process-flow {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: var(--sans);
+    font-size: 14px;
+  }
+  .flow-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .flow-step:last-child { border-bottom: none; }
+  .flow-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+    min-width: 24px;
+    padding-top: 2px;
+  }
+  .flow-text { color: var(--text); line-height: 1.55; }
+  .flow-text strong { font-weight: 600; }
+
+  /* DEF LIST */
+  .def-list { margin: 16px 0 24px; }
+  .def-item {
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 210px 1fr;
+    gap: 20px;
+    font-size: 15px;
+  }
+  .def-item:last-child { border-bottom: none; }
+  .def-term {
+    font-family: var(--sans);
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 14px;
+    padding-top: 1px;
+    line-height: 1.4;
+  }
+
+  /* GRID CARDS */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 16px 18px;
+  }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 10px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card ul { list-style: none; font-family: var(--sans); font-size: 13.5px; }
+  .card ul li {
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .card ul li:last-child { border-bottom: none; }
+  .card ul li strong { color: var(--text); }
+
+  /* BODY LIST */
+  ul.body-list {
+    list-style: none;
+    font-family: var(--sans);
+    font-size: 15px;
+    padding: 0;
+    margin: 12px 0 20px;
+  }
+  ul.body-list li {
+    padding: 5px 0 5px 18px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  ul.body-list li:last-child { border-bottom: none; }
+  ul.body-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--border2);
+    font-size: 12px;
+  }
+  ul.body-list li strong { color: var(--text); }
+
+  /* LASER PROCESS PANEL */
+  .laser-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+  .laser-panel-header {
+    background: var(--text);
+    color: rgba(255,255,255,0.85);
+    padding: 10px 18px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .laser-steps {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0;
+  }
+  .laser-step {
+    padding: 14px 10px;
+    border-right: 1px solid var(--border);
+    text-align: center;
+    font-family: var(--sans);
+  }
+  .laser-step:last-child { border-right: none; }
+  .ls-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    font-weight: 600;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .ls-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    display: block;
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+  .ls-sym {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.3;
+    display: block;
+  }
+
+  /* PRINT DEFECT VISUAL */
+  .defect-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+  }
+  .defect-panel h4 {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .defect-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--sans);
+    font-size: 13.5px;
+  }
+  .defect-row:last-child { border-bottom: none; }
+  .defect-preview {
+    width: 56px;
+    height: 40px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    background: #fff;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  /* Lines down */
+  .prev-lines::before {
+    content: '';
+    position: absolute;
+    left: 12px; top: 0; bottom: 0;
+    width: 2px;
+    background: #ccc;
+  }
+  .prev-lines::after {
+    content: '';
+    position: absolute;
+    left: 30px; top: 0; bottom: 0;
+    width: 1px;
+    background: #ddd;
+  }
+  /* Faded */
+  .prev-faded {
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(180,180,180,0.15) 0px, rgba(180,180,180,0.15) 2px,
+      transparent 2px, transparent 4px
+    );
+  }
+  /* Speckling */
+  .prev-speckle {
+    background-image:
+      radial-gradient(circle, #aaa 1px, transparent 1px),
+      radial-gradient(circle, #999 1px, transparent 1px),
+      radial-gradient(circle, #bbb 1px, transparent 1px);
+    background-size: 8px 8px, 12px 12px, 6px 6px;
+    background-position: 3px 4px, 7px 2px, 1px 7px;
+  }
+  /* Double image */
+  .prev-double {
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 6px, rgba(0,0,0,0.08) 6px, rgba(0,0,0,0.08) 7px);
+  }
+  .prev-double::after {
+    content: 'A';
+    position: absolute;
+    font-size: 18px;
+    font-weight: 900;
+    color: rgba(0,0,0,0.15);
+    left: 8px; top: 2px;
+    font-family: serif;
+  }
+  .prev-double::before {
+    content: 'A';
+    position: absolute;
+    font-size: 18px;
+    font-weight: 900;
+    color: rgba(0,0,0,0.7);
+    left: 14px; top: 8px;
+    font-family: serif;
+    z-index: 1;
+  }
+  /* Garbled */
+  .prev-garbled {
+    background: repeating-linear-gradient(
+      45deg,
+      rgba(0,0,200,0.05) 0px, rgba(0,0,200,0.05) 3px,
+      rgba(200,0,0,0.05) 3px, rgba(200,0,0,0.05) 6px
+    );
+  }
+  .defect-name {
+    font-weight: 600;
+    color: var(--text);
+    min-width: 140px;
+  }
+  .defect-cause { color: var(--muted); font-size: 13px; line-height: 1.4; }
+
+  /* PRINT QUEUE PANEL */
+  .queue-panel {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 5px;
+    padding: 16px 20px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: #79c0ff;
+    margin: 16px 0;
+    line-height: 1.8;
+  }
+  .queue-panel .cmt { color: #6e7681; }
+  .queue-panel .ok  { color: #56d364; }
+  .queue-panel .hl  { color: #e3b341; }
+  .queue-panel .wh  { color: #f0f6fc; }
+
+  code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: var(--accent);
+  }
+
+  .key-term { font-style: italic; font-weight: 500; color: var(--accent2); }
+
+  /* PRINTER TYPE BADGE */
+  .type-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 1px 7px;
+    border-radius: 3px;
+    font-weight: 600;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
+  .badge-laser { background: #e3f2fd; color: #1565c0; border: 1px solid #90caf9; }
+  .badge-inkjet { background: #f3e5f5; color: #6a1b9a; border: 1px solid #ce93d8; }
+  .badge-thermal { background: #fff3e0; color: #e65100; border: 1px solid #ffcc80; }
+  .badge-impact { background: #e8f5e9; color: #1b5e20; border: 1px solid #a5d6a7; }
+  .badge-all { background: var(--surface2); color: var(--muted); border: 1px solid var(--border2); }
+
+  /* SUMMARY */
+  .summary-box {
+    background: var(--text);
+    color: #f0ede6;
+    border-radius: 6px;
+    padding: 28px 32px;
+    margin: 40px 0;
+  }
+  .summary-box h3 {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 18px;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 32px;
+  }
+  .summary-item {
+    font-family: var(--sans);
+    font-size: 13.5px;
+    color: #c4bfb4;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .summary-item .s-sym {
+    color: #fff;
+    font-weight: 600;
+    min-width: 185px;
+    line-height: 1.4;
+  }
+
+  .ch-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--border2), transparent);
+    margin: 48px 0;
+  }
+
+  @media (max-width: 680px) {
+    .page { padding: 0 20px 60px; }
+    .summary-grid, .card-grid { grid-template-columns: 1fr; }
+    .def-item { grid-template-columns: 1fr; gap: 4px; }
+    .laser-steps { grid-template-columns: repeat(4, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV — update href values to match your actual file names -->
+<nav class="top-nav">
+  <div class="top-nav-left">
+    <a class="nav-home" href="../index.html">Study Guide</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current"><strong>5.6</strong> Troubleshooting Printer Issues</span>
+  </div>
+  <div class="top-nav-right">
+    <!-- Point these to the adjacent section files, or remove if not applicable -->
+    <a class="nav-prev" href="./5_5-Troubleshoot-Network.html">5.5</a>
+    <span class="nav-end" href="">End of Core 1 ✓</span>
+  </div>
+</nav>
+  
+<div class="page">
+
+<!-- HEADER -->
+<div class="book-header">
+  <div class="book-eyebrow">
+    <span>5.6</span>
+    CompTIA A+ · Core 1 (220-1201) · Domain 5 — Hardware & Network Troubleshooting
+  </div>
+  <h1 class="book-title">Troubleshooting<br>Printer Issues</h1>
+  <div class="book-subtitle">
+    <span>Objective 5.6</span>
+    <span>Domain weight: 28%</span>
+    <span>16 testable symptoms</span>
+  </div>
+</div>
+
+
+<!-- INTRO -->
+<h2 class="chapter"><span class="ch-num">OVERVIEW</span>Introduction</h2>
+
+<p>Printers remain one of the most problematic peripheral devices in any IT environment. Their complexity — combining mechanical paper handling, electrostatic or inkjet chemistry, electronic control systems, and network connectivity — means failure can originate from virtually any subsystem. A technician who understands exactly how each printer type functions can diagnose output defects by reasoning from the symptom to the failed component, rather than guessing.</p>
+
+<p>Objective 5.6 covers sixteen distinct printer symptoms across all major printer technologies. This section begins with a thorough grounding in how each printer type works — because the symptoms are direct expressions of the underlying technology. A <em>faded print</em> means something entirely different on a laser printer versus an inkjet versus a thermal printer.</p>
+
+<div class="callout callout-info">
+  <p class="callout-title">Technology Scope</p>
+  <p>Unless stated otherwise, each symptom is examined from the perspective of the most common printer technology for that symptom. <strong>Laser printers</strong> are the most heavily tested on the A+ exam because they have the most complex mechanism and the most distinctive symptom-to-cause mappings. Inkjet, thermal, and impact printer symptoms are also covered where they appear in the objectives.</p>
+</div>
+
+
+<!-- PRINTER TECHNOLOGY FOUNDATION -->
+<h2 class="chapter"><span class="ch-num">FOUNDATION</span>Printer Technologies</h2>
+
+<h3 class="section">The Laser Printing Process — Seven Steps</h3>
+
+<p>The laser printer's imaging process is the most tested technical topic in the entire printer domain. Every image quality defect maps to a specific step in this sequence. Memorizing the steps and their functions is essential — not just the names, but <em>what happens at each step</em> and <em>what breaks when that step fails</em>.</p>
+
+<div class="laser-panel">
+  <div class="laser-panel-header">Laser Printer Imaging Sequence — 7 Steps (in order)</div>
+  <div class="laser-steps">
+    <div class="laser-step">
+      <span class="ls-num">STEP 1</span>
+      <span class="ls-name">Processing</span>
+      <span class="ls-sym">Image data sent to printer memory</span>
+    </div>
+    <div class="laser-step">
+      <span class="ls-num">STEP 2</span>
+      <span class="ls-name">Charging</span>
+      <span class="ls-sym">Drum charged uniformly (~−600V)</span>
+    </div>
+    <div class="laser-step">
+      <span class="ls-num">STEP 3</span>
+      <span class="ls-name">Exposing</span>
+      <span class="ls-sym">Laser neutralizes charged areas = image</span>
+    </div>
+    <div class="laser-step">
+      <span class="ls-num">STEP 4</span>
+      <span class="ls-name">Developing</span>
+      <span class="ls-sym">Toner adheres to exposed (less-charged) areas</span>
+    </div>
+    <div class="laser-step">
+      <span class="ls-num">STEP 5</span>
+      <span class="ls-name">Transferring</span>
+      <span class="ls-sym">Toner moved from drum to paper</span>
+    </div>
+    <div class="laser-step">
+      <span class="ls-num">STEP 6</span>
+      <span class="ls-name">Fusing</span>
+      <span class="ls-sym">Heat + pressure bonds toner permanently</span>
+    </div>
+    <div class="laser-step">
+      <span class="ls-num">STEP 7</span>
+      <span class="ls-name">Cleaning</span>
+      <span class="ls-sym">Excess toner scraped from drum</span>
+    </div>
+  </div>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Mnemonic — The 7 Steps</p>
+  <p><strong>"Please Call Every Developer For Complete Cleanup"</strong> — Processing, Charging, Exposing, Developing, (Fusing), Transferring... Note: the order in many study guides uses <strong>P-C-E-D-T-F-C</strong> (Processing, Charging, Exposing, Developing, Transferring, Fusing, Cleaning). Some sources combine or reorder slightly. What matters is understanding the function of each step. The exam may ask "which step uses a laser?" (Exposing) or "which step requires heat?" (Fusing).</p>
+</div>
+
+<h3 class="section">Other Printer Technologies</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Inkjet</span>
+    <span>Ejects microscopic droplets of liquid ink from hundreds of nozzles in the printhead directly onto paper. The printhead moves across the paper on a carriage. Ink is stored in replaceable cartridges. Susceptible to nozzle clogging (dried ink blocks individual nozzles), head alignment issues, and smearing of wet ink. Produces excellent photo quality but slow throughput. Ink is expensive per page.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Thermal</span>
+    <span>Uses heat-sensitive paper. A thermal print head selectively heats the paper surface — heated areas turn dark, unheated areas remain white. No ink or toner required. Most common in receipt printers (POS terminals) and label printers. Susceptible to heat exposure (direct sunlight or leaving in a hot car darkens the entire paper) and requires special thermal paper. Output fades significantly over time.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Impact / Dot Matrix</span>
+    <span>Pins on a print head physically strike an inked ribbon against paper. The pattern of pin strikes forms characters and graphics from dots. Very loud. Slow. Low print quality. The primary remaining use case is multipart forms — carbon copy documents where the physical impact transfers through multiple layers. Found in some industrial, logistics, and point-of-sale environments.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">3D Printer (FDM)</span>
+    <span>Fused Deposition Modeling extrudes heated plastic filament (PLA, ABS, PETG) through a nozzle, building objects layer by layer. Completely different technology but classified as a printer for A+ purposes. Relevant symptoms: clogged nozzle, bed adhesion failure, filament jams, and layer delamination.</span>
+  </div>
+</div>
+
+
+<!-- ═══ SYMPTOM 1: LINES DOWN THE PRINTED PAGES ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 01</span>Lines Down the Printed Pages</h2>
+
+<p>Vertical lines — streaks running parallel to the direction of paper travel, from the top of the page to the bottom — are one of the most common laser printer symptoms. The lines may be white (missing toner), black (excess toner), or colored on a color printer.</p>
+
+<h3 class="section">Cause by Line Type</h3>
+
+<table class="data-table">
+  <thead><tr><th>Line Type</th><th>Printer Type</th><th>Cause</th><th>Fix</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>White vertical lines (missing toner)</td>
+      <td><span class="type-badge badge-laser">Laser</span></td>
+      <td>Toner is not reaching specific areas of the drum. Most common cause: <strong>scratch or groove on the photosensitive drum</strong> — damaged drum surface prevents proper electrostatic imaging. Also caused by a clogged or damaged developer roller that is not distributing toner evenly.</td>
+      <td>Replace the toner cartridge / drum unit. On printers where the drum is part of the cartridge, cartridge replacement is the fix.</td>
+    </tr>
+    <tr>
+      <td>Black vertical lines (excess toner)</td>
+      <td><span class="type-badge badge-laser">Laser</span></td>
+      <td><strong>Damaged drum</strong> where the damage causes toner to adhere where it shouldn't. Also caused by a <strong>dirty or damaged wiper blade</strong> in the cleaning step — the wiper blade scrapes residual toner off the drum after each page; a damaged blade leaves a streak of excess toner behind.</td>
+      <td>Replace the toner cartridge. Clean or replace the fuser. Replace the drum unit if separate from the cartridge.</td>
+    </tr>
+    <tr>
+      <td>Colored vertical lines (missing one color)</td>
+      <td><span class="type-badge badge-laser">Color Laser</span></td>
+      <td>One color toner cartridge (cyan, magenta, yellow, or black) has a damaged drum or is nearly empty. The missing line corresponds to the affected color channel.</td>
+      <td>Identify which color is missing; replace that color's toner cartridge.</td>
+    </tr>
+    <tr>
+      <td>Horizontal lines / banding</td>
+      <td><span class="type-badge badge-inkjet">Inkjet</span></td>
+      <td>One or more printhead nozzles are clogged. Each nozzle covers a specific set of horizontal dots; a clogged nozzle leaves a thin white gap at regular intervals across the page.</td>
+      <td>Run the printhead cleaning utility from the printer's software or control panel. Multiple cleaning cycles may be needed. If cleaning fails, the printhead may need replacement or soaking.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus</p>
+  <p>On the A+ exam, <strong>vertical lines on a laser printer = damaged drum or dirty wiper blade.</strong> The practical fix in both cases is to <strong>replace the toner cartridge</strong> (which includes the drum on most consumer/SOHO laser printers). For enterprise printers where the drum is a separate, expensive component, it may be cleaned or replaced independently.</p>
+</div>
+
+
+<!-- ═══ SYMPTOM 2: GARBLED PRINT ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 02</span>Garbled Print</h2>
+
+<p><span class="key-term">Garbled print</span> refers to output that is clearly wrong in a systematic way — random characters, symbols, control codes, or completely unreadable output printed instead of the expected document. This is distinct from a smeared or faded print (image quality issue); garbled output means the printer received or interpreted the data incorrectly.</p>
+
+<h3 class="section">Causes</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Wrong or corrupt printer driver</span>
+    <span>The most common cause. The application sends data formatted for one printer language (e.g., PCL 6) but the printer expects a different one (e.g., PostScript or PCL 5). The printer interprets the foreign data stream as best it can and produces garbled output. Also caused by a corrupt driver installation. Resolution: reinstall or update the correct printer driver from the manufacturer's website.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">PCL vs. PostScript mismatch</span>
+    <span><span class="key-term">PCL (Printer Command Language)</span> is the standard for most HP and compatible printers. <span class="key-term">PostScript</span> is a page description language used for high-quality graphics and publishing. If a PostScript job is sent to a PCL-only printer, or a PCL driver is used with a PostScript printer, the result is pages of PostScript code printed as plain text rather than the intended document. Verify the driver matches the printer's supported language.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Faulty USB or data cable</span>
+    <span>A damaged data cable can introduce bit errors into the data stream being sent to the printer. The printer receives corrupted data and produces garbled output. Test with a known-good cable or switch to a different connection method (USB to network, or vice versa).</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Insufficient printer memory</span>
+    <span>Complex print jobs (high-resolution graphics, many fonts, complex PDFs) require significant memory in the printer's internal buffer. If the printer runs out of memory mid-job, it may print what it has received up to that point and then produce garbled or partial output for the remainder. Upgrading printer RAM or reducing print job complexity resolves this.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Application-level formatting error</span>
+    <span>A corrupt document file, an application generating invalid print data, or a bug in the application's print routine can cause garbled output. Test by printing a different, simpler document. If a simple test page prints correctly but the document is garbled, the issue is with the document or application.</span>
+  </div>
+</div>
+
+<div class="process-flow">
+  <div class="flow-title">Garbled Print — Diagnostic Steps</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Print a test page from the printer itself.</strong> Use the printer's control panel to print a self-test page — this bypasses the computer entirely. If the test page is clean and correct, the printer hardware is fine and the problem is driver, cable, or software.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Reinstall the correct printer driver.</strong> Remove the existing driver from Devices and Printers → right-click → Remove device. Download the latest driver from the manufacturer's website and install fresh.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Verify PCL vs. PostScript.</strong> In the printer driver properties, confirm the printer language matches what the printer supports. Check the printer model's spec sheet if unsure.</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Test with a different cable or connection method.</strong> Replace the USB cable with a known-good one, or try printing over the network if the printer supports it.</div></div>
+  <div class="flow-step"><span class="flow-num">05</span><div class="flow-text"><strong>Test with a simple document.</strong> Print a plain-text Notepad document or a simple Word file. If it prints correctly, the problem is document-specific — open the document in a different application or recreate it.</div></div>
+</div>
+
+
+<!-- ═══ SYMPTOM 3: PAPER JAMS ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 03</span>Paper Jams</h2>
+
+<p>A <span class="key-term">paper jam</span> occurs when a sheet of paper fails to travel through the printer's paper path correctly — it stops, bunches, or wraps around a roller, triggering a sensor that halts the printer. Paper jams are among the most frequent printer complaints and have multiple causes that range from trivial (wrong paper loaded) to requiring service (worn rollers).</p>
+
+<h3 class="section">Common Causes of Paper Jams</h3>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>Paper-Related Causes</h4>
+    <ul>
+      <li><strong>Incorrect paper weight</strong> — paper too thick or too thin for the printer's specifications</li>
+      <li><strong>Damp or curled paper</strong> — humidity causes paper to curl, preventing smooth feeding</li>
+      <li><strong>Overfilled paper tray</strong> — too many sheets prevents top sheets from feeding correctly</li>
+      <li><strong>Incorrectly loaded paper</strong> — paper not seated against tray guides, allowing skewing</li>
+      <li><strong>Mixed paper sizes</strong> — different-sized sheets in the same tray</li>
+      <li><strong>Torn or damaged sheets</strong> — fragments of previous jams left inside the printer</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Printer Hardware Causes</h4>
+    <ul>
+      <li><strong>Worn pickup rollers</strong> — rollers lose their rubber grip coating over time; can't grab paper reliably</li>
+      <li><strong>Worn separation pad</strong> — separates individual sheets; when worn, multiple sheets feed simultaneously</li>
+      <li><strong>Debris inside paper path</strong> — torn paper fragments, staples, or foreign objects</li>
+      <li><strong>Misaligned paper guides</strong> — guides set incorrectly cause paper to skew and jam</li>
+      <li><strong>Fuser issues</strong> — paper wrapping around the fuser roller instead of exiting cleanly</li>
+    </ul>
+  </div>
+</div>
+
+<h3 class="section">Clearing a Paper Jam Safely</h3>
+
+<div class="process-flow">
+  <div class="flow-title">Paper Jam Clearance Procedure</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Do not force the paper.</strong> Never yank jammed paper — forcing it can tear it, leaving fragments inside the printer that cause the next jam. It can also damage rollers and guides.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Follow the printer's jam indicator.</strong> Most printers display which access panel to open to reach the jam. Open the indicated door or tray.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Pull in the direction of paper travel.</strong> Remove paper by pulling slowly and steadily in the direction the paper would normally exit the printer — not backward against the paper path, which risks tearing.</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Inspect for torn fragments.</strong> After removing the jammed sheet, use a flashlight to inspect the entire paper path for any torn pieces. Even a small fragment will cause the next print to jam immediately.</div></div>
+  <div class="flow-step"><span class="flow-num">05</span><div class="flow-text"><strong>Check the fuser area with caution.</strong> The fuser is extremely hot during and after operation — it can cause burns. Allow the printer to cool before reaching near the fuser if the jam requires access to that area.</div></div>
+  <div class="flow-step"><span class="flow-num">06</span><div class="flow-text"><strong>If jams recur consistently:</strong> clean the pickup rollers with a lint-free cloth dampened with isopropyl alcohol; check that paper is correctly loaded and is the right type for the printer; consider replacing worn pickup rollers if cleaning does not restore grip.</div></div>
+</div>
+
+<div class="callout callout-warn">
+  <p class="callout-title">Fuser Temperature Warning</p>
+  <p>The fuser assembly in a laser printer reaches temperatures of 180–200°C (356–392°F) during operation and retains heat for several minutes after the printer is powered down. If a paper jam requires reaching into or near the fuser area, allow the printer to sit powered off for at least 15–20 minutes before reaching in. Burns from fuser components are a real occupational hazard.</p>
+</div>
+
+
+<!-- ═══ SYMPTOM 4: FADED PRINTS ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 04</span>Faded Prints</h2>
+
+<p>Faded prints — output that is lighter than expected, with text or images appearing washed out or gray instead of solid black — have different causes depending on the printer technology.</p>
+
+<h3 class="section">Faded Prints by Technology</h3>
+
+<table class="data-table">
+  <thead><tr><th>Technology</th><th>Cause</th><th>Resolution</span></th></tr></thead>
+  <tbody>
+    <tr>
+      <td><span class="type-badge badge-laser">Laser</span> Low toner</td>
+      <td>Toner cartridge is nearly empty. Toner density drops as the cartridge depletes, resulting in progressively lighter prints.</td>
+      <td>Remove the cartridge and gently rock it side to side to redistribute remaining toner — this often provides 20–50 more pages. Replace the cartridge when rocking no longer improves output.</td>
+    </tr>
+    <tr>
+      <td><span class="type-badge badge-laser">Laser</span> Density setting too low</td>
+      <td>The printer's print density (darkness) setting is configured too low in the driver or printer's on-board settings.</td>
+      <td>Increase print density in printer properties or the printer's control panel.</td>
+    </tr>
+    <tr>
+      <td><span class="type-badge badge-laser">Laser</span> Drum nearing end of life</td>
+      <td>The photosensitive drum degrades over its rated page count — its ability to hold the electrostatic charge needed to attract toner diminishes, resulting in lighter prints.</td>
+      <td>Replace the drum unit (or the toner cartridge if drum is integrated).</td>
+    </tr>
+    <tr>
+      <td><span class="type-badge badge-inkjet">Inkjet</span> Low ink</td>
+      <td>One or more ink cartridges is running low. Colors may be faded or shifted if one color is more depleted than others.</td>
+      <td>Replace the low/empty ink cartridge. Check ink levels via printer software.</td>
+    </tr>
+    <tr>
+      <td><span class="type-badge badge-inkjet">Inkjet</span> Clogged nozzles</td>
+      <td>Ink has dried in nozzles, reducing ink flow and producing faded or streaked output.</td>
+      <td>Run printhead cleaning utility. Multiple cycles may be needed. Leave the printer idle for several hours after cleaning to allow residual cleaning solution to dissolve dried ink.</td>
+    </tr>
+    <tr>
+      <td><span class="type-badge badge-thermal">Thermal</span> Faded/old paper</td>
+      <td>Thermal paper fades significantly over time. Old stock or paper stored improperly (heat, sunlight) is less reactive to the print head's heat.</td>
+      <td>Use fresh thermal paper stored correctly (cool, dark location). Check paper orientation — thermal paper has one reactive side; loading it backward produces very faint output.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<!-- ═══ SYMPTOM 5: PAPER NOT FEEDING ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 05</span>Paper Not Feeding</h2>
+
+<p>When the printer attempts to print but no paper feeds from the tray — the printer makes sounds as if starting a print job but produces nothing — the cause is in the paper pickup mechanism.</p>
+
+<h3 class="section">Causes</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Worn pickup rollers</span>
+    <span>The pickup roller is a rubber-coated roller that grabs the top sheet of paper from the tray and pulls it into the print path. Over time (typically after 50,000–100,000 pages) the rubber coating wears smooth, losing the friction needed to grab paper. The roller spins but cannot grip the paper. Cleaning the roller surface with a damp lint-free cloth can temporarily restore grip. Replacement pickup rollers are available for most printers and are a standard maintenance part.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Paper tray empty or not fully inserted</span>
+    <span>The simplest cause — no paper in the tray, or the tray is not pushed fully into the printer. Always verify the obvious before investigating hardware. Some printers have tray presence sensors that will not attempt to feed if the tray is slightly out of position.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Incorrect paper size guides</span>
+    <span>Paper guides in the tray must be adjusted to the paper size being used. If guides are too loose, the paper shifts sideways during pickup and may not engage the roller correctly. If too tight, paper is compressed and may not fan properly, causing feeding issues.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Static buildup in paper</span>
+    <span>Paper that has been sitting in a tray for extended periods, especially in low-humidity environments, can develop static charge that causes sheets to stick together, preventing individual sheet pickup. Fan the paper before loading to separate the sheets and discharge static buildup.</span>
+  </div>
+</div>
+
+
+<!-- ═══ SYMPTOM 6: MULTIPAGE MISFEED ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 06</span>Multipage Misfeed</h2>
+
+<p>A <span class="key-term">multipage misfeed</span> (also called a multi-feed) occurs when the printer picks up two or more sheets of paper simultaneously instead of one. The result is that one print job prints on a single sheet while a blank sheet travels through simultaneously — print jobs lose pages, and jams often follow because the printer was not designed to handle double-thickness paper through its paper path.</p>
+
+<h3 class="section">Causes and Resolution</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Worn separation pad</span>
+    <span>The <span class="key-term">separation pad</span> (also called a friction pad or retard pad) is positioned against the pickup roller to prevent multiple sheets from feeding. When one sheet is pulled by the roller, the separation pad creates friction against any additional sheets that try to follow. When the pad wears smooth, multiple sheets can slip past simultaneously. Replacement separation pads are inexpensive standard maintenance parts.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Overfilled tray</span>
+    <span>Loading too many sheets — exceeding the tray's maximum capacity marking — compresses the stack. The pickup roller may grab the top two sheets because they are held together by friction from the compressed stack. Do not exceed the tray's stated maximum sheet capacity.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Static-charged paper</span>
+    <span>Adjacent sheets stuck together due to static electricity feed simultaneously. Fan the paper thoroughly before loading, especially if the paper has been in storage. Paper from a freshly opened ream is less prone to this than paper that has been in the tray for weeks.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Paper weight mismatch</span>
+    <span>Very thin, lightweight paper has less rigidity and is more prone to double-feeding than standard 20 lb / 75 gsm copy paper. Using paper within the printer's specified weight range prevents this.</span>
+  </div>
+</div>
+
+
+<!-- ═══ SYMPTOM 7: MULTIPLE PRINTS PENDING IN QUEUE ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 07</span>Multiple Prints Pending in Queue</h2>
+
+<p>When print jobs accumulate in the Windows print queue without printing — or a single stuck job blocks all subsequent jobs — the <span class="key-term">print spooler</span> is usually the root cause. The print spooler is a Windows service that manages the queue of pending print jobs, temporarily storing spool files on disk and sending them to the printer in sequence.</p>
+
+<h3 class="section">The Windows Print Spooler</h3>
+
+<p>The spooler service (<code>spoolsv.exe</code>) runs as a Windows service (Print Spooler / Spooler). When it receives a print job, it writes a spool file to <code>C:\Windows\System32\spool\PRINTERS\</code>. The spooler then sends the job to the printer. If the spooler crashes, hangs, or a corrupt spool file gets stuck in the queue, all subsequent print jobs queue behind the stuck job — creating the appearance of multiple pending prints that never start.</p>
+
+<div class="queue-panel">
+<span class="cmt"># --- CLEAR A STUCK PRINT QUEUE ---</span>
+
+<span class="cmt"># Method 1: Services console (most reliable)</span>
+<span class="hl">services.msc</span>       <span class="cmt"># Open Services</span>
+<span class="wh">→ Find "Print Spooler"</span>
+<span class="wh">→ Right-click → Stop</span>
+<span class="cmt"># Now delete spool files manually:</span>
+<span class="hl">C:\Windows\System32\spool\PRINTERS\</span>
+<span class="wh">→ Delete all files in this folder (NOT the folder itself)</span>
+<span class="wh">→ Return to Services → Start "Print Spooler"</span>
+
+<span class="cmt"># Method 2: Command prompt (run as Administrator)</span>
+<span class="hl">net stop spooler</span>
+<span class="hl">del /Q /F /S "%systemroot%\System32\spool\PRINTERS\*.*"</span>
+<span class="hl">net start spooler</span>
+
+<span class="cmt"># Verify queue is clear:</span>
+<span class="hl">Control Panel → Devices and Printers → double-click printer</span>
+<span class="ok"># Queue should be empty after restart</span>
+</div>
+
+<h3 class="section">Causes of Queue Backlog</h3>
+
+<ul class="body-list">
+  <li><strong>Printer offline or disconnected</strong> — jobs queue because the printer cannot receive them; the spooler holds them waiting for the printer to come online</li>
+  <li><strong>Corrupt spool file</strong> — a single corrupt print job blocks all subsequent jobs; deleting it (after stopping the spooler) clears the blockage</li>
+  <li><strong>Spooler service crashed</strong> — the spooler process has crashed and is no longer processing the queue; restarting the service resumes printing</li>
+  <li><strong>Printer driver issue</strong> — a bad driver causes the spooler to crash repeatedly each time it processes a job for that printer</li>
+  <li><strong>User sent multiple copies accidentally</strong> — user clicked print multiple times, sending 10+ identical jobs; cancel all but the first in the print queue</li>
+</ul>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus</p>
+  <p>Multiple prints stuck in queue = <strong>restart the Print Spooler service</strong> and delete spool files. Know the exact steps: stop spooler → delete files in <code>C:\Windows\System32\spool\PRINTERS\</code> → start spooler. This is a high-frequency exam scenario.</p>
+</div>
+
+
+<!-- ═══ SYMPTOM 8: SPECKLING ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 08</span>Speckling on Printed Pages</h2>
+
+<p><span class="key-term">Speckling</span> refers to random dots or spots of toner scattered across the printed page outside of the intended print area. Unlike lines (which follow a consistent pattern), speckling appears as irregular, randomly distributed marks.</p>
+
+<h3 class="section">Causes</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Dirty or contaminated drum</span>
+    <span>Loose toner particles scattered on the drum surface outside the image area adhere to paper during the transfer step, appearing as random specks. Caused by a damaged toner cartridge that is leaking toner internally, or by the drum's charge roller failing to uniformly charge the drum (leaving randomly charged spots that attract stray toner).</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Dirty paper path or rollers</span>
+    <span>Toner buildup on rollers, guides, and other internal surfaces accumulates over thousands of pages. As paper travels through, it picks up stray toner from these surfaces, appearing as specks or smudges in random locations. Regular maintenance cleaning (applying the maintenance kit) prevents this.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Damaged or leaking toner cartridge</span>
+    <span>A toner cartridge with a crack, a damaged seal, or a failed developer component leaks loose toner inside the printer. This loose toner gets onto every surface it contacts — rollers, paper path, and paper itself. The fix is to replace the toner cartridge and clean the interior of the printer.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Low-quality third-party toner</span>
+    <span>Third-party remanufactured toner cartridges sometimes use toner with inconsistent particle sizing or substandard charge characteristics. This produces unpredictable results including speckling, streaking, and fading. Using OEM (Original Equipment Manufacturer) toner resolves quality defects attributable to consumable quality.</span>
+  </div>
+</div>
+
+<div class="callout callout-tip">
+  <p class="callout-title">Cleaning Tip</p>
+  <p>When cleaning loose toner from inside a printer, use a <strong>toner vacuum</strong> (a vacuum cleaner designed for fine particles with a HEPA filter) or a dry lint-free cloth. Never use a regular household vacuum — toner particles are small enough to pass through standard filters and will be exhausted back into the air. Never use compressed air, which disperses toner throughout the printer's interior and into the room. Toner inhalation is a health hazard.</p>
+</div>
+
+
+<!-- ═══ SYMPTOM 9: DOUBLE/ECHO IMAGES ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 09</span>Double / Echo Images on the Print</h2>
+
+<p>A <span class="key-term">ghost image</span> or <span class="key-term">echo image</span> is a faint duplicate of a previously printed image appearing in the wrong location on the current page — typically offset by a fixed distance that corresponds to the circumference of the drum or fuser roller. The ghost is significantly lighter than the original, giving the appearance of a "shadow" of the previous print.</p>
+
+<div class="defect-panel">
+  <h4>Ghost / Echo Image — Visual Representation</h4>
+  <div class="defect-row">
+    <div class="defect-preview prev-double"></div>
+    <div>
+      <div class="defect-name">Ghost / Echo Image</div>
+      <div class="defect-cause">A faint duplicate of previously printed content appears offset below or after the primary image. The offset distance matches the drum or fuser roller circumference (~94mm for a typical A4 laser drum).</div>
+    </div>
+  </div>
+</div>
+
+<h3 class="section">Causes</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Faulty cleaning blade (drum ghost)</span>
+    <span>After the transfer step, the cleaning blade scrapes residual toner off the drum surface. If the cleaning blade is worn, damaged, or stuck, some toner remains on the drum and deposits on the next rotation at a position offset by exactly one drum circumference. This is called a <span class="key-term">positive ghost</span> — extra toner from the previous image appears on the current page.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Drum not fully discharging (charge roller failure)</span>
+    <span>A failing <span class="key-term">primary charge roller (PCR)</span> does not uniformly discharge the drum between pages. Areas of the drum that were previously exposed to the laser retain a partial image-shaped charge variation on the next rotation, causing the previous image to faintly re-appear. This is called a <span class="key-term">negative ghost</span> — the ghost appears lighter (less toner) than surrounding areas.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Failing fuser roller</span>
+    <span>The fuser's heat roller can develop a buildup of melted toner in the shape of previously printed content. On subsequent pages, this residue deposits faint marks in the same pattern offset by the roller's circumference. Measured offset: if a letter at the top of a page has an echo 94mm below it, and the drum circumference is 94mm, the drum is the source. A different offset (matching the fuser roller's smaller circumference, typically 63mm) points to the fuser.</span>
+  </div>
+</div>
+
+<h3 class="section">Diagnosis and Fix</h3>
+
+<p>Measure the distance between the original image element and its ghost. Compare this to the drum circumference (typically printed in the printer's service manual or on the cartridge documentation). If the offsets match, the problem is in the drum/cleaning system — replace the toner cartridge. If the offset is smaller and matches the fuser roller, the fuser needs replacement or the maintenance kit needs to be applied.</p>
+
+
+<!-- ═══ SYMPTOM 10: GRINDING NOISE ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 10</span>Grinding Noise</h2>
+
+<p>Abnormal mechanical noises — grinding, clicking, or scraping sounds during printing — indicate a mechanical failure inside the printer. The source must be isolated before the appropriate part can be identified.</p>
+
+<h3 class="section">Sources of Grinding Noise</h3>
+
+<table class="data-table">
+  <thead><tr><th>Sound</th><th>Likely Source</th><th>Diagnosis</th><th>Fix</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>Grinding during print job</td>
+      <td>Paper feed assembly; worn or damaged gear</td>
+      <td>Occurs consistently during every print; may correlate with paper movement</td>
+      <td>Inspect gear train for cracked, missing, or worn teeth; replace damaged gear or paper feed assembly</td>
+    </tr>
+    <tr>
+      <td>Grinding when paper feeds</td>
+      <td>Foreign object in paper path; paper debris wrapped around roller</td>
+      <td>Open all access panels and visually inspect rollers and paper path for debris</td>
+      <td>Remove debris; clear any wrapped paper fragments from rollers</td>
+    </tr>
+    <tr>
+      <td>Grinding from fuser area</td>
+      <td>Failed fuser gear or fuser pressure roller bearing</td>
+      <td>Sound comes from rear or center of printer near exit; correlates with fuser activity</td>
+      <td>Replace fuser assembly; fuser units are typically field-replaceable modules</td>
+    </tr>
+    <tr>
+      <td>Clicking without paper movement</td>
+      <td>Damaged or out-of-round roller; broken plastic component</td>
+      <td>Rhythmic clicking at regular intervals; clicking stops when specific roller area is bypassed</td>
+      <td>Identify the damaged roller and replace; often the pickup or transfer roller</td>
+    </tr>
+    <tr>
+      <td>Grinding on startup only</td>
+      <td>Drum initialization; calibration mechanism</td>
+      <td>Brief grinding at power-on that stops within seconds — often normal for some laser printers</td>
+      <td>If consistent and worsening, inspect drum unit for damage</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="callout callout-warn">
+  <p class="callout-title">Stop Printing Immediately</p>
+  <p>When a printer emits a grinding noise, stop sending print jobs immediately. Continuing to print while a mechanical failure exists causes progressively worse damage — a cracked gear tooth can shatter completely; a paper fragment wrapped around a roller can tear and jam the mechanism more severely. Power off the printer and diagnose before resuming.</p>
+</div>
+
+
+<!-- ═══ SYMPTOM 11: FINISHING ISSUES ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 11</span>Finishing Issues — Staple Jams & Hole Punch</h2>
+
+<p><span class="key-term">Finishing</span> refers to post-printing operations performed by an optional <span class="key-term">finisher unit</span> attached to a high-volume printer or multifunction device. Common finishing operations include stapling, hole punching, folding, and collating. Finishing issues are mechanical problems in the finisher unit, not the printer's main imaging system.</p>
+
+<h3 class="section">Staple Jams</h3>
+
+<p>Staple jams occur when the finisher's stapling mechanism fails to properly form, drive, or clinch a staple through the document stack. The staple bends, breaks, or gets stuck in the stapler mechanism.</p>
+
+<ul class="body-list">
+  <li><strong>Empty staple cartridge</strong> — most common cause; the finisher reports a staple jam but the actual issue is simply no staples remaining. Replace the staple cartridge.</li>
+  <li><strong>Bent or broken staple lodged in mechanism</strong> — a previous partial staple attempt left a malformed staple in the stapler head. Open the staple access door, remove the staple cartridge, and manually remove the bent staple with needle-nose pliers.</li>
+  <li><strong>Stack too thick</strong> — attempting to staple more sheets than the stapler's rated capacity bends or breaks the staple. Check the finisher's maximum staple capacity (typically 30–50 sheets for office finishers).</li>
+  <li><strong>Wrong staple cartridge type</strong> — using staples not specified for that finisher model. Finisher staplers use specific cartridge types — using a compatible-but-wrong cartridge causes feeding and jamming issues.</li>
+</ul>
+
+<h3 class="section">Hole Punch Issues</h3>
+
+<p>Hole punch problems occur when the finisher's punch mechanism fails to cleanly punch holes in the correct positions.</p>
+
+<ul class="body-list">
+  <li><strong>Full hole punch waste bin</strong> — the container that collects paper chads from punching is full and must be emptied. When full, the punch mechanism cannot complete its stroke and jams or refuses to operate. Empty the waste bin through its access door.</li>
+  <li><strong>Paper misalignment</strong> — holes punched in the wrong location, or one hole off-center. The paper registration system in the finisher may need calibration, or paper guides may be set incorrectly.</li>
+  <li><strong>Punch mechanism jam</strong> — a chad or fragment of paper has jammed in the punch die. Open the punch access area and clear the obstruction.</li>
+</ul>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus</p>
+  <p>For staple jams: check for an <strong>empty cartridge</strong> first, then a <strong>bent staple</strong> in the mechanism. For hole punch problems: check the <strong>hole punch waste bin</strong> — this is the most commonly tested finishing issue. A full waste bin is the number-one cause of hole punch failure.</p>
+</div>
+
+
+<!-- ═══ SYMPTOM 12: INCORRECT PAGE ORIENTATION ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 12</span>Incorrect Page Orientation</h2>
+
+<p>A document prints in the wrong orientation — the content is rotated 90° or the page is printed in portrait when it should be landscape — despite the document appearing correctly on screen. This is almost always a software or driver configuration issue rather than a hardware failure.</p>
+
+<h3 class="section">Causes and Resolution</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Application vs. driver conflict</span>
+    <span>Both the application (Word, Excel, PDF reader) and the printer driver have orientation settings. If they conflict — the application says Landscape but the driver is set to Portrait — one overrides the other. Ensure orientation is set consistently in both the application's print dialog and the printer driver properties. The application setting typically takes precedence for most Windows applications.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Default printer orientation</span>
+    <span>The printer driver's default orientation may be set to Landscape globally — affecting all print jobs from that printer. If most documents print in the wrong orientation, change the driver's default: Control Panel → Devices and Printers → right-click printer → Printer Properties → Printing Preferences → Orientation.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Paper loaded incorrectly</span>
+    <span>On some printers, loading paper vertically vs. horizontally in the tray changes the effective orientation. Verify paper is loaded according to the icons/arrows on the tray indicating correct loading direction for portrait or landscape output.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Tray configuration mismatch</span>
+    <span>If the printer driver is configured to use a specific paper tray, and that tray's paper orientation setting in the driver doesn't match how paper is physically loaded, the output orientation will be wrong. Verify the tray's paper size and orientation settings in the printer driver match the actual loaded paper.</span>
+  </div>
+</div>
+
+
+<!-- ═══ SYMPTOM 13: TRAY NOT RECOGNIZED ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 13</span>Tray Not Recognized</h2>
+
+<p>A paper tray that the printer does not recognize will not be available as a print source in the driver's paper source selection — attempts to print from that tray produce an error, or the tray simply doesn't appear in the driver settings.</p>
+
+<h3 class="section">Causes</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Optional tray not installed/configured in driver</span>
+    <span>Additional paper trays (Tray 3, Tray 4, high-capacity feeders) are optional accessories. The printer driver must be configured to know the tray is installed. Go to printer Properties → Device Settings (or similar) and set the optional tray status to "Installed." Without this, the driver doesn't offer the tray as an option even if the physical tray is present and the printer recognizes it at the hardware level.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Tray not fully seated</span>
+    <span>The tray has not been pushed fully into the printer, preventing its presence sensor from triggering. Remove the tray completely and reinsert firmly until the click or resistance indicates it is fully seated. The printer should detect the tray immediately upon proper seating.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Faulty tray presence sensor</span>
+    <span>A small sensor inside the printer detects whether a tray is inserted. If this sensor is stuck, dirty, or damaged, the printer cannot detect the tray even when properly inserted. Cleaning the sensor contact points or replacing the sensor resolves this.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Driver not updated after hardware change</span>
+    <span>After adding or replacing a tray, the driver may need to be updated or the installed options refreshed. Some printer drivers support automatic configuration detection (querying the printer for its current hardware configuration) — run this from the driver's Device Settings.</span>
+  </div>
+</div>
+
+
+<!-- ═══ SYMPTOM 14: CONNECTIVITY ISSUES ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 14</span>Connectivity Issues</h2>
+
+<p>Printer connectivity issues — where the printer cannot be reached from the computer — span USB, wired network, and wireless connections. The troubleshooting approach differs significantly by connection type.</p>
+
+<h3 class="section">By Connection Type</h3>
+
+<table class="data-table">
+  <thead><tr><th>Connection</th><th>Common Failures</th><th>Diagnostic Steps</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>USB (local)</td>
+      <td>Cable fault; wrong USB port; driver not loaded; printer powered off</td>
+      <td>Try different USB port (avoid USB hubs for printers); replace cable; check Device Manager for errors; reinstall driver</td>
+    </tr>
+    <tr>
+      <td>Wired network (Ethernet)</td>
+      <td>IP address changed or expired; wrong IP configured in driver; firewall blocking printer ports; printer offline</td>
+      <td>Print a configuration page from printer control panel to see current IP; update driver with correct IP; ping the printer's IP; verify TCP/IP port settings in driver</td>
+    </tr>
+    <tr>
+      <td>Wireless (Wi-Fi)</td>
+      <td>Printer connected to wrong SSID; IP address changed; WPA2 passphrase changed; printer out of Wi-Fi range</td>
+      <td>Print Wi-Fi configuration page; reconnect printer to correct SSID; assign static IP to printer in router's DHCP reservation</td>
+    </tr>
+    <tr>
+      <td>Shared printer (Windows)</td>
+      <td>Print server offline; share permissions changed; printer share name changed; firewall blocking File and Printer Sharing</td>
+      <td>Verify print server is running; check Windows Firewall → File and Printer Sharing exceptions; verify share name and credentials</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 class="section">Static IP for Network Printers</h3>
+
+<p>Network printers that obtain their IP via DHCP can cause recurring connectivity problems — whenever the DHCP lease changes, the IP address changes, and any drivers configured with the old IP lose connection. The best practice is to assign a <span class="key-term">static IP</span> (or DHCP reservation) to network printers:</p>
+
+<ul class="body-list">
+  <li><strong>Configure static IP on the printer directly</strong> — use the printer's control panel or web interface to assign a fixed IP outside the DHCP range</li>
+  <li><strong>Use DHCP reservation (preferred)</strong> — configure the router's DHCP server to always assign the same IP to the printer's MAC address; the printer still gets an IP from DHCP but it is always the same one</li>
+  <li><strong>Update the driver's TCP/IP port</strong> — after confirming the printer's permanent IP, update the printer port in Windows: Devices and Printers → right-click printer → Printer Properties → Ports tab → Configure Port → update IP</li>
+</ul>
+
+<div class="callout callout-tip">
+  <p class="callout-title">Print a Configuration Page</p>
+  <p>Every network printer has a built-in configuration page accessible from its control panel. This page shows the printer's current IP address, subnet mask, gateway, wireless SSID (if applicable), firmware version, and connection status. When a user cannot find or connect to a printer on the network, printing this page (by pressing the right button sequence on the printer itself — consult the manual) is the fastest way to get the printer's current network configuration without any software.</p>
+</div>
+
+
+<!-- ═══ SYMPTOM 15: FROZEN PRINT QUEUE ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 15</span>Frozen Print Queue</h2>
+
+<p>A <span class="key-term">frozen print queue</span> differs slightly from the "multiple prints pending" scenario: in a frozen queue, a specific print job is stuck in a "Deleting" or "Printing" state that cannot be removed through the normal queue interface — the delete button does nothing, or the job immediately reappears after being deleted. This is caused by the print spooler holding an open file handle to the spool file, preventing normal deletion.</p>
+
+<h3 class="section">Why Jobs Get Stuck</h3>
+
+<p>When you delete a print job from the queue, Windows tells the spooler service to remove it. If the spooler is currently processing that job — or is in a crashed state — it may not release the job's spool file. The file cannot be deleted while the spooler service holds it open. The queue appears frozen.</p>
+
+<div class="process-flow">
+  <div class="flow-title">Clearing a Frozen Print Queue</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Stop the Print Spooler service first.</strong> Open Services.msc → find Print Spooler → right-click → Stop. You must stop the service before you can delete spool files — the service holds file locks that prevent deletion while running.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Navigate to the spool folder.</strong> Open <code>C:\Windows\System32\spool\PRINTERS\</code>. You will see .SHD and .SPL files corresponding to queued print jobs.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Delete all files in the PRINTERS folder.</strong> Select all (Ctrl+A) and delete. Do not delete the PRINTERS folder itself — only its contents. If a file cannot be deleted even with the spooler stopped, restart the computer and try again before starting the spooler.</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Restart the Print Spooler service.</strong> In Services.msc → right-click Print Spooler → Start. The queue should now be empty and the printer ready to accept new jobs.</div></div>
+  <div class="flow-step"><span class="flow-num">05</span><div class="flow-text"><strong>Resubmit the print job.</strong> Once the spooler is running and the queue is clear, send the document to print again. If it freezes again immediately, the driver is likely corrupt — reinstall the printer driver.</div></div>
+</div>
+
+<div class="callout callout-info">
+  <p class="callout-title">Frozen Queue vs. Multiple Pending Jobs</p>
+  <p>These two symptoms share the same root cause (print spooler) and the same fix (stop spooler, clear files, restart spooler). The distinction: <strong>multiple pending</strong> = jobs visible and waiting, printer not printing them. <strong>Frozen queue</strong> = one job stuck in "Deleting" state that cannot be removed through the UI. In both cases, the procedure is identical — the spooler must be stopped before the spool files can be manipulated.</p>
+</div>
+
+
+<!-- ═══ SYMPTOM 16: INCORRECT COLOR DISPLAY ═══ -->
+<h2 class="chapter"><span class="ch-num">BONUS REF</span>Print Quality Defect Visual Reference</h2>
+
+<p>This reference maps common print defects to their causes at a glance — useful for rapid diagnosis when confronted with a printed sample.</p>
+
+<div class="defect-panel">
+  <h4>Print Defect → Cause Mapping</h4>
+  <div class="defect-row">
+    <div class="defect-preview prev-lines"></div>
+    <div>
+      <div class="defect-name">Vertical lines / streaks</div>
+      <div class="defect-cause"><span class="type-badge badge-laser">Laser</span> White lines = damaged drum or empty toner. Black lines = dirty wiper blade or contaminated drum. → Replace toner cartridge.</div>
+    </div>
+  </div>
+  <div class="defect-row">
+    <div class="defect-preview prev-faded"></div>
+    <div>
+      <div class="defect-name">Faded / light print</div>
+      <div class="defect-cause"><span class="type-badge badge-laser">Laser</span> Low toner (rock cartridge to test) or density setting too low. <span class="type-badge badge-inkjet">Inkjet</span> Low ink or clogged nozzles. <span class="type-badge badge-thermal">Thermal</span> Wrong paper side or old stock.</div>
+    </div>
+  </div>
+  <div class="defect-row">
+    <div class="defect-preview prev-speckle"></div>
+    <div>
+      <div class="defect-name">Speckling / random spots</div>
+      <div class="defect-cause"><span class="type-badge badge-laser">Laser</span> Dirty drum, leaking cartridge, or contaminated paper path rollers. → Replace cartridge and clean interior.</div>
+    </div>
+  </div>
+  <div class="defect-row">
+    <div class="defect-preview prev-double"></div>
+    <div>
+      <div class="defect-name">Ghost / echo image</div>
+      <div class="defect-cause"><span class="type-badge badge-laser">Laser</span> Failed cleaning blade (residual toner) or failed PCR (residual charge). Offset = drum or fuser circumference. → Replace cartridge or fuser.</div>
+    </div>
+  </div>
+  <div class="defect-row">
+    <div class="defect-preview prev-garbled"></div>
+    <div>
+      <div class="defect-name">Garbled / random characters</div>
+      <div class="defect-cause"><span class="type-badge badge-all">All</span> Wrong driver, PCL vs. PostScript mismatch, corrupt driver, or faulty data cable. → Reinstall correct driver; replace cable.</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- MASTER REFERENCE -->
+<div class="ch-divider"></div>
+
+<div class="summary-box">
+  <h3>Master Reference — All 16 Symptoms</h3>
+  <div class="summary-grid">
+    <div class="summary-item"><span class="s-sym">Lines down pages</span><span>Damaged drum (replace cartridge) or dirty wiper blade</span></div>
+    <div class="summary-item"><span class="s-sym">Garbled print</span><span>Wrong/corrupt driver; PCL vs PostScript mismatch; faulty cable</span></div>
+    <div class="summary-item"><span class="s-sym">Paper jams</span><span>Wrong paper, worn pickup rollers, debris, or overfilled tray</span></div>
+    <div class="summary-item"><span class="s-sym">Faded prints</span><span>Low toner (rock cartridge); low ink; density setting; clogged nozzles</span></div>
+    <div class="summary-item"><span class="s-sym">Paper not feeding</span><span>Worn pickup rollers; empty/misaligned tray; static-stuck paper</span></div>
+    <div class="summary-item"><span class="s-sym">Multipage misfeed</span><span>Worn separation pad; overfilled tray; static-charged paper</span></div>
+    <div class="summary-item"><span class="s-sym">Multiple prints in queue</span><span>Stop spooler → delete C:\...\spool\PRINTERS\ files → start spooler</span></div>
+    <div class="summary-item"><span class="s-sym">Speckling</span><span>Dirty/leaking toner cartridge; contaminated rollers; low-quality toner</span></div>
+    <div class="summary-item"><span class="s-sym">Ghost / echo images</span><span>Failed cleaning blade or PCR; offset = drum or fuser circumference</span></div>
+    <div class="summary-item"><span class="s-sym">Grinding noise</span><span>Stop printing; damaged gear, debris in paper path, or fuser failure</span></div>
+    <div class="summary-item"><span class="s-sym">Staple jams</span><span>Empty cartridge first; then bent staple in mechanism; then stack too thick</span></div>
+    <div class="summary-item"><span class="s-sym">Hole punch issues</span><span>Full waste bin (most common); then paper misalignment; then punch jam</span></div>
+    <div class="summary-item"><span class="s-sym">Incorrect orientation</span><span>Check app AND driver orientation settings; check paper load direction</span></div>
+    <div class="summary-item"><span class="s-sym">Tray not recognized</span><span>Enable optional tray in driver Device Settings; reseat tray fully</span></div>
+    <div class="summary-item"><span class="s-sym">Connectivity issues</span><span>USB: cable/port/driver. Network: IP change — assign static/reservation.</span></div>
+    <div class="summary-item"><span class="s-sym">Frozen print queue</span><span>Same as above: stop spooler → delete spool files → restart spooler</span></div>
+  </div>
+</div>
+
+
+<!-- TOOLS REFERENCE -->
+<h2 class="chapter"><span class="ch-num">REFERENCE</span>Printer Maintenance & Diagnostic Tools</h2>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>Windows Tools & Paths</h4>
+    <ul>
+      <li><strong>Devices and Printers</strong> — Control Panel → Devices and Printers; manage all printers</li>
+      <li><strong>Print queue</strong> — double-click a printer in Devices and Printers</li>
+      <li><strong>Services.msc</strong> → Print Spooler; stop/start/restart service</li>
+      <li><strong>Spool folder</strong> → <code>C:\Windows\System32\spool\PRINTERS\</code></li>
+      <li><strong>Printer Properties</strong> → Device Settings; configure optional hardware</li>
+      <li><strong>Printing Preferences</strong> → orientation, quality, paper source</li>
+      <li><strong>Color Management</strong> → ICC profiles per printer</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Physical Maintenance Items</h4>
+    <ul>
+      <li><strong>Maintenance kit</strong> — fuser, pickup rollers, transfer roller; applied at page count intervals (typically 150,000–200,000 pages)</li>
+      <li><strong>Toner vacuum</strong> — HEPA-filtered; required for safe loose toner cleanup</li>
+      <li><strong>Isopropyl alcohol (90%+)</strong> — cleaning rubber rollers and glass surfaces</li>
+      <li><strong>Lint-free cloths</strong> — cleaning optical and rubber components</li>
+      <li><strong>Compressed air</strong> — only for blowing dust from non-toner areas</li>
+      <li><strong>Toner cartridge</strong> — OEM preferred; resolves most laser print quality issues</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout callout-exam" style="margin-top: 28px;">
+  <p class="callout-title">Final Exam Reminders</p>
+  <p><strong>7 laser steps in order:</strong> Processing → Charging → Exposing → Developing → Transferring → Fusing → Cleaning.</p>
+  <p><strong>Heat is used in:</strong> the Fusing step. <strong>Laser is used in:</strong> the Exposing step.</p>
+  <p><strong>Vertical lines on laser</strong> = damaged drum → replace toner cartridge.</p>
+  <p><strong>Ghost/echo image</strong> = failed cleaning blade or PCR → replace cartridge; offset distance = drum circumference.</p>
+  <p><strong>Faded laser print</strong> = rock the cartridge to redistribute toner; replace if still faded.</p>
+  <p><strong>Garbled print</strong> = wrong driver or PCL/PostScript mismatch → reinstall correct driver.</p>
+  <p><strong>Stuck/frozen print queue</strong> = stop Print Spooler → delete files in spool\PRINTERS\ → start spooler.</p>
+  <p><strong>Staple jam</strong> = check cartridge first (may just be empty), then remove bent staple from mechanism.</p>
+  <p><strong>Hole punch won't work</strong> = empty the hole punch waste bin.</p>
+  <p><strong>Tray not shown in driver</strong> = go to Printer Properties → Device Settings → mark tray as installed.</p>
+  <p><strong>Network printer keeps losing connection</strong> = assign static IP or DHCP reservation to prevent IP changes.</p>
+  <p><strong>Multipage misfeed</strong> = worn separation pad or overfilled tray. <strong>No feed</strong> = worn pickup rollers.</p>
+</div>
+
+</div>
+</body>
+</html>

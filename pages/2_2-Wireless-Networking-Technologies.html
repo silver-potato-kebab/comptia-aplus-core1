@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CompTIA A+ 2.2 — Explain Wireless Networking Technologies</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --surface2: #f5f4f0;
+    --border: #e5e2d9;
+    --border2: #d4d0c4;
+    --text: #1a1a18;
+    --muted: #6b6860;
+    --accent: #c0392b;
+    --accent2: #2c3e6b;
+    --accent3: #1a6b3a;
+    --accent4: #b5590a;
+    --accent-light: #fdf2f1;
+    --accent2-light: #f0f2f8;
+    --accent3-light: #f0f8f3;
+    --accent4-light: #fdf5ed;
+    --serif: 'Crimson Pro', Georgia, serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── TOP NAV ── */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .top-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .nav-home {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+  .nav-home:hover { color: var(--accent2); }
+  .nav-home::before {
+    content: '←';
+    font-size: 12px;
+  }
+  .nav-sep {
+    font-size: 12px;
+    color: var(--border2);
+    flex-shrink: 0;
+  }
+  .nav-current {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nav-current strong {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    margin-right: 6px;
+  }
+  .top-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .nav-prev, .nav-next {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 4px 9px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    white-space: nowrap;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .nav-prev:hover, .nav-next:hover {
+    border-color: var(--border2);
+    color: var(--accent2);
+  }
+  .nav-prev::before { content: '← '; }
+  .nav-next::after  { content: ' →'; }
+
+  @media (max-width: 600px) {
+    .top-nav { padding: 0 16px; }
+    .nav-current { display: none; }
+    .nav-sep { display: none; }
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  .page { max-width: 860px; margin: 0 auto; padding: 0 40px 80px; }
+
+  /* HEADER */
+  .book-header {
+    border-bottom: 3px double var(--border2);
+    padding: 56px 0 32px;
+    margin-bottom: 48px;
+  }
+  .book-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .book-eyebrow span {
+    background: var(--accent);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-right: 10px;
+    font-size: 10px;
+  }
+  .book-title {
+    font-family: var(--serif);
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+  .book-subtitle {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .book-subtitle span { display: flex; align-items: center; gap: 6px; }
+  .book-subtitle span::before { content: '·'; color: var(--border2); }
+  .book-subtitle span:first-child::before { display: none; }
+
+  /* HEADINGS */
+  h2.chapter {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 600;
+    margin: 52px 0 6px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    letter-spacing: -0.01em;
+  }
+  h2.chapter .ch-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+    letter-spacing: 0.1em;
+    font-weight: 400;
+  }
+  h3.section {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    margin: 36px 0 12px;
+  }
+  h3.section::before { content: '§ '; color: var(--muted); font-weight: 300; }
+
+  p { margin-bottom: 16px; }
+
+  /* CALLOUTS */
+  .callout {
+    border-left: 3px solid;
+    padding: 14px 20px;
+    margin: 24px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 15.5px;
+  }
+  .callout p { margin-bottom: 6px; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout-title {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px !important;
+  }
+  .callout-exam { border-color: var(--accent); background: var(--accent-light); }
+  .callout-exam .callout-title { color: var(--accent); }
+  .callout-info { border-color: var(--accent2); background: var(--accent2-light); }
+  .callout-info .callout-title { color: var(--accent2); }
+  .callout-tip { border-color: var(--accent3); background: var(--accent3-light); }
+  .callout-tip .callout-title { color: var(--accent3); }
+  .callout-warn { border-color: var(--accent4); background: var(--accent4-light); }
+  .callout-warn .callout-title { color: var(--accent4); }
+
+  /* TABLES */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+    font-family: var(--sans);
+    margin: 16px 0 24px;
+  }
+  .data-table thead th {
+    background: var(--surface2);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 9px 13px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .data-table tbody tr { border-bottom: 1px solid var(--border); }
+  .data-table tbody tr:last-child { border-bottom: none; }
+  .data-table td { padding: 9px 13px; vertical-align: top; line-height: 1.5; }
+  .data-table td:first-child {
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 13.5px;
+  }
+
+  /* PROCESS FLOW */
+  .process-flow {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: var(--sans);
+    font-size: 14px;
+  }
+  .flow-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .flow-step:last-child { border-bottom: none; }
+  .flow-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+    min-width: 24px;
+    padding-top: 2px;
+  }
+  .flow-text { color: var(--text); line-height: 1.55; }
+  .flow-text strong { font-weight: 600; }
+
+  /* DEF LIST */
+  .def-list { margin: 16px 0 24px; }
+  .def-item {
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 210px 1fr;
+    gap: 20px;
+    font-size: 15px;
+  }
+  .def-item:last-child { border-bottom: none; }
+  .def-term {
+    font-family: var(--sans);
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 14px;
+    padding-top: 1px;
+    line-height: 1.4;
+  }
+
+  /* GRID CARDS */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 16px 18px;
+  }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 10px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card ul { list-style: none; font-family: var(--sans); font-size: 13.5px; }
+  .card ul li {
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .card ul li:last-child { border-bottom: none; }
+  .card ul li strong { color: var(--text); }
+
+  /* BODY LIST */
+  ul.body-list {
+    list-style: none;
+    font-family: var(--sans);
+    font-size: 15px;
+    padding: 0;
+    margin: 12px 0 20px;
+  }
+  ul.body-list li {
+    padding: 5px 0 5px 18px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  ul.body-list li:last-child { border-bottom: none; }
+  ul.body-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--border2);
+    font-size: 12px;
+  }
+  ul.body-list li strong { color: var(--text); }
+
+  /* ARCH DIAGRAM */
+  .arch-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+  .arch-diagram-header {
+    background: var(--text);
+    color: rgba(255,255,255,0.85);
+    padding: 10px 18px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .arch-body { padding: 20px 24px; }
+  .arch-layer {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 10px 14px;
+    margin-bottom: 6px;
+    font-family: var(--sans);
+    font-size: 13.5px;
+    font-weight: 600;
+    text-align: center;
+    position: relative;
+  }
+  .arch-layer .layer-label {
+    font-size: 10px;
+    font-family: var(--mono);
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 2px;
+  }
+  .layer-hw    { background: #f0f2f8; color: var(--accent2); border-color: #b0bce8; }
+  .layer-hv    { background: #fdf2f1; color: var(--accent); border-color: #e8b0b0; }
+  .layer-os    { background: #f0f8f3; color: var(--accent3); border-color: #b0d8bc; }
+  .layer-app   { background: var(--surface2); color: var(--muted); border-color: var(--border2); }
+  .layer-vm    { background: #fff3e0; color: var(--accent4); border-color: #e8c880; }
+  .arch-arrow {
+    text-align: center;
+    color: var(--border2);
+    font-size: 14px;
+    line-height: 1.2;
+    margin: 2px 0;
+  }
+
+  /* FREQUENCY BAND DISPLAY */
+  .freq-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .freq-card {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .freq-head {
+    padding: 10px 14px;
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 700;
+    text-align: center;
+  }
+  .freq-head.f24 { background: #e3f2fd; color: #1565c0; }
+  .freq-head.f5  { background: #f3e5f5; color: #6a1b9a; }
+  .freq-head.f6  { background: #e8f5e9; color: #1b5e20; }
+  .freq-body { padding: 12px 14px; }
+  .freq-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--sans);
+    font-size: 12.5px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+  .freq-row:last-child { border-bottom: none; }
+  .freq-row strong { color: var(--text); display: block; }
+
+  /* COMPARE GRID */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 20px 0;
+  }
+  .compare-col {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .compare-head {
+    padding: 10px 14px;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 700;
+    text-align: center;
+  }
+  .compare-head.ch-a { background: #e3f2fd; color: #1565c0; }
+  .compare-head.ch-b { background: #fdf2f1; color: #b71c1c; }
+  .compare-head.ch-c { background: #e8f5e9; color: #1b5e20; }
+  .compare-head.ch-d { background: #fff3e0; color: #e65100; }
+  .compare-body { padding: 12px 14px; }
+  .compare-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+  .compare-row:last-child { border-bottom: none; }
+  .compare-row .cr-icon { font-size: 11px; min-width: 14px; margin-top: 2px; }
+  .compare-row strong { color: var(--text); }
+
+  /* BENEFIT ROW */
+  .benefit-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--sans);
+    font-size: 14px;
+  }
+  .benefit-row:last-child { border-bottom: none; }
+  .benefit-icon {
+    font-size: 18px;
+    min-width: 28px;
+    text-align: center;
+    padding-top: 1px;
+  }
+  .benefit-body { line-height: 1.5; }
+  .benefit-body strong { color: var(--text); display: block; font-size: 14.5px; margin-bottom: 2px; }
+  .benefit-body span { color: var(--muted); }
+
+  code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: var(--accent);
+  }
+
+  .key-term { font-style: italic; font-weight: 500; color: var(--accent2); }
+
+  /* SUMMARY */
+  .summary-box {
+    background: var(--text);
+    color: #f0ede6;
+    border-radius: 6px;
+    padding: 28px 32px;
+    margin: 40px 0;
+  }
+  .summary-box h3 {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 18px;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 32px;
+  }
+  .summary-item {
+    font-family: var(--sans);
+    font-size: 13.5px;
+    color: #c4bfb4;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .summary-item .s-sym {
+    color: #fff;
+    font-weight: 600;
+    min-width: 160px;
+    line-height: 1.4;
+  }
+
+  .ch-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--border2), transparent);
+    margin: 48px 0;
+  }
+
+  /* SPECTRUM BAR */
+  .spectrum-bar {
+    height: 28px;
+    border-radius: 4px;
+    display: flex;
+    overflow: hidden;
+    margin: 16px 0 8px;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .spec-seg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  /* CHANNEL WIDTH VISUAL */
+  .ch-width-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--sans);
+    font-size: 13px;
+  }
+  .ch-width-row:last-child { border-bottom: none; }
+  .ch-label { min-width: 68px; font-weight: 600; color: var(--accent2); }
+  .ch-bar-wrap { flex: 1; height: 14px; background: var(--surface2); border-radius: 3px; border: 1px solid var(--border); }
+  .ch-bar { height: 100%; border-radius: 3px; }
+  .ch-note { min-width: 200px; color: var(--muted); font-size: 12px; }
+
+  @media (max-width: 680px) {
+    .page { padding: 0 20px 60px; }
+    .summary-grid, .card-grid, .compare-grid, .freq-grid { grid-template-columns: 1fr; }
+    .def-item { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV — update href values to match your actual file names -->
+<nav class="top-nav">
+  <div class="top-nav-left">
+    <a class="nav-home" href="../index.html">Study Guide</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current"><strong>2.2</strong> Explain Wireless Networking Technologies</span>
+  </div>
+  <div class="top-nav-right">
+    <!-- Point these to the adjacent section files, or remove if not applicable -->
+    <a class="nav-prev" href="./2_1-TCP-UDP-Ports-Protocols.html">2.1</a>
+    <a class="nav-next" href="./2_3-Networked-Hosts-Services.html">2.3</a>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- HEADER -->
+<div class="book-header">
+  <div class="book-eyebrow">
+    <span>2.2</span>
+    CompTIA A+ · Core 1 (220-1201) · Domain 2 — Networking
+  </div>
+  <h1 class="book-title">Explain Wireless<br>Networking Technologies</h1>
+  <div class="book-subtitle">
+    <span>Objective 2.2</span>
+    <span>Domain weight: 20%</span>
+    <span>Frequencies · Channels · 802.11 · Bluetooth · NFC · RFID</span>
+  </div>
+</div>
+
+
+<!-- OVERVIEW -->
+<h2 class="chapter"><span class="ch-num">OVERVIEW</span>Introduction to Wireless Networking</h2>
+
+<p>Wireless networking has become the dominant means by which devices connect to local networks and the internet. Rather than physical copper or fiber cables, wireless technologies use radio frequency (RF) energy — electromagnetic waves — to transmit data through the air between devices and access points. Understanding wireless technologies is essential for any A+ technician, as troubleshooting wireless issues is one of the most common tasks in the field.</p>
+
+<p>The wireless landscape is defined by several key variables: the <span class="key-term">frequency</span> at which a radio signal is transmitted, the <span class="key-term">channel</span> within that frequency band used to avoid interference, the <span class="key-term">standard</span> (IEEE 802.11 amendment) that governs speed and protocol, and the <span class="key-term">technology type</span> (Wi-Fi, Bluetooth, NFC, RFID) best suited to a given use case.</p>
+
+<div class="callout callout-info">
+  <p class="callout-title">Core Concept</p>
+  <p>All wireless communication relies on <strong>radio frequency (RF) signals</strong> — waves of electromagnetic energy that radiate outward from an antenna. Different wireless technologies operate on different parts of the RF spectrum, each with distinct propagation characteristics, range, throughput, and interference profiles. The A+ exam tests your ability to match the right technology to the right scenario and to troubleshoot common wireless problems.</p>
+</div>
+
+<h3 class="section">Key Vocabulary</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Frequency (GHz/MHz)</span>
+    <span>The number of wave cycles per second. Higher frequencies carry more data (more cycles = more bits per second) but are absorbed more easily by walls, furniture, and the human body, reducing range. Lower frequencies penetrate obstacles better but offer lower maximum data rates.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Wavelength</span>
+    <span>The physical distance between two adjacent wave peaks. Inversely related to frequency — higher frequency = shorter wavelength. 2.4 GHz waves are about 12.5 cm long; 5 GHz waves about 6 cm; 6 GHz waves even shorter. Shorter wavelengths mean greater susceptibility to physical obstruction.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Channel</span>
+    <span>A defined sub-band within a frequency band. Multiple access points in the same area use different channels to avoid interfering with each other — much like radio stations on different FM frequencies. Channel overlap is a primary source of wireless interference.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">SSID</span>
+    <span>Service Set Identifier. The human-readable name of a wireless network, broadcast by the access point. Devices use the SSID to identify and join a specific network. Multiple access points can share the same SSID to create a seamless extended network (roaming).</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Access Point (AP)</span>
+    <span>A network device that creates a wireless network segment and bridges wireless clients to the wired infrastructure. A wireless router combines an AP with routing, switching, and sometimes a modem in a single device. Enterprise deployments use dedicated APs managed by a wireless controller.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">MIMO / MU-MIMO</span>
+    <span>Multiple-Input Multiple-Output. A technique using multiple antennas to send and receive multiple data streams simultaneously, dramatically increasing throughput. MU-MIMO (Multi-User MIMO) extends this to allow simultaneous transmissions to multiple clients rather than one at a time.</span>
+  </div>
+</div>
+
+
+<!-- ═══ FREQUENCIES ═══ -->
+<h2 class="chapter"><span class="ch-num">SECTION 1</span>Wireless Frequencies</h2>
+
+<p>Wi-Fi networks operate in <span class="key-term">ISM (Industrial, Scientific, and Medical) radio bands</span> — unlicensed portions of the RF spectrum that do not require a government license to operate. The three primary Wi-Fi bands are 2.4 GHz, 5 GHz, and the newer 6 GHz band introduced with Wi-Fi 6E. Each has distinct trade-offs between range, speed, and interference susceptibility.</p>
+
+<div class="freq-grid">
+  <div class="freq-card">
+    <div class="freq-head f24">2.4 GHz</div>
+    <div class="freq-body">
+      <div class="freq-row"><div><strong>Range</strong> Long range; penetrates walls and obstacles well</div></div>
+      <div class="freq-row"><div><strong>Speed</strong> Lower max throughput (~600 Mbps theoretical)</div></div>
+      <div class="freq-row"><div><strong>Channels</strong> 11 channels (US); only 3 non-overlapping (1, 6, 11)</div></div>
+      <div class="freq-row"><div><strong>Congestion</strong> Very crowded; microwaves, cordless phones, baby monitors, Bluetooth all share this band</div></div>
+      <div class="freq-row"><div><strong>Standards</strong> 802.11b/g/n/ax support</div></div>
+    </div>
+  </div>
+  <div class="freq-card">
+    <div class="freq-head f5">5 GHz</div>
+    <div class="freq-body">
+      <div class="freq-row"><div><strong>Range</strong> Shorter range; attenuated more by walls and distance</div></div>
+      <div class="freq-row"><div><strong>Speed</strong> Much higher throughput (up to ~3.5 Gbps with 802.11ac)</div></div>
+      <div class="freq-row"><div><strong>Channels</strong> 25 non-overlapping 20 MHz channels (US)</div></div>
+      <div class="freq-row"><div><strong>Congestion</strong> Far less congested than 2.4 GHz; less device competition</div></div>
+      <div class="freq-row"><div><strong>Standards</strong> 802.11a/n/ac/ax support</div></div>
+    </div>
+  </div>
+  <div class="freq-card">
+    <div class="freq-head f6">6 GHz</div>
+    <div class="freq-body">
+      <div class="freq-row"><div><strong>Range</strong> Shortest range; most susceptible to attenuation</div></div>
+      <div class="freq-row"><div><strong>Speed</strong> Highest throughput (up to ~9.6 Gbps with 802.11ax)</div></div>
+      <div class="freq-row"><div><strong>Channels</strong> Up to 59 non-overlapping 20 MHz channels (US); vast spectrum</div></div>
+      <div class="freq-row"><div><strong>Congestion</strong> Cleanest band; Wi-Fi 6E/7 devices only; no legacy interference</div></div>
+      <div class="freq-row"><div><strong>Standards</strong> 802.11ax (Wi-Fi 6E) and 802.11be (Wi-Fi 7)</div></div>
+    </div>
+  </div>
+</div>
+
+<h3 class="section">2.4 GHz Band — Deep Dive</h3>
+
+<p>The 2.4 GHz band has been part of Wi-Fi since the original 802.11b standard in 1999. Its lower frequency means its waves are longer and lose less energy when passing through building materials like drywall, wood, and glass. This makes it the best choice for maximum range and whole-home coverage, especially in older or larger buildings with many obstructions.</p>
+
+<p>The critical trade-off is <span class="key-term">congestion</span>. The 2.4 GHz band is an ISM band used by dozens of device categories: microwave ovens leak RF energy at 2.45 GHz, cordless phones, baby monitors, wireless audio systems, Bluetooth devices, and neighboring Wi-Fi networks all compete in the same narrow spectrum. In dense apartment buildings or office environments, a device might detect 20 or more overlapping 2.4 GHz networks simultaneously.</p>
+
+<div class="callout callout-warn">
+  <p class="callout-title">Common Interference Source</p>
+  <p>Microwave ovens operating near 2.4 GHz Wi-Fi can cause significant, intermittent interference. When a microwave is running, the magnetron generates RF noise across the 2.4 GHz band. This manifests as sudden Wi-Fi slowdowns or disconnections whenever the microwave is in use — a classic symptom to recognize in troubleshooting scenarios.</p>
+</div>
+
+<h3 class="section">5 GHz Band — Deep Dive</h3>
+
+<p>The 5 GHz band offers a dramatically cleaner environment than 2.4 GHz, with far more channels, less interference from non-Wi-Fi devices, and much higher maximum throughput. 802.11ac (Wi-Fi 5) is exclusively a 5 GHz standard, which is why modern dual-band routers route high-speed traffic to 5 GHz automatically.</p>
+
+<p>The physics trade-off is penetration. At 5 GHz, electromagnetic waves are shorter and absorbed more readily by building materials. A 5 GHz signal that passes through three walls may be 80% weaker than the same signal in an open room. This makes 5 GHz ideal for high-throughput applications at close to medium range (same room or adjacent rooms), but poor for far-end coverage.</p>
+
+<p>Some portions of the 5 GHz band are shared with radar systems and require <span class="key-term">Dynamic Frequency Selection (DFS)</span> — if a Wi-Fi access point detects a radar signal, it must automatically switch channels to avoid interference. This occasionally causes brief connection interruptions.</p>
+
+<h3 class="section">6 GHz Band — Deep Dive</h3>
+
+<p>The 6 GHz band was opened for unlicensed Wi-Fi use in the US by the FCC in April 2020, enabling the Wi-Fi 6E standard. This was the largest single expansion of unlicensed spectrum in history, adding 1,200 MHz of new spectrum compared to the combined 80 MHz of usable 2.4 GHz and the ~500 MHz of practical 5 GHz spectrum.</p>
+
+<p>The defining advantage of 6 GHz is its cleanliness. Because Wi-Fi 6E requires newer hardware to operate in this band, the 6 GHz band contains no legacy 802.11b/g/n devices, no microwave interference, and no cordless phone interference. Every device competing in 6 GHz is a modern, capable device running modern protocols. This enables dramatically higher efficiency and speed in dense environments like stadiums, conference centers, and offices.</p>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus — Frequency Trade-offs</p>
+  <p>Know the core trade-offs: <strong>2.4 GHz = longer range, more interference, lower speed.</strong> <strong>5 GHz = shorter range, less interference, higher speed.</strong> <strong>6 GHz = shortest range, cleanest band, highest speed.</strong> A question describing slow Wi-Fi near a microwave → suspect 2.4 GHz channel overlap. A question asking which band provides the most non-overlapping channels → 6 GHz.</p>
+</div>
+
+<table class="data-table">
+  <thead><tr><th>Band</th><th>Frequency Range</th><th>Max Channels (US)</th><th>Non-Overlapping (20 MHz)</th><th>Key Trade-off</th></tr></thead>
+  <tbody>
+    <tr><td>2.4 GHz</td><td>2.400–2.4835 GHz</td><td>11</td><td>3 (ch 1, 6, 11)</td><td>Best range; worst congestion</td></tr>
+    <tr><td>5 GHz</td><td>5.150–5.850 GHz</td><td>45</td><td>~25 (20 MHz wide)</td><td>Good balance; DFS on some channels</td></tr>
+    <tr><td>6 GHz</td><td>5.925–7.125 GHz</td><td>59+</td><td>59 (20 MHz wide)</td><td>Best speed/least interference; shortest range</td></tr>
+  </tbody>
+</table>
+
+
+<!-- ═══ CHANNELS ═══ -->
+<h2 class="chapter"><span class="ch-num">SECTION 2</span>Wireless Channels</h2>
+
+<p>A wireless <span class="key-term">channel</span> is a defined subdivision of a frequency band. The 2.4 GHz band, for example, spans approximately 83.5 MHz of spectrum. This spectrum is divided into overlapping 22 MHz channels numbered 1 through 11 (in the US). Access points and wireless clients communicate on one channel at a time, and choosing the right channel — or having the network choose it automatically — is critical to performance.</p>
+
+<h3 class="section">Regulations</h3>
+
+<p>Wireless channels are regulated by government agencies in each country to manage interference and prevent harmful RF emissions. In the United States, the <span class="key-term">FCC (Federal Communications Commission)</span> defines which channels are permitted, the maximum transmit power levels, and whether certain channels require DFS. In Europe, the <span class="key-term">ETSI (European Telecommunications Standards Institute)</span> defines similar rules, often with slightly different channel availability. In Japan, regulatory bodies allow additional channels beyond what the US permits in some bands.</p>
+
+<div class="arch-diagram">
+  <div class="arch-diagram-header">Regulatory Bodies — Global Overview</div>
+  <div class="arch-body">
+    <div class="def-list" style="margin:0;">
+      <div class="def-item">
+        <span class="def-term">FCC (United States)</span>
+        <span>Channels 1–11 for 2.4 GHz; extensive 5 GHz channels with DFS requirements on UNII-2 and UNII-2e; opened 6 GHz in 2020. Maximum EIRP (effective isotropic radiated power) limits apply to all bands.</span>
+      </div>
+      <div class="def-item">
+        <span class="def-term">ETSI (Europe)</span>
+        <span>Channels 1–13 for 2.4 GHz (two additional channels vs. US); similar 5 GHz availability with DFS mandatory on many channels; 6 GHz band opened with power restrictions. EU countries generally follow ETSI standards.</span>
+      </div>
+      <div class="def-item">
+        <span class="def-term">TELEC (Japan)</span>
+        <span>Channels 1–14 for 2.4 GHz (channel 14 only allowed for legacy 802.11b DSSS, not g/n); 5 GHz availability varies; strict power limits. Japan's additional channel 14 is a common exam trivia point.</span>
+      </div>
+      <div class="def-item">
+        <span class="def-term">DFS Requirement</span>
+        <span>Dynamic Frequency Selection is mandatory for Wi-Fi devices operating on channels that overlap with radar frequencies (UNII-2 and UNII-2e in 5 GHz, roughly 5.25–5.725 GHz). APs must listen for radar signals and vacate a channel within 10 seconds if radar is detected. This can cause brief client disconnections.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="callout callout-warn">
+  <p class="callout-title">Regulatory Compliance</p>
+  <p>Using a wireless device set to a country/region that doesn't match your physical location may enable channels or power levels that are illegal locally. This can cause interference with other services (including aircraft radar) and carries significant legal penalties. Always ensure access point region settings match your physical country.</p>
+</div>
+
+<h3 class="section">Channel Selection</h3>
+
+<p>Channel selection is the process of choosing which specific channel (or channels, with channel bonding) an access point uses for transmission. Poor channel selection is one of the most common causes of slow Wi-Fi in environments with many access points. Most modern APs support <span class="key-term">automatic channel selection (ACS)</span>, but understanding manual selection principles is essential for troubleshooting.</p>
+
+<h3 class="section">Channel Widths</h3>
+
+<p>Channel width determines how much spectrum a single channel occupies and directly impacts throughput. Wider channels carry more data per transmission but consume more spectrum and are more susceptible to interference from other users.</p>
+
+<div class="process-flow">
+  <div class="flow-title">Channel Widths — Comparison</div>
+  <div class="ch-width-row" style="display:grid;grid-template-columns:70px 1fr 220px;gap:12px;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);font-family:var(--sans);font-size:13px;">
+    <span style="font-weight:600;color:var(--accent2);">20 MHz</span>
+    <div style="height:14px;background:#bbdefb;border-radius:3px;border:1px solid #90caf9;width:20%;"></div>
+    <span style="color:var(--muted);">Standard width; maximum non-overlapping channels; best in dense environments</span>
+  </div>
+  <div class="ch-width-row" style="display:grid;grid-template-columns:70px 1fr 220px;gap:12px;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);font-family:var(--sans);font-size:13px;">
+    <span style="font-weight:600;color:var(--accent2);">40 MHz</span>
+    <div style="height:14px;background:#ce93d8;border-radius:3px;border:1px solid #ab47bc;width:40%;"></div>
+    <span style="color:var(--muted);">Bonds two 20 MHz channels; roughly 2× throughput; common for 5 GHz home use</span>
+  </div>
+  <div class="ch-width-row" style="display:grid;grid-template-columns:70px 1fr 220px;gap:12px;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);font-family:var(--sans);font-size:13px;">
+    <span style="font-weight:600;color:var(--accent2);">80 MHz</span>
+    <div style="height:14px;background:#a5d6a7;border-radius:3px;border:1px solid #66bb6a;width:65%;"></div>
+    <span style="color:var(--muted);">802.11ac minimum for 5 GHz high-speed; significant throughput gain; moderate spectrum use</span>
+  </div>
+  <div class="ch-width-row" style="display:grid;grid-template-columns:70px 1fr 220px;gap:12px;align-items:center;padding:7px 0;">
+    <span style="font-weight:600;color:var(--accent2);">160 MHz</span>
+    <div style="height:14px;background:#ffcc80;border-radius:3px;border:1px solid #ffa726;width:95%;"></div>
+    <span style="color:var(--muted);">Maximum width; highest throughput; consumes most spectrum; best only in 6 GHz</span>
+  </div>
+</div>
+
+<div class="callout callout-info">
+  <p class="callout-title">Channel Width in Practice</p>
+  <p>In the <strong>2.4 GHz band</strong>, using 40 MHz channels is generally a poor choice — there are only 3 non-overlapping 20 MHz channels, and bonding them effectively leaves only one non-overlapping 40 MHz channel. This causes massive co-channel interference. <strong>In 5 GHz</strong>, 80 MHz is the sweet spot for most environments. <strong>In 6 GHz</strong>, 80–160 MHz channels are practical because so much spectrum is available.</p>
+</div>
+
+<h3 class="section">Non-Overlapping Channels in 2.4 GHz</h3>
+
+<p>The most critical channel concept for the A+ exam is the three <span class="key-term">non-overlapping channels</span> in the 2.4 GHz band: <strong>channels 1, 6, and 11</strong>. Because 2.4 GHz channels are 22 MHz wide but the entire band is only about 83 MHz, adjacent channels overlap significantly. An access point on channel 3 will interfere with access points on channels 1, 2, 4, and 5.</p>
+
+<p>By using only channels 1, 6, and 11, three access points in the same physical area can operate without overlapping each other's frequencies. This is the standard configuration for enterprise Wi-Fi deployments with multiple access points, and the correct answer to nearly every channel-selection question on the exam.</p>
+
+<div class="arch-diagram">
+  <div class="arch-diagram-header">2.4 GHz Channel Overlap Diagram</div>
+  <div class="arch-body">
+    <p style="font-family:var(--sans);font-size:13px;color:var(--muted);margin-bottom:16px;">The following channels are <strong>non-overlapping</strong> in the US 2.4 GHz band. Each occupies a distinct, non-interfering slice of spectrum. All other channel combinations result in partial or full overlap.</p>
+    <div style="display:flex;gap:6px;margin-bottom:8px;">
+      <div style="flex:1;padding:10px;background:#e3f2fd;border:2px solid #1565c0;border-radius:4px;text-align:center;font-family:var(--sans);font-size:14px;font-weight:700;color:#1565c0;">Channel 1<br><span style="font-size:11px;font-weight:400;">2.412 GHz</span></div>
+      <div style="flex:1;padding:10px;background:#f3e5f5;border:2px solid #6a1b9a;border-radius:4px;text-align:center;font-family:var(--sans);font-size:14px;font-weight:700;color:#6a1b9a;">Channel 6<br><span style="font-size:11px;font-weight:400;">2.437 GHz</span></div>
+      <div style="flex:1;padding:10px;background:#e8f5e9;border:2px solid #1b5e20;border-radius:4px;text-align:center;font-family:var(--sans);font-size:14px;font-weight:700;color:#1b5e20;">Channel 11<br><span style="font-size:11px;font-weight:400;">2.462 GHz</span></div>
+    </div>
+    <p style="font-family:var(--sans);font-size:12px;color:var(--muted);margin-top:10px;margin-bottom:0;">In Europe (ETSI), channels 1, 5, 9, and 13 may be used as four non-overlapping channels (with 802.11g+ using 20 MHz spacing). The US-only restriction to 1/6/11 is driven by the 22 MHz channel width of legacy 802.11b.</p>
+  </div>
+</div>
+
+<h3 class="section">Channel Frequencies</h3>
+
+<table class="data-table">
+  <thead><tr><th>Channel</th><th>Center Frequency</th><th>Overlap Notes</th><th>Use in US?</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>2.412 GHz</td><td>Non-overlapping with ch 6 & 11</td><td>✓ Recommended</td></tr>
+    <tr><td>2</td><td>2.417 GHz</td><td>Overlaps ch 1 and 3</td><td>Avoid</td></tr>
+    <tr><td>3</td><td>2.422 GHz</td><td>Overlaps ch 1 and 5</td><td>Avoid</td></tr>
+    <tr><td>4</td><td>2.427 GHz</td><td>Overlaps ch 1 through 6</td><td>Avoid</td></tr>
+    <tr><td>5</td><td>2.432 GHz</td><td>Overlaps ch 1 through 7</td><td>Avoid</td></tr>
+    <tr><td>6</td><td>2.437 GHz</td><td>Non-overlapping with ch 1 & 11</td><td>✓ Recommended</td></tr>
+    <tr><td>7</td><td>2.442 GHz</td><td>Overlaps ch 5 through 9</td><td>Avoid</td></tr>
+    <tr><td>8</td><td>2.447 GHz</td><td>Overlaps ch 6 through 10</td><td>Avoid</td></tr>
+    <tr><td>9</td><td>2.452 GHz</td><td>Overlaps ch 7 through 11</td><td>Avoid</td></tr>
+    <tr><td>10</td><td>2.457 GHz</td><td>Overlaps ch 8 through 11</td><td>Avoid</td></tr>
+    <tr><td>11</td><td>2.462 GHz</td><td>Non-overlapping with ch 1 & 6</td><td>✓ Recommended</td></tr>
+  </tbody>
+</table>
+
+<h3 class="section">Bands and Band Steering</h3>
+
+<p>Modern wireless routers and access points are <span class="key-term">dual-band</span> (2.4 GHz + 5 GHz) or <span class="key-term">tri-band</span> (2.4 GHz + two 5 GHz radios, or 2.4 GHz + 5 GHz + 6 GHz). <span class="key-term">Band steering</span> is a feature that uses 802.11k/v signals to encourage capable clients to move from the congested 2.4 GHz band to the less-congested 5 GHz or 6 GHz band, improving overall network efficiency.</p>
+
+<ul class="body-list">
+  <li><strong>Single-band (2.4 GHz only):</strong> Legacy or budget devices; limited throughput; maximum range</li>
+  <li><strong>Dual-band (2.4 + 5 GHz):</strong> Standard for all modern consumer routers; most common deployment</li>
+  <li><strong>Tri-band (2.4 + 5 + 5 GHz):</strong> High-end routers dedicate one 5 GHz radio to backhaul for mesh systems</li>
+  <li><strong>Tri-band with 6 GHz (2.4 + 5 + 6 GHz):</strong> Wi-Fi 6E routers; maximum performance; future-proof</li>
+</ul>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus — Channels</p>
+  <p>Memorize: <strong>Channels 1, 6, 11 are the three non-overlapping 2.4 GHz channels in the US.</strong> The 5 GHz band has many more non-overlapping channels (roughly 25 at 20 MHz width). Using overlapping channels is the primary cause of co-channel and adjacent-channel interference. A site survey uses a wireless analyzer to discover which channels neighbors are using before configuring an AP.</p>
+</div>
+
+
+<!-- ═══ 802.11 STANDARDS ═══ -->
+<h2 class="chapter"><span class="ch-num">SECTION 3</span>IEEE 802.11 Standards</h2>
+
+<p>The <span class="key-term">IEEE 802.11</span> family of standards defines the technical specifications for Wi-Fi networks — how data is transmitted, at what speed, on which frequencies, and with what modulation techniques. Each amendment to the original 1997 standard added capabilities. The Wi-Fi Alliance introduced simplified marketing names (Wi-Fi 4, Wi-Fi 5, Wi-Fi 6) for the most recent major amendments.</p>
+
+<table class="data-table">
+  <thead><tr><th>Standard</th><th>Wi-Fi Name</th><th>Year</th><th>Band(s)</th><th>Max Throughput</th><th>Key Technology</th></tr></thead>
+  <tbody>
+    <tr><td>802.11</td><td>—</td><td>1997</td><td>2.4 GHz</td><td>2 Mbps</td><td>Original standard; DSSS/FHSS</td></tr>
+    <tr><td>802.11a</td><td>—</td><td>1999</td><td>5 GHz</td><td>54 Mbps</td><td>First 5 GHz standard; OFDM; little adoption</td></tr>
+    <tr><td>802.11b</td><td>—</td><td>1999</td><td>2.4 GHz</td><td>11 Mbps</td><td>First mass-market standard; DSSS; defined ch 1/6/11</td></tr>
+    <tr><td>802.11g</td><td>—</td><td>2003</td><td>2.4 GHz</td><td>54 Mbps</td><td>Backward compatible with 11b; OFDM</td></tr>
+    <tr><td>802.11n</td><td>Wi-Fi 4</td><td>2009</td><td>2.4 + 5 GHz</td><td>600 Mbps</td><td>MIMO; 40 MHz channels; dual-band; beam selection</td></tr>
+    <tr><td>802.11ac</td><td>Wi-Fi 5</td><td>2013</td><td>5 GHz only</td><td>~3.5 Gbps</td><td>MU-MIMO; 80/160 MHz channels; beamforming; Wave 2</td></tr>
+    <tr><td>802.11ax</td><td>Wi-Fi 6/6E</td><td>2019/2021</td><td>2.4 + 5 + 6 GHz</td><td>~9.6 Gbps</td><td>OFDMA; BSS Coloring; TWT; MU-MIMO 8×8; 6 GHz (6E)</td></tr>
+    <tr><td>802.11be</td><td>Wi-Fi 7</td><td>2024</td><td>2.4 + 5 + 6 GHz</td><td>~46 Gbps</td><td>320 MHz channels; 4096-QAM; MLO; next-gen standard</td></tr>
+  </tbody>
+</table>
+
+<h3 class="section">Key Standard Details — Exam-Critical</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">802.11b</span>
+    <span>The first widely deployed Wi-Fi standard (1999). Used <strong>Direct Sequence Spread Spectrum (DSSS)</strong> modulation at 2.4 GHz with a maximum of 11 Mbps. Defined the 11-channel 2.4 GHz US channel plan and the concept of non-overlapping channels 1, 6, and 11. Backward compatibility requirements with 802.11b slowed later 2.4 GHz networks significantly — a single 802.11b client on a network forces the AP to use protection mechanisms that reduce total throughput.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">802.11a</span>
+    <span>Also released in 1999 but significantly less adopted than 802.11b. Operated at <strong>5 GHz</strong> using OFDM with up to 54 Mbps. Was not compatible with 802.11b since they used different frequencies. Expensive hardware and shorter range limited adoption. However, 802.11a established the 5 GHz Wi-Fi band that later became dominant with 802.11n and 802.11ac.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">802.11g</span>
+    <span>Released in 2003, 802.11g brought 54 Mbps to the 2.4 GHz band using OFDM while maintaining backward compatibility with 802.11b clients. 802.11g became the dominant home Wi-Fi standard through the mid-2000s until 802.11n arrived. Any 802.11b client on an 802.11g network forces the AP to add protection overhead, reducing effective throughput to well below 54 Mbps.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">802.11n (Wi-Fi 4)</span>
+    <span>The 2009 amendment was transformational: it introduced <strong>MIMO</strong> (multiple antennas for multiple simultaneous data streams), dual-band operation (2.4 GHz and 5 GHz simultaneously), and 40 MHz channel bonding. Maximum theoretical throughput reached 600 Mbps with 4×4 MIMO and 40 MHz channels. 802.11n is the first standard most people would recognize as "modern" Wi-Fi and remains in widespread deployment today.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">802.11ac (Wi-Fi 5)</span>
+    <span>Released in 2013, 802.11ac is the <strong>5 GHz-only</strong> standard that brought gigabit Wi-Fi to consumers. Key innovations: 80 MHz and 160 MHz channel bonding (up to 3.47 Gbps with 8×8 MU-MIMO on 160 MHz channels), <strong>MU-MIMO</strong> allowing simultaneous downlink to multiple clients, and explicit beamforming that focuses signal energy toward clients. Wave 2 (later 802.11ac revision) added 160 MHz and 4-client MU-MIMO. The most common standard deployed in enterprise environments today.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">802.11ax (Wi-Fi 6/6E)</span>
+    <span>The current generation standard, released in 2019 (Wi-Fi 6) with a 2021 extension to 6 GHz (Wi-Fi 6E). Key innovations beyond raw speed: <strong>OFDMA</strong> (multiple clients share one transmission, similar to LTE), <strong>BSS Coloring</strong> (spatial reuse to reduce collisions in dense environments), <strong>TWT (Target Wake Time)</strong> (clients sleep and wake on a schedule to extend battery life), and uplink MU-MIMO. Wi-Fi 6 is optimized for dense environments — stadiums, airports, apartment buildings — rather than just maximum single-device speed.</span>
+  </div>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus — 802.11 Standards</p>
+  <p>Key facts to memorize: <strong>802.11a = 5 GHz, 54 Mbps.</strong> <strong>802.11b = 2.4 GHz, 11 Mbps.</strong> <strong>802.11g = 2.4 GHz, 54 Mbps.</strong> <strong>802.11n = both bands, 600 Mbps, MIMO.</strong> <strong>802.11ac = 5 GHz only, up to ~3.5 Gbps, MU-MIMO.</strong> <strong>802.11ax = all three bands (6E adds 6 GHz).</strong> 802.11ac's 5-GHz-only operation is a frequent exam question — ac devices cannot fall back to 2.4 GHz.</p>
+</div>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>2.4 GHz-Only Standards</h4>
+    <ul>
+      <li><strong>802.11b</strong> — 11 Mbps; DSSS; 1999</li>
+      <li><strong>802.11g</strong> — 54 Mbps; OFDM; backward compat with b</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>5 GHz-Only Standards</h4>
+    <ul>
+      <li><strong>802.11a</strong> — 54 Mbps; OFDM; 1999; low adoption</li>
+      <li><strong>802.11ac (Wi-Fi 5)</strong> — up to 3.5 Gbps; MU-MIMO; dominant</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Dual-Band Standards</h4>
+    <ul>
+      <li><strong>802.11n (Wi-Fi 4)</strong> — 2.4 + 5 GHz; up to 600 Mbps; MIMO</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Tri-Band Standards</h4>
+    <ul>
+      <li><strong>802.11ax (Wi-Fi 6)</strong> — 2.4 + 5 GHz; OFDMA; up to 9.6 Gbps</li>
+      <li><strong>802.11ax (Wi-Fi 6E)</strong> — adds 6 GHz band</li>
+      <li><strong>802.11be (Wi-Fi 7)</strong> — all three bands; MLO; 46 Gbps</li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- ═══ BLUETOOTH ═══ -->
+<h2 class="chapter"><span class="ch-num">SECTION 4</span>Bluetooth</h2>
+
+<p>Bluetooth is a short-range wireless technology designed for <span class="key-term">Personal Area Networks (PANs)</span> — connecting devices within close proximity, typically within 10 meters (33 feet), though modern versions can reach farther. Unlike Wi-Fi, which connects devices to a network infrastructure, Bluetooth creates direct point-to-point or point-to-multipoint connections between devices: phone to headset, laptop to keyboard, computer to printer, phone to car.</p>
+
+<p>Bluetooth operates in the <strong>2.4 GHz ISM band</strong>, using a technique called <span class="key-term">Frequency Hopping Spread Spectrum (FHSS)</span>. Bluetooth devices rapidly hop between 79 different 1 MHz channels within the 2.4 GHz band approximately 1,600 times per second. This hopping pattern makes Bluetooth remarkably resilient to interference — if one channel is noisy, the device hops to another automatically within milliseconds.</p>
+
+<h3 class="section">Bluetooth Versions</h3>
+
+<table class="data-table">
+  <thead><tr><th>Version</th><th>Year</th><th>Max Speed</th><th>Key Additions</th></tr></thead>
+  <tbody>
+    <tr><td>Bluetooth 1.0–1.2</td><td>1999–2003</td><td>1 Mbps</td><td>Original; basic profiles; EDR (1.2)</td></tr>
+    <tr><td>Bluetooth 2.0 + EDR</td><td>2004</td><td>3 Mbps</td><td>Enhanced Data Rate; faster transfers; less power</td></tr>
+    <tr><td>Bluetooth 3.0 + HS</td><td>2009</td><td>24 Mbps</td><td>High Speed using Wi-Fi radio for large transfers</td></tr>
+    <tr><td>Bluetooth 4.0 (BLE)</td><td>2010</td><td>1 Mbps</td><td>Bluetooth Low Energy (BLE); IoT; sensors; beacons</td></tr>
+    <tr><td>Bluetooth 4.2</td><td>2014</td><td>1 Mbps</td><td>IPv6 support; improved security; faster BLE</td></tr>
+    <tr><td>Bluetooth 5.0</td><td>2016</td><td>2 Mbps</td><td>4× range; 2× speed vs BLE 4.2; 8× broadcast capacity</td></tr>
+    <tr><td>Bluetooth 5.1</td><td>2019</td><td>2 Mbps</td><td>Direction finding / angle-of-arrival for location</td></tr>
+    <tr><td>Bluetooth 5.2</td><td>2020</td><td>2 Mbps</td><td>LE Audio; LC3 codec; Auracast broadcast audio</td></tr>
+    <tr><td>Bluetooth 5.3/5.4</td><td>2021–2023</td><td>2 Mbps</td><td>Enhanced connection; PAwR for IoT; improved reliability</td></tr>
+  </tbody>
+</table>
+
+<h3 class="section">Bluetooth Low Energy (BLE)</h3>
+
+<p><span class="key-term">Bluetooth Low Energy (BLE)</span>, introduced with Bluetooth 4.0, is a separate protocol within the Bluetooth standard specifically designed for devices that transmit small amounts of data infrequently and must run on tiny batteries for months or years. BLE is the foundation of the Internet of Things (IoT) device ecosystem.</p>
+
+<div class="arch-body" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:20px 24px;margin:20px 0;">
+  <div class="benefit-row">
+    <div class="benefit-icon">⌚</div>
+    <div class="benefit-body">
+      <strong>Wearables and fitness trackers</strong>
+      <span>Heart rate monitors, smartwatches, and fitness bands use BLE to periodically transmit sensor readings to a paired smartphone without draining their small batteries.</span>
+    </div>
+  </div>
+  <div class="benefit-row">
+    <div class="benefit-icon">🔑</div>
+    <div class="benefit-body">
+      <strong>Smart locks and access control</strong>
+      <span>BLE-enabled locks detect proximity of a paired smartphone and unlock automatically, or accept credential messages from a Bluetooth connection.</span>
+    </div>
+  </div>
+  <div class="benefit-row">
+    <div class="benefit-icon">📍</div>
+    <div class="benefit-body">
+      <strong>Asset tracking beacons</strong>
+      <span>iBeacon (Apple) and Eddystone (Google) beacons continuously broadcast their location ID via BLE advertising packets. Receivers use RSSI (signal strength) triangulation to locate assets like luggage, equipment, or retail displays.</span>
+    </div>
+  </div>
+  <div class="benefit-row">
+    <div class="benefit-icon">🩺</div>
+    <div class="benefit-body">
+      <strong>Medical sensors</strong>
+      <span>Continuous glucose monitors, blood pressure cuffs, and implanted cardiac monitors use BLE to transmit readings to smartphones or dedicated receivers without requiring frequent recharging.</span>
+    </div>
+  </div>
+</div>
+
+<h3 class="section">Bluetooth Pairing and Security</h3>
+
+<p>Bluetooth devices must <span class="key-term">pair</span> before communicating — a one-time process that exchanges a cryptographic key to authenticate and encrypt future communications. The pairing process has evolved significantly across Bluetooth versions:</p>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Legacy Pairing (PIN)</span>
+    <span>Early Bluetooth versions used a shared PIN (often "0000" or "1234") entered on both devices. This was vulnerable to eavesdropping attacks because the PIN exchange was observable and PIN entropy was low. Never use legacy pairing for sensitive applications.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">SSP — Just Works</span>
+    <span>Secure Simple Pairing (SSP) introduced with Bluetooth 2.1. "Just Works" mode requires no user interaction — devices pair automatically. Used for devices with no display (headsets, keyboards without screens). Protects against passive eavesdropping but not man-in-the-middle attacks.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">SSP — Numeric Comparison</span>
+    <span>Both devices display a 6-digit code; the user confirms they match. Strong protection against MITM attacks. Used for devices with displays (smartphones pairing to car audio).</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Bluejacking / Bluesnarfing</span>
+    <span><strong>Bluejacking</strong> sends unsolicited messages to discoverable Bluetooth devices (annoying but harmless). <strong>Bluesnarfing</strong> exploits vulnerabilities to access contacts, calendar, and data without authorization — a serious security attack. Setting a device to non-discoverable mode (while remaining connectable to paired devices) mitigates bluejacking and reduces bluesnarfing exposure.</span>
+  </div>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus — Bluetooth</p>
+  <p>Key facts: Bluetooth uses the <strong>2.4 GHz ISM band</strong> with <strong>FHSS</strong> (frequency hopping). Typical range is <strong>10 meters (Class 2)</strong> for most consumer devices. <strong>BLE (Bluetooth 4.0+)</strong> is designed for low-power IoT sensors. Bluetooth creates a <strong>PAN (Personal Area Network)</strong>. A piconet is a Bluetooth network of one master and up to 7 active slaves.</p>
+</div>
+
+
+<!-- ═══ NFC ═══ -->
+<h2 class="chapter"><span class="ch-num">SECTION 5</span>Near Field Communication (NFC)</h2>
+
+<p><span class="key-term">Near Field Communication (NFC)</span> is an extremely short-range wireless technology derived from RFID that enables communication between devices brought within approximately <strong>4 centimeters (1.6 inches)</strong> of each other. NFC operates at <strong>13.56 MHz</strong> and transfers data at speeds up to 424 Kbps. Its defining characteristic is the requirement for extreme physical proximity — this close range is both a limitation and a security feature.</p>
+
+<p>NFC operates on the principle of <span class="key-term">inductive coupling</span> — a magnetic field generated by one device induces a current in a loop antenna in the other device. Unlike Wi-Fi or Bluetooth, which broadcast energy outward in all directions, NFC fields are extremely localized and drop off rapidly with distance, making accidental or unauthorized connections essentially impossible at the protocol level.</p>
+
+<h3 class="section">NFC Operating Modes</h3>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>Reader/Writer Mode</h4>
+    <ul>
+      <li><strong>Active device reads passive tag</strong> — phone reads an NFC tag embedded in a poster or product</li>
+      <li><strong>One-directional</strong> — tag responds to reader queries; tag has no battery</li>
+      <li><strong>Range</strong> — typically 2–4 cm</li>
+      <li><strong>Use cases</strong> — smart labels, marketing tags, asset information, museum exhibits</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Peer-to-Peer Mode</h4>
+    <ul>
+      <li><strong>Two-way active communication</strong> between two NFC-capable devices</li>
+      <li><strong>Both devices powered</strong> — enables bidirectional data transfer</li>
+      <li><strong>Use cases</strong> — Android Beam (deprecated), sharing contacts, Wi-Fi/Bluetooth pairing handshake</li>
+      <li><strong>Speeds</strong> — up to 424 Kbps; suitable for small data only</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Card Emulation Mode</h4>
+    <ul>
+      <li><strong>Device acts as a smart card</strong> — phone emulates a contactless payment card</li>
+      <li><strong>Host Card Emulation (HCE)</strong> — software-based emulation without secure element</li>
+      <li><strong>Use cases</strong> — Apple Pay, Google Pay, transit cards, hotel key cards</li>
+      <li><strong>Security</strong> — tokenization protects actual card numbers from readers</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Key NFC Specs</h4>
+    <ul>
+      <li><strong>Frequency</strong> — 13.56 MHz</li>
+      <li><strong>Range</strong> — 0–4 cm (practical tap-to-use)</li>
+      <li><strong>Speed</strong> — 106 / 212 / 424 Kbps</li>
+      <li><strong>Standard</strong> — ISO/IEC 14443, ISO/IEC 18092</li>
+      <li><strong>Power</strong> — passive tags need no battery (reader-powered)</li>
+    </ul>
+  </div>
+</div>
+
+<h3 class="section">NFC Use Cases</h3>
+
+<ul class="body-list">
+  <li><strong>Contactless payments:</strong> Apple Pay, Google Pay, Samsung Pay — tap phone/watch to payment terminal to authorize transaction using tokenized card credentials</li>
+  <li><strong>Transit systems:</strong> Contactless transit cards (London Oyster, NYC OMNY, Tokyo Suica) use NFC card emulation for tap-to-pay fare collection</li>
+  <li><strong>Access control:</strong> Building entry systems, hotel room keys, and employee badges increasingly use NFC instead of legacy magnetic stripe</li>
+  <li><strong>Quick device pairing:</strong> NFC tap initiates a Bluetooth or Wi-Fi pairing handshake — user taps phone to speaker, NFC exchanges Bluetooth credentials, devices pair automatically</li>
+  <li><strong>Smart tags:</strong> NFC tags embedded in posters, products, or business cards allow phones to read URLs, contact information, or trigger automation routines when tapped</li>
+  <li><strong>Healthcare:</strong> NFC-enabled patient wristbands allow staff to tap a phone to access patient records and medication schedules at bedside</li>
+</ul>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus — NFC</p>
+  <p>NFC's defining characteristic is its <strong>extremely short range (≤4 cm)</strong>, which makes it inherently more secure against eavesdropping than longer-range wireless technologies. It operates at <strong>13.56 MHz</strong>. The primary real-world application tested on the A+ exam is <strong>contactless payment</strong> (mobile wallets). NFC differs from RFID in that NFC supports bidirectional, peer-to-peer communication between active devices.</p>
+</div>
+
+
+<!-- ═══ RFID ═══ -->
+<h2 class="chapter"><span class="ch-num">SECTION 6</span>Radio-Frequency Identification (RFID)</h2>
+
+<p><span class="key-term">Radio-Frequency Identification (RFID)</span> is a wireless identification technology that uses radio waves to automatically identify and track objects, animals, or people. An RFID system consists of two components: a <span class="key-term">reader</span> (also called an interrogator), which emits RF energy, and a <span class="key-term">tag</span> (also called a transponder), which is attached to the item being tracked and responds to the reader's signal with a unique identifier.</p>
+
+<p>RFID is fundamentally a one-directional identification system — readers interrogate tags and tags respond with their stored ID. Unlike NFC (which evolved from RFID), traditional RFID is not designed for peer-to-peer data exchange. RFID enables automatic identification without requiring line-of-sight or physical contact — a pallet of goods can be read through cardboard boxes, a library book through its cover, or a vehicle through its windshield.</p>
+
+<h3 class="section">RFID Tag Types</h3>
+
+<div class="compare-grid">
+  <div class="compare-col">
+    <div class="compare-head ch-a">Passive RFID Tags</div>
+    <div class="compare-body">
+      <div class="compare-row"><span class="cr-icon">🔋</span><div><strong>No battery required</strong> — powered entirely by RF energy from the reader</div></div>
+      <div class="compare-row"><span class="cr-icon">📏</span><div><strong>Range</strong> — centimeters to a few meters depending on frequency</div></div>
+      <div class="compare-row"><span class="cr-icon">💰</span><div><strong>Low cost</strong> — can be manufactured for pennies; applied at scale to retail goods</div></div>
+      <div class="compare-row"><span class="cr-icon">🏷️</span><div><strong>Uses</strong> — retail inventory tags, library books, access cards, supply chain labels</div></div>
+      <div class="compare-row"><span class="cr-icon">⏳</span><div><strong>Lifetime</strong> — essentially unlimited since no battery to deplete</div></div>
+    </div>
+  </div>
+  <div class="compare-col">
+    <div class="compare-head ch-b">Active RFID Tags</div>
+    <div class="compare-body">
+      <div class="compare-row"><span class="cr-icon">🔋</span><div><strong>Battery-powered</strong> — broadcasts continuously; does not require reader proximity</div></div>
+      <div class="compare-row"><span class="cr-icon">📏</span><div><strong>Range</strong> — up to 100 meters or more; much longer than passive tags</div></div>
+      <div class="compare-row"><span class="cr-icon">💰</span><div><strong>Higher cost</strong> — battery and circuitry increase price significantly</div></div>
+      <div class="compare-row"><span class="cr-icon">🏷️</span><div><strong>Uses</strong> — vehicle tracking, shipping containers, high-value asset monitoring</div></div>
+      <div class="compare-row"><span class="cr-icon">⏳</span><div><strong>Lifetime</strong> — limited by battery; typically 3–5 years</div></div>
+    </div>
+  </div>
+</div>
+
+<h3 class="section">RFID Frequency Bands</h3>
+
+<table class="data-table">
+  <thead><tr><th>Band</th><th>Frequency</th><th>Range</th><th>Read Speed</th><th>Common Uses</th></tr></thead>
+  <tbody>
+    <tr><td>LF (Low Frequency)</td><td>125–134 kHz</td><td>Up to 10 cm</td><td>Slow</td><td>Animal microchips, car key fobs, access control cards</td></tr>
+    <tr><td>HF (High Frequency)</td><td>13.56 MHz</td><td>Up to 1 m</td><td>Moderate</td><td>Library books, passports, contactless smart cards, NFC</td></tr>
+    <tr><td>UHF (Ultra High Frequency)</td><td>860–960 MHz</td><td>Up to 12 m</td><td>Fast</td><td>Retail inventory, supply chain/logistics, toll collection</td></tr>
+    <tr><td>Microwave</td><td>2.45 GHz</td><td>Up to 2 m</td><td>Very fast</td><td>Specialized industrial tracking; high-speed applications</td></tr>
+  </tbody>
+</table>
+
+<h3 class="section">RFID Applications</h3>
+
+<div class="arch-body" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:20px 24px;margin:20px 0;">
+  <div class="benefit-row">
+    <div class="benefit-icon">🏪</div>
+    <div class="benefit-body">
+      <strong>Retail inventory management</strong>
+      <span>UHF RFID tags on merchandise allow entire store shelves to be inventoried in minutes by walking through with a reader, vs. hours of manual barcode scanning. Walmart and Target have mandated RFID tagging from suppliers for years. Loss prevention gates at store exits detect tags that haven't been deactivated at purchase.</span>
+    </div>
+  </div>
+  <div class="benefit-row">
+    <div class="benefit-icon">🚗</div>
+    <div class="benefit-body">
+      <strong>Toll collection and vehicle access</strong>
+      <span>E-ZPass, SunPass, and similar systems use active UHF RFID transponders in vehicles. Readers embedded in highway gantries detect passing vehicles at highway speed and charge tolls electronically. Parking garages and gated communities use RFID for access control without requiring drivers to stop.</span>
+    </div>
+  </div>
+  <div class="benefit-row">
+    <div class="benefit-icon">✈️</div>
+    <div class="benefit-body">
+      <strong>Airline baggage tracking</strong>
+      <span>RFID-embedded baggage tags allow automated sorting systems to track and route bags through airports without line-of-sight barcode scanning. IATA Resolution 753 requires baggage tracking at key touchpoints, driving widespread airline RFID adoption.</span>
+    </div>
+  </div>
+  <div class="benefit-row">
+    <div class="benefit-icon">🐾</div>
+    <div class="benefit-body">
+      <strong>Animal identification</strong>
+      <span>LF RFID microchips (15-digit ISO 11784/11785 format) are implanted subcutaneously in pets, livestock, and wildlife. Veterinarians and shelters use handheld readers to identify animals. Each microchip contains a unique ID linked to owner information in a registry database.</span>
+    </div>
+  </div>
+  <div class="benefit-row">
+    <div class="benefit-icon">📦</div>
+    <div class="benefit-body">
+      <strong>Supply chain and logistics</strong>
+      <span>RFID enables pallets and shipping containers to be read as they move through warehouse dock doors, automatically updating inventory systems. Combined with GPS tracking, RFID creates end-to-end visibility across supply chains from manufacturer to retailer.</span>
+    </div>
+  </div>
+  <div class="benefit-row">
+    <div class="benefit-icon">🏥</div>
+    <div class="benefit-body">
+      <strong>Healthcare asset tracking</strong>
+      <span>Hospitals use active RFID tags on expensive mobile equipment (IV pumps, ventilators, crash carts) to locate assets in real time. RFID wristbands on patients enable automated medication administration verification, reducing errors.</span>
+    </div>
+  </div>
+</div>
+
+<h3 class="section">RFID Security Considerations</h3>
+
+<div class="callout callout-warn">
+  <p class="callout-title">RFID Security Risks</p>
+  <p><strong>Eavesdropping:</strong> Passive RFID tags respond to any reader that provides the correct RF interrogation signal. A malicious reader within range could silently read tag contents without the tag owner's knowledge. This is a concern for passports, employee badges, and contactless payment cards. <strong>RFID-blocking wallets</strong> and sleeves (containing metallic shielding) prevent unauthorized reads by attenuating RF signals. Modern passports and credit cards use encryption to protect data even if the tag is read. <strong>Relay attacks</strong> amplify a legitimate card's signal to fool a reader into thinking the card is present.</p>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus — RFID</p>
+  <p>RFID is an <strong>automatic identification technology</strong> using radio waves, enabling identification without line-of-sight. Passive tags have <strong>no battery</strong> and are powered by the reader's RF field; active tags have a battery and longer range. RFID tags store a <strong>unique identifier (UID)</strong> that readers capture. Key differences from NFC: RFID is primarily one-way identification; NFC adds bidirectional, peer-to-peer communication and operates specifically at 13.56 MHz.</p>
+</div>
+
+
+<!-- ═══ COMPARISON ═══ -->
+<h2 class="chapter"><span class="ch-num">SECTION 7</span>Wireless Technology Comparison</h2>
+
+<p>A key exam skill is selecting the appropriate wireless technology for a given scenario. The following table and comparison grid consolidate the critical differentiators between Wi-Fi, Bluetooth, NFC, and RFID.</p>
+
+<table class="data-table">
+  <thead><tr><th>Technology</th><th>Frequency</th><th>Range</th><th>Speed</th><th>Primary Use Case</th><th>Infrastructure Needed</th></tr></thead>
+  <tbody>
+    <tr><td>Wi-Fi (802.11)</td><td>2.4 / 5 / 6 GHz</td><td>Tens to hundreds of meters</td><td>Mbps to Gbps</td><td>General LAN/Internet access</td><td>Access point / router</td></tr>
+    <tr><td>Bluetooth Classic</td><td>2.4 GHz (FHSS)</td><td>~10 m (Class 2)</td><td>1–3 Mbps</td><td>Audio, peripherals, file transfer</td><td>None (ad-hoc pairing)</td></tr>
+    <tr><td>Bluetooth LE</td><td>2.4 GHz</td><td>Up to 100 m (BT 5)</td><td>~1–2 Mbps</td><td>IoT sensors, wearables, beacons</td><td>None (ad-hoc or gateway)</td></tr>
+    <tr><td>NFC</td><td>13.56 MHz</td><td>≤4 cm</td><td>106–424 Kbps</td><td>Payments, tap-to-pair, smart tags</td><td>None (or payment terminal)</td></tr>
+    <tr><td>RFID (LF)</td><td>125–134 kHz</td><td>Up to 10 cm</td><td>Slow</td><td>Animal ID, access cards, key fobs</td><td>RFID reader</td></tr>
+    <tr><td>RFID (HF)</td><td>13.56 MHz</td><td>Up to 1 m</td><td>Moderate</td><td>Library books, passports, smart cards</td><td>RFID reader</td></tr>
+    <tr><td>RFID (UHF)</td><td>860–960 MHz</td><td>Up to 12 m</td><td>Fast</td><td>Retail inventory, supply chain, tolls</td><td>RFID reader/gate</td></tr>
+  </tbody>
+</table>
+
+<h3 class="section">Scenario-Based Selection Guide</h3>
+
+<div class="process-flow">
+  <div class="flow-title">Matching Technology to Scenario</div>
+  <div class="flow-step">
+    <div class="flow-num">01</div>
+    <div class="flow-text"><strong>Connecting a laptop to a company network and the internet from a conference room</strong> → Wi-Fi (802.11). Need LAN/internet access at data rates supporting video calls. Distance to AP is meters. Standard choice: 802.11ac or 802.11ax on 5 GHz.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">02</div>
+    <div class="flow-text"><strong>Connecting wireless earbuds to a smartphone</strong> → Bluetooth Classic (A2DP profile for audio). Short range, low data rate audio streaming, no network infrastructure. Classic Bluetooth is the universal standard for wireless audio.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">03</div>
+    <div class="flow-text"><strong>Monitoring patient temperature remotely in a hospital room</strong> → Bluetooth Low Energy (BLE). Battery-powered sensor transmitting small data packets infrequently. BLE extends battery life of the sensor device dramatically vs. Classic Bluetooth or Wi-Fi.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">04</div>
+    <div class="flow-text"><strong>Paying for coffee at a coffee shop with a smartphone</strong> → NFC (card emulation mode). Mobile wallet apps (Apple Pay / Google Pay) use NFC to communicate with point-of-sale terminals. Range limited to a deliberate tap.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">05</div>
+    <div class="flow-text"><strong>Tracking thousands of products in a warehouse automatically without barcode scanning</strong> → RFID (UHF passive tags). Tags on pallets are read as they pass through dock door readers automatically. Far too many items for NFC range or Bluetooth complexity.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">06</div>
+    <div class="flow-text"><strong>Building entry system for employees</strong> → RFID (HF or LF smart card) or NFC. HF 13.56 MHz cards are standard for proximity access control badges (HID brand is the market leader). Employees tap or wave badge at reader to unlock door.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">07</div>
+    <div class="flow-text"><strong>Verifying a pet dog's identity at a shelter</strong> → RFID (LF passive microchip, 125 kHz). Implanted microchip responds to a handheld RFID reader. The chip stores a 15-digit ISO code linked to owner records in a pet registry database.</div>
+  </div>
+</div>
+
+
+<!-- MASTER REFERENCE -->
+<div class="ch-divider"></div>
+
+<div class="summary-box">
+  <h3>Master Reference — Objective 2.2 Key Concepts</h3>
+  <div class="summary-grid">
+    <div class="summary-item"><span class="s-sym">2.4 GHz</span><span>Long range; more interference; 3 non-overlapping channels (1, 6, 11); microwaves, Bluetooth share band</span></div>
+    <div class="summary-item"><span class="s-sym">5 GHz</span><span>Shorter range; less interference; ~25 non-overlapping channels; 802.11ac is 5 GHz only</span></div>
+    <div class="summary-item"><span class="s-sym">6 GHz</span><span>Shortest range; cleanest; 59+ channels; Wi-Fi 6E/7 only; opened by FCC in 2020</span></div>
+    <div class="summary-item"><span class="s-sym">Non-overlapping ch.</span><span>2.4 GHz: 1, 6, 11 (US). 5 GHz: ~25 channels. 6 GHz: 59 channels.</span></div>
+    <div class="summary-item"><span class="s-sym">DFS</span><span>Dynamic Frequency Selection on 5 GHz UNII-2/2e; AP must vacate channel if radar detected</span></div>
+    <div class="summary-item"><span class="s-sym">Channel width</span><span>20 / 40 / 80 / 160 MHz. Wider = more throughput but more spectrum; 160 MHz best in 6 GHz</span></div>
+    <div class="summary-item"><span class="s-sym">802.11a</span><span>5 GHz; 54 Mbps; 1999; OFDM; little adopted; established 5 GHz band</span></div>
+    <div class="summary-item"><span class="s-sym">802.11b</span><span>2.4 GHz; 11 Mbps; 1999; DSSS; defined ch 1/6/11; legacy devices slow networks</span></div>
+    <div class="summary-item"><span class="s-sym">802.11g</span><span>2.4 GHz; 54 Mbps; 2003; OFDM; backward compat with 802.11b</span></div>
+    <div class="summary-item"><span class="s-sym">802.11n (Wi-Fi 4)</span><span>2.4 + 5 GHz; 600 Mbps; MIMO; 40 MHz bonding; dual-band; 2009</span></div>
+    <div class="summary-item"><span class="s-sym">802.11ac (Wi-Fi 5)</span><span>5 GHz ONLY; up to 3.5 Gbps; MU-MIMO; 80/160 MHz; beamforming; 2013</span></div>
+    <div class="summary-item"><span class="s-sym">802.11ax (Wi-Fi 6)</span><span>All bands; OFDMA; TWT; BSS Coloring; up to 9.6 Gbps; 6E adds 6 GHz</span></div>
+    <div class="summary-item"><span class="s-sym">Bluetooth</span><span>2.4 GHz FHSS; PAN; ~10 m range; FHSS hops 1,600×/sec; creates piconet</span></div>
+    <div class="summary-item"><span class="s-sym">BLE (Bluetooth 4.0+)</span><span>Low Energy for IoT; sensors; wearables; beacons; years of battery life; up to 100 m (BT 5)</span></div>
+    <div class="summary-item"><span class="s-sym">NFC</span><span>13.56 MHz; ≤4 cm range; inductive coupling; payments, tap-to-pair; passive tags no battery</span></div>
+    <div class="summary-item"><span class="s-sym">RFID passive</span><span>No battery; powered by reader RF; centimeters to meters range; supply chain, pet microchips</span></div>
+    <div class="summary-item"><span class="s-sym">RFID active</span><span>Battery-powered; broadcasts continuously; up to 100 m; vehicles, shipping containers</span></div>
+    <div class="summary-item"><span class="s-sym">RFID UHF</span><span>860–960 MHz; up to 12 m; fast reads; retail inventory, logistics, toll collection</span></div>
+  </div>
+</div>
+
+<!-- QUICK REFERENCE -->
+<h2 class="chapter"><span class="ch-num">REFERENCE</span>Standards & Technology Quick Reference</h2>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>802.11 Standards — Speed Summary</h4>
+    <ul>
+      <li><strong>802.11b</strong> — 11 Mbps · 2.4 GHz · 1999</li>
+      <li><strong>802.11a</strong> — 54 Mbps · 5 GHz · 1999</li>
+      <li><strong>802.11g</strong> — 54 Mbps · 2.4 GHz · 2003</li>
+      <li><strong>802.11n (Wi-Fi 4)</strong> — 600 Mbps · Dual-band · 2009</li>
+      <li><strong>802.11ac (Wi-Fi 5)</strong> — 3.5 Gbps · 5 GHz only · 2013</li>
+      <li><strong>802.11ax (Wi-Fi 6/6E)</strong> — 9.6 Gbps · All bands · 2019</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Bluetooth Versions — Key Milestones</h4>
+    <ul>
+      <li><strong>BT 2.0 + EDR</strong> — 3 Mbps; lower power; 2004</li>
+      <li><strong>BT 3.0 + HS</strong> — 24 Mbps via Wi-Fi radio; 2009</li>
+      <li><strong>BT 4.0 (BLE)</strong> — Low Energy; IoT/sensors introduced; 2010</li>
+      <li><strong>BT 5.0</strong> — 4× range; 2× speed; 8× broadcast; 2016</li>
+      <li><strong>BT 5.2</strong> — LE Audio; LC3 codec; Auracast; 2020</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>NFC Quick Facts</h4>
+    <ul>
+      <li><strong>Frequency</strong> — 13.56 MHz (same as HF RFID)</li>
+      <li><strong>Range</strong> — ≤4 cm (tap-to-use by design)</li>
+      <li><strong>Speed</strong> — 106, 212, or 424 Kbps</li>
+      <li><strong>Modes</strong> — Reader/Writer, Peer-to-Peer, Card Emulation</li>
+      <li><strong>Uses</strong> — Apple Pay, Google Pay, transit, access badges</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>RFID Frequency Bands</h4>
+    <ul>
+      <li><strong>LF (125–134 kHz)</strong> — pet microchips, key fobs; ~10 cm</li>
+      <li><strong>HF (13.56 MHz)</strong> — passports, library, NFC; ~1 m</li>
+      <li><strong>UHF (860–960 MHz)</strong> — retail, logistics, tolls; ~12 m</li>
+      <li><strong>Passive tags</strong> — no battery; reader-powered</li>
+      <li><strong>Active tags</strong> — battery; up to 100 m; vehicle tracking</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout callout-exam" style="margin-top: 28px;">
+  <p class="callout-title">Final Exam Reminders</p>
+  <p><strong>Channels 1, 6, 11</strong> are the only non-overlapping channels in the 2.4 GHz US band. Using other channels causes co-channel interference.</p>
+  <p><strong>802.11ac is 5 GHz only</strong> — it cannot operate on 2.4 GHz. Devices that need 2.4 GHz fallback must also support 802.11n or 802.11ax.</p>
+  <p><strong>2.4 GHz vs 5 GHz trade-off</strong>: 2.4 GHz = better range, more interference. 5 GHz = better speed, shorter range. 6 GHz = best speed, cleanest, shortest range.</p>
+  <p><strong>Bluetooth</strong> = 2.4 GHz ISM + FHSS; PAN; ~10 m; pairs devices. BLE = low-power IoT variant; long battery life.</p>
+  <p><strong>NFC</strong> = 13.56 MHz; ≤4 cm; contactless payments; inductive coupling; no battery needed for passive tags.</p>
+  <p><strong>RFID</strong> = passive (no battery, reader-powered) or active (battery, longer range). UHF = retail/logistics. LF = pet microchips. HF = passports/library.</p>
+  <p><strong>Microwave interference</strong> with 2.4 GHz Wi-Fi is a classic troubleshooting scenario — microwave oven leaks RF near 2.45 GHz, disrupting nearby Wi-Fi on the 2.4 GHz band.</p>
+  <p><strong>DFS</strong> (Dynamic Frequency Selection) is required on 5 GHz UNII-2 channels to avoid radar interference — an AP may briefly change channels if radar is detected nearby.</p>
+</div>
+
+</div>
+</body>
+</html>

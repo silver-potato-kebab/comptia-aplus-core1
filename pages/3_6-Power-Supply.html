@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CompTIA A+ 3.6 — Install the Appropriate Power Supply</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --surface2: #f5f4f0;
+    --border: #e5e2d9;
+    --border2: #d4d0c4;
+    --text: #1a1a18;
+    --muted: #6b6860;
+    --accent: #c0392b;
+    --accent2: #2c3e6b;
+    --accent3: #1a6b3a;
+    --accent4: #b5590a;
+    --accent-light: #fdf2f1;
+    --accent2-light: #f0f2f8;
+    --accent3-light: #f0f8f3;
+    --accent4-light: #fdf5ed;
+    --serif: 'Crimson Pro', Georgia, serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── TOP NAV ── */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .top-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .nav-home {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+  .nav-home:hover { color: var(--accent2); }
+  .nav-home::before {
+    content: '←';
+    font-size: 12px;
+  }
+  .nav-sep {
+    font-size: 12px;
+    color: var(--border2);
+    flex-shrink: 0;
+  }
+  .nav-current {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nav-current strong {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    margin-right: 6px;
+  }
+  .top-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .nav-prev, .nav-next {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 4px 9px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    white-space: nowrap;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .nav-prev:hover, .nav-next:hover {
+    border-color: var(--border2);
+    color: var(--accent2);
+  }
+  .nav-prev::before { content: '← '; }
+  .nav-next::after  { content: ' →'; }
+
+  @media (max-width: 600px) {
+    .top-nav { padding: 0 16px; }
+    .nav-current { display: none; }
+    .nav-sep { display: none; }
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  .page { max-width: 860px; margin: 0 auto; padding: 0 40px 80px; }
+
+  /* HEADER */
+  .book-header {
+    border-bottom: 3px double var(--border2);
+    padding: 56px 0 32px;
+    margin-bottom: 48px;
+  }
+  .book-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .book-eyebrow span {
+    background: var(--accent);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-right: 10px;
+    font-size: 10px;
+  }
+  .book-title {
+    font-family: var(--serif);
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+  .book-subtitle {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .book-subtitle span { display: flex; align-items: center; gap: 6px; }
+  .book-subtitle span::before { content: '·'; color: var(--border2); }
+  .book-subtitle span:first-child::before { display: none; }
+
+  /* HEADINGS */
+  h2.chapter {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 600;
+    margin: 52px 0 6px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    letter-spacing: -0.01em;
+  }
+  h2.chapter .ch-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+    letter-spacing: 0.1em;
+    font-weight: 400;
+  }
+  h3.section {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    margin: 36px 0 12px;
+  }
+  h3.section::before { content: '§ '; color: var(--muted); font-weight: 300; }
+
+  p { margin-bottom: 16px; }
+
+  /* CALLOUTS */
+  .callout {
+    border-left: 3px solid;
+    padding: 14px 20px;
+    margin: 24px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 15.5px;
+  }
+  .callout p { margin-bottom: 6px; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout-title {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px !important;
+  }
+  .callout-exam { border-color: var(--accent); background: var(--accent-light); }
+  .callout-exam .callout-title { color: var(--accent); }
+  .callout-info { border-color: var(--accent2); background: var(--accent2-light); }
+  .callout-info .callout-title { color: var(--accent2); }
+  .callout-tip { border-color: var(--accent3); background: var(--accent3-light); }
+  .callout-tip .callout-title { color: var(--accent3); }
+  .callout-warn { border-color: var(--accent4); background: var(--accent4-light); }
+  .callout-warn .callout-title { color: var(--accent4); }
+
+  /* TABLES */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+    font-family: var(--sans);
+    margin: 16px 0 24px;
+  }
+  .data-table thead th {
+    background: var(--surface2);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 9px 13px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .data-table tbody tr { border-bottom: 1px solid var(--border); }
+  .data-table tbody tr:last-child { border-bottom: none; }
+  .data-table td { padding: 9px 13px; vertical-align: top; line-height: 1.5; }
+  .data-table td:first-child {
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 13.5px;
+  }
+
+  /* PROCESS FLOW */
+  .process-flow {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: var(--sans);
+    font-size: 14px;
+  }
+  .flow-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .flow-step:last-child { border-bottom: none; }
+  .flow-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+    min-width: 24px;
+    padding-top: 2px;
+  }
+  .flow-text { color: var(--text); line-height: 1.55; }
+  .flow-text strong { font-weight: 600; }
+
+  /* DEF LIST */
+  .def-list { margin: 16px 0 24px; }
+  .def-item {
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 210px 1fr;
+    gap: 20px;
+    font-size: 15px;
+  }
+  .def-item:last-child { border-bottom: none; }
+  .def-term {
+    font-family: var(--sans);
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 14px;
+    padding-top: 1px;
+    line-height: 1.4;
+  }
+
+  /* GRID CARDS */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 16px 18px;
+  }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 10px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card ul { list-style: none; font-family: var(--sans); font-size: 13.5px; }
+  .card ul li {
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .card ul li:last-child { border-bottom: none; }
+  .card ul li strong { color: var(--text); }
+
+  /* BODY LIST */
+  ul.body-list {
+    list-style: none;
+    font-family: var(--sans);
+    font-size: 15px;
+    padding: 0;
+    margin: 12px 0 20px;
+  }
+  ul.body-list li {
+    padding: 5px 0 5px 18px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  ul.body-list li:last-child { border-bottom: none; }
+  ul.body-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--border2);
+    font-size: 12px;
+  }
+  ul.body-list li strong { color: var(--text); }
+
+  /* SPEC DIAGRAM (range bars) */
+  .spec-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: var(--sans);
+  }
+  .spec-diagram h4 {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .spec-bar-wrap { margin-bottom: 10px; }
+  .spec-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .spec-label strong { color: var(--text); }
+  .spec-bar {
+    height: 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .spec-fill {
+    height: 100%;
+    border-radius: 2px;
+  }
+  .fill-blue { background: #2c3e6b; }
+  .fill-green { background: #4caf50; }
+  .fill-amber { background: #ffc107; }
+  .fill-orange { background: #ff9800; }
+  .fill-red { background: #f44336; }
+  .fill-purple { background: #8e44ad; }
+  .fill-gray { background: #9e9e9e; }
+
+  /* VOLTAGE RAIL DIAGRAM */
+  .rail-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: var(--sans);
+  }
+  .rail-diagram h4 {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .rail-row {
+    display: grid;
+    grid-template-columns: 70px 1fr 200px;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .rail-row:last-child { border-bottom: none; }
+  .rail-voltage {
+    font-family: var(--mono);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--accent2);
+  }
+  .rail-track {
+    height: 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .rail-fill { height: 100%; border-radius: 4px; }
+  .rail-desc { font-size: 12px; color: var(--muted); }
+
+  /* CODE */
+  code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: var(--accent);
+  }
+
+  .key-term { font-style: italic; font-weight: 500; color: var(--accent2); }
+
+  /* SUMMARY BOX */
+  .summary-box {
+    background: var(--text);
+    color: #f0ede6;
+    border-radius: 6px;
+    padding: 28px 32px;
+    margin: 40px 0;
+  }
+  .summary-box h3 {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 18px;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 32px;
+  }
+  .summary-item {
+    font-family: var(--sans);
+    font-size: 13.5px;
+    color: #c4bfb4;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .summary-item .s-sym {
+    color: #fff;
+    font-weight: 600;
+    min-width: 175px;
+    line-height: 1.4;
+  }
+
+  .ch-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--border2), transparent);
+    margin: 48px 0;
+  }
+
+  /* INDICATOR DOTS */
+  .malware-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .ind-high { background: var(--accent); }
+  .ind-med { background: var(--accent4); }
+  .ind-low { background: var(--accent3); }
+
+  @media (max-width: 680px) {
+    .page { padding: 0 20px 60px; }
+    .summary-grid, .card-grid { grid-template-columns: 1fr; }
+    .def-item { grid-template-columns: 1fr; gap: 4px; }
+    .rail-row { grid-template-columns: 1fr; gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV — update href values to match your actual file names -->
+<nav class="top-nav">
+  <div class="top-nav-left">
+    <a class="nav-home" href="../index.html">Study Guide</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current"><strong>3.6</strong> Install the Appropriate Power Supply</span>
+  </div>
+  <div class="top-nav-right">
+    <!-- Point these to the adjacent section files, or remove if not applicable -->
+    <a class="nav-prev" href="./3_5-Motherboards-CPUs-AddOn-Cards.html">3.5</a>
+    <a class="nav-next" href="./3_7-Multifunction-Devices-Printers.html">3.7</a>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- HEADER -->
+<div class="book-header">
+  <div class="book-eyebrow">
+    <span>3.6</span>
+    CompTIA A+ · Core 1 (220-1201) · Domain 3 — Hardware
+  </div>
+  <h1 class="book-title">Install the Appropriate<br>Power Supply</h1>
+  <div class="book-subtitle">
+    <span>Objective 3.6</span>
+    <span>Domain weight: 25%</span>
+    <span>Input/output voltage · Connectors · Ratings</span>
+  </div>
+</div>
+
+<!-- INTRO -->
+<h2 class="chapter"><span class="ch-num">OVERVIEW</span>Introduction</h2>
+
+<p>Objective 3.6 covers the <span class="key-term">power supply unit (PSU)</span> — the component responsible for converting the alternating current (AC) coming from a wall outlet into the various direct current (DC) voltages every other component in the system actually needs to run. Every motherboard, drive, fan, and expansion card you've studied in objectives 3.3–3.5 ultimately depends on the PSU delivering clean, sufficient, correctly-voltaged power.</p>
+
+<p>This objective is comparatively compact relative to 3.5, but every concept in it is directly practical: matching input voltage to regional electrical standards, understanding what each output voltage rail powers, recognizing the standard motherboard power connector, and knowing when redundancy, modularity, sufficient wattage, or energy efficiency actually matter in a real installation scenario.</p>
+
+<div class="callout callout-info">
+  <p class="callout-title">AC In, DC Out — The PSU's Core Job</p>
+  <p>A wall outlet supplies <strong>AC (alternating current)</strong>, where the direction of current flow reverses many times per second. Computer components require <strong>DC (direct current)</strong>, where current flows in one constant direction at a steady voltage. The power supply's fundamental job is to convert AC to DC and step that voltage down to the specific, much lower voltages (3.3V, 5V, 12V) that internal components actually use — everything else in this objective builds on that core conversion function.</p>
+</div>
+
+<!-- ═══ SECTION 1: INPUT VOLTAGE ═══ -->
+<h2 class="chapter"><span class="ch-num">CONCEPT 01</span>Input Voltage — 110–120 VAC vs. 220–240 VAC</h2>
+
+<p>Electrical standards differ by region of the world, and a power supply must be compatible with the voltage actually supplied by the wall outlet it's plugged into. The exam recognizes two broad input voltage standards.</p>
+
+<table class="data-table">
+  <thead><tr><th>Standard</th><th>Typical Region</th><th>Note</th></tr></thead>
+  <tbody>
+    <tr><td>110–120 VAC</td><td>North America, parts of Central/South America, Japan</td><td>Lower voltage, generally requires higher current (amperage) for the same wattage</td></tr>
+    <tr><td>220–240 VAC</td><td>Europe, most of Asia, Africa, Australia, much of the rest of the world</td><td>Higher voltage standard, used across the majority of the global population</td></tr>
+  </tbody>
+</table>
+
+<h3 class="section">Fixed-Input vs. Auto-Switching PSUs</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Fixed-input (manual-switch) PSU</span>
+    <span>Supports only one voltage range at a time, often via a small physical switch on the back of the unit (sometimes labeled 115/230) that must be manually set to match the local electrical standard before use. Setting this switch incorrectly for the actual input voltage can damage the power supply and potentially other connected components.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Auto-switching (wide-range) PSU</span>
+    <span>Automatically detects and adapts to the input voltage across a wide range (commonly rated something like 100–240 VAC), requiring no manual switch and making the unit usable virtually anywhere in the world without configuration. Most modern consumer and business PSUs are auto-switching.</span>
+  </div>
+</div>
+
+<div class="callout callout-warn">
+  <p class="callout-title">Common Pitfall</p>
+  <p>If a fixed-input power supply's voltage selector switch is set incorrectly relative to the actual wall outlet voltage — for example, set to 115V while plugged into a 230V outlet — the result can be immediate and serious hardware damage, potentially including a risk of fire. Always verify the voltage selector switch position (if present) matches the local electrical standard before powering on a system, especially after international travel/relocation or when working with imported/used hardware of unknown origin.</p>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>A scenario describing a computer being shipped or relocated internationally, or a system purchased abroad and used domestically, is testing whether you know to check the PSU's input voltage compatibility — either confirming it's auto-switching, or manually setting the correct voltage range on a fixed-input unit before that system is ever powered on in its new location.</p>
+</div>
+
+<!-- ═══ SECTION 2: OUTPUT VOLTAGE ═══ -->
+<h2 class="chapter"><span class="ch-num">CONCEPT 02</span>Output Voltage — 3.3V vs. 5V vs. 12V</h2>
+
+<p>After converting AC to DC, a PSU delivers power across several distinct voltage <span class="key-term">rails</span>, each intended for different categories of components based on their power requirements.</p>
+
+<div class="rail-diagram">
+  <h4>Output Voltage Rails — What Each One Powers</h4>
+  <div class="rail-row">
+    <span class="rail-voltage">3.3V</span>
+    <div class="rail-track"><div class="rail-fill fill-blue" style="width:28%"></div></div>
+    <span class="rail-desc">Motherboard chipset, some RAM circuitry</span>
+  </div>
+  <div class="rail-row">
+    <span class="rail-voltage">5V</span>
+    <div class="rail-track"><div class="rail-fill fill-green" style="width:42%"></div></div>
+    <span class="rail-desc">USB devices, some legacy drive logic, low-power circuits</span>
+  </div>
+  <div class="rail-row">
+    <span class="rail-voltage">12V</span>
+    <div class="rail-track"><div class="rail-fill fill-red" style="width:100%"></div></div>
+    <span class="rail-desc">CPU, GPU, drive motors, fans — the highest-power components</span>
+  </div>
+</div>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">3.3V rail</span>
+    <span>Powers lower-voltage logic circuits, including portions of the motherboard chipset and certain memory-related circuitry.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">5V rail</span>
+    <span>Powers USB ports/devices and some legacy drive interface logic, among other moderate-power components.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">12V rail</span>
+    <span>Powers the most demanding components in a modern system — the CPU, the GPU, drive spindle motors (on HDDs/optical drives), and case/cooling fans. In modern high-performance systems, the 12V rail typically carries the largest share of total system power draw by far, since CPUs and especially GPUs are the heaviest power consumers.</span>
+  </div>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>Modern, demanding components — especially CPUs and GPUs — draw the overwhelming majority of their power from the <strong>12V rail</strong>. If a question describes high-end graphics card installation requirements or overall system power delivery concerns, the 12V rail is almost always the relevant detail. The 3.3V and 5V rails matter conceptually (and for accurately identifying connector pinouts) but carry comparatively modest loads in a typical modern build.</p>
+</div>
+
+<!-- ═══ SECTION 3: MOTHERBOARD CONNECTOR ═══ -->
+<h2 class="chapter"><span class="ch-num">CONCEPT 03</span>20+4 Pin Motherboard Connector</h2>
+
+<p>The <span class="key-term">20+4 pin connector</span> (commonly called the main ATX power connector) is the primary connector delivering power from the PSU to the motherboard, supplying the various voltage rails discussed above to the board's power-distribution circuitry.</p>
+
+<p>The "20+4" naming reflects its design: a 20-pin block plus a separate, detachable 4-pin block that can be connected alongside it to form a full 24-pin connector, or removed to leave a standalone 20-pin connector. This split design exists specifically for backward compatibility — older motherboards expecting only a 20-pin connector can still be powered by a PSU that splits off the extra 4 pins, while modern motherboards expecting the full 24-pin connector simply use both pieces together.</p>
+
+<div class="process-flow">
+  <div class="flow-title">Why the Connector Splits Into 20 + 4</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Older standard (20-pin).</strong> Early ATX motherboards used a single 20-pin main power connector, sufficient for the lower power demands of systems at the time.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Power demands increased.</strong> As CPUs, expansion cards, and overall systems became more power-hungry, the ATX standard was updated to add 4 additional pins, delivering more available power and additional ground connections.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Backward-compatible design.</strong> Rather than making old and new PSUs/motherboards entirely incompatible, the connector was designed so the extra 4 pins detach as their own small block — a 24-pin-capable PSU can power a 20-pin-only motherboard by simply not connecting (or physically separating) that extra block.</div></div>
+</div>
+
+<div class="callout callout-info">
+  <p class="callout-title">Not the Only Power Connector</p>
+  <p>While the 20+4 pin connector is the main motherboard power connector and the specific one named in this objective, real-world systems also typically require a separate <strong>4-pin or 8-pin CPU/EPS power connector</strong> (delivering dedicated 12V power directly near the CPU socket, as referenced in objective 3.5), plus SATA power connectors for drives and PCIe power connectors for higher-power graphics cards. The 20+4 pin connector specifically addresses the motherboard's general power needs — it is not the sole power delivery point in a complete system.</p>
+</div>
+
+<!-- ═══ SECTION 4: REDUNDANT POWER SUPPLY ═══ -->
+<h2 class="chapter"><span class="ch-num">CONCEPT 04</span>Redundant Power Supply</h2>
+
+<p>A <span class="key-term">redundant power supply</span> configuration uses two (or more) power supply units installed together in the same system, such that if one PSU fails, the other immediately and automatically continues supplying power without any interruption or downtime. This is a server/enterprise-class feature, almost never found in consumer desktops, and directly parallels the broader theme of redundancy seen elsewhere in the exam (RAID arrays in objective 3.4, redundant network links).</p>
+
+<div class="callout callout-tip">
+  <p class="callout-title">Why Servers Use Redundant PSUs</p>
+  <p>For a server running critical business applications, databases, or services that many users/systems depend on, an unplanned power supply failure causing a full outage can be extremely costly. A redundant PSU setup means a single failed unit doesn't take the whole system down — the surviving unit (or units) continue supplying power, often allowing the failed unit to be physically replaced (hot-swapped) without ever powering down the system at all, depending on the specific server hardware design.</p>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>If a scenario emphasizes high availability, mission-critical uptime, or a server environment that "cannot go down," redundant power supplies are a strong candidate answer alongside other redundancy measures covered elsewhere in the exam (RAID, redundant network paths). This is purely an enterprise/server consideration — don't apply it to typical consumer desktop scenarios.</p>
+</div>
+
+<!-- ═══ SECTION 5: MODULAR POWER SUPPLY ═══ -->
+<h2 class="chapter"><span class="ch-num">CONCEPT 05</span>Modular Power Supply</h2>
+
+<p>A <span class="key-term">modular power supply</span> allows individual cables to be physically connected or disconnected from the PSU itself, as opposed to having every cable permanently hardwired into the unit. This lets a technician install only the specific cables actually needed for a given build, rather than dealing with a fixed bundle of cables — some of which may go entirely unused.</p>
+
+<table class="data-table">
+  <thead><tr><th>Type</th><th>Description</th><th>Tradeoff</th></tr></thead>
+  <tbody>
+    <tr><td>Non-modular</td><td>All cables permanently hardwired/attached to the PSU</td><td>Simplest, often least expensive; unused cables must be tucked away, hurting airflow/cable management</td></tr>
+    <tr><td>Semi-modular</td><td>Essential cables (like the 20+4 pin and CPU power) are fixed; less commonly needed cables are detachable</td><td>A middle ground between cost and cable management flexibility</td></tr>
+    <tr><td>Fully modular</td><td>Every cable is detachable, including the main motherboard and CPU power cables</td><td>Best cable management and airflow; typically the most expensive option</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-tip">
+  <p class="callout-title">Why Modularity Matters in Practice</p>
+  <p>Beyond simple convenience, a fully or semi-modular PSU directly improves case airflow and cable management by eliminating unused cables that would otherwise need to be crammed somewhere inside the case, potentially blocking fans or restricting airflow. This is purely a build-quality-of-life and thermal consideration — modularity has no effect on the PSU's actual power output, wattage, or efficiency rating.</p>
+</div>
+
+<!-- ═══ SECTION 6: WATTAGE RATING ═══ -->
+<h2 class="chapter"><span class="ch-num">CONCEPT 06</span>Wattage Rating</h2>
+
+<p>A PSU's <span class="key-term">wattage rating</span> describes the maximum total power it can reliably deliver to all connected components simultaneously. Selecting a PSU with sufficient wattage for a given system's actual power demands is one of the most fundamental and practical decisions in any build or upgrade.</p>
+
+<ul class="body-list">
+  <li><strong>Undersized wattage</strong> — a PSU rated below the system's actual power draw can cause instability, random shutdowns or reboots under load, failure to boot at all, or in worst cases, premature PSU failure from being run consistently beyond its rated capacity.</li>
+  <li><strong>Component power draw varies enormously</strong> — a high-end GPU alone can draw several hundred watts under load, while a basic office desktop with integrated graphics may need only a small fraction of that for the entire system.</li>
+  <li><strong>Headroom matters</strong> — it's standard practice to select a PSU with some margin above the calculated/estimated total system power draw, both to maintain efficiency (PSUs are typically least efficient very close to their maximum rated load) and to leave room for future upgrades.</li>
+  <li><strong>Upgrades change requirements</strong> — adding a more powerful GPU, additional drives, or more case fans to an existing system increases total power draw, and an older PSU that was perfectly adequate before the upgrade may become insufficient afterward.</li>
+</ul>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>A classic scenario: "A user installs a new high-end graphics card, and the system now randomly shuts down or fails to boot under load." This points to <strong>insufficient PSU wattage</strong> for the new component's power demands — the troubleshooting answer is to verify the PSU's wattage rating against the new total system power requirements and upgrade the PSU if needed, not to assume the GPU itself is defective.</p>
+</div>
+
+<!-- ═══ SECTION 7: ENERGY EFFICIENCY ═══ -->
+<h2 class="chapter"><span class="ch-num">CONCEPT 07</span>Energy Efficiency</h2>
+
+<p>A PSU's <span class="key-term">energy efficiency</span> describes what percentage of the AC power it draws from the wall is actually converted into usable DC output power for components, versus how much is lost as waste heat during that conversion process. A more efficient PSU wastes less electricity as heat, reducing both electricity costs and the amount of heat the system's cooling has to deal with.</p>
+
+<p>The most widely recognized efficiency standard is the <span class="key-term">80 PLUS</span> certification program, which tests and certifies PSUs at multiple tiers based on efficiency percentage at various load levels (typically tested at 20%, 50%, and 100% load).</p>
+
+<div class="spec-diagram">
+  <h4>80 PLUS Certification Tiers — Relative Efficiency</h4>
+  <div class="spec-bar-wrap">
+    <div class="spec-label"><strong>80 PLUS (base)</strong><span>≥80% efficiency at tested load points</span></div>
+    <div class="spec-bar"><div class="spec-fill fill-gray" style="width:60%"></div></div>
+  </div>
+  <div class="spec-bar-wrap">
+    <div class="spec-label"><strong>80 PLUS Bronze</strong><span>Improved efficiency over base certification</span></div>
+    <div class="spec-bar"><div class="spec-fill fill-orange" style="width:70%"></div></div>
+  </div>
+  <div class="spec-bar-wrap">
+    <div class="spec-label"><strong>80 PLUS Silver</strong><span>Further improved efficiency</span></div>
+    <div class="spec-bar"><div class="spec-fill fill-blue" style="width:78%"></div></div>
+  </div>
+  <div class="spec-bar-wrap">
+    <div class="spec-label"><strong>80 PLUS Gold</strong><span>High efficiency; common choice for performance builds</span></div>
+    <div class="spec-bar"><div class="spec-fill fill-amber" style="width:88%"></div></div>
+  </div>
+  <div class="spec-bar-wrap">
+    <div class="spec-label"><strong>80 PLUS Platinum / Titanium</strong><span>Highest efficiency tiers available</span></div>
+    <div class="spec-bar"><div class="spec-fill fill-green" style="width:100%"></div></div>
+  </div>
+</div>
+
+<div class="callout callout-tip">
+  <p class="callout-title">Why Efficiency Matters Beyond the Electric Bill</p>
+  <p>A less efficient PSU doesn't just waste more electricity — that wasted energy is released as <strong>heat inside the case</strong>, adding to the system's overall thermal load and requiring more cooling effort (covered in objective 3.5) to manage. In environments with many systems running continuously (server rooms, data centers, busy offices), efficiency differences compound significantly across electricity costs, cooling/HVAC demands, and equipment longevity over time.</p>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>You don't need to memorize exact efficiency percentages for each 80 PLUS tier, but you should recognize the relative ranking — <strong>base 80 PLUS is the minimum, with Bronze, Silver, Gold, Platinum, and Titanium representing progressively higher efficiency</strong> — and understand that higher efficiency tiers generally cost more but reduce electricity waste and heat output, which matters more in continuously-running or high-power environments than in light, occasional-use systems.</p>
+</div>
+
+<!-- MASTER REFERENCE -->
+<div class="ch-divider"></div>
+
+<div class="summary-box">
+  <h3>Master Reference — Power Supply Characteristics</h3>
+  <div class="summary-grid">
+    <div class="summary-item"><span class="s-sym">110–120 VAC</span><span>North America and similar regional standard</span></div>
+    <div class="summary-item"><span class="s-sym">220–240 VAC</span><span>Europe, Asia, and much of the rest of the world</span></div>
+    <div class="summary-item"><span class="s-sym">Auto-switching PSU</span><span>Adapts automatically; no manual voltage selector needed</span></div>
+    <div class="summary-item"><span class="s-sym">3.3V rail</span><span>Chipset, some RAM-related circuitry</span></div>
+    <div class="summary-item"><span class="s-sym">5V rail</span><span>USB devices, some legacy drive logic</span></div>
+    <div class="summary-item"><span class="s-sym">12V rail</span><span>CPU, GPU, drive motors, fans — heaviest load</span></div>
+    <div class="summary-item"><span class="s-sym">20+4 pin connector</span><span>Main motherboard power; splits for backward compatibility</span></div>
+    <div class="summary-item"><span class="s-sym">Redundant PSU</span><span>Server-class; second unit takes over on failure</span></div>
+    <div class="summary-item"><span class="s-sym">Modular PSU</span><span>Detachable cables; better airflow/cable management</span></div>
+    <div class="summary-item"><span class="s-sym">Wattage rating</span><span>Must meet or exceed total system power draw</span></div>
+    <div class="summary-item"><span class="s-sym">80 PLUS</span><span>Efficiency certification: base → Bronze → Silver → Gold → Platinum/Titanium</span></div>
+  </div>
+</div>
+
+<!-- QUICK REFERENCE TOOLS -->
+<h2 class="chapter"><span class="ch-num">REFERENCE</span>3.6 Quick Reference</h2>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>Input Voltage Checklist</h4>
+    <ul>
+      <li><strong>North America</strong> → 110–120 VAC</li>
+      <li><strong>Most of rest of world</strong> → 220–240 VAC</li>
+      <li><strong>Traveling/relocating hardware</strong> → Verify auto-switching or correct manual switch position</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Output Rail By Component</h4>
+    <ul>
+      <li><strong>CPU / GPU / fans / drive motors</strong> → 12V</li>
+      <li><strong>USB devices</strong> → 5V</li>
+      <li><strong>Chipset logic</strong> → 3.3V</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Symptom → Likely PSU Cause</h4>
+    <ul>
+      <li><strong>Random shutdowns after GPU upgrade</strong> → Insufficient wattage</li>
+      <li><strong>Damaged after international relocation</strong> → Wrong input voltage setting</li>
+      <li><strong>Server needs zero downtime</strong> → Redundant PSU</li>
+      <li><strong>Poor airflow / cable clutter</strong> → Consider modular PSU</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>80 PLUS Tier Order</h4>
+    <ul>
+      <li><strong>Lowest → Highest efficiency:</strong></li>
+      <li>80 PLUS (base) → Bronze → Silver → Gold → Platinum → Titanium</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout callout-exam" style="margin-top: 28px;">
+  <p class="callout-title">Final Exam Reminders</p>
+  <p><strong>110–120 VAC</strong> = North America-style. <strong>220–240 VAC</strong> = most of the rest of the world. Auto-switching PSUs handle both automatically.</p>
+  <p><strong>12V rail</strong> = carries the heaviest load in modern systems — CPU, GPU, drive motors, fans.</p>
+  <p><strong>20+4 pin connector</strong> = main motherboard power; the detachable 4-pin block exists for backward compatibility with older 20-pin-only boards.</p>
+  <p><strong>Redundant PSU</strong> = server/enterprise feature only; a second unit takes over instantly if one fails.</p>
+  <p><strong>Modular PSU</strong> = detachable cables for better airflow/cable management; does NOT affect wattage or efficiency.</p>
+  <p><strong>Wattage rating</strong> = must meet or exceed total system power draw; insufficient wattage causes instability/shutdowns under load, especially after GPU upgrades.</p>
+  <p><strong>80 PLUS</strong> = efficiency certification; higher tiers waste less power as heat and cost more electricity savings over time, especially in always-on environments.</p>
+</div>
+
+</div>
+</body>
+</html>

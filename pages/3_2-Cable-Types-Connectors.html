@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CompTIA A+ 3.2 — Cable Types, Connectors, Features & Purposes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --surface2: #f5f4f0;
+    --border: #e5e2d9;
+    --border2: #d4d0c4;
+    --text: #1a1a18;
+    --muted: #6b6860;
+    --accent: #c0392b;
+    --accent2: #2c3e6b;
+    --accent3: #1a6b3a;
+    --accent4: #b5590a;
+    --accent-light: #fdf2f1;
+    --accent2-light: #f0f2f8;
+    --accent3-light: #f0f8f3;
+    --accent4-light: #fdf5ed;
+    --serif: 'Crimson Pro', Georgia, serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── TOP NAV ── */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .top-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .nav-home {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+  .nav-home:hover { color: var(--accent2); }
+  .nav-home::before {
+    content: '←';
+    font-size: 12px;
+  }
+  .nav-sep {
+    font-size: 12px;
+    color: var(--border2);
+    flex-shrink: 0;
+  }
+  .nav-current {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nav-current strong {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    margin-right: 6px;
+  }
+  .top-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .nav-prev, .nav-next {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 4px 9px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    white-space: nowrap;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .nav-prev:hover, .nav-next:hover {
+    border-color: var(--border2);
+    color: var(--accent2);
+  }
+  .nav-prev::before { content: '← '; }
+  .nav-next::after  { content: ' →'; }
+
+  @media (max-width: 600px) {
+    .top-nav { padding: 0 16px; }
+    .nav-current { display: none; }
+    .nav-sep { display: none; }
+  }
+
+  body { background: var(--bg); color: var(--text); font-family: var(--serif); font-size: 17px; line-height: 1.75; }
+  .page { max-width: 860px; margin: 0 auto; padding: 0 40px 80px; }
+
+  /* HEADER */
+  .book-header { border-bottom: 3px double var(--border2); padding: 56px 0 32px; margin-bottom: 48px; }
+  .book-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+  .book-eyebrow span { background: var(--accent); color: #fff; padding: 2px 8px; border-radius: 2px; margin-right: 10px; font-size: 10px; }
+  .book-title { font-family: var(--serif); font-size: clamp(26px, 4vw, 38px); font-weight: 600; line-height: 1.2; letter-spacing: -0.01em; margin-bottom: 12px; }
+  .book-subtitle { font-family: var(--sans); font-size: 14px; color: var(--muted); display: flex; gap: 20px; flex-wrap: wrap; margin-top: 16px; }
+  .book-subtitle span { display: flex; align-items: center; gap: 6px; }
+  .book-subtitle span::before { content: '·'; color: var(--border2); }
+  .book-subtitle span:first-child::before { display: none; }
+
+  /* HEADINGS */
+  h2.chapter { font-family: var(--serif); font-size: 26px; font-weight: 600; margin: 52px 0 6px; padding-bottom: 10px; border-bottom: 2px solid var(--border); letter-spacing: -0.01em; }
+  h2.chapter .ch-num { font-family: var(--mono); font-size: 12px; color: var(--accent); display: block; margin-bottom: 4px; letter-spacing: 0.1em; font-weight: 400; }
+  h3.section { font-family: var(--serif); font-size: 20px; font-weight: 600; margin: 36px 0 12px; }
+  h3.section::before { content: '§ '; color: var(--muted); font-weight: 300; }
+
+  p { margin-bottom: 16px; }
+
+  /* CALLOUTS */
+  .callout { border-left: 3px solid; padding: 14px 20px; margin: 24px 0; border-radius: 0 4px 4px 0; font-size: 15.5px; }
+  .callout p { margin-bottom: 6px; } .callout p:last-child { margin-bottom: 0; }
+  .callout-title { font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px !important; }
+  .callout-exam { border-color: var(--accent); background: var(--accent-light); } .callout-exam .callout-title { color: var(--accent); }
+  .callout-info { border-color: var(--accent2); background: var(--accent2-light); } .callout-info .callout-title { color: var(--accent2); }
+  .callout-tip  { border-color: var(--accent3); background: var(--accent3-light); } .callout-tip .callout-title  { color: var(--accent3); }
+  .callout-warn { border-color: var(--accent4); background: var(--accent4-light); } .callout-warn .callout-title { color: var(--accent4); }
+
+  /* TABLES */
+  .data-table { width: 100%; border-collapse: collapse; font-size: 14.5px; font-family: var(--sans); margin: 16px 0 24px; }
+  .data-table thead th { background: var(--surface2); font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding: 9px 13px; text-align: left; border-bottom: 2px solid var(--border); }
+  .data-table tbody tr { border-bottom: 1px solid var(--border); } .data-table tbody tr:last-child { border-bottom: none; }
+  .data-table td { padding: 9px 13px; vertical-align: top; line-height: 1.5; }
+  .data-table td:first-child { font-weight: 600; color: var(--accent2); font-size: 13.5px; }
+
+  /* DEF LIST */
+  .def-list { margin: 16px 0 24px; }
+  .def-item { padding: 11px 0; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 200px 1fr; gap: 20px; font-size: 15px; }
+  .def-item:last-child { border-bottom: none; }
+  .def-term { font-family: var(--sans); font-weight: 600; color: var(--accent2); font-size: 14px; padding-top: 1px; line-height: 1.4; }
+
+  /* CARDS */
+  .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 20px 0; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 5px; padding: 16px 18px; }
+  .card h4 { font-family: var(--sans); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 10px; padding-bottom: 7px; border-bottom: 1px solid var(--border); }
+  .card ul { list-style: none; font-family: var(--sans); font-size: 13.5px; }
+  .card ul li { padding: 4px 0; border-bottom: 1px solid var(--border); color: var(--muted); line-height: 1.45; }
+  .card ul li:last-child { border-bottom: none; }
+  .card ul li strong { color: var(--text); }
+
+  /* BODY LIST */
+  ul.body-list { list-style: none; font-family: var(--sans); font-size: 15px; padding: 0; margin: 12px 0 20px; }
+  ul.body-list li { padding: 5px 0 5px 18px; border-bottom: 1px solid var(--border); position: relative; line-height: 1.5; color: var(--muted); }
+  ul.body-list li:last-child { border-bottom: none; }
+  ul.body-list li::before { content: '—'; position: absolute; left: 0; color: var(--border2); font-size: 12px; }
+  ul.body-list li strong { color: var(--text); }
+
+  /* CONNECTOR GALLERY */
+  .connector-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin: 20px 0; }
+  .conn-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+  .conn-visual { height: 68px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-family: var(--mono); position: relative; }
+  .conn-info { padding: 10px 12px; }
+  .conn-name { font-family: var(--sans); font-size: 13px; font-weight: 700; color: var(--text); display: block; margin-bottom: 2px; }
+  .conn-detail { font-family: var(--sans); font-size: 11.5px; color: var(--muted); line-height: 1.4; }
+
+  /* CONNECTOR SVG SHAPES */
+  .cv-rj45    { background: #e8f0fe; }
+  .cv-rj11    { background: #f0f8f3; }
+  .cv-usbc    { background: #fff3e0; }
+  .cv-usba    { background: #fce4ec; }
+  .cv-ftype   { background: #f3e5f5; }
+  .cv-st      { background: #e0f7fa; }
+  .cv-sc      { background: #fff8e1; }
+  .cv-lc      { background: #e8f5e9; }
+  .cv-molex   { background: #f3f0ff; }
+  .cv-db9     { background: #fdf2f1; }
+  .cv-lightning{ background: #f5f5f5; }
+  .cv-punch   { background: #e8eaf6; }
+  .cv-sata    { background: #e0f2f1; }
+  .cv-hdmi    { background: #fff9c4; }
+
+  /* WIRE PAIR DIAGRAM */
+  .wire-diagram { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 18px 22px; margin: 16px 0; font-family: var(--sans); }
+  .wire-diagram h4 { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+  .wiring-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 13px; }
+  .wiring-row:last-child { margin-bottom: 0; }
+  .pin-num { font-family: var(--mono); font-size: 11px; color: var(--muted); min-width: 24px; }
+  .wire-swatch { width: 28px; height: 16px; border-radius: 2px; border: 1px solid rgba(0,0,0,0.12); flex-shrink: 0; }
+  .wire-label { color: var(--text); min-width: 100px; font-weight: 500; }
+  .wire-note  { color: var(--muted); font-size: 12px; }
+  /* Wire colors */
+  .w-wog { background: repeating-linear-gradient(90deg,#fff 0,#fff 3px,#2e7d32 3px,#2e7d32 6px); }
+  .w-og  { background: #e65100; }
+  .w-wgr { background: repeating-linear-gradient(90deg,#fff 0,#fff 3px,#1565c0 3px,#1565c0 6px); }
+  .w-bl  { background: #1565c0; }
+  .w-wbl { background: repeating-linear-gradient(90deg,#fff 0,#fff 3px,#0d47a1 3px,#0d47a1 6px); }
+  .w-gr  { background: #2e7d32; }
+  .w-wbr { background: repeating-linear-gradient(90deg,#fff 0,#fff 3px,#795548 3px,#795548 6px); }
+  .w-br  { background: #795548; }
+  .w-wgn { background: repeating-linear-gradient(90deg,#fff 0,#fff 3px,#388e3c 3px,#388e3c 6px); }
+  .w-gn  { background: #388e3c; }
+  .w-wr  { background: repeating-linear-gradient(90deg,#fff 0,#fff 3px,#c62828 3px,#c62828 6px); }
+  .w-rd  { background: #c62828; }
+
+  /* SPEED COMPARISON */
+  .speed-bar-wrap { margin: 4px 0; }
+  .speed-bar { height: 10px; background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; display: inline-block; vertical-align: middle; margin-right: 8px; }
+  .speed-fill { height: 100%; border-radius: 3px; }
+  .sf-blue   { background: var(--accent2); }
+  .sf-green  { background: var(--accent3); }
+  .sf-orange { background: var(--accent4); }
+  .sf-red    { background: var(--accent); }
+  .sf-purple { background: #7b1fa2; }
+
+  /* USB GENERATION TABLE */
+  .usb-gen-row { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border); font-family: var(--sans); font-size: 13.5px; }
+  .usb-gen-row:last-child { border-bottom: none; }
+  .usb-gen-name { font-weight: 700; min-width: 160px; color: var(--text); }
+  .usb-gen-speed { font-family: var(--mono); font-size: 12px; color: var(--accent2); min-width: 80px; }
+  .usb-gen-color { width: 16px; height: 16px; border-radius: 3px; border: 1px solid rgba(0,0,0,0.15); flex-shrink: 0; }
+  .usb-gen-note { color: var(--muted); font-size: 13px; }
+
+  code { font-family: var(--mono); font-size: 12.5px; background: var(--surface2); border: 1px solid var(--border); padding: 1px 6px; border-radius: 3px; color: var(--accent); }
+  .key-term { font-style: italic; font-weight: 500; color: var(--accent2); }
+
+  /* SUMMARY */
+  .summary-box { background: var(--text); color: #f0ede6; border-radius: 6px; padding: 28px 32px; margin: 40px 0; }
+  .summary-box h3 { font-family: var(--sans); font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 18px; }
+  .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 32px; }
+  .summary-item { font-family: var(--sans); font-size: 13.5px; color: #c4bfb4; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.07); display: flex; gap: 10px; align-items: flex-start; }
+  .summary-item .s-sym { color: #fff; font-weight: 600; min-width: 150px; line-height: 1.4; }
+
+  .ch-divider { height: 1px; background: linear-gradient(90deg, var(--border2), transparent); margin: 48px 0; }
+
+  @media (max-width: 680px) {
+    .page { padding: 0 20px 60px; }
+    .summary-grid, .card-grid { grid-template-columns: 1fr; }
+    .def-item { grid-template-columns: 1fr; gap: 4px; }
+    .connector-gallery { grid-template-columns: repeat(2, 1fr); }
+    .wiring-row { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV — update href values to match your actual file names -->
+<nav class="top-nav">
+  <div class="top-nav-left">
+    <a class="nav-home" href="../index.html">Study Guide</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current"><strong>3.2</strong> Cable Types, Connectors, Features & Purposes</span>
+  </div>
+  <div class="top-nav-right">
+    <!-- Point these to the adjacent section files, or remove if not applicable -->
+    <a class="nav-prev" href="./3_1-Display-Components-Attributes.html">3.1</a>
+    <a class="nav-next" href="./3_3-RAM-Characteristics.html">3.3</a>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- HEADER -->
+<div class="book-header">
+  <div class="book-eyebrow">
+    <span>3.2</span>
+    CompTIA A+ · Core 1 (220-1201) · Domain 3 — Hardware
+  </div>
+  <h1 class="book-title">Cable Types, Connectors,<br>Features & Purposes</h1>
+  <div class="book-subtitle">
+    <span>Objective 3.2</span>
+    <span>Domain weight: 25%</span>
+    <span>Network · Peripheral · Video · Storage · Adapter · Connector Identification</span>
+  </div>
+</div>
+
+
+<!-- INTRO -->
+<h2 class="chapter"><span class="ch-num">OVERVIEW</span>Introduction</h2>
+
+<p>Cables and connectors are the physical foundation of every computing environment — data, video, storage, and power all travel through cables between components. An IT technician who can immediately identify a connector type, understand its capabilities and limitations, and choose the correct cable for a given application is far more effective in the field than one who must look up each connector individually.</p>
+
+<p>Objective 3.2 covers four categories of cables (network, peripheral, video, storage), adapters, and a specific list of connector types you must be able to identify by name and physical description. This section covers all of them with enough depth to handle scenario-based exam questions.</p>
+
+<div class="callout callout-info">
+  <p class="callout-title">How the Exam Tests This Topic</p>
+  <p>Expect questions in two formats: identification ("Which connector is used for telephone landlines?") and application ("A user needs to connect a VGA monitor to a DisplayPort laptop — what is needed?"). Knowing both the <em>name</em> and the <em>physical characteristics</em> of each connector is required.</p>
+</div>
+
+
+<!-- ═══ NETWORK CABLES — COPPER ═══ -->
+<h2 class="chapter"><span class="ch-num">SECTION 1</span>Network Cables — Copper</h2>
+
+<p>Copper network cables are the backbone of wired local area networks. They transmit data electrically through copper conductors and are the standard connection method for desktop computers, network switches, routers, and any device that requires a reliable, low-latency wired connection.</p>
+
+<h3 class="section">Twisted Pair Cable Categories</h3>
+
+<p>Twisted pair Ethernet cables consist of four pairs of copper wires — eight wires total. Each pair is twisted together at a specific rate per foot, which reduces <span class="key-term">crosstalk</span> (electromagnetic interference between adjacent wire pairs) and <span class="key-term">EMI</span> (external electromagnetic interference). The tighter the twist rate, the better the interference rejection, and the higher the supported data rate.</p>
+
+<p>Cables are categorized (Cat) by their electrical performance specifications. Higher category numbers support higher frequencies, faster data rates, and longer distances at speed:</p>
+
+<table class="data-table">
+  <thead><tr><th>Category</th><th>Max Speed</th><th>Max Distance at Speed</th><th>Bandwidth</th><th>Notes</th></tr></thead>
+  <tbody>
+    <tr><td>Cat 5</td><td>100 Mbps</td><td>100m</td><td>100 MHz</td><td>Legacy; obsolete; replaced by Cat 5e</td></tr>
+    <tr><td>Cat 5e</td><td>1 Gbps</td><td>100m</td><td>100 MHz</td><td>"Enhanced" Cat 5; reduced crosstalk; current minimum standard for new installations</td></tr>
+    <tr><td>Cat 6</td><td>1 Gbps / 10 Gbps</td><td>100m / 55m at 10G</td><td>250 MHz</td><td>Spline separator between pairs; 10G only up to 55m; most common in new commercial installations</td></tr>
+    <tr><td>Cat 6a</td><td>10 Gbps</td><td>100m</td><td>500 MHz</td><td>"Augmented" Cat 6; full 10G at 100m; heavier, stiffer cable; shielded versions common</td></tr>
+    <tr><td>Cat 7</td><td>10 Gbps</td><td>100m</td><td>600 MHz</td><td>Fully shielded pairs; proprietary GG45/TERA connectors (not RJ45); not a TIA standard — limited adoption</td></tr>
+    <tr><td>Cat 8</td><td>25/40 Gbps</td><td>30m</td><td>2,000 MHz</td><td>Data center use only; short distances; shielded; uses modified 8P8C connector</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus — Cable Categories</p>
+  <p>Memorize these four: <strong>Cat 5e = 1 Gbps / 100m</strong>. <strong>Cat 6 = 10 Gbps / 55m</strong> (or 1 Gbps at 100m). <strong>Cat 6a = 10 Gbps / 100m</strong>. These are the most tested. Cat 7 is important to know as <em>not a TIA standard</em> despite appearing in product catalogs. The max distance for all standard Ethernet cable runs is <strong>100 meters (328 feet)</strong>.</p>
+</div>
+
+<h3 class="section">T568A and T568B Wiring Standards</h3>
+
+<p>The T568A and T568B standards define the specific order in which the eight wires of an Ethernet cable are inserted into an RJ-45 connector. Both standards produce functional cables — they differ only in which pairs are assigned to pins 1–2 and 3–6. The standards are defined by TIA/EIA-568 and determine whether a cable is a <span class="key-term">straight-through cable</span> or a <span class="key-term">crossover cable</span>.</p>
+
+<div class="wire-diagram">
+  <h4>T568A vs T568B — Pin Assignments</h4>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+    <div>
+      <div style="font-family:var(--sans);font-size:12px;font-weight:700;color:var(--accent3);margin-bottom:8px;letter-spacing:0.05em;">T568A (green pair first)</div>
+      <div class="wiring-row"><span class="pin-num">1</span><div class="wire-swatch w-wgn"></div><span class="wire-label">White/Green</span></div>
+      <div class="wiring-row"><span class="pin-num">2</span><div class="wire-swatch w-gn"></div><span class="wire-label">Green</span></div>
+      <div class="wiring-row"><span class="pin-num">3</span><div class="wire-swatch w-wr"></div><span class="wire-label">White/Orange</span></div>
+      <div class="wiring-row"><span class="pin-num">4</span><div class="wire-swatch w-bl"></div><span class="wire-label">Blue</span></div>
+      <div class="wiring-row"><span class="pin-num">5</span><div class="wire-swatch w-wbl"></div><span class="wire-label">White/Blue</span></div>
+      <div class="wiring-row"><span class="pin-num">6</span><div class="wire-swatch w-og"></div><span class="wire-label">Orange</span></div>
+      <div class="wiring-row"><span class="pin-num">7</span><div class="wire-swatch w-wbr"></div><span class="wire-label">White/Brown</span></div>
+      <div class="wiring-row"><span class="pin-num">8</span><div class="wire-swatch w-br"></div><span class="wire-label">Brown</span></div>
+    </div>
+    <div>
+      <div style="font-family:var(--sans);font-size:12px;font-weight:700;color:var(--accent4);margin-bottom:8px;letter-spacing:0.05em;">T568B (orange pair first)</div>
+      <div class="wiring-row"><span class="pin-num">1</span><div class="wire-swatch w-wr"></div><span class="wire-label">White/Orange</span></div>
+      <div class="wiring-row"><span class="pin-num">2</span><div class="wire-swatch w-og"></div><span class="wire-label">Orange</span></div>
+      <div class="wiring-row"><span class="pin-num">3</span><div class="wire-swatch w-wgn"></div><span class="wire-label">White/Green</span></div>
+      <div class="wiring-row"><span class="pin-num">4</span><div class="wire-swatch w-bl"></div><span class="wire-label">Blue</span></div>
+      <div class="wiring-row"><span class="pin-num">5</span><div class="wire-swatch w-wbl"></div><span class="wire-label">White/Blue</span></div>
+      <div class="wiring-row"><span class="pin-num">6</span><div class="wire-swatch w-gn"></div><span class="wire-label">Green</span></div>
+      <div class="wiring-row"><span class="pin-num">7</span><div class="wire-swatch w-wbr"></div><span class="wire-label">White/Brown</span></div>
+      <div class="wiring-row"><span class="pin-num">8</span><div class="wire-swatch w-br"></div><span class="wire-label">Brown</span></div>
+    </div>
+  </div>
+  <div style="margin-top:14px;font-family:var(--sans);font-size:13px;color:var(--muted);border-top:1px solid var(--border);padding-top:12px;">
+    <strong style="color:var(--text);">Straight-through cable:</strong> Both ends wired identically (both T568A or both T568B). Connects unlike devices: computer to switch, switch to router.<br>
+    <strong style="color:var(--text);">Crossover cable:</strong> One end T568A, other end T568B. Connects like devices: computer to computer, switch to switch. (Modern equipment with Auto-MDI/MDIX auto-negotiates, making crossover cables largely obsolete.)<br>
+    <strong style="color:var(--text);">T568B is the most common</strong> in North American commercial installations.
+  </div>
+</div>
+
+<h3 class="section">Shielded Twisted Pair (STP) and Unshielded Twisted Pair (UTP)</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">UTP (Unshielded Twisted Pair)</span>
+    <span>The standard Ethernet cable used in offices and homes. Relies solely on the twist rate of each wire pair for interference rejection. No metallic shielding around the pairs or cable. Flexible, inexpensive, easy to terminate, and suitable for almost all standard office and home networking environments. Cat 5e through Cat 6 UTP covers the vast majority of installations.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">STP (Shielded Twisted Pair)</span>
+    <span>Adds metallic shielding — either around individual pairs (FTP/STP), around all pairs together (overall shield), or both (SFTP). The shield must be grounded at one end to be effective. Used in environments with significant EMI: manufacturing floors, hospitals with MRI equipment, data centers, or wherever cables run alongside high-voltage power wiring. More expensive, less flexible, and harder to terminate than UTP. Cat 6a and Cat 7/8 are commonly available in shielded form.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Direct burial cable</span>
+    <span>A specialized STP cable designed to be installed underground, either in conduit or directly buried in soil without conduit. Has additional weatherproofing: a gel-filled jacket that prevents moisture intrusion, and UV-resistant outer jacket. Used when running Ethernet between buildings across a campus, from a main building to a detached garage, or in any outdoor underground installation. Must be rated for direct burial — standard indoor Cat cable will fail when buried due to moisture damage to the jacket and conductors.</span>
+  </div>
+</div>
+
+<h3 class="section">Coaxial Cable</h3>
+
+<p><span class="key-term">Coaxial cable</span> (coax) has a very different construction from twisted pair: a single central copper conductor, surrounded by a dielectric insulator, surrounded by a woven copper mesh shield, surrounded by an outer plastic jacket — all concentric (sharing the same axis, hence "co-axial"). The shield completely surrounds the signal conductor, making coax inherently immune to most EMI.</p>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>Coax Types and Uses</h4>
+    <ul>
+      <li><strong>RG-6:</strong> standard cable for cable TV, satellite, and cable internet (DOCSIS); uses F-type connector</li>
+      <li><strong>RG-59:</strong> older, thinner; lower frequency; CCTV cameras, short composite video runs</li>
+      <li><strong>RG-11:</strong> thicker, lower loss than RG-6; longer cable TV runs from street to home</li>
+      <li><strong>10Base2 / Thinnet:</strong> legacy Ethernet (obsolete); BNC connectors; no longer used for networking</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Coax Properties</h4>
+    <ul>
+      <li><strong>Single conductor:</strong> not differential signaling like twisted pair</li>
+      <li><strong>Excellent EMI rejection:</strong> shield surrounds signal conductor</li>
+      <li><strong>Higher impedance:</strong> 75Ω (TV/cable) or 50Ω (RF/antenna)</li>
+      <li><strong>Current use:</strong> cable TV distribution, satellite, some CCTV; not used for standard Ethernet</li>
+      <li><strong>Connector:</strong> F-type (threaded) for cable TV/internet; BNC (twist-lock) for broadcast/CCTV</li>
+    </ul>
+  </div>
+</div>
+
+<h3 class="section">Plenum-Rated Cable</h3>
+
+<p><span class="key-term">Plenum</span> refers to the air space inside a building used for HVAC air circulation — specifically the space above drop ceilings and below raised floors. In many commercial buildings, network cables are routed through these plenum spaces.</p>
+
+<p>Standard PVC cable jacket material releases toxic chlorine gas when burned. In an enclosed air-handling space, burning standard cable in a fire would rapidly distribute toxic fumes throughout the entire building via the HVAC system. <span class="key-term">Plenum-rated cable</span> (CMP — Communications Multipurpose Plenum) uses a low-smoke, low-toxicity jacket material (typically fluoropolymer or flame-retardant PVC) that self-extinguishes and releases minimal toxic fumes when exposed to fire.</p>
+
+<div class="callout callout-warn">
+  <p class="callout-title">Building Code Requirement</p>
+  <p>Building codes (NEC Article 800 in the US) require plenum-rated cable in plenum air spaces. Installing standard (riser or CM-rated) cable in a plenum space is a code violation that can result in failed inspections and liability in the event of a fire. Plenum cable costs approximately 2–3× more than standard cable. Always verify the installation environment before ordering cable.</p>
+</div>
+
+<p>The cable jacket rating hierarchy (from most to least restrictive installation environment): CMP (Plenum) > CMR (Riser — between floors in conduit, non-plenum) > CM (General Purpose — same floor) > CMX (Residential).</p>
+
+
+<!-- ═══ NETWORK CABLES — FIBER OPTIC ═══ -->
+<h2 class="chapter"><span class="ch-num">SECTION 2</span>Network Cables — Optical Fiber</h2>
+
+<p><span class="key-term">Fiber optic cable</span> transmits data as pulses of light rather than electrical signals through copper. A glass or plastic core carries light from a laser or LED source at one end to a photodetector at the other. Because light is immune to electromagnetic interference and can travel much longer distances than electrical signals without significant degradation, fiber optic cable is used for long-distance runs, high-bandwidth connections, and any environment where EMI is a concern.</p>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>Fiber vs. Copper — Key Differences</h4>
+    <ul>
+      <li><strong>Immune to EMI:</strong> light is unaffected by electromagnetic fields</li>
+      <li><strong>Much longer distance:</strong> single-mode fiber spans tens of kilometers vs. 100m for copper</li>
+      <li><strong>Higher bandwidth potential:</strong> light wavelengths can carry enormous data rates</li>
+      <li><strong>No electrical ground loops:</strong> important for connections between buildings at different electrical potentials</li>
+      <li><strong>Cannot carry Power over Ethernet (PoE)</strong> — light cannot power a device</li>
+      <li><strong>More fragile:</strong> glass core shatters if bent sharply; has a minimum bend radius</li>
+      <li><strong>More expensive</strong> than copper per meter and for transceivers/equipment</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Fiber Optic Cable Construction</h4>
+    <ul>
+      <li><strong>Core:</strong> the light-carrying center; glass or plastic; 8–50 µm diameter</li>
+      <li><strong>Cladding:</strong> surrounds core; slightly lower refractive index — causes total internal reflection, keeping light inside the core</li>
+      <li><strong>Buffer coating:</strong> protective plastic over cladding; protects glass from moisture and physical damage</li>
+      <li><strong>Strength member (Kevlar):</strong> aramid fiber strands that provide tensile strength without stretching the glass core</li>
+      <li><strong>Outer jacket:</strong> PVC or LSZH (Low Smoke Zero Halogen) outer protection</li>
+    </ul>
+  </div>
+</div>
+
+<h3 class="section">Single-Mode Fiber (SMF)</h3>
+
+<p><span class="key-term">Single-mode fiber</span> has a very narrow core — approximately 8–10 µm in diameter (about the width of a human hair). The narrow core allows only a single propagation mode of light (a single "path" or "ray") to travel through the fiber. Because all light travels the same path, there is no <span class="key-term">modal dispersion</span> (light arriving at slightly different times via different paths). Single-mode fiber can carry signals over extremely long distances — tens of kilometers — with minimal signal degradation.</p>
+
+<ul class="body-list">
+  <li><strong>Core diameter:</strong> ~8–10 µm</li>
+  <li><strong>Light source:</strong> laser diode (coherent light; expensive)</li>
+  <li><strong>Typical distance:</strong> 10–100+ km without repeaters</li>
+  <li><strong>Color coding:</strong> yellow jacket (OS1/OS2 standards)</li>
+  <li><strong>Use cases:</strong> long-haul telecommunications, ISP backbone, campus networks spanning multiple buildings, metropolitan area networks</li>
+  <li><strong>Cost:</strong> higher than multimode due to precision manufacturing and laser transceivers</li>
+</ul>
+
+<h3 class="section">Multimode Fiber (MMF)</h3>
+
+<p><span class="key-term">Multimode fiber</span> has a larger core — 50 µm or 62.5 µm in diameter. The larger core allows multiple propagation modes (multiple light paths at slightly different angles) to travel simultaneously. This causes <span class="key-term">modal dispersion</span> — light rays traveling different paths arrive at slightly different times, spreading the signal pulse over time and limiting transmission distance and data rate. Multimode is less expensive than single-mode and uses LEDs or VCSELs rather than precision lasers.</p>
+
+<ul class="body-list">
+  <li><strong>Core diameter:</strong> 50 µm (OM3/OM4/OM5) or 62.5 µm (OM1/OM2, legacy)</li>
+  <li><strong>Light source:</strong> LED or VCSEL (Vertical Cavity Surface Emitting Laser)</li>
+  <li><strong>Typical distance:</strong> up to 550m for 10G on OM3; up to 400m for 10G on OM4</li>
+  <li><strong>Color coding:</strong> orange (OM1/OM2), aqua (OM3), violet/erika (OM4), lime green (OM5)</li>
+  <li><strong>Use cases:</strong> data center interconnects, within-building backbone, SAN connections, high-speed LAN</li>
+  <li><strong>Cost:</strong> lower than single-mode; LEDs and VCSELs are cheaper than precision laser transceivers</li>
+</ul>
+
+<table class="data-table">
+  <thead><tr><th>Type</th><th>Core</th><th>Light Source</th><th>Max Distance</th><th>Jacket Color</th><th>Use Case</th></tr></thead>
+  <tbody>
+    <tr><td>SMF (OS1/OS2)</td><td>8–10 µm</td><td>Laser diode</td><td>10–100+ km</td><td>Yellow</td><td>Long-haul, ISP, campus WAN</td></tr>
+    <tr><td>MMF OM1</td><td>62.5 µm</td><td>LED</td><td>275m @ 1G</td><td>Orange</td><td>Legacy; being replaced</td></tr>
+    <tr><td>MMF OM3</td><td>50 µm</td><td>VCSEL</td><td>300m @ 10G</td><td>Aqua</td><td>Data center, SAN, LAN</td></tr>
+    <tr><td>MMF OM4</td><td>50 µm</td><td>VCSEL</td><td>400m @ 10G</td><td>Violet</td><td>High-performance data center</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus — Single-Mode vs. Multimode</p>
+  <p><strong>Single-mode = narrow core, yellow jacket, laser, long distance (km).</strong> <strong>Multimode = wide core, aqua/orange jacket, LED/VCSEL, shorter distance (meters).</strong> The key distinguishing fact: single-mode uses a laser; multimode uses an LED. Distance: single-mode is for long distances across campuses and cities; multimode is for shorter runs within buildings or between nearby buildings.</p>
+</div>
+
+
+<!-- ═══ PERIPHERAL CABLES ═══ -->
+<h2 class="chapter"><span class="ch-num">SECTION 3</span>Peripheral Cables</h2>
+
+<h3 class="section">USB (Universal Serial Bus)</h3>
+
+<p>USB is the universal standard for connecting peripherals — keyboards, mice, storage drives, printers, cameras, and hundreds of other device types — to computers. USB has gone through multiple major revisions, each increasing data transfer speed. Understanding the version numbering is critical because USB has been renamed multiple times, creating significant confusion.</p>
+
+<div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:18px 22px;margin:20px 0;">
+  <div style="font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">USB Versions — Speed and Port Color</div>
+
+  <div class="usb-gen-row">
+    <div class="usb-gen-color" style="background:#111;"></div>
+    <span class="usb-gen-name">USB 2.0</span>
+    <span class="usb-gen-speed">480 Mbps</span>
+    <span class="usb-gen-note">Hi-Speed USB; black ports; still common on keyboards, mice, basic storage; adequate for most non-video peripherals</span>
+  </div>
+  <div class="usb-gen-row">
+    <div class="usb-gen-color" style="background:#1565c0;"></div>
+    <span class="usb-gen-name">USB 3.0 / 3.1 Gen 1 / USB 3.2 Gen 1</span>
+    <span class="usb-gen-speed">5 Gbps</span>
+    <span class="usb-gen-note">SuperSpeed USB; blue ports (standard ID); 10× faster than USB 2.0; same-A connector but blue</span>
+  </div>
+  <div class="usb-gen-row">
+    <div class="usb-gen-color" style="background:#00bcd4;"></div>
+    <span class="usb-gen-name">USB 3.1 Gen 2 / USB 3.2 Gen 2</span>
+    <span class="usb-gen-speed">10 Gbps</span>
+    <span class="usb-gen-note">SuperSpeed USB 10Gbps; teal/red ports on some hardware; available in USB-A and USB-C</span>
+  </div>
+  <div class="usb-gen-row">
+    <div class="usb-gen-color" style="background:#7b1fa2;"></div>
+    <span class="usb-gen-name">USB 3.2 Gen 2×2</span>
+    <span class="usb-gen-speed">20 Gbps</span>
+    <span class="usb-gen-note">SuperSpeed USB 20Gbps; USB-C only; two 10 Gbps lanes simultaneously</span>
+  </div>
+  <div class="usb-gen-row">
+    <div class="usb-gen-color" style="background:#f57c00;"></div>
+    <span class="usb-gen-name">USB4 / Thunderbolt 3/4</span>
+    <span class="usb-gen-speed">40 Gbps</span>
+    <span class="usb-gen-note">USB-C only; compatible with Thunderbolt 3/4; supports DisplayPort Alt Mode and PCIe tunneling; 240W charging</span>
+  </div>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus — USB Version Naming Chaos</p>
+  <p>USB naming was officially consolidated by the USB-IF in 2019 and again in 2022. For the A+ exam: <strong>USB 2.0 = 480 Mbps</strong> (black ports). <strong>USB 3.0 = 5 Gbps</strong> (blue ports) — regardless of whether it's labeled 3.0, 3.1 Gen 1, or 3.2 Gen 1. The blue color of the port is the fastest way to identify USB 3.x in the field.</p>
+</div>
+
+<h3 class="section">Serial (RS-232 / DB-9)</h3>
+
+<p><span class="key-term">Serial</span> in the context of legacy peripheral connections refers to the RS-232 standard, using the DB-9 (DE-9) connector — a 9-pin D-shaped connector. Serial transmits data one bit at a time over a single wire, at low speeds (typically 9600 baud to 115,200 baud). Once the universal standard for modems, mice, and external devices, serial was almost entirely replaced by USB.</p>
+
+<p>Serial ports survive in specific use cases: configuring network routers and switches via console port (Cisco, Juniper), industrial control systems (PLCs, CNC machines), scientific instruments, and serial-controlled devices in manufacturing. A USB-to-serial adapter allows modern laptops without serial ports to communicate with these legacy devices.</p>
+
+<h3 class="section">Thunderbolt</h3>
+
+<p><span class="key-term">Thunderbolt</span> is a high-speed interface developed by Intel in collaboration with Apple. It combines multiple protocols — PCIe (for high-performance data and external GPU), DisplayPort (for video), and USB — into a single cable and connector. The Thunderbolt symbol (⚡) is printed next to compatible ports.</p>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Thunderbolt 1 & 2</span>
+    <span>Used the Mini DisplayPort connector (Thunderbolt 1: 10 Gbps; Thunderbolt 2: 20 Gbps). Found on older Macs. Backward-compatible with Mini DisplayPort displays using a passive adapter.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Thunderbolt 3</span>
+    <span>Switched to USB-C connector. 40 Gbps bidirectional. Supports up to two 4K displays or one 5K display. 100W power delivery. Compatible with USB 3.1. Uses the same USB-C physical connector — only distinguishable by the ⚡ symbol or by testing.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Thunderbolt 4</span>
+    <span>Same 40 Gbps speed as TB3 but with stricter minimum requirements: must support two 4K displays or one 8K display, must provide at least 15W power to connected devices, minimum 32 Gbps PCIe bandwidth, and Intel VT-d-based DMA protection. USB-C connector. Fully backward-compatible with TB3, USB4, and USB 3.x.</span>
+  </div>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Thunderbolt vs. USB-C</p>
+  <p>Not all USB-C ports are Thunderbolt. A USB-C port with a Thunderbolt symbol (⚡) supports Thunderbolt. A USB-C port without the symbol is just USB-C. Thunderbolt 3/4 uses the same physical USB-C connector as standard USB-C — the difference is purely in the controller chip inside the device. A Thunderbolt cable works in a USB-C port (at USB speeds); a USB-C cable works in a Thunderbolt port (at USB speeds only).</p>
+</div>
+
+
+<!-- ═══ VIDEO CABLES ═══ -->
+<h2 class="chapter"><span class="ch-num">SECTION 4</span>Video Cables</h2>
+
+<h3 class="section">VGA (Video Graphics Array)</h3>
+
+<p><span class="key-term">VGA</span> is the oldest display standard still in use, introduced with the IBM PS/2 in 1987. It uses a 15-pin D-subminiature (DB-15 or HD-15) connector — three rows of five pins in a trapezoidal shell. VGA is an <span class="key-term">analog signal</span> — the video data is transmitted as continuous voltage variations representing color intensity, not as digital data. This is a fundamental limitation: analog signals degrade with cable length, are susceptible to interference, and cannot achieve the sharp pixel-perfect image of digital connections at high resolutions.</p>
+
+<ul class="body-list">
+  <li><strong>Signal type:</strong> analog RGB</li>
+  <li><strong>Audio:</strong> no audio signal carried</li>
+  <li><strong>Maximum resolution:</strong> technically unlimited (analog), but practical limit ~2560×1600; quality degrades at higher resolutions</li>
+  <li><strong>Connector:</strong> DB-15 (HD-15), blue color coding by convention</li>
+  <li><strong>Current status:</strong> legacy; found on projectors, older monitors, older laptops. Being phased out completely.</li>
+</ul>
+
+<h3 class="section">DVI (Digital Visual Interface)</h3>
+
+<p><span class="key-term">DVI</span> was designed to succeed VGA as the primary computer monitor connection, offering digital signal transmission. DVI uses a wide rectangular connector that comes in several variants, distinguished by their pin arrangements:</p>
+
+<table class="data-table">
+  <thead><tr><th>Type</th><th>Signal</th><th>Analog Support</th><th>Max Resolution</th><th>Notes</th></tr></thead>
+  <tbody>
+    <tr><td>DVI-D Single Link</td><td>Digital only</td><td>No</td><td>1920×1200</td><td>Most common DVI</td></tr>
+    <tr><td>DVI-D Dual Link</td><td>Digital only</td><td>No</td><td>2560×1600</td><td>Extra pins for higher resolution</td></tr>
+    <tr><td>DVI-A</td><td>Analog only</td><td>Yes</td><td>~1920×1200</td><td>Rare; for VGA compatibility only</td></tr>
+    <tr><td>DVI-I Single Link</td><td>Digital + Analog</td><td>Yes</td><td>1920×1200</td><td>Integrated; can connect to VGA with adapter</td></tr>
+    <tr><td>DVI-I Dual Link</td><td>Digital + Analog</td><td>Yes</td><td>2560×1600</td><td>Most versatile DVI variant</td></tr>
+  </tbody>
+</table>
+
+<p>DVI carries no audio. It is largely superseded by HDMI and DisplayPort but still found on older monitors and graphics cards. A key exam point: DVI-I adapts to VGA (because it carries analog pins); DVI-D does not adapt to VGA without an active converter.</p>
+
+<h3 class="section">HDMI (High-Definition Multimedia Interface)</h3>
+
+<p><span class="key-term">HDMI</span> is the dominant consumer display standard, carrying both high-definition video and multi-channel audio on a single cable. The familiar HDMI connector — a 19-pin trapezoidal connector — is found on televisions, monitors, laptops, gaming consoles, streaming devices, and AV equipment.</p>
+
+<table class="data-table">
+  <thead><tr><th>Version</th><th>Max Resolution @ Rate</th><th>Max Bandwidth</th><th>Key Features</th></tr></thead>
+  <tbody>
+    <tr><td>HDMI 1.4</td><td>4K @ 30Hz</td><td>10.2 Gbps</td><td>4K support, Audio Return Channel (ARC), 3D</td></tr>
+    <tr><td>HDMI 2.0</td><td>4K @ 60Hz</td><td>18 Gbps</td><td>4K@60Hz, HDR (2.0a), 21:9 aspect ratio</td></tr>
+    <tr><td>HDMI 2.1</td><td>10K @ 120Hz</td><td>48 Gbps</td><td>Variable Refresh Rate (VRR), eARC, 8K/10K, 4K@120Hz</td></tr>
+  </tbody>
+</table>
+
+<p>HDMI connector form factors: <strong>Standard HDMI</strong> (Type A, full size), <strong>Mini HDMI</strong> (Type C, smaller devices), <strong>Micro HDMI</strong> (Type D, cameras, tablets). The full-size standard connector is most common in the exam context.</p>
+
+<h3 class="section">DisplayPort</h3>
+
+<p><span class="key-term">DisplayPort</span> is a digital display interface developed by VESA, designed specifically for connecting computers to monitors. Unlike HDMI (which originated in the consumer electronics industry), DisplayPort was designed from the start for computer display applications. It supports higher refresh rates than HDMI at the same version level and is the preferred connection for high-refresh-rate gaming monitors and multi-monitor setups.</p>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>DisplayPort Advantages Over HDMI</h4>
+    <ul>
+      <li><strong>Daisy-chaining:</strong> up to 4 monitors connected in series from one DP port (Multi-Stream Transport / MST)</li>
+      <li><strong>Higher refresh rates:</strong> DP 1.4 supports 4K@144Hz and 1440p@240Hz; HDMI 2.0 caps at 4K@60Hz</li>
+      <li><strong>Locking connector:</strong> DP connector has a latching mechanism preventing accidental disconnection</li>
+      <li><strong>Free royalty use:</strong> no licensing fees for VESA members, unlike HDMI</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>DisplayPort Versions</h4>
+    <ul>
+      <li><strong>DP 1.2:</strong> 21.6 Gbps; 4K@60Hz; MST daisy chain</li>
+      <li><strong>DP 1.4:</strong> 32.4 Gbps; 4K@120Hz, 8K@30Hz; HDR; DSC compression</li>
+      <li><strong>DP 2.0:</strong> 80 Gbps; 16K; 4K@240Hz</li>
+      <li><strong>Mini DisplayPort:</strong> smaller connector; used on older Macs; same signal as full DP</li>
+      <li><strong>USB-C Alt Mode:</strong> DisplayPort signal over USB-C cable — same DP performance, different connector</li>
+    </ul>
+  </div>
+</div>
+
+<h3 class="section">USB-C as a Video Connector</h3>
+
+<p>USB-C supports <span class="key-term">Alternate Mode (Alt Mode)</span> — the ability to carry non-USB signals through its pins. When a device and cable support DisplayPort Alt Mode, the USB-C port carries a full DisplayPort signal, enabling video output without a separate DisplayPort connector. Thunderbolt 3/4 ports also carry DisplayPort natively. Not all USB-C ports support video output — a USB-C port that only implements USB power delivery will not carry video.</p>
+
+
+<!-- ═══ HARD DRIVE CABLES ═══ -->
+<h2 class="chapter"><span class="ch-num">SECTION 5</span>Hard Drive Cables</h2>
+
+<h3 class="section">SATA (Serial Advanced Technology Attachment)</h3>
+
+<p><span class="key-term">SATA</span> is the standard interface connecting storage drives (HDDs and SSDs) to the motherboard inside a computer. SATA replaced the older PATA/IDE (Parallel ATA) standard, offering higher speeds, a much smaller connector, thinner cables (improving airflow), and hot-swapping capability.</p>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">SATA data cable</span>
+    <span>A thin, 7-pin L-shaped connector on each end. Carries data between the drive and the motherboard's SATA controller. The L-shape prevents insertion in the wrong orientation. Maximum cable length: 1 meter. The connector is not latching by default, though some implementations have a clip to prevent accidental disconnection.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">SATA power cable</span>
+    <span>A 15-pin flat connector from the PSU to the drive. Carries +3.3V, +5V, and +12V power rails. Wider than the data connector. The L-shape matches the data connector but is wider and has more pins. On modular PSUs, the SATA power cables are separate; on non-modular PSUs, they are permanently attached.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">SATA revisions</span>
+    <span>SATA I: 1.5 Gbps (150 MB/s). SATA II: 3.0 Gbps (300 MB/s). SATA III: 6.0 Gbps (600 MB/s) — the current standard. All revisions are backward-compatible. The physical connector is the same across all revisions; the speed depends on both the drive and the controller.</span>
+  </div>
+</div>
+
+<h3 class="section">eSATA (External SATA)</h3>
+
+<p><span class="key-term">eSATA</span> extends the SATA interface for external drive connections. The eSATA connector is a modified SATA connector — similar shape but with reinforced contacts designed for repeated insertion/removal and without the data and power combined in one plug (eSATA is data-only; external power is required separately or via eSATAp which adds USB power). eSATA provides SATA III speeds (6 Gbps) to external drives — faster than USB 2.0 and early USB 3.0 when those were the alternatives.</p>
+
+<p>eSATA has been largely superseded by USB 3.0 and USB 3.1 Gen 2 (10 Gbps), which are faster, provide power, and are more universally supported. eSATA ports are still found on some older desktop and laptop systems. The maximum cable length for eSATA is 2 meters (vs. 1 meter for internal SATA).</p>
+
+
+<!-- ═══ ADAPTERS ═══ -->
+<h2 class="chapter"><span class="ch-num">SECTION 6</span>Adapters</h2>
+
+<p>Adapters convert one connector type to another, enabling connectivity between devices that use different interface standards. Understanding when a passive adapter works versus when an active (powered) converter is required is critical — using the wrong type can result in no signal or a damaged device.</p>
+
+<table class="data-table">
+  <thead><tr><th>Adapter</th><th>Type</th><th>Notes</th></tr></thead>
+  <tbody>
+    <tr><td>DisplayPort → HDMI</td><td>Active (recommended) or Passive</td><td>Passive works in many cases because DP supports HDMI signal natively; active preferred for reliability at 4K</td></tr>
+    <tr><td>HDMI → DisplayPort</td><td>Active only</td><td>HDMI cannot drive a DP display passively; requires active conversion chip with power</td></tr>
+    <tr><td>VGA → HDMI</td><td>Active only</td><td>Analog-to-digital conversion; requires a chip and power; never passive</td></tr>
+    <tr><td>HDMI → VGA</td><td>Active only</td><td>Digital-to-analog conversion; requires a chip and power</td></tr>
+    <tr><td>DVI-I → VGA</td><td>Passive</td><td>DVI-I carries analog pins; passive adapter connects those analog pins to VGA</td></tr>
+    <tr><td>USB-C → USB-A</td><td>Passive</td><td>No conversion needed; just physical shape change; speed depends on underlying USB version</td></tr>
+    <tr><td>USB-C → DisplayPort</td><td>Passive (Alt Mode)</td><td>Works if USB-C port supports DP Alt Mode; no active conversion needed</td></tr>
+    <tr><td>USB-C → HDMI</td><td>Passive (Alt Mode)</td><td>Works if USB-C port supports HDMI Alt Mode or DP Alt Mode with conversion</td></tr>
+    <tr><td>USB-A → USB-B (printer)</td><td>Passive</td><td>Shape adapter only; common for printer connections</td></tr>
+    <tr><td>USB-to-Serial</td><td>Active</td><td>USB controller chip converts USB to RS-232 serial; requires driver; used for legacy device access</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus — Active vs. Passive Adapters</p>
+  <p><strong>Analog ↔ digital conversion always requires an active adapter</strong> with a conversion chip (and usually USB power). <strong>Digital ↔ digital of the same underlying signal can use passive adapters</strong> (e.g., DVI-D to HDMI is a passive adapter because both are digital). When a user buys a cheap passive VGA-to-HDMI adapter and gets no signal, it's because VGA (analog) to HDMI (digital) requires an active converter.</p>
+</div>
+
+
+<!-- ═══ CONNECTOR TYPES ═══ -->
+<h2 class="chapter"><span class="ch-num">SECTION 7</span>Connector Types — Identification Reference</h2>
+
+<p>The A+ exam requires identifying connectors by name and physical description. This section covers every connector listed in the official objectives with enough detail to answer identification questions.</p>
+
+<div class="connector-gallery">
+
+  <div class="conn-card">
+    <div class="conn-visual cv-rj45">
+      <svg width="70" height="45" viewBox="0 0 70 45">
+        <rect x="10" y="8" width="50" height="30" rx="3" fill="#1565c0" opacity="0.8"/>
+        <rect x="15" y="14" width="5" height="12" rx="1" fill="#ffd700"/>
+        <rect x="23" y="14" width="5" height="12" rx="1" fill="#ff8c00"/>
+        <rect x="31" y="14" width="5" height="12" rx="1" fill="#fff"/>
+        <rect x="39" y="14" width="5" height="12" rx="1" fill="#1a3a7c"/>
+        <rect x="47" y="14" width="5" height="12" rx="1" fill="#fff"/>
+        <text x="35" y="38" text-anchor="middle" fill="#6b6860" font-size="8" font-family="monospace">8 pins</text>
+      </svg>
+    </div>
+    <div class="conn-info">
+      <span class="conn-name">RJ-45</span>
+      <span class="conn-detail">8-pin registered jack. Ethernet networks. Wider than RJ-11. Used with Cat5e/Cat6 cable. Most common network connector.</span>
+    </div>
+  </div>
+
+  <div class="conn-card">
+    <div class="conn-visual cv-rj11">
+      <svg width="70" height="45" viewBox="0 0 70 45">
+        <rect x="18" y="8" width="34" height="30" rx="3" fill="#2e7d32" opacity="0.8"/>
+        <rect x="24" y="14" width="5" height="12" rx="1" fill="#ffd700"/>
+        <rect x="32" y="14" width="5" height="12" rx="1" fill="#ff8c00"/>
+        <rect x="40" y="14" width="5" height="12" rx="1" fill="#fff"/>
+        <text x="35" y="38" text-anchor="middle" fill="#6b6860" font-size="8" font-family="monospace">6 pins</text>
+      </svg>
+    </div>
+    <div class="conn-info">
+      <span class="conn-name">RJ-11</span>
+      <span class="conn-detail">6-position, 2-pin used (6P2C). Telephone landlines and DSL. Narrower than RJ-45. Not used for Ethernet.</span>
+    </div>
+  </div>
+
+  <div class="conn-card">
+    <div class="conn-visual cv-ftype">
+      <svg width="70" height="45" viewBox="0 0 70 45">
+        <circle cx="35" cy="22" r="14" fill="#7b1fa2" opacity="0.7"/>
+        <circle cx="35" cy="22" r="6" fill="#f3e5f5"/>
+        <circle cx="35" cy="22" r="2" fill="#7b1fa2"/>
+        <path d="M 35 8 A 14 14 0 0 1 49 22" stroke="#4a148c" stroke-width="2" fill="none"/>
+        <text x="35" y="43" text-anchor="middle" fill="#6b6860" font-size="8" font-family="monospace">threaded</text>
+      </svg>
+    </div>
+    <div class="conn-info">
+      <span class="conn-name">F-Type</span>
+      <span class="conn-detail">Threaded coaxial connector. Cable TV, satellite, and cable internet (DOCSIS modem). Screws onto the port — distinguishes it from push-on connectors.</span>
+    </div>
+  </div>
+
+  <div class="conn-card">
+    <div class="conn-visual cv-st">
+      <svg width="70" height="45" viewBox="0 0 70 45">
+        <rect x="28" y="5" width="14" height="35" rx="3" fill="#006064" opacity="0.8"/>
+        <circle cx="35" cy="22" r="5" fill="#e0f7fa"/>
+        <path d="M 25 18 L 18 12 M 25 26 L 18 32" stroke="#00838f" stroke-width="2"/>
+        <text x="35" y="43" text-anchor="middle" fill="#6b6860" font-size="8" font-family="monospace">bayonet</text>
+      </svg>
+    </div>
+    <div class="conn-info">
+      <span class="conn-name">ST (Straight Tip)</span>
+      <span class="conn-detail">Bayonet-style twist-lock fiber optic connector. Older fiber installations. Round ferrule with twist-lock mechanism. Being replaced by SC and LC.</span>
+    </div>
+  </div>
+
+  <div class="conn-card">
+    <div class="conn-visual cv-sc">
+      <svg width="70" height="45" viewBox="0 0 70 45">
+        <rect x="22" y="10" width="26" height="24" rx="2" fill="#f57f17" opacity="0.8"/>
+        <rect x="28" y="16" width="14" height="12" rx="1" fill="#fff9c4"/>
+        <rect x="33" y="19" width="4" height="6" rx="1" fill="#e65100"/>
+        <text x="35" y="43" text-anchor="middle" fill="#6b6860" font-size="8" font-family="monospace">push-pull</text>
+      </svg>
+    </div>
+    <div class="conn-info">
+      <span class="conn-name">SC (Subscriber Connector)</span>
+      <span class="conn-detail">Square push-pull fiber optic connector. Common in telecom and data centers. "Square Connector" — snaps in, push to release. Available duplex (two in one housing).</span>
+    </div>
+  </div>
+
+  <div class="conn-card">
+    <div class="conn-visual cv-lc">
+      <svg width="70" height="45" viewBox="0 0 70 45">
+        <rect x="25" y="10" width="20" height="24" rx="2" fill="#1b5e20" opacity="0.8"/>
+        <rect x="30" y="15" width="10" height="8" rx="1" fill="#e8f5e9"/>
+        <rect x="33" y="17" width="4" height="4" rx="0.5" fill="#1b5e20"/>
+        <rect x="30" y="27" width="10" height="5" rx="1" fill="#a5d6a7"/>
+        <text x="35" y="43" text-anchor="middle" fill="#6b6860" font-size="8" font-family="monospace">small form</text>
+      </svg>
+    </div>
+    <div class="conn-info">
+      <span class="conn-name">LC (Lucent Connector)</span>
+      <span class="conn-detail">Small form factor fiber connector; half the size of SC. Locking tab mechanism. Dominant in high-density data centers and modern fiber installations. Often duplex.</span>
+    </div>
+  </div>
+
+  <div class="conn-card">
+    <div class="conn-visual cv-punch">
+      <svg width="70" height="45" viewBox="0 0 70 45">
+        <rect x="8" y="12" width="54" height="22" rx="2" fill="#3949ab" opacity="0.7"/>
+        <line x1="16" y1="12" x2="16" y2="34" stroke="#c5cae9" stroke-width="1"/>
+        <line x1="24" y1="12" x2="24" y2="34" stroke="#c5cae9" stroke-width="1"/>
+        <line x1="32" y1="12" x2="32" y2="34" stroke="#c5cae9" stroke-width="1"/>
+        <line x1="40" y1="12" x2="40" y2="34" stroke="#c5cae9" stroke-width="1"/>
+        <line x1="48" y1="12" x2="48" y2="34" stroke="#c5cae9" stroke-width="1"/>
+        <line x1="56" y1="12" x2="56" y2="34" stroke="#c5cae9" stroke-width="1"/>
+        <text x="35" y="43" text-anchor="middle" fill="#6b6860" font-size="8" font-family="monospace">110 block</text>
+      </svg>
+    </div>
+    <div class="conn-info">
+      <span class="conn-name">Punchdown Block</span>
+      <span class="conn-detail">110-type block for terminating Ethernet cable in patch panels and wall outlets. Wire is "punched down" with a punchdown tool — no stripping or crimping required.</span>
+    </div>
+  </div>
+
+  <div class="conn-card">
+    <div class="conn-visual cv-usba">
+      <svg width="70" height="45" viewBox="0 0 70 45">
+        <rect x="15" y="12" width="40" height="22" rx="2" fill="#c62828" opacity="0.7"/>
+        <rect x="20" y="16" width="30" height="14" rx="1" fill="#fff"/>
+        <rect x="22" y="18" width="26" height="10" rx="0.5" fill="#ffcdd2"/>
+        <text x="35" y="43" text-anchor="middle" fill="#6b6860" font-size="8" font-family="monospace">rectangular</text>
+      </svg>
+    </div>
+    <div class="conn-info">
+      <span class="conn-name">MicroUSB</span>
+      <span class="conn-detail">5-pin micro connector; smaller than MiniUSB. Was the universal Android charging standard before USB-C. Still found on some devices and accessories.</span>
+    </div>
+  </div>
+
+  <div class="conn-card">
+    <div class="conn-visual cv-rj11">
+      <svg width="70" height="45" viewBox="0 0 70 45">
+        <rect x="20" y="14" width="30" height="18" rx="2" fill="#1976d2" opacity="0.8"/>
+        <rect x="24" y="18" width="22" height="10" rx="1" fill="#bbdefb"/>
+        <rect x="26" y="20" width="18" height="6" rx="0.5" fill="#1976d2"/>
+        <text x="35" y="43" text-anchor="middle" fill="#6b6860" font-size="8" font-family="monospace">trapezoid</text>
+      </svg>
+    </div>
+    <div class="conn-info">
+      <span class="conn-name">MiniUSB</span>
+      <span class="conn-detail">5-pin connector; older and larger than MicroUSB. Found on older cameras, GPS devices, and early portable hard drives. Largely replaced by MicroUSB and USB-C.</span>
+    </div>
+  </div>
+
+  <div class="conn-card">
+    <div class="conn-visual cv-usbc">
+      <svg width="70" height="45" viewBox="0 0 70 45">
+        <rect x="18" y="14" width="34" height="18" rx="9" fill="#e65100" opacity="0.85"/>
+        <rect x="23" y="18" width="24" height="10" rx="5" fill="#fff3e0"/>
+        <rect x="27" y="20" width="16" height="6" rx="3" fill="#e65100"/>
+        <text x="35" y="43" text-anchor="middle" fill="#6b6860" font-size="8" font-family="monospace">reversible oval</text>
+      </svg>
+    </div>
+    <div class="conn-info">
+      <span class="conn-name">USB-C</span>
+      <span class="conn-detail">24-pin reversible oval connector. Current universal standard. Carries USB data, power (up to 240W), DisplayPort, Thunderbolt, HDMI Alt Mode. Reversible — no wrong way to insert.</span>
+    </div>
+  </div>
+
+  <div class="conn-card">
+    <div class="conn-visual cv-molex">
+      <svg width="70" height="45" viewBox="0 0 70 45">
+        <rect x="12" y="10" width="46" height="26" rx="2" fill="#6a1b9a" opacity="0.75"/>
+        <rect x="17" y="15" width="8" height="16" rx="1" fill="#e1bee7"/>
+        <rect x="28" y="15" width="8" height="16" rx="1" fill="#e1bee7"/>
+        <rect x="39" y="15" width="8" height="16" rx="1" fill="#e1bee7"/>
+        <text x="35" y="43" text-anchor="middle" fill="#6b6860" font-size="8" font-family="monospace">4-pin power</text>
+      </svg>
+    </div>
+    <div class="conn-info">
+      <span class="conn-name">Molex</span>
+      <span class="conn-detail">4-pin power connector from PSU. Carries +5V and +12V. Used for older HDDs, optical drives, fans, and legacy peripherals. Being replaced by SATA power connectors.</span>
+    </div>
+  </div>
+
+  <div class="conn-card">
+    <div class="conn-visual cv-lightning">
+      <svg width="70" height="45" viewBox="0 0 70 45">
+        <rect x="22" y="15" width="26" height="15" rx="4" fill="#555" opacity="0.9"/>
+        <rect x="28" y="18" width="14" height="9" rx="2" fill="#aaa"/>
+        <rect x="31" y="20" width="8" height="5" rx="1" fill="#555"/>
+        <text x="35" y="43" text-anchor="middle" fill="#6b6860" font-size="8" font-family="monospace">reversible</text>
+      </svg>
+    </div>
+    <div class="conn-info">
+      <span class="conn-name">Lightning</span>
+      <span class="conn-detail">Apple proprietary 8-pin reversible connector. Used on iPhone (through iPhone 14), iPad, and AirPods. Being replaced by USB-C across Apple product line (mandated by EU).</span>
+    </div>
+  </div>
+
+  <div class="conn-card">
+    <div class="conn-visual cv-db9">
+      <svg width="70" height="45" viewBox="0 0 70 45">
+        <path d="M 12 8 L 58 8 L 62 14 L 62 32 L 58 38 L 12 38 L 8 32 L 8 14 Z" fill="#c0392b" opacity="0.75"/>
+        <circle cx="22" cy="19" r="3" fill="#fdf2f1"/>
+        <circle cx="33" cy="19" r="3" fill="#fdf2f1"/>
+        <circle cx="44" cy="19" r="3" fill="#fdf2f1"/>
+        <circle cx="55" cy="19" r="3" fill="#fdf2f1"/>
+        <circle cx="16" cy="19" r="3" fill="#fdf2f1"/>
+        <circle cx="19" cy="29" r="3" fill="#fdf2f1"/>
+        <circle cx="30" cy="29" r="3" fill="#fdf2f1"/>
+        <circle cx="41" cy="29" r="3" fill="#fdf2f1"/>
+        <circle cx="51" cy="29" r="3" fill="#fdf2f1"/>
+        <text x="35" y="43" text-anchor="middle" fill="#6b6860" font-size="8" font-family="monospace">D-shaped</text>
+      </svg>
+    </div>
+    <div class="conn-info">
+      <span class="conn-name">DB-9 (DE-9)</span>
+      <span class="conn-detail">9-pin D-subminiature connector. RS-232 serial communication. Used for console access to network equipment (routers, switches), industrial/scientific devices. Rare on modern PCs — requires USB adapter.</span>
+    </div>
+  </div>
+
+  <div class="conn-card">
+    <div class="conn-visual cv-sata">
+      <svg width="70" height="45" viewBox="0 0 70 45">
+        <path d="M 15 15 L 55 15 L 55 30 L 45 30 L 45 22 L 15 22 Z" fill="#00695c" opacity="0.8"/>
+        <rect x="17" y="17" width="26" height="3" rx="0.5" fill="#e0f2f1"/>
+        <rect x="17" y="21" width="26" height="1" fill="#e0f2f1"/>
+        <text x="35" y="43" text-anchor="middle" fill="#6b6860" font-size="8" font-family="monospace">7-pin L-shape</text>
+      </svg>
+    </div>
+    <div class="conn-info">
+      <span class="conn-name">SATA Data</span>
+      <span class="conn-detail">7-pin L-shaped connector. Connects internal HDDs and SSDs to motherboard. Thin, small, keyed — cannot insert wrong way. SATA III = 6 Gbps.</span>
+    </div>
+  </div>
+
+</div>
+
+<h3 class="section">Connector Quick-Reference Table</h3>
+
+<table class="data-table">
+  <thead><tr><th>Connector</th><th>Pins</th><th>Used For</th><th>Key Identifier</th></tr></thead>
+  <tbody>
+    <tr><td>RJ-45</td><td>8</td><td>Ethernet network</td><td>Wider than RJ-11; 8 visible copper contacts</td></tr>
+    <tr><td>RJ-11</td><td>6 position, 2 used</td><td>Telephone / DSL</td><td>Narrower than RJ-45; phone landlines</td></tr>
+    <tr><td>F-type</td><td>1 (center pin)</td><td>Cable TV / satellite / cable modem</td><td>Threaded outer ring; screws on</td></tr>
+    <tr><td>ST (Straight Tip)</td><td>1 (fiber)</td><td>Fiber optic (older)</td><td>Round barrel with bayonet twist-lock</td></tr>
+    <tr><td>SC (Subscriber Connector)</td><td>1 (fiber)</td><td>Fiber optic</td><td>Square body; push-pull mechanism; snaps in</td></tr>
+    <tr><td>LC (Lucent Connector)</td><td>1 (fiber)</td><td>Fiber optic (high-density)</td><td>Smaller than SC; locking tab; common in data centers</td></tr>
+    <tr><td>Punchdown block (110)</td><td>varies</td><td>Patch panel / wall plate termination</td><td>Horizontal slots where bare wire is pressed in with tool</td></tr>
+    <tr><td>MicroUSB</td><td>5</td><td>Older Android charging/data</td><td>Very small, trapezoidal, asymmetric</td></tr>
+    <tr><td>MiniUSB</td><td>5</td><td>Older cameras, GPS</td><td>Trapezoidal, larger than MicroUSB</td></tr>
+    <tr><td>USB-C</td><td>24</td><td>Universal data/power/video</td><td>Oval, reversible; same both sides</td></tr>
+    <tr><td>Molex</td><td>4</td><td>Legacy PSU power for drives/fans</td><td>Large white 4-pin housing; +5V (red) and +12V (yellow)</td></tr>
+    <tr><td>Lightning</td><td>8</td><td>Apple iPhone/iPad (pre-USB-C)</td><td>Apple proprietary; small, reversible, flat</td></tr>
+    <tr><td>DB-9 / DE-9</td><td>9</td><td>RS-232 serial; console access</td><td>D-shaped shell; two rows (5 over 4 pins)</td></tr>
+  </tbody>
+</table>
+
+
+<!-- MASTER REFERENCE -->
+<div class="ch-divider"></div>
+
+<div class="summary-box">
+  <h3>Master Reference — Objective 3.2 Key Concepts</h3>
+  <div class="summary-grid">
+    <div class="summary-item"><span class="s-sym">Cat 5e</span><span>1 Gbps / 100m — current minimum standard</span></div>
+    <div class="summary-item"><span class="s-sym">Cat 6</span><span>1 Gbps / 100m or 10 Gbps / 55m</span></div>
+    <div class="summary-item"><span class="s-sym">Cat 6a</span><span>10 Gbps / 100m — full 10G at full distance</span></div>
+    <div class="summary-item"><span class="s-sym">T568A vs T568B</span><span>Both wiring standards; T568B more common; crossover = one end each</span></div>
+    <div class="summary-item"><span class="s-sym">UTP</span><span>No shielding; standard office/home use; flexible and cheap</span></div>
+    <div class="summary-item"><span class="s-sym">STP</span><span>Shielded; high-EMI environments; must be grounded</span></div>
+    <div class="summary-item"><span class="s-sym">Direct burial</span><span>Gel-filled STP for underground outdoor runs</span></div>
+    <div class="summary-item"><span class="s-sym">Plenum-rated</span><span>Low-smoke jacket; required in HVAC air-handling spaces</span></div>
+    <div class="summary-item"><span class="s-sym">Single-mode fiber</span><span>Yellow; laser; 8–10 µm core; km-range distances</span></div>
+    <div class="summary-item"><span class="s-sym">Multimode fiber</span><span>Aqua/orange; LED/VCSEL; 50/62.5 µm core; up to ~550m</span></div>
+    <div class="summary-item"><span class="s-sym">USB 2.0</span><span>480 Mbps; black ports</span></div>
+    <div class="summary-item"><span class="s-sym">USB 3.0</span><span>5 Gbps; blue ports</span></div>
+    <div class="summary-item"><span class="s-sym">Thunderbolt 3/4</span><span>40 Gbps; USB-C connector; DP + PCIe + USB; ⚡ symbol</span></div>
+    <div class="summary-item"><span class="s-sym">VGA</span><span>Analog; 15-pin DB-15; blue; no audio; legacy</span></div>
+    <div class="summary-item"><span class="s-sym">DVI-I</span><span>Digital + analog; adapts to VGA passively</span></div>
+    <div class="summary-item"><span class="s-sym">DVI-D</span><span>Digital only; cannot adapt to VGA passively</span></div>
+    <div class="summary-item"><span class="s-sym">HDMI</span><span>Digital audio + video; 19-pin; 2.1 = 48 Gbps / 4K@120Hz</span></div>
+    <div class="summary-item"><span class="s-sym">DisplayPort</span><span>Locking; daisy-chain; higher refresh rates than HDMI 2.0</span></div>
+    <div class="summary-item"><span class="s-sym">SATA III</span><span>6 Gbps; 7-pin L-shaped data connector; 15-pin power</span></div>
+    <div class="summary-item"><span class="s-sym">eSATA</span><span>External SATA; data only; no power; largely superseded by USB 3</span></div>
+    <div class="summary-item"><span class="s-sym">RJ-45</span><span>8 pins; Ethernet; wider than RJ-11</span></div>
+    <div class="summary-item"><span class="s-sym">RJ-11</span><span>6-position/2-pin used; telephone/DSL; narrower than RJ-45</span></div>
+    <div class="summary-item"><span class="s-sym">F-type</span><span>Threaded coax; cable TV / satellite / cable modem</span></div>
+    <div class="summary-item"><span class="s-sym">ST / SC / LC</span><span>Fiber connectors; ST = bayonet; SC = square snap; LC = small latch</span></div>
+    <div class="summary-item"><span class="s-sym">Molex</span><span>4-pin legacy PSU power; +5V and +12V; for HDDs and fans</span></div>
+    <div class="summary-item"><span class="s-sym">Lightning</span><span>Apple proprietary 8-pin; iPhone/iPad; being replaced by USB-C</span></div>
+    <div class="summary-item"><span class="s-sym">DB-9</span><span>9-pin D-shell; RS-232 serial; console access to network equipment</span></div>
+    <div class="summary-item"><span class="s-sym">Analog↔digital adapter</span><span>Always requires active converter (chip + power); never passive</span></div>
+  </div>
+</div>
+
+<div class="callout callout-exam" style="margin-top:28px;">
+  <p class="callout-title">Final Exam Reminders</p>
+  <p><strong>RJ-45 vs RJ-11:</strong> RJ-45 = 8 pins = Ethernet. RJ-11 = 6 position, 2 pins used = telephone. RJ-11 is narrower.</p>
+  <p><strong>ST vs SC vs LC fiber connectors:</strong> ST = round + bayonet twist. SC = square + push-pull snap. LC = small latch tab (data center standard).</p>
+  <p><strong>Single-mode = yellow jacket = laser = long distance (km). Multimode = aqua/orange = LED = shorter distance (meters).</strong></p>
+  <p><strong>USB blue port = USB 3.0 = 5 Gbps. Black port = USB 2.0 = 480 Mbps.</strong></p>
+  <p><strong>Thunderbolt uses USB-C connector but is NOT the same as USB-C</strong> — only ports with the ⚡ symbol are Thunderbolt.</p>
+  <p><strong>Plenum cable</strong> = required in HVAC air spaces; low-smoke jacket; more expensive than standard cable.</p>
+  <p><strong>VGA → HDMI always requires active adapter</strong> (analog to digital). DVI-I → VGA is passive (DVI-I has analog pins).</p>
+  <p><strong>T568B is the most common</strong> wiring standard in North America. Straight-through = same standard both ends. Crossover = A on one end, B on the other.</p>
+  <p><strong>Molex = 4-pin legacy PSU connector.</strong> SATA power = 15-pin flat PSU connector. Both power drives; SATA is current standard.</p>
+  <p><strong>DB-9</strong> = 9-pin D-shaped connector = serial (RS-232) = used for console access to routers and switches.</p>
+  <p><strong>Lightning</strong> = Apple proprietary; not USB-C; being replaced by USB-C across Apple devices per EU regulations.</p>
+</div>
+
+</div>
+</body>
+</html>

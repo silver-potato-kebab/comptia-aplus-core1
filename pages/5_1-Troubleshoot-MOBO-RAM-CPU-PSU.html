@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CompTIA A+ 5.1 — Troubleshoot Motherboards, RAM, CPUs & Power</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --surface2: #f5f4f0;
+    --border: #e5e2d9;
+    --border2: #d4d0c4;
+    --text: #1a1a18;
+    --muted: #6b6860;
+    --accent: #c0392b;
+    --accent2: #2c3e6b;
+    --accent3: #1a6b3a;
+    --accent4: #b5590a;
+    --accent-light: #fdf2f1;
+    --accent2-light: #f0f2f8;
+    --accent3-light: #f0f8f3;
+    --accent4-light: #fdf5ed;
+    --serif: 'Crimson Pro', Georgia, serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── TOP NAV ── */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .top-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .nav-home {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+  .nav-home:hover { color: var(--accent2); }
+  .nav-home::before {
+    content: '←';
+    font-size: 12px;
+  }
+  .nav-sep {
+    font-size: 12px;
+    color: var(--border2);
+    flex-shrink: 0;
+  }
+  .nav-current {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nav-current strong {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    margin-right: 6px;
+  }
+  .top-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .nav-prev, .nav-next {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 4px 9px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    white-space: nowrap;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .nav-prev:hover, .nav-next:hover {
+    border-color: var(--border2);
+    color: var(--accent2);
+  }
+  .nav-prev::before { content: '← '; }
+  .nav-next::after  { content: ' →'; }
+
+  @media (max-width: 600px) {
+    .top-nav { padding: 0 16px; }
+    .nav-current { display: none; }
+    .nav-sep { display: none; }
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.75;
+    font-weight: 400;
+  }
+
+  /* PAGE LAYOUT */
+  .page { max-width: 860px; margin: 0 auto; padding: 0 40px 80px; }
+
+  /* HEADER */
+  .book-header {
+    border-bottom: 3px double var(--border2);
+    padding: 56px 0 32px;
+    margin-bottom: 48px;
+  }
+  .book-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .book-eyebrow span {
+    background: var(--accent);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-right: 10px;
+    font-size: 10px;
+  }
+  .book-title {
+    font-family: var(--serif);
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  .book-subtitle {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .book-subtitle span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .book-subtitle span::before {
+    content: '·';
+    color: var(--border2);
+  }
+  .book-subtitle span:first-child::before { display: none; }
+
+  /* SECTION HEADERS */
+  h2.chapter {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 52px 0 6px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    letter-spacing: -0.01em;
+  }
+  h2.chapter .ch-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+    letter-spacing: 0.1em;
+    font-weight: 400;
+  }
+
+  h3.section {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 36px 0 12px;
+    letter-spacing: -0.005em;
+  }
+  h3.section::before {
+    content: '§ ';
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  h4.subsection {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin: 24px 0 10px;
+  }
+
+  /* BODY TEXT */
+  p {
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+
+  /* CALLOUT BOXES */
+  .callout {
+    border-left: 3px solid;
+    padding: 14px 20px;
+    margin: 24px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 15.5px;
+  }
+  .callout p { margin-bottom: 6px; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout-title {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px !important;
+  }
+  .callout-exam {
+    border-color: var(--accent);
+    background: var(--accent-light);
+  }
+  .callout-exam .callout-title { color: var(--accent); }
+  .callout-info {
+    border-color: var(--accent2);
+    background: var(--accent2-light);
+  }
+  .callout-info .callout-title { color: var(--accent2); }
+  .callout-tip {
+    border-color: var(--accent3);
+    background: var(--accent3-light);
+  }
+  .callout-tip .callout-title { color: var(--accent3); }
+  .callout-warn {
+    border-color: var(--accent4);
+    background: var(--accent4-light);
+  }
+  .callout-warn .callout-title { color: var(--accent4); }
+
+  /* SYMPTOM CARDS */
+  .symptom-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin: 28px 0;
+    overflow: hidden;
+  }
+  .symptom-header {
+    background: var(--text);
+    color: #fff;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .symptom-number {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    min-width: 32px;
+  }
+  .symptom-title {
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+  .symptom-tag {
+    margin-left: auto;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    padding: 3px 8px;
+    border-radius: 3px;
+    text-transform: uppercase;
+  }
+  .tag-critical { background: rgba(192,57,43,0.3); color: #ff9999; }
+  .tag-hardware { background: rgba(44,62,107,0.3); color: #99b0ff; }
+  .tag-thermal { background: rgba(181,89,10,0.3); color: #ffcc99; }
+  .symptom-body { padding: 20px 24px; }
+
+  /* DIAGNOSIS TABLE */
+  .diag-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+    font-family: var(--sans);
+    margin: 16px 0;
+  }
+  .diag-table thead th {
+    background: var(--surface2);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .diag-table tbody tr { border-bottom: 1px solid var(--border); }
+  .diag-table tbody tr:last-child { border-bottom: none; }
+  .diag-table td { padding: 9px 12px; vertical-align: top; }
+  .diag-table td:first-child {
+    font-weight: 500;
+    color: var(--accent2);
+    white-space: nowrap;
+    font-size: 13.5px;
+  }
+
+  /* BEEP CODE TABLE */
+  .beep-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    font-family: var(--sans);
+    margin: 16px 0;
+  }
+  .beep-table thead th {
+    background: var(--surface2);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .beep-table tbody tr { border-bottom: 1px solid var(--border); }
+  .beep-table td { padding: 9px 12px; vertical-align: top; }
+  .beep-table td:first-child {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  /* PROCESS FLOW */
+  .process-flow {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: var(--sans);
+    font-size: 14px;
+  }
+  .process-flow .flow-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .flow-step:last-child { border-bottom: none; }
+  .flow-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+    min-width: 24px;
+    padding-top: 1px;
+  }
+  .flow-text { color: var(--text); line-height: 1.5; }
+  .flow-text strong { color: var(--text); font-weight: 600; }
+
+  /* DEFINITION LIST */
+  .def-list { margin: 16px 0; }
+  .def-item {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 20px;
+    font-size: 15px;
+  }
+  .def-item:last-child { border-bottom: none; }
+  .def-term {
+    font-family: var(--sans);
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 14px;
+    padding-top: 1px;
+  }
+
+  /* INLINE CODE */
+  code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: var(--accent);
+  }
+
+  /* KEY TERM */
+  .key-term {
+    font-style: italic;
+    font-weight: 500;
+    color: var(--accent2);
+  }
+
+  /* SUMMARY BOX */
+  .summary-box {
+    background: var(--text);
+    color: #f0ede6;
+    border-radius: 6px;
+    padding: 28px 32px;
+    margin: 40px 0;
+  }
+  .summary-box h3 {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 16px;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 32px;
+  }
+  .summary-item {
+    font-family: var(--sans);
+    font-size: 13.5px;
+    color: #d4d0c4;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    gap: 10px;
+  }
+  .summary-item .s-symptom {
+    color: #fff;
+    font-weight: 500;
+    min-width: 160px;
+  }
+
+  /* CHAPTER DIVIDER */
+  .ch-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--border2), transparent);
+    margin: 48px 0;
+  }
+
+  /* QUICK REFERENCE */
+  .qr-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .qr-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 14px 16px;
+  }
+  .qr-card h4 {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .qr-card ul {
+    list-style: none;
+    font-family: var(--sans);
+    font-size: 13.5px;
+  }
+  .qr-card ul li {
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    line-height: 1.4;
+  }
+  .qr-card ul li:last-child { border-bottom: none; }
+  .qr-card ul li strong { color: var(--text); }
+
+  @media (max-width: 680px) {
+    .page { padding: 0 20px 60px; }
+    .summary-grid, .qr-grid { grid-template-columns: 1fr; }
+    .def-item { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV — update href values to match your actual file names -->
+<nav class="top-nav">
+  <div class="top-nav-left">
+    <a class="nav-home" href="../index.html">Study Guide</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current"><strong>5.1</strong> Troubleshooting Motherboards, RAM, CPUs, and Power</span>
+  </div>
+  <div class="top-nav-right">
+    <!-- Point these to the adjacent section files, or remove if not applicable -->
+    <a class="nav-prev" href="./4_2-Cloud-Computing.html">4.2</a>
+    <a class="nav-next" href="./5_2-Troubleshoot-Drive-RAID.html">5.2</a>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- HEADER -->
+<div class="book-header">
+  <div class="book-eyebrow">
+    <span>5.1</span>
+    CompTIA A+ · Core 1 (220-1201) · Domain 5 — Hardware & Network Troubleshooting
+  </div>
+  <h1 class="book-title">Troubleshooting Motherboards,<br>RAM, CPUs, and Power</h1>
+  <div class="book-subtitle">
+    <span>Objective 5.1</span>
+    <span>Domain weight: 28%</span>
+    <span>12 testable symptoms</span>
+  </div>
+</div>
+
+<!-- OVERVIEW -->
+<h2 class="chapter"><span class="ch-num">OVERVIEW</span>Introduction</h2>
+
+<p>The motherboard, CPU, RAM, and power supply form the core of any computing system. When any one of these components fails — or begins to fail — the symptoms can range from subtle (a system that runs slightly slower than expected) to catastrophic (a system that will not power on at all). As an IT support technician, your ability to accurately identify which component is responsible for a given symptom is one of the most practically valuable skills you can develop.</p>
+
+<p>This section covers Objective 5.1 of the CompTIA A+ Core 1 exam: <em>Given a scenario, troubleshoot motherboards, RAM, CPUs, and power.</em> Each of the twelve testable symptoms is examined in depth — what causes it, how to isolate the root cause, and how to resolve it.</p>
+
+<div class="callout callout-info">
+  <p class="callout-title">Before You Begin</p>
+  <p>Always follow the standard troubleshooting methodology: identify the problem, establish a theory of probable cause, test the theory, implement the fix, verify functionality, and document. This section maps directly to the "test the theory" phase — knowing which symptom points to which component.</p>
+</div>
+
+<div class="callout callout-warn">
+  <p class="callout-title">Safety First</p>
+  <p>Before opening any system: power off completely, unplug the power cable, and press the power button once to discharge residual electricity. Wear an ESD (electrostatic discharge) wrist strap grounded to the case. Never touch component contacts with bare fingers. Capacitors on a PSU can retain lethal charge even when unplugged — never open a power supply unit.</p>
+</div>
+
+
+<!-- ═══════════════════ SYMPTOM 1: POST BEEPS ═══════════════════ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 01</span>POST Beeps</h2>
+
+<p>When a computer is powered on, the firmware (BIOS or UEFI) runs the <span class="key-term">Power-On Self-Test (POST)</span> — a series of hardware diagnostics performed before the operating system loads. The POST checks that essential components are present and functional: the CPU, RAM, video card, and keyboard controller.</p>
+
+<p>If the POST completes successfully and the system hands off to the bootloader, you typically hear a single short beep (on systems with a speaker) or no beep at all. If the POST detects a critical hardware failure, it cannot display an error on screen because the display system itself may not be functional yet. Instead, it communicates through a series of audible beep codes.</p>
+
+<h3 class="section">Beep Code Systems</h3>
+
+<p>Beep codes are not universal. They are defined by the motherboard manufacturer or the BIOS vendor. The three most common BIOS vendors are <strong>AMI (American Megatrends)</strong>, <strong>Award/Phoenix</strong>, and <strong>IBM</strong>. Always consult the motherboard manual or manufacturer's website to decode beeps accurately. That said, certain patterns are commonly tested:</p>
+
+<table class="beep-table">
+  <thead><tr><th>BIOS</th><th>Beep Pattern</th><th>Likely Cause</th></tr></thead>
+  <tbody>
+    <tr><td>AMI</td><td>1 short</td><td>POST passed (normal)</td></tr>
+    <tr><td>AMI</td><td>2 short</td><td>POST error — check display</td></tr>
+    <tr><td>AMI</td><td>3 long</td><td>RAM not detected or seated incorrectly</td></tr>
+    <tr><td>AMI</td><td>5 short</td><td>CPU failure</td></tr>
+    <tr><td>AMI</td><td>8 short</td><td>Video card / display memory failure</td></tr>
+    <tr><td>Award</td><td>1 long, 2 short</td><td>Video card error</td></tr>
+    <tr><td>Award</td><td>Continuous</td><td>RAM issue or unseated RAM</td></tr>
+    <tr><td>Any</td><td>No beep + no display</td><td>No POST speaker, or CPU/power failure</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus</p>
+  <p>The exam does not require memorizing every beep code from every vendor. What matters is understanding that beep codes indicate POST failures, that they vary by BIOS vendor, and that you should consult the motherboard documentation. The most commonly tested pattern is <strong>RAM-related beeps</strong> — multiple beeps or continuous beeping almost always point to a RAM problem.</p>
+</div>
+
+<h3 class="section">Troubleshooting POST Beeps</h3>
+
+<div class="process-flow">
+  <div class="flow-title">Diagnostic Steps — POST Beeps</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Count and document the beeps.</strong> Note whether they are short or long, and how many. Look up the pattern in the motherboard manual.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Identify the component indicated.</strong> RAM beeps → reseat RAM. Video beeps → reseat GPU. CPU beeps → check CPU seating and cooler.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Reseat the indicated component.</strong> Power off, remove the component fully, clean contacts with isopropyl alcohol if needed, and firmly re-insert.</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Test with known-good components.</strong> Swap RAM with a confirmed working stick. Try a different GPU in a different slot.</div></div>
+  <div class="flow-step"><span class="flow-num">05</span><div class="flow-text"><strong>Clear CMOS.</strong> If the issue persists, clear CMOS by removing the CMOS battery for 30 seconds or using the CMOS jumper on the motherboard. This resets BIOS to defaults.</div></div>
+</div>
+
+
+<!-- ═══════════════════ SYMPTOM 2: CRASH SCREENS ═══════════════════ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 02</span>Proprietary Crash Screens</h2>
+
+<p>A <span class="key-term">proprietary crash screen</span> is a full-screen error message displayed by the operating system when it encounters a fatal, unrecoverable error — typically a kernel-level failure that it cannot safely recover from. The most well-known example is the Windows <span class="key-term">Blue Screen of Death (BSOD)</span>. macOS displays a similar screen called a <span class="key-term">kernel panic</span>, and Linux shows a <span class="key-term">kernel oops</span> or panic message in the terminal.</p>
+
+<h3 class="section">Windows BSOD</h3>
+
+<p>On Windows 10 and 11, the BSOD displays a frown emoji, a brief description, and a <span class="key-term">stop code</span> (also called a bug check code). The stop code is the most important piece of information — it tells you what type of failure caused the crash. Common hardware-related stop codes include:</p>
+
+<table class="diag-table">
+  <thead><tr><th>Stop Code</th><th>Likely Hardware Cause</th></tr></thead>
+  <tbody>
+    <tr><td>MEMORY_MANAGEMENT</td><td>Faulty RAM, RAM incompatibility, or RAM running at incorrect speeds</td></tr>
+    <tr><td>PAGE_FAULT_IN_NONPAGED_AREA</td><td>Defective RAM or failing storage drive</td></tr>
+    <tr><td>IRQL_NOT_LESS_OR_EQUAL</td><td>Faulty RAM or incompatible/corrupt driver</td></tr>
+    <tr><td>WHEA_UNCORRECTABLE_ERROR</td><td>CPU error, overheating, or overclocking instability</td></tr>
+    <tr><td>CRITICAL_PROCESS_DIED</td><td>Corrupt system files, failing storage, or RAM</td></tr>
+    <tr><td>KERNEL_SECURITY_CHECK_FAILURE</td><td>Corrupt drivers or RAM errors</td></tr>
+  </tbody>
+</table>
+
+<h3 class="section">Interpreting Crash Patterns</h3>
+
+<p>A single, isolated BSOD after a driver update almost always points to software. However, <strong>repeated BSODs — especially with different stop codes — strongly suggest hardware failure</strong>, typically RAM or storage. The pattern matters as much as the code itself.</p>
+
+<div class="callout callout-tip">
+  <p class="callout-title">Diagnostic Tip</p>
+  <p>Windows saves crash dump files to <code>C:\Windows\Minidump\</code>. Tools like <strong>WinDbg</strong> or <strong>WhoCrashed</strong> can analyze these files to identify the faulty driver or hardware component. On the exam, Event Viewer is the primary tool for reviewing crash logs.</p>
+</div>
+
+<h3 class="section">Troubleshooting Crash Screens</h3>
+
+<div class="process-flow">
+  <div class="flow-title">Diagnostic Steps — BSOD / Kernel Panic</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Note the stop code.</strong> Photograph the screen if possible. The stop code and any referenced file name are your primary diagnostic data.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Check Event Viewer.</strong> Open Event Viewer → Windows Logs → System. Look for Critical errors timestamped around the crash time.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Run Windows Memory Diagnostic.</strong> Search for "Windows Memory Diagnostic" and run it. It tests RAM across multiple passes and reports errors on next boot.</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Run SFC and CHKDSK.</strong> <code>sfc /scannow</code> checks system file integrity. <code>chkdsk /f /r</code> checks the drive for errors that could cause crashes.</div></div>
+  <div class="flow-step"><span class="flow-num">05</span><div class="flow-text"><strong>Check for recent changes.</strong> New driver? New hardware? Roll back the change and test. BSODs after a Windows Update often resolve by uninstalling the update.</div></div>
+  <div class="flow-step"><span class="flow-num">06</span><div class="flow-text"><strong>Test RAM with MemTest86.</strong> Boot from a USB drive and run MemTest86 for multiple passes. Any errors = defective RAM that must be replaced.</div></div>
+</div>
+
+
+<!-- ═══════════════════ SYMPTOM 3: BLANK SCREEN ═══════════════════ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 03</span>Blank Screen</h2>
+
+<p>A blank screen on boot is one of the most ambiguous symptoms because it can originate from several different component failures. The key diagnostic distinction is determining <em>at what point</em> the screen goes blank and whether any other signs of life are present.</p>
+
+<h3 class="section">Diagnosing a Blank Screen</h3>
+
+<p>First, determine whether the system is receiving power at all. Do the fans spin? Do any LEDs illuminate? Do you hear POST beeps? Each answer narrows the cause significantly.</p>
+
+<table class="diag-table">
+  <thead><tr><th>Observation</th><th>Likely Cause</th></tr></thead>
+  <tbody>
+    <tr><td>No power at all — fans silent, no LEDs</td><td>PSU failure, failed power button, no AC power</td></tr>
+    <tr><td>Fans spin, beeps occur, no display</td><td>GPU failure, unseated GPU, monitor cable issue, monitor failure</td></tr>
+    <tr><td>Fans spin, no beeps, no display</td><td>No POST speaker, CPU failure, completely dead RAM, or dead motherboard</td></tr>
+    <tr><td>POST screen shows briefly then blank</td><td>GPU driver crash, corrupt bootloader, OS issue</td></tr>
+    <tr><td>Blank after Windows logo</td><td>Driver issue, not a hardware POST problem</td></tr>
+  </tbody>
+</table>
+
+<div class="process-flow">
+  <div class="flow-title">Diagnostic Steps — Blank Screen</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Check the monitor first.</strong> Try a different cable, a different port on the GPU, and a different monitor. Many blank screens are monitor or cable issues, not component failures.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Check display output source.</strong> If the motherboard has integrated graphics AND a dedicated GPU, the system may be outputting to the wrong one. Try both sets of display ports.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Reseat the GPU.</strong> Power off, remove the GPU, clean the PCIe slot, and re-insert firmly. Ensure the PCIe power connectors are fully seated.</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Reseat RAM.</strong> Remove all RAM sticks, clean with isopropyl alcohol, and re-insert one at a time in the correct slots (consult motherboard manual for dual-channel configuration).</div></div>
+  <div class="flow-step"><span class="flow-num">05</span><div class="flow-text"><strong>Remove non-essential components.</strong> Disconnect all drives, extra RAM sticks, PCIe cards except GPU. Boot with only the minimum required components. This is called a <strong>breadboard test</strong>.</div></div>
+  <div class="flow-step"><span class="flow-num">06</span><div class="flow-text"><strong>Test with known-good components.</strong> Swap GPU with a confirmed working card. If the system POSTs with the new GPU, the original GPU is faulty.</div></div>
+</div>
+
+
+<!-- ═══════════════════ SYMPTOM 4: NO POWER ═══════════════════ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 04</span>No Power</h2>
+
+<p>A system with no power shows absolutely no signs of life: no fans spinning, no LEDs, no beeps, no display. The cause is almost always the power supply unit (PSU), the power delivery path, or a motherboard short circuit.</p>
+
+<h3 class="section">Power Supply Fundamentals</h3>
+
+<p>The PSU converts AC power from the wall into DC voltages used by components. It outputs three main voltages:</p>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">+3.3V rail</span>
+    <span>Powers RAM, PCIe slots, and some chipset logic</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">+5V rail</span>
+    <span>Powers USB ports, older drives, and some chipset components</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">+12V rail</span>
+    <span>Powers CPU, GPU, and motors (drives, fans) — the most critical rail</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">-12V / +5VSB</span>
+    <span>5VSB is standby power — keeps the system in a "soft off" state, enabling wake-on-LAN and power button response</span>
+  </div>
+</div>
+
+<h3 class="section">Common Causes of No Power</h3>
+
+<div class="process-flow">
+  <div class="flow-title">Diagnostic Steps — No Power</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Verify the basics.</strong> Is the power cable seated? Is the outlet working? Is the PSU switch on the back set to ON ( | )? Is a surge protector or UPS powered on?</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Test the outlet.</strong> Plug a known-working device into the same outlet. If the outlet is dead, the problem is upstream of the computer entirely.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Check the PSU voltage switch.</strong> Some PSUs have a 115V/230V selector switch. If set to 230V in a 115V country, the system will receive insufficient power and appear completely dead. Setting it to 230V in a 115V region can damage the PSU.</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Use the paperclip test.</strong> Disconnect the 24-pin ATX connector from the motherboard. Short the green wire (PS_ON) to any black wire (ground) with a paperclip. If the PSU fan spins, the PSU is functional. If nothing happens, the PSU is dead.</div></div>
+  <div class="flow-step"><span class="flow-num">05</span><div class="flow-text"><strong>Use a PSU tester.</strong> A dedicated PSU tester tool plugs into the 24-pin connector and displays voltage readings on each rail. Significantly out-of-spec voltages indicate a failing PSU.</div></div>
+  <div class="flow-step"><span class="flow-num">06</span><div class="flow-text"><strong>Check for a motherboard short.</strong> A loose standoff (the brass spacers between the motherboard and case) can cause a short. Remove the motherboard and test outside the case on a non-conductive surface (cardboard).</div></div>
+  <div class="flow-step"><span class="flow-num">07</span><div class="flow-text"><strong>Inspect the front panel connector.</strong> The power button connects via a small header on the motherboard. If this connector is loose or the power button mechanism is faulty, the system won't start. Briefly shorting the two power button header pins with a screwdriver simulates pressing the power button.</div></div>
+</div>
+
+<div class="callout callout-warn">
+  <p class="callout-title">Safety Warning</p>
+  <p>Never open a PSU casing. Capacitors inside can retain dangerous charge levels — up to 400V — long after the unit is unplugged. If a PSU is faulty, replace the entire unit. PSUs are not field-serviceable components.</p>
+</div>
+
+
+<!-- ═══════════════════ SYMPTOM 5: SLUGGISH PERFORMANCE ═══════════════════ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 05</span>Sluggish Performance</h2>
+
+<p>Sluggish or degraded system performance that develops gradually — or appears suddenly without an obvious software cause — is frequently a hardware problem. The most common hardware culprits are <strong>overheating (thermal throttling)</strong>, <strong>insufficient or failing RAM</strong>, and <strong>a failing storage drive</strong>. A failing CPU is less common but possible.</p>
+
+<h3 class="section">Thermal Throttling</h3>
+
+<p>Modern CPUs and GPUs include protection mechanisms that automatically reduce their operating frequency when they exceed safe temperature thresholds. This is called <span class="key-term">thermal throttling</span>. A CPU that should run at 4.0 GHz may throttle down to 800 MHz when overheating, causing severe performance degradation. The system remains functional but runs significantly slower.</p>
+
+<p>Thermal throttling is often the cause when a system runs fine after a cold boot but becomes progressively slower over time — it gets slower as it heats up. Monitoring CPU temperature with a tool like <strong>HWMonitor</strong> or <strong>Core Temp</strong> during a load test will reveal throttling if it's occurring.</p>
+
+<h3 class="section">RAM Issues</h3>
+
+<p>Insufficient RAM forces the operating system to use <span class="key-term">virtual memory</span> — a reserved area of the storage drive used as overflow RAM (the pagefile in Windows, swap in Linux). Because storage drives are orders of magnitude slower than RAM, excessive pagefile usage causes dramatic slowdowns. Signs include constant hard drive activity (thrashing) and very slow application switching.</p>
+
+<p>Failing RAM can also cause performance degradation. A RAM stick with bad cells may cause the CPU to stall waiting for reliable data reads, or the OS may keep those bad pages in reserve and reduce the effective available RAM.</p>
+
+<div class="callout callout-tip">
+  <p class="callout-title">Diagnostic Tools</p>
+  <p><strong>Task Manager</strong> (Ctrl+Shift+Esc) shows real-time CPU, RAM, and disk usage. If RAM is consistently at 90–100% during normal use, the system needs more RAM. If CPU is at 100% but the system is throttling, check temperatures. <strong>Resource Monitor</strong> (resmon) provides more granular detail.</p>
+</div>
+
+<div class="process-flow">
+  <div class="flow-title">Diagnostic Steps — Sluggish Performance</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Check Task Manager.</strong> Identify which resource (CPU, RAM, Disk, Network) is at or near 100%. This tells you where the bottleneck is.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Check CPU temperature.</strong> Use HWMonitor or BIOS hardware monitoring. Intel CPUs typically throttle above 100°C; AMD varies by model. Sustained temps above 90°C under load indicate a cooling problem.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Check fan operation.</strong> Verify all fans (CPU cooler, case fans, GPU fan) are spinning. A failed CPU fan is the most common cause of thermal throttling.</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Clean the system.</strong> Dust accumulation on heatsinks and in vents is the most common cause of cooling degradation. Use compressed air to clear dust from all heatsinks, fans, and vents.</div></div>
+  <div class="flow-step"><span class="flow-num">05</span><div class="flow-text"><strong>Check/replace thermal paste.</strong> Thermal paste between CPU and heatsink dries out over time (typically 3–5 years), reducing heat transfer. Clean old paste with isopropyl alcohol and apply a new pea-sized amount.</div></div>
+  <div class="flow-step"><span class="flow-num">06</span><div class="flow-text"><strong>Test RAM.</strong> Run Windows Memory Diagnostic or MemTest86 to identify failing RAM modules.</div></div>
+</div>
+
+
+<!-- ═══════════════════ SYMPTOM 6: OVERHEATING ═══════════════════ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 06</span>Overheating</h2>
+
+<p>Overheating is one of the leading causes of hardware failure and reduced component lifespan. Heat is the enemy of all semiconductor components. Understanding the heat path — from the CPU die, through the thermal paste, through the heatsink, into the airflow, and out of the case — helps diagnose and resolve thermal problems systematically.</p>
+
+<h3 class="section">Normal Operating Temperatures</h3>
+
+<table class="diag-table">
+  <thead><tr><th>Component</th><th>Normal Idle</th><th>Normal Load</th><th>Danger Zone</th></tr></thead>
+  <tbody>
+    <tr><td>CPU (modern)</td><td>30–50°C</td><td>60–85°C</td><td>Above 95–100°C</td></tr>
+    <tr><td>GPU</td><td>30–50°C</td><td>65–85°C</td><td>Above 95°C</td></tr>
+    <tr><td>HDD</td><td>25–40°C</td><td>35–50°C</td><td>Above 55°C</td></tr>
+    <tr><td>SSD (SATA/NVMe)</td><td>25–45°C</td><td>40–70°C</td><td>Above 80°C</td></tr>
+  </tbody>
+</table>
+
+<h3 class="section">Causes of Overheating</h3>
+
+<div class="qr-grid">
+  <div class="qr-card">
+    <h4>Cooling System Failures</h4>
+    <ul>
+      <li><strong>Failed CPU fan</strong> — most common cause</li>
+      <li><strong>Dried thermal paste</strong> — after 3–5 years</li>
+      <li><strong>Clogged heatsink fins</strong> — dust buildup</li>
+      <li><strong>Failed case fans</strong> — poor airflow</li>
+      <li><strong>Liquid cooler leak/pump failure</strong></li>
+    </ul>
+  </div>
+  <div class="qr-card">
+    <h4>Environmental Causes</h4>
+    <ul>
+      <li><strong>High ambient temperature</strong> — room too hot</li>
+      <li><strong>Poor case airflow</strong> — cables blocking fans</li>
+      <li><strong>Inadequate case ventilation</strong> — vents blocked</li>
+      <li><strong>Enclosed cabinet</strong> — no airflow around case</li>
+      <li><strong>Overclocking</strong> — increased heat output</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus</p>
+  <p>The exam frequently presents overheating as the cause of random shutdowns and sluggish performance. Know that the CPU will <strong>throttle</strong> first (slow down to reduce heat), and if temperatures continue rising, the system will <strong>shut down</strong> to prevent permanent damage. This is a protection mechanism, not a failure — but the underlying cause (usually a failed fan or dried thermal paste) must be fixed.</p>
+</div>
+
+
+<!-- ═══════════════════ SYMPTOM 7: BURNING SMELL ═══════════════════ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 07</span>Burning Smell</h2>
+
+<p>A burning smell emanating from a computer is a serious warning sign that requires immediate action. It indicates that a component is either overheating severely or has already suffered electrical damage. <strong>The correct response is always to power off the system immediately.</strong></p>
+
+<h3 class="section">Common Sources</h3>
+
+<table class="diag-table">
+  <thead><tr><th>Smell / Visual</th><th>Likely Source</th><th>Action</th></tr></thead>
+  <tbody>
+    <tr><td>Acrid, sharp electrical smell</td><td>Capacitor failure on motherboard or PSU</td><td>Power off immediately; inspect for visual damage</td></tr>
+    <tr><td>Sweet, slightly chemical smell</td><td>Burning PCB traces or components</td><td>Power off; look for burn marks on motherboard</td></tr>
+    <tr><td>Hot plastic / insulation smell</td><td>PSU internal failure or wire touching hot component</td><td>Power off; check cable routing near hot areas</td></tr>
+    <tr><td>Dusty/burning dust smell on first boot</td><td>Dust burning off heatsinks after cleaning or seasonal startup</td><td>Often harmless — monitor; ensure dust is cleared</td></tr>
+    <tr><td>Smell + visible smoke</td><td>Active component failure — capacitor, MOSFET, or PSU</td><td>Power off and do not power on again until component is identified and replaced</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-warn">
+  <p class="callout-title">Important</p>
+  <p>Never continue to operate a system that smells of burning electronics. Continued operation risks cascading damage — a failing capacitor on a motherboard can destroy connected components. Power off, unplug, and inspect before doing anything else. If you see smoke or the smell is severe, do not plug back in until the damaged component is identified and replaced.</p>
+</div>
+
+<h3 class="section">Visual Inspection</h3>
+
+<p>After powering off and unplugging, conduct a thorough visual inspection. Look specifically for:</p>
+
+<ul style="font-family: var(--sans); font-size: 15px; padding-left: 24px; margin: 12px 0;">
+  <li style="padding: 5px 0;"><strong>Bulging or leaking capacitors</strong> — cylindrical components with rounded or cracked tops (covered in detail in Symptom 11)</li>
+  <li style="padding: 5px 0;"><strong>Burn marks or discoloration</strong> on the PCB — brown or black scorching around a component</li>
+  <li style="padding: 5px 0;"><strong>Melted plastic</strong> on connectors or cable insulation</li>
+  <li style="padding: 5px 0;"><strong>Arcing marks</strong> on the motherboard — typically caused by a loose screw or standoff shorting a trace</li>
+</ul>
+
+
+<!-- ═══════════════════ SYMPTOM 8: RANDOM SHUTDOWN ═══════════════════ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 08</span>Random Shutdown</h2>
+
+<p>A system that powers off suddenly without warning — no BSOD, no error message, just an instant cut to black — is exhibiting one of the most hardware-indicative symptoms. Unlike a BSOD, which is a controlled OS response, an instant shutdown bypasses the OS entirely, pointing to a hardware-level trigger.</p>
+
+<h3 class="section">Causes and Characteristics</h3>
+
+<table class="diag-table">
+  <thead><tr><th>Cause</th><th>Pattern</th><th>Distinguishing Sign</th></tr></thead>
+  <tbody>
+    <tr><td>CPU overheating</td><td>Occurs under load; system runs fine after cooling</td><td>Shutdown correlates with high CPU usage; temps spike before shutdown</td></tr>
+    <tr><td>PSU failing / underpowered</td><td>Occurs under heavy load (gaming, encoding)</td><td>Happens when GPU and CPU both spike simultaneously; PSU can't supply enough wattage</td></tr>
+    <tr><td>RAM failure</td><td>Random, not load-correlated</td><td>Often accompanied by freezes or BSODs before pure shutdowns</td></tr>
+    <tr><td>Failing motherboard</td><td>Random, unpredictable</td><td>May have accompanying hardware error codes in Event Viewer</td></tr>
+    <tr><td>Software (OS setting)</td><td>After Windows Update or setting change</td><td>Can be diagnosed by disabling "Automatically restart on system failure" in Windows</td></tr>
+  </tbody>
+</table>
+
+<div class="process-flow">
+  <div class="flow-title">Diagnostic Steps — Random Shutdown</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Monitor temperatures under load.</strong> Run a CPU stress test (Prime95) while watching temperatures with HWMonitor. If temps hit thermal shutdown threshold (usually 100°C for Intel), overheating is confirmed.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Note the circumstances.</strong> Does it happen during gaming? During video encoding? At idle? Shutdowns under heavy load point to PSU or thermals. Random shutdowns at idle point to PSU or motherboard.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Check PSU wattage.</strong> Calculate the total system power draw (online tools like PCPartPicker estimate wattage). If the system requires 450W and the PSU is rated 430W, it will fail under full load.</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Test with a higher-wattage PSU.</strong> Temporarily swap in a known-good PSU with adequate wattage. If shutdowns stop, the original PSU is the cause.</div></div>
+  <div class="flow-step"><span class="flow-num">05</span><div class="flow-text"><strong>Check Event Viewer.</strong> Windows logs a "The system has rebooted without cleanly shutting down first" event (Event ID 41, Kernel-Power) after an unexpected shutdown. This confirms hardware-level cause vs. software.</div></div>
+</div>
+
+
+<!-- ═══════════════════ SYMPTOM 9: APPLICATION CRASHES ═══════════════════ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 09</span>Application Crashes</h2>
+
+<p>Applications that crash unexpectedly — particularly multiple different applications, or the same application consistently — can indicate hardware-level instability rather than a software bug. The key differentiator is <em>breadth</em>: one specific application crashing is a software problem; multiple unrelated applications crashing is often a hardware problem.</p>
+
+<h3 class="section">Hardware Causes of Application Crashes</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Faulty RAM</span>
+    <span>RAM errors corrupt data as it is read/written. Applications crash when they try to access a corrupted memory page. This is the most common hardware cause of application crashes. Different applications crash at different times depending on which memory addresses they access.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">CPU instability</span>
+    <span>Overclocked or overheating CPUs can produce incorrect calculation results, causing applications to crash when they receive wrong data. Also occurs with CPUs that have damaged or underperforming cores.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Failing storage</span>
+    <span>If application executable files or DLLs are stored on a failing drive with bad sectors, the application may crash on launch or mid-operation when it reads a corrupted portion of its code.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Inadequate power</span>
+    <span>A failing PSU that provides inconsistent voltages can cause CPU or RAM errors that manifest as application crashes.</span>
+  </div>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus</p>
+  <p>When the exam presents application crashes as a symptom alongside other symptoms like sluggish performance or random shutdowns, the answer is almost always <strong>RAM failure</strong>. MemTest86 is the standard tool to confirm. Multiple different applications crashing = test RAM first.</p>
+</div>
+
+
+<!-- ═══════════════════ SYMPTOM 10: UNUSUAL NOISE ═══════════════════ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 10</span>Unusual Noise</h2>
+
+<p>Computers produce several types of sounds during normal operation — fan noise, drive activity sounds, and occasionally a single POST beep. Any new, unusual, or worsening sounds are diagnostic indicators that should be investigated promptly.</p>
+
+<h3 class="section">Noise Identification Guide</h3>
+
+<table class="diag-table">
+  <thead><tr><th>Sound</th><th>Source</th><th>Meaning</th><th>Action</th></tr></thead>
+  <tbody>
+    <tr><td>Clicking / ticking (rhythmic)</td><td>HDD</td><td>Read/write head seeking — can be normal, or early sign of failure. A distinct "click of death" = head failure</td><td>Immediately back up data; run S.M.A.R.T. diagnostics</td></tr>
+    <tr><td>Grinding (mechanical)</td><td>HDD or fan bearing</td><td>Bearing failure in HDD or fan; imminent mechanical failure</td><td>Back up immediately; identify which component and replace</td></tr>
+    <tr><td>High-pitched whining</td><td>PSU, GPU, or capacitors</td><td>Coil whine from inductors under load; capacitor aging</td><td>Often cosmetic (coil whine); persistent whine from PSU = investigate</td></tr>
+    <tr><td>Rattling</td><td>Fan (debris/loose blade)</td><td>Foreign object in fan or loose fan blade; can also be loose case panel</td><td>Power off; locate and remove obstruction; tighten panels</td></tr>
+    <tr><td>Loud fan noise (always)</td><td>CPU or case fan</td><td>Fan control not working; system stuck at max RPM; possibly thermal issue</td><td>Check BIOS fan control settings; verify thermal paste</td></tr>
+    <tr><td>Intermittent buzzing</td><td>HDD or PSU</td><td>Vibration against case; or failing PSU transformer</td><td>Check drive mounting screws; evaluate PSU</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-warn">
+  <p class="callout-title">Hard Drive Warning</p>
+  <p>A rhythmic clicking sound from a hard drive — especially the "click of death" (a repeated clicking with pauses) — indicates that the read/write head is failing to find its home position. Data loss is imminent. <strong>Stop using the drive immediately and recover data before doing anything else.</strong> Running <code>chkdsk</code> on a drive making this sound can accelerate data loss.</p>
+</div>
+
+
+<!-- ═══════════════════ SYMPTOM 11: CAPACITOR SWELLING ═══════════════════ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 11</span>Capacitor Swelling</h2>
+
+<p><span class="key-term">Capacitors</span> are small cylindrical components found on motherboards, GPUs, and PSUs. They store and release electrical charge to smooth out power delivery, filter noise, and stabilize voltage. A healthy capacitor has a flat top. A failing capacitor develops a characteristic <span class="key-term">bulge</span> at the top — this is called <span class="key-term">capacitor swelling</span> or <span class="key-term">capacitor plague</span>.</p>
+
+<h3 class="section">Why Capacitors Fail</h3>
+
+<p>Electrolytic capacitors contain a liquid electrolyte. When they are exposed to excessive heat, overvoltage, or age, the electrolyte degrades and produces gas. Since the capacitor casing is sealed, the gas causes the top to bulge outward. In advanced cases, the top may rupture, releasing a brown, crusty residue on the board. This is called a <span class="key-term">leaking capacitor</span>.</p>
+
+<h3 class="section">Identifying Bad Capacitors</h3>
+
+<p>Conduct a visual inspection under good lighting, looking at the top surface of all cylindrical components on the motherboard. Healthy capacitors have perfectly flat or very slightly concave tops. A bad capacitor shows:</p>
+
+<ul style="font-family: var(--sans); font-size: 15px; padding-left: 24px; margin: 12px 0;">
+  <li style="padding: 5px 0;">A <strong>domed or rounded top</strong> — even a slight bulge is significant</li>
+  <li style="padding: 5px 0;"><strong>Brown or rust-colored residue</strong> on or around the capacitor top</li>
+  <li style="padding: 5px 0;"><strong>Cracked or split top vent</strong> — the X-shaped vent on the top has opened</li>
+  <li style="padding: 5px 0;"><strong>Electrolyte residue on the PCB</strong> around the base of the capacitor</li>
+</ul>
+
+<h3 class="section">Symptoms Caused by Bad Capacitors</h3>
+
+<p>Because capacitors regulate power delivery to the CPU, RAM, and other components, failing capacitors on a motherboard cause a wide range of seemingly unrelated symptoms: random shutdowns, failure to POST, system instability, application crashes, and sluggish performance. When multiple unexplained symptoms occur on an older system, always inspect the capacitors visually.</p>
+
+<div class="callout callout-info">
+  <p class="callout-title">Repair vs. Replace</p>
+  <p>Technically, capacitors can be replaced by a skilled technician with soldering equipment. In practice, for most A+ level support scenarios, a motherboard with multiple bad capacitors is replaced rather than repaired. Component-level soldering is outside the scope of the A+ exam. The exam-level response is: <strong>identify the bad capacitors visually → replace the motherboard.</strong></p>
+</div>
+
+
+<!-- ═══════════════════ SYMPTOM 12: INACCURATE DATE/TIME ═══════════════════ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 12</span>Inaccurate System Date/Time</h2>
+
+<p>If a computer consistently resets its date and time to the same incorrect value every time it is powered on — typically January 1, 2000, or a similarly "reset" date — the cause is almost always a dead or dying <span class="key-term">CMOS battery</span>.</p>
+
+<h3 class="section">The CMOS Battery</h3>
+
+<p>The motherboard contains a small section of non-volatile memory called <span class="key-term">CMOS</span> (Complementary Metal-Oxide Semiconductor) that stores BIOS settings: the system date/time, boot order, hardware configuration, and other firmware settings. While the computer is powered off, a small coin cell battery — typically a <strong>CR2032</strong> (3V lithium) — maintains power to this memory so the settings are preserved.</p>
+
+<p>When the CMOS battery dies, the BIOS loses its stored settings every time the system is powered off. The most noticeable symptom is the clock resetting to a default date, but other BIOS settings (boot order, custom hardware settings) may also reset.</p>
+
+<h3 class="section">CMOS Battery Lifespan and Replacement</h3>
+
+<p>A CMOS battery typically lasts <strong>5–10 years</strong>. In a system used daily, the computer's main power supply trickle-charges the battery and it lasts longer. In a system that sits unused for extended periods, the battery drains faster.</p>
+
+<div class="process-flow">
+  <div class="flow-title">Replacing the CMOS Battery</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Power off and unplug.</strong> Press the power button to discharge residual capacitance.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Locate the battery.</strong> The CMOS battery is a silver coin cell (CR2032) seated in a round clip holder on the motherboard. It is usually near the PCIe slots.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Note the orientation.</strong> The positive (+) side typically faces up. Confirm before removing.</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Remove the old battery.</strong> Use a small flathead screwdriver or your fingernail to gently press the retaining clip and pop out the battery.</div></div>
+  <div class="flow-step"><span class="flow-num">05</span><div class="flow-text"><strong>Insert the new CR2032.</strong> Press firmly until it clicks into the holder with the correct orientation.</div></div>
+  <div class="flow-step"><span class="flow-num">06</span><div class="flow-text"><strong>Power on and reconfigure BIOS.</strong> Enter BIOS setup (usually Delete or F2 at POST) and reset the date, time, and any custom settings. Save and exit.</div></div>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus</p>
+  <p>This is a high-frequency exam question. The symptom is always the same: <strong>date and time reset after every power cycle</strong>. The answer is always: <strong>replace the CMOS battery (CR2032)</strong>. You may also see it phrased as "BIOS settings keep resetting" — same answer.</p>
+</div>
+
+<p>Note that a dead CMOS battery is distinct from a software clock drift issue. If the clock loses time gradually while the computer is running, that points to a software or OS issue. The CMOS battery symptom is specifically about the clock (and settings) <em>resetting completely</em> every time the system is powered off.</p>
+
+
+<!-- ═══════════════════ MASTER REFERENCE ═══════════════════ -->
+<div class="ch-divider"></div>
+
+<div class="summary-box">
+  <h3>Master Reference — Symptom to Component Mapping</h3>
+  <div class="summary-grid">
+    <div class="summary-item"><span class="s-symptom">POST beeps</span><span>RAM, GPU, or CPU (check beep code)</span></div>
+    <div class="summary-item"><span class="s-symptom">BSOD / kernel panic</span><span>RAM, drivers, or storage</span></div>
+    <div class="summary-item"><span class="s-symptom">Blank screen</span><span>GPU, monitor, cable, or RAM</span></div>
+    <div class="summary-item"><span class="s-symptom">No power</span><span>PSU, power cable, or wall outlet</span></div>
+    <div class="summary-item"><span class="s-symptom">Sluggish performance</span><span>Thermal throttling, RAM, or storage</span></div>
+    <div class="summary-item"><span class="s-symptom">Overheating</span><span>Fan failure, thermal paste, dust</span></div>
+    <div class="summary-item"><span class="s-symptom">Burning smell</span><span>PSU, capacitor, or shorted component</span></div>
+    <div class="summary-item"><span class="s-symptom">Random shutdown</span><span>Overheating or PSU failure</span></div>
+    <div class="summary-item"><span class="s-symptom">Application crashes</span><span>RAM failure (run MemTest86)</span></div>
+    <div class="summary-item"><span class="s-symptom">Unusual noise</span><span>Failing HDD, fan bearing, or PSU</span></div>
+    <div class="summary-item"><span class="s-symptom">Capacitor swelling</span><span>Motherboard — replace the board</span></div>
+    <div class="summary-item"><span class="s-symptom">Date/time resets</span><span>Dead CMOS battery (CR2032)</span></div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════ KEY TOOLS ═══════════════════ -->
+<h2 class="chapter"><span class="ch-num">REFERENCE</span>Diagnostic Tools Summary</h2>
+
+<div class="qr-grid">
+  <div class="qr-card">
+    <h4>Software Tools</h4>
+    <ul>
+      <li><strong>MemTest86</strong> — bootable RAM tester; gold standard for RAM diagnosis</li>
+      <li><strong>Windows Memory Diagnostic</strong> — built-in; less thorough than MemTest86</li>
+      <li><strong>HWMonitor / Core Temp</strong> — real-time temperature monitoring</li>
+      <li><strong>CrystalDiskInfo</strong> — reads S.M.A.R.T. drive health data</li>
+      <li><strong>Event Viewer</strong> — Windows logs; critical for crash analysis</li>
+      <li><strong>Task Manager / Resource Monitor</strong> — real-time performance data</li>
+      <li><strong>Prime95</strong> — CPU stress tester to trigger thermal throttling</li>
+    </ul>
+  </div>
+  <div class="qr-card">
+    <h4>Hardware Tools</h4>
+    <ul>
+      <li><strong>PSU tester</strong> — tests all PSU voltage rails; confirms PSU health</li>
+      <li><strong>Multimeter</strong> — measures voltage at PSU connectors precisely</li>
+      <li><strong>POST card</strong> — plugs into PCIe slot; displays POST codes when no display</li>
+      <li><strong>ESD wrist strap</strong> — prevents static discharge damage</li>
+      <li><strong>Compressed air</strong> — clears dust from heatsinks and fans</li>
+      <li><strong>Thermal paste</strong> — applied between CPU and heatsink</li>
+      <li><strong>Isopropyl alcohol (90%+)</strong> — cleans old thermal paste and contacts</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout callout-exam" style="margin-top: 32px;">
+  <p class="callout-title">Final Exam Reminders</p>
+  <p><strong>CMOS battery</strong> = date/time resets after power off. Replace with CR2032.</p>
+  <p><strong>Multiple app crashes</strong> = test RAM with MemTest86 first.</p>
+  <p><strong>Random shutdown under load</strong> = overheating or PSU wattage issue.</p>
+  <p><strong>POST beep codes</strong> = vary by BIOS vendor; consult motherboard manual.</p>
+  <p><strong>Capacitor swelling</strong> = visual inspection; replace the motherboard.</p>
+  <p><strong>Burning smell</strong> = power off immediately; do not continue operating.</p>
+</div>
+
+</div><!-- /page -->
+</body>
+</html>

@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CompTIA A+ 5.4 — Troubleshoot Common Mobile Device Issues</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --surface2: #f5f4f0;
+    --border: #e5e2d9;
+    --border2: #d4d0c4;
+    --text: #1a1a18;
+    --muted: #6b6860;
+    --accent: #c0392b;
+    --accent2: #2c3e6b;
+    --accent3: #1a6b3a;
+    --accent4: #b5590a;
+    --accent-light: #fdf2f1;
+    --accent2-light: #f0f2f8;
+    --accent3-light: #f0f8f3;
+    --accent4-light: #fdf5ed;
+    --serif: 'Crimson Pro', Georgia, serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── TOP NAV ── */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .top-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .nav-home {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+  .nav-home:hover { color: var(--accent2); }
+  .nav-home::before {
+    content: '←';
+    font-size: 12px;
+  }
+  .nav-sep {
+    font-size: 12px;
+    color: var(--border2);
+    flex-shrink: 0;
+  }
+  .nav-current {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nav-current strong {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    margin-right: 6px;
+  }
+  .top-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .nav-prev, .nav-next {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 4px 9px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    white-space: nowrap;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .nav-prev:hover, .nav-next:hover {
+    border-color: var(--border2);
+    color: var(--accent2);
+  }
+  .nav-prev::before { content: '← '; }
+  .nav-next::after  { content: ' →'; }
+
+  @media (max-width: 600px) {
+    .top-nav { padding: 0 16px; }
+    .nav-current { display: none; }
+    .nav-sep { display: none; }
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  .page { max-width: 860px; margin: 0 auto; padding: 0 40px 80px; }
+
+  /* HEADER */
+  .book-header {
+    border-bottom: 3px double var(--border2);
+    padding: 56px 0 32px;
+    margin-bottom: 48px;
+  }
+  .book-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .book-eyebrow span {
+    background: var(--accent);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-right: 10px;
+    font-size: 10px;
+  }
+  .book-title {
+    font-family: var(--serif);
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+  .book-subtitle {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .book-subtitle span { display: flex; align-items: center; gap: 6px; }
+  .book-subtitle span::before { content: '·'; color: var(--border2); }
+  .book-subtitle span:first-child::before { display: none; }
+
+  /* HEADINGS */
+  h2.chapter {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 600;
+    margin: 52px 0 6px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    letter-spacing: -0.01em;
+  }
+  h2.chapter .ch-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+    letter-spacing: 0.1em;
+    font-weight: 400;
+  }
+  h3.section {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    margin: 36px 0 12px;
+  }
+  h3.section::before { content: '§ '; color: var(--muted); font-weight: 300; }
+
+  p { margin-bottom: 16px; }
+
+  /* CALLOUTS */
+  .callout {
+    border-left: 3px solid;
+    padding: 14px 20px;
+    margin: 24px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 15.5px;
+  }
+  .callout p { margin-bottom: 6px; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout-title {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px !important;
+  }
+  .callout-exam { border-color: var(--accent); background: var(--accent-light); }
+  .callout-exam .callout-title { color: var(--accent); }
+  .callout-info { border-color: var(--accent2); background: var(--accent2-light); }
+  .callout-info .callout-title { color: var(--accent2); }
+  .callout-tip { border-color: var(--accent3); background: var(--accent3-light); }
+  .callout-tip .callout-title { color: var(--accent3); }
+  .callout-warn { border-color: var(--accent4); background: var(--accent4-light); }
+  .callout-warn .callout-title { color: var(--accent4); }
+
+  /* TABLES */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+    font-family: var(--sans);
+    margin: 16px 0 24px;
+  }
+  .data-table thead th {
+    background: var(--surface2);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 9px 13px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .data-table tbody tr { border-bottom: 1px solid var(--border); }
+  .data-table tbody tr:last-child { border-bottom: none; }
+  .data-table td { padding: 9px 13px; vertical-align: top; line-height: 1.5; }
+  .data-table td:first-child {
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 13.5px;
+  }
+
+  /* PROCESS FLOW */
+  .process-flow {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: var(--sans);
+    font-size: 14px;
+  }
+  .flow-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .flow-step:last-child { border-bottom: none; }
+  .flow-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+    min-width: 24px;
+    padding-top: 2px;
+  }
+  .flow-text { color: var(--text); line-height: 1.55; }
+  .flow-text strong { font-weight: 600; }
+
+  /* DEF LIST */
+  .def-list { margin: 16px 0 24px; }
+  .def-item {
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 210px 1fr;
+    gap: 20px;
+    font-size: 15px;
+  }
+  .def-item:last-child { border-bottom: none; }
+  .def-term {
+    font-family: var(--sans);
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 14px;
+    padding-top: 1px;
+    line-height: 1.4;
+  }
+
+  /* GRID CARDS */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 16px 18px;
+  }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 10px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card ul { list-style: none; font-family: var(--sans); font-size: 13.5px; }
+  .card ul li {
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .card ul li:last-child { border-bottom: none; }
+  .card ul li strong { color: var(--text); }
+
+  /* BODY LIST */
+  ul.body-list {
+    list-style: none;
+    font-family: var(--sans);
+    font-size: 15px;
+    padding: 0;
+    margin: 12px 0 20px;
+  }
+  ul.body-list li {
+    padding: 5px 0 5px 18px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  ul.body-list li:last-child { border-bottom: none; }
+  ul.body-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--border2);
+    font-size: 12px;
+  }
+  ul.body-list li strong { color: var(--text); }
+
+  /* BATTERY DIAGRAM */
+  .battery-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: var(--sans);
+  }
+  .battery-diagram h4 {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .battery-bar-wrap {
+    margin-bottom: 10px;
+  }
+  .battery-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .battery-label strong { color: var(--text); }
+  .battery-bar {
+    height: 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .battery-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.3s;
+  }
+  .fill-green { background: #4caf50; }
+  .fill-yellow { background: #ffc107; }
+  .fill-orange { background: #ff9800; }
+  .fill-red { background: #f44336; }
+
+  /* CONNECTIVITY TABLE */
+  .conn-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-weight: 600;
+    margin-right: 4px;
+  }
+  .badge-wifi { background: #e3f2fd; color: #1565c0; border: 1px solid #90caf9; }
+  .badge-cell { background: #f3e5f5; color: #6a1b9a; border: 1px solid #ce93d8; }
+  .badge-bt { background: #e8f5e9; color: #1b5e20; border: 1px solid #a5d6a7; }
+  .badge-nfc { background: #fff3e0; color: #e65100; border: 1px solid #ffcc80; }
+
+  /* CODE */
+  code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: var(--accent);
+  }
+
+  .key-term { font-style: italic; font-weight: 500; color: var(--accent2); }
+
+  /* SUMMARY BOX */
+  .summary-box {
+    background: var(--text);
+    color: #f0ede6;
+    border-radius: 6px;
+    padding: 28px 32px;
+    margin: 40px 0;
+  }
+  .summary-box h3 {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 18px;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 32px;
+  }
+  .summary-item {
+    font-family: var(--sans);
+    font-size: 13.5px;
+    color: #c4bfb4;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .summary-item .s-sym {
+    color: #fff;
+    font-weight: 600;
+    min-width: 175px;
+    line-height: 1.4;
+  }
+
+  .ch-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--border2), transparent);
+    margin: 48px 0;
+  }
+
+  /* MALWARE TABLE */
+  .malware-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .ind-high { background: var(--accent); }
+  .ind-med { background: var(--accent4); }
+  .ind-low { background: var(--accent3); }
+
+  @media (max-width: 680px) {
+    .page { padding: 0 20px 60px; }
+    .summary-grid, .card-grid { grid-template-columns: 1fr; }
+    .def-item { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV — update href values to match your actual file names -->
+<nav class="top-nav">
+  <div class="top-nav-left">
+    <a class="nav-home" href="../index.html">Study Guide</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current"><strong>5.4</strong> Troubleshooting Common Mobile Device Issues</span>
+  </div>
+  <div class="top-nav-right">
+    <!-- Point these to the adjacent section files, or remove if not applicable -->
+    <a class="nav-prev" href="./5_3-Troubleshoot-Video-Projector-Display.html">5.3</a>
+    <a class="nav-next" href="./5_5-Troubleshoot-Network.html">5.5</a>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- HEADER -->
+<div class="book-header">
+  <div class="book-eyebrow">
+    <span>5.4</span>
+    CompTIA A+ · Core 1 (220-1201) · Domain 5 — Hardware & Network Troubleshooting
+  </div>
+  <h1 class="book-title">Troubleshooting Common<br>Mobile Device Issues</h1>
+  <div class="book-subtitle">
+    <span>Objective 5.4</span>
+    <span>Domain weight: 28%</span>
+    <span>14 testable symptoms</span>
+  </div>
+</div>
+
+<!-- INTRO -->
+<h2 class="chapter"><span class="ch-num">OVERVIEW</span>Introduction</h2>
+
+<p>Mobile devices — smartphones, tablets, and convertible laptops — have become the primary computing platform for hundreds of millions of users. For IT support technicians, mobile device troubleshooting is a daily reality. Unlike desktop systems where most components are replaceable and externally accessible, mobile devices are tightly integrated, often sealed, and designed with non-serviceability in mind. This changes the troubleshooting approach: the focus shifts from component-level repair toward systematic diagnosis followed by software remediation, user behavior correction, or device replacement.</p>
+
+<p>Objective 5.4 presents fourteen symptoms across the two major mobile platforms — iOS (Apple iPhone/iPad) and Android (Samsung, Google Pixel, and others). While the underlying hardware is similar, the software ecosystems, app store policies, and management tools differ significantly. Where relevant, platform-specific differences are noted.</p>
+
+<div class="callout callout-info">
+  <p class="callout-title">Mobile Repair Philosophy</p>
+  <p>Mobile device repairs are generally classified into two tiers: <strong>Level 1 (user/technician accessible)</strong> — screen replacement, battery replacement on devices with accessible batteries, SIM card, and SD card. <strong>Level 2 (factory/depot)</strong> — logic board replacement, chip-level repair, water damage treatment. The A+ exam focuses on diagnosis and appropriate response, not repair techniques.</p>
+</div>
+
+<!-- MOBILE HARDWARE FOUNDATION -->
+<h2 class="chapter"><span class="ch-num">FOUNDATION</span>Mobile Device Hardware Overview</h2>
+
+<p>A clear understanding of mobile hardware components — particularly those that have unique failure modes — is essential for diagnosing the symptoms in this objective.</p>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Lithium-Ion (Li-Ion) Battery</span>
+    <span>The primary power source in virtually all modern mobile devices. Stores energy in lithium compounds. Rechargeable through hundreds of charge cycles. Capacity degrades over time — typically retains ~80% capacity after 500 full cycles. Contains a liquid or gel electrolyte that can produce gas if damaged or overcharged, causing the battery to physically swell.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Digitizer</span>
+    <span>The transparent layer overlaid on the display that detects touch input. Separate from the LCD/OLED panel beneath it. On many modern devices, the digitizer and display glass are fused together as a single assembly (called a "fused display"). Capacitive touchscreens detect the electrical charge from a finger. Stylus-capable digitizers use either active digitizer (Wacom, MPP) or passive capacitive technology.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Display Assembly</span>
+    <span>Consists of the LCD or OLED panel, the backlight (LCD only), and the digitizer. On flagship devices, the digitizer is fused to the glass — when the glass cracks, the entire assembly (glass + digitizer + often the display panel) must be replaced as one unit, significantly increasing repair cost.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Charging Port</span>
+    <span>The physical connector for power and data. Modern devices use USB-C or Lightning (Apple pre-iPhone 15). Subject to mechanical wear from repeated insertion, physical damage from drops while connected, and debris accumulation (lint from pockets is the most common culprit for charging failures). Many charging issues that appear to be port failures are actually lint blockages.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">SIM / eSIM</span>
+    <span>The Subscriber Identity Module authenticates the device to the cellular network. Physical SIM cards (nano SIM) can be damaged or improperly seated. eSIM (Embedded SIM) is a programmable chip soldered to the logic board — it cannot be physically damaged or replaced independently.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Radio Hardware</span>
+    <span>Mobile devices contain multiple radios: cellular modem (4G LTE / 5G), Wi-Fi (2.4/5/6 GHz), Bluetooth, NFC, and GPS. These are integrated into the system-on-chip (SoC) or as companion chips. Physical damage or overheating can affect radio performance. Software issues (drivers, firmware, settings) can also disable or degrade radio function.</span>
+  </div>
+</div>
+
+
+<!-- ═══ SYMPTOM 1: POOR BATTERY HEALTH ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 01</span>Poor Battery Health</h2>
+
+<p><span class="key-term">Battery health</span> refers to the current maximum charge capacity of a battery relative to its original design capacity. A brand-new battery is at 100% health. Through charge/discharge cycles and chemical aging, that maximum capacity decreases — the battery holds less charge with each passing year, resulting in shorter usage time between charges.</p>
+
+<h3 class="section">How Li-Ion Batteries Degrade</h3>
+
+<p>Lithium-ion degradation occurs through several mechanisms. Every charge cycle causes minor physical changes in the electrode materials. High temperatures accelerate degradation — heat is the primary enemy of Li-Ion batteries. Charging to 100% and discharging to 0% (full cycles) cause more wear than partial cycles. Fast charging generates more heat and therefore more wear than standard charging.</p>
+
+<div class="battery-diagram">
+  <h4>Battery Health Levels and User Impact</h4>
+  <div class="battery-bar-wrap">
+    <div class="battery-label"><strong>100% — New device</strong><span>Full usage time, no throttling</span></div>
+    <div class="battery-bar"><div class="battery-fill fill-green" style="width:100%"></div></div>
+  </div>
+  <div class="battery-bar-wrap">
+    <div class="battery-label"><strong>85–99% — Normal aging</strong><span>Slightly reduced endurance; imperceptible to most users</span></div>
+    <div class="battery-bar"><div class="battery-fill fill-green" style="width:90%"></div></div>
+  </div>
+  <div class="battery-bar-wrap">
+    <div class="battery-label"><strong>70–84% — Noticeable reduction</strong><span>Meaningfully shorter usage time; may not last a full workday</span></div>
+    <div class="battery-bar"><div class="battery-fill fill-yellow" style="width:77%"></div></div>
+  </div>
+  <div class="battery-bar-wrap">
+    <div class="battery-label"><strong>Below 70% — Significant degradation</strong><span>iOS may enable performance throttling to prevent unexpected shutdowns</span></div>
+    <div class="battery-bar"><div class="battery-fill fill-orange" style="width:60%"></div></div>
+  </div>
+  <div class="battery-bar-wrap">
+    <div class="battery-label"><strong>Below 50% — Replacement recommended</strong><span>Device may shut down unexpectedly under load; charging is inefficient</span></div>
+    <div class="battery-bar"><div class="battery-fill fill-red" style="width:40%"></div></div>
+  </div>
+</div>
+
+<h3 class="section">Checking Battery Health</h3>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>iOS (iPhone / iPad)</h4>
+    <ul>
+      <li><strong>Settings → Battery → Battery Health & Charging</strong></li>
+      <li>Shows Maximum Capacity percentage</li>
+      <li>Apple recommends replacement below 80%</li>
+      <li>Peak Performance Capability section shows if throttling is active</li>
+      <li>Service recommendation shown if battery needs replacement</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Android</h4>
+    <ul>
+      <li>No universal built-in health screen (varies by manufacturer)</li>
+      <li>Samsung: Settings → Battery and device care → Battery → Battery health</li>
+      <li>Google Pixel: Settings → Battery → Battery usage</li>
+      <li>Third-party apps: AccuBattery, Battery Guru</li>
+      <li>Dialer code on some devices: <code>*#*#4636#*#*</code></li>
+    </ul>
+  </div>
+</div>
+
+<h3 class="section">Performance Throttling and Battery</h3>
+
+<p>Apple introduced <span class="key-term">performance management</span> (sometimes called battery throttling) in iOS 10.2.1 in response to older iPhones with degraded batteries shutting down unexpectedly under high-demand tasks. The system reduces the CPU's maximum clock speed to keep power demands within what the weakened battery can supply, preventing shutdowns. The visible result is a device that feels sluggish compared to when it was new — particularly in CPU-intensive tasks like launching apps, processing photos, or gaming.</p>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus</p>
+  <p>When an older iPhone feels slow or sluggish and battery health is below 80%, <strong>battery degradation causing performance throttling</strong> is the likely answer. The fix is battery replacement — not a factory reset or OS reinstall.</p>
+</div>
+
+<h3 class="section">Resolution</h3>
+
+<div class="process-flow">
+  <div class="flow-title">Poor Battery Health — Response</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Check battery health percentage.</strong> Use the platform-appropriate method above to get a precise reading.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Identify high-drain apps.</strong> iOS: Settings → Battery shows per-app battery usage. Android: Settings → Battery → Battery usage. Apps consuming excessive background battery should be restricted or uninstalled.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Adjust settings to extend remaining life.</strong> Reduce screen brightness, disable Location Services for non-essential apps, disable Background App Refresh, enable Low Power Mode (iOS) or Battery Saver (Android).</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Replace the battery.</strong> Below 80% health, battery replacement is the appropriate resolution. On most modern devices, battery replacement requires specialized tools and adhesive. Apple, Samsung, and many authorized repair centers offer this service. Some Android devices (e.g., some Fairphone models) have user-replaceable batteries.</div></div>
+</div>
+
+
+<!-- ═══ SYMPTOM 2: SWOLLEN BATTERY ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 02</span>Swollen Battery</h2>
+
+<p>A <span class="key-term">swollen battery</span> is a lithium-ion or lithium-polymer battery that has physically expanded due to gas produced by internal chemical degradation. It is one of the most serious hardware issues in mobile devices and requires immediate action.</p>
+
+<h3 class="section">Why Batteries Swell</h3>
+
+<p>Li-Ion batteries contain an electrolyte that can decompose and produce gas under certain conditions. The most common causes are:</p>
+
+<ul class="body-list">
+  <li><strong>Age</strong> — old batteries experience increased internal resistance, which generates heat during charging and accelerates electrolyte decomposition</li>
+  <li><strong>Overcharging</strong> — consistently charging beyond 100% (which can happen with cheap, non-certified chargers that lack proper charge management circuits) stresses the battery chemistry</li>
+  <li><strong>Physical damage</strong> — a battery that has been punctured, bent, or subjected to significant impact can begin swelling as the separator between electrodes is compromised</li>
+  <li><strong>Excessive heat</strong> — sustained high temperatures accelerate the chemical reactions that produce gas</li>
+  <li><strong>Manufacturing defect</strong> — rare but occurs; the Samsung Galaxy Note 7 recall was a high-profile example</li>
+</ul>
+
+<h3 class="section">Signs of a Swollen Battery</h3>
+
+<ul class="body-list">
+  <li><strong>Screen lifts or separates from the device body</strong> — the expanding battery pushes the display upward from inside, creating a visible gap between the screen and the frame</li>
+  <li><strong>Rear cover bulges or bows outward</strong> on devices with removable backs</li>
+  <li><strong>Device no longer sits flat</strong> on a table — rocks on a flat surface where it previously did not</li>
+  <li><strong>Trackpad on a laptop raises up</strong> — a swollen battery inside a laptop pushes the trackpad from below</li>
+  <li><strong>Device feels unusually thick</strong> or the screen is difficult to press down in certain areas</li>
+</ul>
+
+<div class="callout callout-warn">
+  <p class="callout-title">Immediate Safety Protocol</p>
+  <p>A swollen battery is a <strong>fire and explosion risk</strong>. Do not charge the device. Do not use the device. Do not puncture, compress, or disassemble the battery yourself. Remove the device from flammable environments. Do not place in a pocket or bag. If possible, place it in a fireproof container or area. Bring it to a certified repair center or dispose of it at a battery recycling facility that handles hazardous materials. <strong>Under no circumstances should a swollen battery be thrown in regular trash.</strong></p>
+  <p style="margin-top:8px;">If the battery is already venting (hissing, producing smoke, or smelling acrid), evacuate the area and do not attempt to handle it.</p>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus</p>
+  <p>A swollen battery always requires the same response: <strong>stop using the device, do not charge it, bring it to a professional for safe disposal and replacement.</strong> This is a safety question, not a repair question.</p>
+</div>
+
+
+<!-- ═══ SYMPTOM 3: BROKEN SCREEN ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 03</span>Broken Screen</h2>
+
+<p>A broken screen is one of the most common physical damage issues for mobile devices. The symptom can range from cosmetic cracked glass (device still fully functional) to a completely shattered assembly with no display output. Understanding the layers of the display assembly helps determine the repair scope and cost.</p>
+
+<h3 class="section">Display Assembly Layers</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Protective glass (Gorilla Glass, etc.)</span>
+    <span>The outermost layer. Chemically strengthened but not unbreakable. Cracks from drops are surface glass fractures. If only the glass is cracked but the display below still works perfectly and touch responds normally, the repair is simpler (glass-only replacement on devices where this is possible).</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Digitizer (touch sensor)</span>
+    <span>The layer that detects touch. On modern flagship devices, the digitizer is optically bonded (fused) to the glass. When glass cracks, the digitizer frequently cracks simultaneously or shortly after — pressure through cracked glass can destroy the touch sensor underneath.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">LCD / OLED panel</span>
+    <span>The layer that produces the image. LCD panel damage typically shows as black ink-like spreading or dead zones. OLED damage shows as bright or dark vertical lines, or the characteristic "spiderweb" with black bleed. On many devices, all three layers (glass + digitizer + display) are fused into one assembly — if any layer is damaged, the entire assembly is replaced.</span>
+  </div>
+</div>
+
+<h3 class="section">Damage Assessment</h3>
+
+<table class="data-table">
+  <thead><tr><th>Symptom</th><th>Damaged Layer(s)</th><th>Repair Scope</th></tr></thead>
+  <tbody>
+    <tr><td>Cracked glass, display and touch fully functional</td><td>Glass only</td><td>Tempered glass screen protector (cosmetic fix); glass-only replacement where possible</td></tr>
+    <tr><td>Cracked glass, touch unresponsive in areas</td><td>Glass + digitizer</td><td>Glass + digitizer replacement or full assembly</td></tr>
+    <tr><td>Black spreading areas, display lines or dead zones</td><td>Display panel (LCD/OLED)</td><td>Full display assembly replacement</td></tr>
+    <tr><td>No display output, touch still works</td><td>Display panel or display cable</td><td>Display replacement; check flex cable connection</td></tr>
+    <tr><td>Complete dark screen with no response</td><td>Multiple layers or logic board</td><td>Full assessment needed; may not be cost-effective to repair</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-tip">
+  <p class="callout-title">Practical Advice</p>
+  <p>For the exam, know that a cracked screen with functional display and touch can often be used temporarily with a tempered glass screen protector applied over the crack (to prevent finger cuts and further cracking). The proper resolution is still screen replacement. Additionally, many manufacturers void the water resistance rating of a device after a screen repair — inform users of this consequence.</p>
+</div>
+
+
+<!-- ═══ SYMPTOM 4: IMPROPER CHARGING ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 04</span>Improper Charging</h2>
+
+<p><span class="key-term">Improper charging</span> covers scenarios where the device does not charge at all, charges very slowly, charges intermittently, or charges but loses power faster than it gains it. The cause can be in the charger, the cable, the port, the battery, or the device's charging management software.</p>
+
+<h3 class="section">Systematic Causes</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Debris in charging port</span>
+    <span>The single most common cause of charging failure on smartphones. Pocket lint, dust, and small fibers compact in the charging port over time, preventing the cable connector from making full contact with the port's pins. Often mistaken for a hardware failure. Resolution: use a wooden or plastic toothpick (never metal) to gently remove debris, or use compressed air. Many users are surprised to find this fully resolves the charging problem.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Faulty cable</span>
+    <span>USB-C, Lightning, and Micro-USB cables experience internal wire breakage at the connector ends — the point where the cable is bent and flexed most frequently. A cable that is fraying at the connector end has likely broken one of the internal wires. Test with a known-good cable.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Underpowered charger</span>
+    <span>Modern devices, especially tablets and phones with large batteries, require specific wattage to charge effectively. A 5W phone charger may charge a tablet so slowly that using the device while charging results in the battery level decreasing. Use the charger rated for the specific device or a compatible higher-wattage charger.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Non-certified third-party charger</span>
+    <span>Uncertified chargers (commonly called "counterfeit" or cheap third-party) may lack proper voltage/current regulation, overcharging protection, or USB Power Delivery (USB-PD) negotiation. They can damage the device's charging circuit, the battery, or pose a fire risk. Apple-certified chargers carry MFi (Made for iPhone) certification. Android chargers should carry USB-IF certification.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Damaged charging port</span>
+    <span>Physical damage — from dropping the device while connected, forcing a cable in sideways, or corrosion from moisture — can bend or break the internal pins of the charging port. If cleaning debris does not resolve the issue and the cable is confirmed good, port damage is likely. Port replacement is a common mobile repair.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Software / firmware issue</span>
+    <span>In rare cases, a firmware bug or corrupted charging profile can cause incorrect charging behavior. A factory reset or OS update sometimes resolves software-induced charging issues.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Degraded battery</span>
+    <span>A severely degraded battery may charge quickly to a reported percentage but drain equally quickly. The reported percentage is inaccurate because the battery management system's calibration is off. Replacing the battery resolves this.</span>
+  </div>
+</div>
+
+<div class="process-flow">
+  <div class="flow-title">Improper Charging — Diagnostic Sequence</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Clean the charging port.</strong> Use a non-metallic tool (wooden toothpick, plastic spudger) to gently remove lint and debris. This resolves a significant percentage of charging failures.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Test with a different cable.</strong> Use a known-good, certified cable. Check for fraying, kinks, or visible damage on the current cable.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Test with a different charger.</strong> Use the manufacturer's original charger or a certified equivalent with the correct wattage rating for the device.</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Try wireless charging (if supported).</strong> If the device supports Qi wireless charging and charges wirelessly but not via cable, the charging port is damaged. If it fails both wired and wireless, the issue is battery or logic board.</div></div>
+  <div class="flow-step"><span class="flow-num">05</span><div class="flow-text"><strong>Inspect the port visually.</strong> Use a flashlight to look inside the port for bent pins, corrosion (greenish deposits), or visible damage. Bent pins confirm physical port damage.</div></div>
+  <div class="flow-step"><span class="flow-num">06</span><div class="flow-text"><strong>Check battery health.</strong> If the device charges but drains abnormally fast, check battery health as described in Symptom 01.</div></div>
+</div>
+
+
+<!-- ═══ SYMPTOM 5: POOR/NO CONNECTIVITY ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 05</span>Poor/No Connectivity</h2>
+
+<p>Connectivity issues on mobile devices span four distinct radio technologies, each with its own failure modes and troubleshooting approach: Wi-Fi, cellular (4G/5G), Bluetooth, and NFC. Identifying which type of connectivity is affected narrows the diagnosis significantly.</p>
+
+<h3 class="section">Connectivity Issues by Radio Type</h3>
+
+<table class="data-table">
+  <thead><tr><th>Technology</th><th>Common Issues</th><th>First Steps</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><span class="conn-badge badge-wifi">Wi-Fi</span></td>
+      <td>Won't connect to network; connects but no internet; weak signal; drops frequently</td>
+      <td>Toggle Wi-Fi off/on; forget network and reconnect; restart router; check for IP conflicts; verify password</td>
+    </tr>
+    <tr>
+      <td><span class="conn-badge badge-cell">Cellular</span></td>
+      <td>No signal; calls drop; data not working; SIM not recognized</td>
+      <td>Toggle Airplane Mode on then off; check SIM seating; check carrier coverage map; check APN settings (Android)</td>
+    </tr>
+    <tr>
+      <td><span class="conn-badge badge-bt">Bluetooth</span></td>
+      <td>Won't pair; disconnects frequently; audio cuts out; device not found</td>
+      <td>Toggle Bluetooth off/on; forget device and re-pair; check distance (max ~10m); clear Bluetooth cache (Android)</td>
+    </tr>
+    <tr>
+      <td><span class="conn-badge badge-nfc">NFC</span></td>
+      <td>Contactless payments fail; NFC pairing not working</td>
+      <td>Enable NFC in settings; remove thick case (NFC has ~4cm range); check that payment app is set as default</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 class="section">Universal Connectivity Troubleshooting Steps</h3>
+
+<div class="process-flow">
+  <div class="flow-title">General Connectivity Troubleshooting</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Toggle Airplane Mode on, wait 10 seconds, then off.</strong> This forces all radios (cellular, Wi-Fi, Bluetooth) to reinitialize simultaneously. Resolves a surprising number of transient connectivity issues on both iOS and Android.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Restart the device.</strong> A full power cycle clears radio driver state, refreshes network registrations, and resolves many software-level connectivity issues.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Check for OS updates.</strong> Carrier and Wi-Fi connectivity issues are often addressed in OS updates. Ensure the device is running the latest available OS version.</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Reset network settings.</strong> iOS: Settings → General → Transfer or Reset iPhone → Reset → Reset Network Settings. Android: Settings → General Management → Reset → Reset Network Settings. This clears all saved Wi-Fi passwords, Bluetooth pairings, and cellular settings — a clean slate for the network stack.</div></div>
+  <div class="flow-step"><span class="flow-num">05</span><div class="flow-text"><strong>Check for carrier-specific issues (cellular).</strong> Check the carrier's outage map or call their support. A carrier-side issue requires no action on the device.</div></div>
+  <div class="flow-step"><span class="flow-num">06</span><div class="flow-text"><strong>Reseat or replace the SIM card (cellular).</strong> Use the SIM ejector tool to remove the SIM tray, inspect the SIM and contacts for damage or corrosion, and reinsert firmly. Try the SIM in a different device to test if the SIM itself is faulty.</div></div>
+  <div class="flow-step"><span class="flow-num">07</span><div class="flow-text"><strong>Consider hardware damage.</strong> If all software steps fail and connectivity was working before a drop or liquid exposure event, antenna damage is likely. Mobile device antennas are typically integrated into the frame — physical repair or replacement is needed.</div></div>
+</div>
+
+
+<!-- ═══ SYMPTOM 6: LIQUID DAMAGE ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 06</span>Liquid Damage</h2>
+
+<p><span class="key-term">Liquid damage</span> is one of the most common and most mishandled mobile device failures. Water and other liquids cause damage through two primary mechanisms: <strong>short circuits</strong> (immediate, when the device is powered on with liquid present) and <strong>corrosion</strong> (gradual, as minerals in the liquid deposit on circuit board contacts and oxidize them over days or weeks).</p>
+
+<h3 class="section">IP Ratings — Water Resistance</h3>
+
+<p>Modern flagship devices carry an <span class="key-term">IP (Ingress Protection) rating</span> that describes their resistance to dust and water. The rating is expressed as IP followed by two digits: the first for dust, the second for water.</p>
+
+<table class="data-table">
+  <thead><tr><th>Rating</th><th>Water Protection Level</th><th>Example Devices</th></tr></thead>
+  <tbody>
+    <tr><td>IP67</td><td>Submersion up to 1 meter for 30 minutes</td><td>iPhone 8, Samsung Galaxy S8</td></tr>
+    <tr><td>IP68</td><td>Submersion up to 1.5–6 meters (manufacturer-specified) for 30 minutes</td><td>iPhone 15, Samsung Galaxy S24, Google Pixel 8</td></tr>
+    <tr><td>IPX4</td><td>Splash resistant only — not submersion</td><td>Many budget Android devices</td></tr>
+    <tr><td>None</td><td>No official water resistance</td><td>Older and budget devices</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-warn">
+  <p class="callout-title">Important Limitations of IP Ratings</p>
+  <p>IP ratings are tested on new devices in laboratory conditions with fresh water. They do <strong>not</strong> account for: saltwater (far more corrosive), chlorinated pool water, coffee, juice, or other liquids; damage from prior drops that may have compromised seals; and gradual seal degradation over the device's life. An IP68-rated device that has been dropped may no longer hold its rated water resistance. Many manufacturer warranties do not cover water damage even on IP-rated devices.</p>
+</div>
+
+<h3 class="section">Liquid Damage Indicators (LDI)</h3>
+
+<p>Mobile devices contain <span class="key-term">Liquid Damage Indicators (LDIs)</span> — small stickers or sensors that permanently change color (typically from white to red or pink) when exposed to moisture. Repair centers and manufacturers use these to determine if water damage has occurred, which typically voids the warranty. LDI locations vary by device — common locations include inside the SIM card tray slot and inside the charging port.</p>
+
+<div class="process-flow">
+  <div class="flow-title">Liquid Damage Response Protocol</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Power off immediately.</strong> If the device is on, power it off as fast as possible. A powered device with liquid inside is actively shorting circuits. Do not press any buttons repeatedly or attempt to use it.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Do not charge it.</strong> Charging a wet device forces current through potentially liquid-bridged contacts, causing additional short circuit damage.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Remove external components.</strong> Remove the case, SIM card tray, and any accessories. This allows moisture to escape from any accessible openings.</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Do not use rice.</strong> The popular "put it in rice" advice is largely ineffective — uncooked rice has poor moisture absorption and can introduce starch and dust particles into the device. Commercial desiccant packets (silica gel) are more effective if the device must be dried at home.</div></div>
+  <div class="flow-step"><span class="flow-num">05</span><div class="flow-text"><strong>Bring to a professional service center.</strong> Proper liquid damage treatment involves opening the device, cleaning circuit boards with isopropyl alcohol (90%+), and drying under controlled conditions. The sooner this is done after liquid exposure, the better the outcome — corrosion begins within hours.</div></div>
+  <div class="flow-step"><span class="flow-num">06</span><div class="flow-text"><strong>Back up data as soon as the device is functional again.</strong> A device that survived liquid damage may have latent corrosion that causes failure days or weeks later. Treat it as a device with a shortened remaining lifespan.</div></div>
+</div>
+
+
+<!-- ═══ SYMPTOM 7: OVERHEATING ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 07</span>Overheating</h2>
+
+<p>Mobile devices generate significant heat from their processors, radios, and displays — all packed into a thin enclosure with minimal airflow. Unlike desktop computers, mobile devices rely entirely on passive cooling (heat spreading through the metal frame) and thermal management software. When thermal loads exceed the system's ability to dissipate heat, the device overheats.</p>
+
+<h3 class="section">Normal vs. Abnormal Heat</h3>
+
+<p>Some warmth during use is entirely normal. Gaming, video recording in 4K, wireless charging, and GPS navigation all generate significant heat. A device that becomes warm to the touch during these activities is behaving normally. Overheating — where the device displays a temperature warning, throttles performance, stops charging, or becomes too hot to hold comfortably — is the abnormal condition requiring attention.</p>
+
+<h3 class="section">Causes of Mobile Overheating</h3>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>Usage-Related Causes</h4>
+    <ul>
+      <li><strong>Demanding gaming</strong> — 3D games push GPU and CPU continuously</li>
+      <li><strong>Video streaming for extended periods</strong> — screen + radio + decoder all active</li>
+      <li><strong>4K video recording</strong> — video encoder runs at full load</li>
+      <li><strong>Navigation + charging simultaneously</strong> — GPS + screen + charging = triple heat source</li>
+      <li><strong>Direct sunlight</strong> — ambient heat adds to self-generated heat</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Problem-Related Causes</h4>
+    <ul>
+      <li><strong>Runaway app or process</strong> — a buggy app consuming 100% CPU in background</li>
+      <li><strong>Malware</strong> — malicious apps (cryptominers) running in background</li>
+      <li><strong>Too many apps running</strong> — background processes accumulating</li>
+      <li><strong>Wireless charging inefficiency</strong> — wireless charging produces more heat than wired</li>
+      <li><strong>Swollen battery</strong> — thermal event causing both heat and swelling</li>
+      <li><strong>Thick case blocking heat dissipation</strong> — case traps heat from the metal frame</li>
+    </ul>
+  </div>
+</div>
+
+<div class="process-flow">
+  <div class="flow-title">Overheating — Response Steps</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Stop charging and remove the case.</strong> Both add heat. Allow the device to cool in a shaded, temperate environment.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Close all background apps.</strong> Force-close all running applications. Check which apps are consuming CPU in background settings.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Check for runaway processes.</strong> iOS: Settings → Battery → app usage. Android: Settings → Battery → Battery usage. Any single app consuming an abnormal percentage of battery (30%+ in background) is a runaway process.</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Restart the device.</strong> Clears all running processes and resets thermal state. Often resolves transient overheating from runaway apps.</div></div>
+  <div class="flow-step"><span class="flow-num">05</span><div class="flow-text"><strong>Check for malware.</strong> Particularly on Android, cryptomining malware causes sustained high CPU usage and significant heat. Run a mobile security scan.</div></div>
+  <div class="flow-step"><span class="flow-num">06</span><div class="flow-text"><strong>Inspect the battery for swelling.</strong> If overheating is persistent and the device has visible signs of swelling (screen lifting, device rocking), treat as a swollen battery emergency (Symptom 02).</div></div>
+</div>
+
+
+<!-- ═══ SYMPTOM 8: DIGITIZER ISSUES ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 08</span>Digitizer Issues</h2>
+
+<p>The <span class="key-term">digitizer</span> is the touch-sensing layer of the display. Digitizer issues manifest as the touchscreen not responding to touch input, responding inaccurately, registering phantom touches with no finger contact, or responding inconsistently across different areas of the screen.</p>
+
+<h3 class="section">Types of Digitizer Failure</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Complete non-response</span>
+    <span>Touch input is entirely ignored. The display may show content normally but no touch events register. Can be caused by a completely failed digitizer, a disconnected digitizer flex cable (common after a drop), or a software crash of the touch input service. A restart often resolves software-caused complete non-response.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Partial non-response</span>
+    <span>A specific region of the screen does not respond to touch while other areas work normally. This is almost always hardware damage — either physical cracking of the digitizer in that zone or a failed row/column in the capacitive sensing grid. Physical inspection usually reveals corresponding cracked glass above the non-responsive zone.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Ghost touches (phantom touches)</span>
+    <span>The device registers touch input that no finger is producing — the screen taps, swipes, or types on its own. Causes include: cracked digitizer, moisture inside the display assembly (moisture conducts electricity and simulates a touch), a defective digitizer, or a third-party screen replacement with poor-quality digitizer. Can cause the device to open apps, send messages, or make calls without user interaction.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Inaccurate touch registration</span>
+    <span>Touch input registers in the wrong location — tapping an icon results in a different icon being selected, or keyboard presses are consistently offset. Can be a calibration issue (covered in Symptom 13) or a damaged digitizer with misaligned sensing areas.</span>
+  </div>
+</div>
+
+<div class="process-flow">
+  <div class="flow-title">Digitizer Issue Troubleshooting</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Restart the device.</strong> Software crashes of the touch input layer produce complete unresponsiveness that resolves with a restart.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Clean the screen.</strong> Oils, moisture, and debris on the screen surface interfere with capacitive touch detection. Clean with a dry microfiber cloth.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Remove screen protector.</strong> Thick or poor-quality tempered glass screen protectors can interfere with touch sensitivity, especially around the edges. Remove the protector and test directly on the glass.</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Check for moisture.</strong> If ghost touches began after liquid exposure or in humid conditions, moisture inside the assembly is likely. Power off and allow to dry, or bring to a service center.</div></div>
+  <div class="flow-step"><span class="flow-num">05</span><div class="flow-text"><strong>Test in Safe Mode (Android).</strong> Boot into Safe Mode (hold Power → long-press "Power off" → "Reboot to safe mode"). If ghost touches stop in Safe Mode, a third-party app is interfering with touch input. Identify and uninstall the culprit app.</div></div>
+  <div class="flow-step"><span class="flow-num">06</span><div class="flow-text"><strong>If hardware failure is confirmed, replace the display assembly.</strong> Digitizer failures that persist after all software steps require hardware replacement. On fused assemblies, the entire screen (glass + digitizer + display) must be replaced.</div></div>
+</div>
+
+
+<!-- ═══ SYMPTOM 9: PHYSICALLY DAMAGED PORTS ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 09</span>Physically Damaged Ports</h2>
+
+<p>Mobile device ports — primarily the charging/data port and the headphone jack (on devices that still include one) — are subject to physical damage from mechanical stress, debris, and corrosion. Port damage is often identified by symptoms that appear to be charging or audio problems but do not respond to cable or charger changes.</p>
+
+<h3 class="section">Signs of Port Damage</h3>
+
+<ul class="body-list">
+  <li><strong>Cable feels loose or wobbly</strong> when inserted — the internal retention mechanism is bent or broken</li>
+  <li><strong>Charging only works at specific angles</strong> — indicates bent internal pins making intermittent contact</li>
+  <li><strong>Visible corrosion</strong> (green or white deposits) inside the port — common after liquid exposure</li>
+  <li><strong>Bent or missing pins</strong> inside the port — visible with a flashlight</li>
+  <li><strong>Port housing is cracked or deformed</strong> — from drop impact while connected</li>
+  <li><strong>Device charges wirelessly but not via cable</strong> — definitive indicator of charging port failure</li>
+</ul>
+
+<h3 class="section">Debris vs. Physical Damage</h3>
+
+<p>Before concluding that a port is physically damaged, always clean it first. Lint and debris compacted in the charging port is the most common cause of charging failure and is frequently mistaken for hardware damage. Use a non-metallic tool (wooden toothpick, plastic spudger) to gently scrape lint out of the port. A surprising amount of compressed debris can accumulate in jeans pockets over months of use. Only after confirming the port is clean, testing multiple cables, and testing with wireless charging should port damage be concluded.</p>
+
+<div class="callout callout-info">
+  <p class="callout-title">Port Replacement</p>
+  <p>Charging port replacement is one of the more common mobile device repairs and is generally not prohibitively expensive. On most devices, the charging port is a small board or flex cable connected to the logic board — not directly soldered to the main board — making replacement accessible to skilled technicians. Cost varies by device model. For newer flagships where the port is integrated into the logic board, the repair is more expensive.</p>
+</div>
+
+
+<!-- ═══ SYMPTOM 10: MALWARE ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 10</span>Malware</h2>
+
+<p>Mobile malware is less prevalent than desktop malware but is a growing threat — particularly on Android, which allows third-party app installation (sideloading) and has a more open ecosystem than iOS. Recognizing the symptoms of mobile malware is an important skill because malware often masquerades as performance problems, battery issues, or connectivity problems.</p>
+
+<h3 class="section">Mobile Malware Types</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Adware</span>
+    <span>Displays unwanted advertisements, often in full-screen popups that appear even outside the offending app. The most common form of mobile malware — typically installed via free apps that monetize through aggressive ad libraries.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Spyware</span>
+    <span>Silently collects data — location history, contacts, messages, browser history, and microphone/camera input — and transmits it to a remote server. May be installed by a third party to monitor the device owner without consent (stalkerware). Minimal visible symptoms make it particularly dangerous.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Cryptomining malware</span>
+    <span>Uses the device's CPU and GPU to mine cryptocurrency for the attacker. The device owner experiences severe performance degradation, significant battery drain, and chronic overheating. The device may become unusable during mining activity.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Ransomware</span>
+    <span>Encrypts device data and demands payment for the decryption key. Less common on mobile than desktop but exists. May also lock the device's screen and display a ransom message.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Trojan</span>
+    <span>A legitimate-appearing app that contains hidden malicious functionality — credential theft, banking trojans that overlay fake login screens on banking apps, or remote access trojans (RATs) that give attackers full device control.</span>
+  </div>
+</div>
+
+<h3 class="section">Symptoms of Mobile Malware</h3>
+
+<table class="data-table">
+  <thead><tr><th>Symptom</th><th>Likely Malware Type</th><th>Confidence</th></tr></thead>
+  <tbody>
+    <tr><td>Unexpected pop-up ads appearing anywhere, including home screen</td><td>Adware</td><td><span class="malware-indicator ind-high"></span>High</td></tr>
+    <tr><td>Battery draining much faster than normal with no identifiable cause</td><td>Cryptominer, Spyware</td><td><span class="malware-indicator ind-high"></span>High</td></tr>
+    <tr><td>Device constantly hot even at idle</td><td>Cryptominer</td><td><span class="malware-indicator ind-high"></span>High</td></tr>
+    <tr><td>Unexplained high data usage</td><td>Spyware, Adware</td><td><span class="malware-indicator ind-med"></span>Medium-High</td></tr>
+    <tr><td>Unfamiliar apps appearing that were not installed by the user</td><td>Trojan with downloader component</td><td><span class="malware-indicator ind-high"></span>High</td></tr>
+    <tr><td>Device screen locks with ransom message</td><td>Ransomware</td><td><span class="malware-indicator ind-high"></span>Definitive</td></tr>
+    <tr><td>Performance degradation with high CPU usage</td><td>Cryptominer</td><td><span class="malware-indicator ind-med"></span>Medium</td></tr>
+    <tr><td>Contacts receiving strange messages</td><td>Worm / SMS malware</td><td><span class="malware-indicator ind-high"></span>High</td></tr>
+  </tbody>
+</table>
+
+<div class="process-flow">
+  <div class="flow-title">Mobile Malware Removal</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Boot into Safe Mode (Android).</strong> Safe Mode disables all third-party apps. If symptoms stop in Safe Mode, malware is confirmed. Identify recently installed apps and uninstall them.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Uninstall suspicious apps.</strong> Review all installed apps. Uninstall any you don't recognize or didn't intentionally install. Pay particular attention to apps with excessive permissions (contacts, location, microphone, camera).</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Run a mobile security scan.</strong> Use reputable security apps (Malwarebytes Mobile, Bitdefender, ESET Mobile Security) to scan for known malware. Note that iOS cannot run true antivirus scanners due to app sandbox restrictions.</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Remove Device Administrator privileges from suspicious apps.</strong> Android: Settings → Security → Device Admin Apps. Malware often grants itself device administrator status to prevent uninstallation — revoke this first, then uninstall.</div></div>
+  <div class="flow-step"><span class="flow-num">05</span><div class="flow-text"><strong>Perform a factory reset as a last resort.</strong> If malware cannot be identified and removed by other means, a factory reset completely wipes and reinstalls the OS, removing all malware. Ensure a clean backup exists before proceeding.</div></div>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">iOS vs Android Malware Risk</p>
+  <p>iOS has significantly lower malware risk than Android due to its closed ecosystem — all apps must pass Apple's review process and run in strict sandboxes. Android's Google Play Protect scans apps, but sideloaded apps (installed outside the Play Store) are not reviewed and carry much higher risk. On the exam, mobile malware scenarios almost always involve Android and sideloaded apps.</p>
+</div>
+
+
+<!-- ═══ SYMPTOM 11: CURSOR DRIFT / TOUCH CALIBRATION ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 11</span>Cursor Drift / Touch Calibration</h2>
+
+<p><span class="key-term">Cursor drift</span> refers to touch input registering in slightly the wrong location — your finger taps one spot and the device registers the touch offset from where you actually touched. On touchscreen-only devices this manifests as consistently missing tap targets; on devices with a stylus or pointing device, the cursor appears to drift or lag from the actual contact point.</p>
+
+<h3 class="section">Causes</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Digitizer misalignment</span>
+    <span>After a screen replacement (particularly with lower-quality third-party parts), the digitizer layer may not be perfectly aligned with the display layer beneath it. Touch input coordinates are calculated based on the digitizer's position — if it's offset from the visible display, all touches register inaccurately. Resolution: realign or replace the display assembly with an OEM part.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Screen protector interference</span>
+    <span>A warped, bubbled, or thicker-than-spec screen protector can cause the touch sensing layer to register touches slightly offset. Particularly common with rigid tempered glass protectors that are not precisely fitted. Remove the screen protector and test directly on the device glass.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Display driver calibration drift</span>
+    <span>On some Android devices, particularly those with older or lower-quality digitizers, the calibration data stored in firmware can drift over time. Some Android devices offer a touch calibration utility in the settings or accessible via dialer code.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Physical damage</span>
+    <span>A cracked or partially separated digitizer may have portions of the sensing grid shifted from the display pixels beneath them, causing the inaccuracy in specific zones.</span>
+  </div>
+</div>
+
+<h3 class="section">Resolution</h3>
+
+<p>For modern iOS devices, Apple does not expose a user-accessible touch calibration tool — Apple's touchscreen calibration is done at the factory. If drift occurs on an iPhone after a screen replacement, the repair needs to be redone with proper calibration. On Android devices, some manufacturers provide touchscreen calibration tools accessible in Developer Options or via secret dialer codes (varies by device). Removing the screen protector, restarting the device, and ensuring no moisture is under the glass are the first steps before assuming a hardware calibration problem.</p>
+
+
+<!-- ═══ SYMPTOM 12: UNABLE TO INSTALL APPS ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 12</span>Unable to Install New Applications</h2>
+
+<p>When a user cannot install new applications, the cause falls into one of four categories: insufficient storage, account/permission issues, OS version incompatibility, or MDM (Mobile Device Management) restrictions.</p>
+
+<h3 class="section">Causes by Category</h3>
+
+<table class="data-table">
+  <thead><tr><th>Cause</th><th>Indicator</th><th>Resolution</th></tr></thead>
+  <tbody>
+    <tr><td>Insufficient storage space</td><td>Error: "Not enough storage" or "Storage is full"</td><td>Free storage by deleting apps, photos, or videos; use cloud storage (iCloud, Google Photos) to offload media; move data to SD card (Android)</td></tr>
+    <tr><td>OS version too old</td><td>App requires iOS 17+ but device is on iOS 15</td><td>Update the OS if supported hardware allows; if device cannot update, the app simply cannot be installed on that device</td></tr>
+    <tr><td>Wrong Apple/Google account</td><td>App previously purchased on different account</td><td>Sign in with the account that purchased the app; family sharing may allow sharing between accounts</td></tr>
+    <tr><td>App Store sign-in issue</td><td>Unable to connect to App Store; authentication error</td><td>Sign out and back in to Apple ID / Google account; check internet connectivity; check App Store server status</td></tr>
+    <tr><td>MDM restriction (corporate device)</td><td>App category blocked; warning: "This device is managed"</td><td>Contact IT administrator; request the app be approved and pushed through MDM</td></tr>
+    <tr><td>Geographic restriction</td><td>App not available in your country or region</td><td>App developer has not published in the user's region; limited options without changing account region</td></tr>
+    <tr><td>App age/content restriction</td><td>Parental controls blocking app installation</td><td>Adjust Screen Time (iOS) or Digital Wellbeing parental controls (Android)</td></tr>
+    <tr><td>Corrupted App Store cache</td><td>App Store loads slowly or shows errors</td><td>Clear App Store cache; iOS: tap any App Store tab 10 times to clear cache. Android: Settings → Apps → Google Play Store → Clear Cache</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-exam">
+  <p class="callout-title">MDM Context</p>
+  <p>On corporate-managed devices enrolled in an MDM solution (such as Microsoft Intune, Jamf, or VMware Workspace ONE), IT administrators can whitelist specific apps (only approved apps can be installed) or blacklist specific apps (cannot be installed). If a user cannot install an app on a corporate device, the answer is almost always <strong>MDM policy restriction</strong> — contact the IT administrator, not a hardware repair.</p>
+</div>
+
+
+<!-- ═══ SYMPTOM 13: STYLUS DOES NOT WORK ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 13</span>Stylus Does Not Work</h2>
+
+<p>A stylus that does not work may have a hardware failure, a pairing issue, a software configuration issue, or may simply be incompatible with the device. The troubleshooting approach depends heavily on the type of stylus technology involved.</p>
+
+<h3 class="section">Stylus Technologies</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Active stylus (powered)</span>
+    <span>Contains a battery and Bluetooth radio (e.g., Apple Pencil, Samsung S Pen). Communicates with the device via Bluetooth for pressure sensitivity and palm rejection. Requires pairing to the device, has a battery that must be charged, and requires compatible hardware (not all devices support active styluses). The Apple Pencil pairs by attaching to the iPad's magnetic connector. The Samsung S Pen stores inside the device and has an internal capacitor that charges when docked.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Passive stylus (capacitive)</span>
+    <span>A simple conductive tip that mimics a finger on a capacitive touchscreen. No battery, no Bluetooth, no pairing required — works on any capacitive touchscreen. Limited functionality — no pressure sensitivity, no palm rejection. If a passive stylus doesn't work, the touchscreen itself is not responding, or the stylus tip is too small to be detected.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">EMR stylus (Wacom)</span>
+    <span>Electromagnetic Resonance technology used in some Samsung tablets and Wacom devices. A dedicated digitizer layer in the display resonates with the stylus, providing extremely accurate position tracking and pressure sensitivity without requiring a battery in the stylus itself. Works independently of the touchscreen. If the EMR layer fails, the stylus stops working but touch functionality continues.</span>
+  </div>
+</div>
+
+<h3 class="section">Troubleshooting Stylus Issues</h3>
+
+<div class="process-flow">
+  <div class="flow-title">Stylus Not Working — Diagnostic Steps</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Check stylus battery level.</strong> Active styluses (Apple Pencil, S Pen Pro) have batteries. Apple Pencil Gen 1: charge by connecting to Lightning port. Gen 2: attach to iPad's magnetic charging connector. A depleted stylus battery is the most common cause of failure.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Check Bluetooth pairing.</strong> For active Bluetooth styluses, verify the stylus is paired in the device's Bluetooth settings. Remove the pairing and re-pair if needed.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Verify device compatibility.</strong> Not all devices support all styluses. The Apple Pencil Gen 1 does not work on iPad models designed for Gen 2, and vice versa. The Samsung S Pen only works on specific S Pen-capable devices. Verify the stylus is compatible with the specific device model.</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Check app support.</strong> Stylus pressure sensitivity requires app support. A stylus may work for basic navigation but not for pressure-sensitive drawing in apps that don't support the stylus API. Test in a known-compatible app (e.g., Apple Notes for Apple Pencil).</div></div>
+  <div class="flow-step"><span class="flow-num">05</span><div class="flow-text"><strong>Inspect the stylus tip.</strong> Active and passive stylus tips wear down and can be replaced. A worn tip may not make proper contact. Replacement tips are available for most styluses.</div></div>
+  <div class="flow-step"><span class="flow-num">06</span><div class="flow-text"><strong>Restart both device and stylus.</strong> Power cycle the device; if the stylus has a reset option (press and hold tip), reset it. Re-test after restart.</div></div>
+</div>
+
+
+<!-- ═══ SYMPTOM 14: DEGRADED PERFORMANCE ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 14</span>Degraded Performance</h2>
+
+<p><span class="key-term">Degraded performance</span> on a mobile device — sluggishness, slow app launches, choppy animations, slow camera response, stuttering video — is one of the most common user complaints and has multiple causes that must be investigated systematically. It is also a symptom that users frequently misattribute (assuming the device is "just old" when the real cause is a correctable condition).</p>
+
+<h3 class="section">Causes of Degraded Mobile Performance</h3>
+
+<table class="data-table">
+  <thead><tr><th>Cause</th><th>How to Identify</th><th>Resolution</th></tr></thead>
+  <tbody>
+    <tr><td>Battery degradation / performance throttling</td><td>iOS Battery Health below 80%; slowness correlates with battery-intensive tasks; device is older (2+ years)</td><td>Replace battery — this is the single most impactful fix for an older device feeling slow</td></tr>
+    <tr><td>Insufficient free storage</td><td>Storage is 95–100% full; device warns of low storage</td><td>Free up storage — delete unused apps, clear app caches, offload photos to cloud, remove old files. iOS needs ~1GB free for OS operations; less than this causes significant slowdowns.</td></tr>
+    <tr><td>Too many background apps</td><td>Device was warm before slowdown; many apps in multitasking view</td><td>Close background apps; restart device to clear RAM and process state</td></tr>
+    <tr><td>OS needs update</td><td>Device is on old OS version; performance issues are widespread</td><td>Update to the latest compatible OS version — updates often include performance optimizations</td></tr>
+    <tr><td>Malware / cryptominer</td><td>CPU usage stays high at idle; device hot; battery drains fast; slowness is consistent and severe</td><td>Remove malware as described in Symptom 10; factory reset if necessary</td></tr>
+    <tr><td>Bloatware / unused apps</td><td>Many pre-installed apps running services in background (common on carrier-branded Android)</td><td>Disable or uninstall bloatware via Settings → Apps. Disabling prevents the app from running even if it cannot be uninstalled.</td></tr>
+    <tr><td>RAM fragmentation</td><td>Slowness appears gradually over days of use; resolves after restart</td><td>Restart the device — clears RAM, resets process state. If frequent restarts are needed, other causes exist.</td></tr>
+    <tr><td>Incompatible app after update</td><td>Slowness began after a specific app or OS update</td><td>Uninstall or roll back the problematic app; wait for app developer to release a fix</td></tr>
+  </tbody>
+</table>
+
+<div class="process-flow">
+  <div class="flow-title">Performance Degradation — Systematic Approach</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Restart the device first.</strong> Always start here. Clears RAM, closes background processes, and resolves transient slowness. If performance returns to normal after a restart, the cause is background process accumulation.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Check available storage.</strong> Settings → Storage (iOS) or Settings → Storage (Android). If storage is above 90% full, free space is the primary fix.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Check battery health.</strong> On an older device, battery health below 80% with confirmed throttling is the likely cause of sustained slowness that persists even after a restart.</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Update the OS and apps.</strong> Ensure all apps and the OS are fully updated. Outdated apps may have memory leaks or compatibility issues with the current OS version.</div></div>
+  <div class="flow-step"><span class="flow-num">05</span><div class="flow-text"><strong>Identify high-resource apps.</strong> Review battery usage and storage per app. Uninstall or replace apps that consume disproportionate resources.</div></div>
+  <div class="flow-step"><span class="flow-num">06</span><div class="flow-text"><strong>Factory reset as last resort.</strong> If all other steps fail and the device is not old enough that hardware degradation is the cause, a factory reset removes all accumulated app data, settings drift, and software issues. Always back up first. This should resolve software-caused performance issues completely.</div></div>
+</div>
+
+<div class="callout callout-tip">
+  <p class="callout-title">The Factory Reset Principle</p>
+  <p>A factory reset on a mobile device is functionally equivalent to a clean OS reinstall on a desktop. It eliminates all software-caused performance issues. If a device performs well immediately after a factory reset but slows down again after restoring apps and data, a specific app or data migration is the cause — restore apps one at a time and monitor performance after each addition to identify the culprit.</p>
+</div>
+
+
+<!-- MASTER REFERENCE -->
+<div class="ch-divider"></div>
+
+<div class="summary-box">
+  <h3>Master Reference — All 14 Symptoms</h3>
+  <div class="summary-grid">
+    <div class="summary-item"><span class="s-sym">Poor battery health</span><span>Check health %; replace below 80%; iOS throttles CPU to prevent shutdowns</span></div>
+    <div class="summary-item"><span class="s-sym">Swollen battery</span><span>Stop using immediately; do not charge; professional disposal/replacement</span></div>
+    <div class="summary-item"><span class="s-sym">Broken screen</span><span>Assess layers: glass only vs. digitizer vs. full panel; fused assemblies replace as one unit</span></div>
+    <div class="summary-item"><span class="s-sym">Improper charging</span><span>Clean port first; test cable; test charger; try wireless; inspect for bent pins</span></div>
+    <div class="summary-item"><span class="s-sym">Poor/no connectivity</span><span>Toggle Airplane Mode; reset network settings; reseat SIM; check carrier outage</span></div>
+    <div class="summary-item"><span class="s-sym">Liquid damage</span><span>Power off immediately; do not charge; professional cleaning; no rice</span></div>
+    <div class="summary-item"><span class="s-sym">Overheating</span><span>Remove case; close apps; check for runaway process; check battery for swelling</span></div>
+    <div class="summary-item"><span class="s-sym">Digitizer issues</span><span>Restart; clean screen; remove protector; Safe Mode (Android); replace assembly</span></div>
+    <div class="summary-item"><span class="s-sym">Physically damaged ports</span><span>Clean lint first; inspect for bent pins or corrosion; wireless charging test</span></div>
+    <div class="summary-item"><span class="s-sym">Malware</span><span>Safe Mode; uninstall suspicious apps; remove Device Admin rights; factory reset</span></div>
+    <div class="summary-item"><span class="s-sym">Cursor drift / calibration</span><span>Remove screen protector; restart; third-party screen = realign digitizer</span></div>
+    <div class="summary-item"><span class="s-sym">Unable to install apps</span><span>Check storage; check OS version; check MDM policy; check account sign-in</span></div>
+    <div class="summary-item"><span class="s-sym">Stylus does not work</span><span>Check battery; check pairing; verify device compatibility; inspect tip</span></div>
+    <div class="summary-item"><span class="s-sym">Degraded performance</span><span>Restart; check storage; check battery health; update OS; factory reset last</span></div>
+  </div>
+</div>
+
+<!-- QUICK REFERENCE TOOLS -->
+<h2 class="chapter"><span class="ch-num">REFERENCE</span>Platform Quick Reference</h2>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>iOS Key Paths</h4>
+    <ul>
+      <li><strong>Battery Health</strong> → Settings → Battery → Battery Health & Charging</li>
+      <li><strong>Storage</strong> → Settings → General → iPhone Storage</li>
+      <li><strong>Reset Network Settings</strong> → Settings → General → Transfer or Reset → Reset</li>
+      <li><strong>Screen Time / parental controls</strong> → Settings → Screen Time</li>
+      <li><strong>Display & Brightness</strong> → Settings → Display & Brightness</li>
+      <li><strong>Per-app battery usage</strong> → Settings → Battery</li>
+      <li><strong>App offload</strong> → Settings → General → iPhone Storage → Offload App</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Android Key Actions</h4>
+    <ul>
+      <li><strong>Safe Mode</strong> → Hold Power → long-press Power Off → Reboot to Safe Mode</li>
+      <li><strong>Clear app cache</strong> → Settings → Apps → [app] → Storage → Clear Cache</li>
+      <li><strong>Device Admin Apps</strong> → Settings → Security → Device Admin Apps</li>
+      <li><strong>Developer Options</strong> → Settings → About Phone → tap Build Number 7×</li>
+      <li><strong>APN Settings</strong> → Settings → Network → Mobile Network → APN</li>
+      <li><strong>Battery optimization</strong> → Settings → Battery → Battery optimization</li>
+      <li><strong>Factory reset</strong> → Settings → General Management → Reset → Factory Data Reset</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout callout-exam" style="margin-top: 28px;">
+  <p class="callout-title">Final Exam Reminders</p>
+  <p><strong>Swollen battery</strong> = immediate safety risk. Do not use, do not charge. Professional service only.</p>
+  <p><strong>Charging port not working</strong> = clean lint first. Most "broken ports" are blocked by lint.</p>
+  <p><strong>Liquid damage</strong> = power off immediately. Do not charge. No rice. Professional cleaning ASAP.</p>
+  <p><strong>Corporate device can't install apps</strong> = MDM restriction. Contact IT admin — not a hardware issue.</p>
+  <p><strong>Old iPhone feels slow</strong> = battery health below 80% + throttling. Replace the battery.</p>
+  <p><strong>Android malware</strong> = Safe Mode to disable third-party apps; remove Device Admin rights; uninstall suspicious apps.</p>
+  <p><strong>iOS malware</strong> = much less common due to closed ecosystem; sideloaded apps are the primary risk vector.</p>
+  <p><strong>Ghost touches after screen replacement</strong> = poor-quality digitizer or misaligned assembly.</p>
+  <p><strong>Stylus not working</strong> = check battery level first; then Bluetooth pairing; then device compatibility.</p>
+  <p><strong>Degraded performance hierarchy</strong> = restart → free storage → battery health → update OS → factory reset.</p>
+</div>
+
+</div>
+</body>
+</html>

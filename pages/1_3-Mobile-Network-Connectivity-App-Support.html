@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CompTIA A+ 1.3 — Mobile Device Network Connectivity and Application Support</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --surface2: #f5f4f0;
+    --border: #e5e2d9;
+    --border2: #d4d0c4;
+    --text: #1a1a18;
+    --muted: #6b6860;
+    --accent: #c0392b;
+    --accent2: #2c3e6b;
+    --accent3: #1a6b3a;
+    --accent4: #b5590a;
+    --accent-light: #fdf2f1;
+    --accent2-light: #f0f2f8;
+    --accent3-light: #f0f8f3;
+    --accent4-light: #fdf5ed;
+    --serif: 'Crimson Pro', Georgia, serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── TOP NAV ── */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .top-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .nav-home {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+  .nav-home:hover { color: var(--accent2); }
+  .nav-home::before {
+    content: '←';
+    font-size: 12px;
+  }
+  .nav-sep {
+    font-size: 12px;
+    color: var(--border2);
+    flex-shrink: 0;
+  }
+  .nav-current {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nav-current strong {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    margin-right: 6px;
+  }
+  .top-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .nav-prev, .nav-next {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 4px 9px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    white-space: nowrap;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .nav-prev:hover, .nav-next:hover {
+    border-color: var(--border2);
+    color: var(--accent2);
+  }
+  .nav-prev::before { content: '← '; }
+  .nav-next::after  { content: ' →'; }
+
+  @media (max-width: 600px) {
+    .top-nav { padding: 0 16px; }
+    .nav-current { display: none; }
+    .nav-sep { display: none; }
+  }    
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  .page { max-width: 860px; margin: 0 auto; padding: 0 40px 80px; }
+
+  /* HEADER */
+  .book-header {
+    border-bottom: 3px double var(--border2);
+    padding: 56px 0 32px;
+    margin-bottom: 48px;
+  }
+  .book-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .book-eyebrow span {
+    background: var(--accent);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-right: 10px;
+    font-size: 10px;
+  }
+  .book-title {
+    font-family: var(--serif);
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+  .book-subtitle {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .book-subtitle span { display: flex; align-items: center; gap: 6px; }
+  .book-subtitle span::before { content: '·'; color: var(--border2); }
+  .book-subtitle span:first-child::before { display: none; }
+
+  /* HEADINGS */
+  h2.chapter {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 600;
+    margin: 52px 0 6px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    letter-spacing: -0.01em;
+  }
+  h2.chapter .ch-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+    letter-spacing: 0.1em;
+    font-weight: 400;
+  }
+  h3.section {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    margin: 36px 0 12px;
+  }
+  h3.section::before { content: '§ '; color: var(--muted); font-weight: 300; }
+
+  p { margin-bottom: 16px; }
+
+  /* CALLOUTS */
+  .callout {
+    border-left: 3px solid;
+    padding: 14px 20px;
+    margin: 24px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 15.5px;
+  }
+  .callout p { margin-bottom: 6px; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout-title {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px !important;
+  }
+  .callout-exam { border-color: var(--accent); background: var(--accent-light); }
+  .callout-exam .callout-title { color: var(--accent); }
+  .callout-info { border-color: var(--accent2); background: var(--accent2-light); }
+  .callout-info .callout-title { color: var(--accent2); }
+  .callout-tip { border-color: var(--accent3); background: var(--accent3-light); }
+  .callout-tip .callout-title { color: var(--accent3); }
+  .callout-warn { border-color: var(--accent4); background: var(--accent4-light); }
+  .callout-warn .callout-title { color: var(--accent4); }
+
+  /* TABLES */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+    font-family: var(--sans);
+    margin: 16px 0 24px;
+  }
+  .data-table thead th {
+    background: var(--surface2);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 9px 13px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .data-table tbody tr { border-bottom: 1px solid var(--border); }
+  .data-table tbody tr:last-child { border-bottom: none; }
+  .data-table td { padding: 9px 13px; vertical-align: top; line-height: 1.5; }
+  .data-table td:first-child {
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 13.5px;
+  }
+
+  /* PROCESS FLOW */
+  .process-flow {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: var(--sans);
+    font-size: 14px;
+  }
+  .flow-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .flow-step:last-child { border-bottom: none; }
+  .flow-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+    min-width: 24px;
+    padding-top: 2px;
+  }
+  .flow-text { color: var(--text); line-height: 1.55; }
+  .flow-text strong { font-weight: 600; }
+
+  /* DEF LIST */
+  .def-list { margin: 16px 0 24px; }
+  .def-item {
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 210px 1fr;
+    gap: 20px;
+    font-size: 15px;
+  }
+  .def-item:last-child { border-bottom: none; }
+  .def-term {
+    font-family: var(--sans);
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 14px;
+    padding-top: 1px;
+    line-height: 1.4;
+  }
+
+  /* GRID CARDS */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 16px 18px;
+  }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 10px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card ul { list-style: none; font-family: var(--sans); font-size: 13.5px; }
+  .card ul li {
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .card ul li:last-child { border-bottom: none; }
+  .card ul li strong { color: var(--text); }
+
+  /* BODY LIST */
+  ul.body-list {
+    list-style: none;
+    font-family: var(--sans);
+    font-size: 15px;
+    padding: 0;
+    margin: 12px 0 20px;
+  }
+  ul.body-list li {
+    padding: 5px 0 5px 18px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  ul.body-list li:last-child { border-bottom: none; }
+  ul.body-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--border2);
+    font-size: 12px;
+  }
+  ul.body-list li strong { color: var(--text); }
+
+  /* SPEC DIAGRAM (range bars) */
+  .spec-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: var(--sans);
+  }
+  .spec-diagram h4 {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .spec-bar-wrap { margin-bottom: 10px; }
+  .spec-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .spec-label strong { color: var(--text); }
+  .spec-bar {
+    height: 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .spec-fill {
+    height: 100%;
+    border-radius: 2px;
+  }
+  .fill-blue { background: #2c3e6b; }
+  .fill-green { background: #4caf50; }
+  .fill-amber { background: #ffc107; }
+  .fill-orange { background: #ff9800; }
+  .fill-red { background: #f44336; }
+  .fill-purple { background: #8e44ad; }
+  .fill-gray { background: #9e9e9e; }
+
+  /* CONN BADGE */
+  .conn-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-weight: 600;
+    margin-right: 4px;
+  }
+  .badge-wifi { background: #e3f2fd; color: #1565c0; border: 1px solid #90caf9; }
+  .badge-cell { background: #f3e5f5; color: #6a1b9a; border: 1px solid #ce93d8; }
+  .badge-bt { background: #e8f5e9; color: #1b5e20; border: 1px solid #a5d6a7; }
+  .badge-nfc { background: #fff3e0; color: #e65100; border: 1px solid #ffcc80; }
+  .badge-gps { background: #fdf2f1; color: #c0392b; border: 1px solid #e8b4ae; }
+
+  /* MDM COMPARISON CARD */
+  .mdm-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 18px 22px;
+    font-family: var(--sans);
+  }
+  .mdm-card-head {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 12px;
+  }
+  .mdm-corp { background: #f0f2f8; color: #2c3e6b; }
+  .mdm-byod { background: #fdf5ed; color: #b5590a; }
+  .mdm-card ul { list-style: none; font-size: 13.5px; }
+  .mdm-card ul li {
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .mdm-card ul li:last-child { border-bottom: none; }
+  .mdm-card ul li strong { color: var(--text); }
+
+  /* CODE */
+  code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: var(--accent);
+  }
+
+  .key-term { font-style: italic; font-weight: 500; color: var(--accent2); }
+
+  /* SUMMARY BOX */
+  .summary-box {
+    background: var(--text);
+    color: #f0ede6;
+    border-radius: 6px;
+    padding: 28px 32px;
+    margin: 40px 0;
+  }
+  .summary-box h3 {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 18px;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 32px;
+  }
+  .summary-item {
+    font-family: var(--sans);
+    font-size: 13.5px;
+    color: #c4bfb4;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .summary-item .s-sym {
+    color: #fff;
+    font-weight: 600;
+    min-width: 175px;
+    line-height: 1.4;
+  }
+
+  .ch-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--border2), transparent);
+    margin: 48px 0;
+  }
+
+  /* INDICATOR DOTS */
+  .malware-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .ind-high { background: var(--accent); }
+  .ind-med { background: var(--accent4); }
+  .ind-low { background: var(--accent3); }
+
+  @media (max-width: 680px) {
+    .page { padding: 0 20px 60px; }
+    .summary-grid, .card-grid { grid-template-columns: 1fr; }
+    .def-item { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV — update href values to match your actual file names -->
+<nav class="top-nav">
+  <div class="top-nav-left">
+    <a class="nav-home" href="../index.html">Study Guide</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current"><strong>1.3</strong> Mobile Device Network Connectivity and Application Support</span>
+  </div>
+  <div class="top-nav-right">
+    <!-- Point these to the adjacent section files, or remove if not applicable -->
+    <a class="nav-prev" href="./1_2-Mobile-Accessories-Connectivity.html">1.2</a>
+    <a class="nav-next" href="./2_1-TCP-UDP-Ports-Protocols.html">2.1</a>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- HEADER -->
+<div class="book-header">
+  <div class="book-eyebrow">
+    <span>1.3</span>
+    CompTIA A+ · Core 1 (220-1201) · Domain 1 — Mobile Devices
+  </div>
+  <h1 class="book-title">Mobile Device Network Connectivity<br>and Application Support</h1>
+  <div class="book-subtitle">
+    <span>Objective 1.3</span>
+    <span>Domain weight: 13%</span>
+    <span>Cellular/Wi-Fi · Bluetooth · Location · MDM · Sync</span>
+  </div>
+</div>
+
+<!-- INTRO -->
+<h2 class="chapter"><span class="ch-num">OVERVIEW</span>Introduction</h2>
+
+<p>Objective 1.3 moves from mobile device hardware (1.1) and accessories (1.2) into actually getting a mobile device <em>connected and usable</em> — configuring its wireless/cellular networking, pairing Bluetooth accessories, enabling location services, managing the device within a business environment via MDM, and keeping data synchronized across the device and the services it depends on. This is the most procedural and scenario-driven objective in Domain 1 so far, and it leans heavily on understanding realistic, step-by-step configuration tasks rather than pure definitions.</p>
+
+<p>A unifying thread across this objective: mobile devices increasingly blur the line between <strong>personal</strong> and <strong>corporate</strong> use, and a huge share of real-world mobile device support work involves configuring connectivity and data access in a way that respects both the user's needs and the organization's security/policy requirements. Keep that tension in mind, especially in the MDM section.</p>
+
+<!-- ═══ PART 1: WIRELESS/CELLULAR DATA NETWORK ═══ -->
+<h2 class="chapter"><span class="ch-num">PART 1</span>Wireless/Cellular Data Network</h2>
+
+<h3 class="section">3G/4G/5G</h3>
+
+<p>Mobile devices connect to the cellular network using one of several generations of cellular data technology, each representing a significant leap in speed and capability over the last.</p>
+
+<div class="spec-diagram">
+  <h4>Cellular Generations — Relative Speed/Capability</h4>
+  <div class="spec-bar-wrap">
+    <div class="spec-label"><strong>3G</strong><span>Legacy; largely phased out/retired by most carriers</span></div>
+    <div class="spec-bar"><div class="spec-fill fill-gray" style="width:20%"></div></div>
+  </div>
+  <div class="spec-bar-wrap">
+    <div class="spec-label"><strong>4G / 4G LTE</strong><span>Widely deployed; the long-standing mainstream standard</span></div>
+    <div class="spec-bar"><div class="spec-fill fill-blue" style="width:60%"></div></div>
+  </div>
+  <div class="spec-bar-wrap">
+    <div class="spec-label"><strong>5G</strong><span>Current generation; significantly higher speed and lower latency</span></div>
+    <div class="spec-bar"><div class="spec-fill fill-red" style="width:100%"></div></div>
+  </div>
+</div>
+
+<p>Cellular data can be <strong>enabled or disabled</strong> directly from a mobile device's settings, a basic but frequently tested configuration toggle — disabling cellular data stops the device from using carrier data entirely (useful for controlling data usage/costs or troubleshooting connectivity issues) while still allowing Wi-Fi-based internet access to function normally.</p>
+
+<h3 class="section">Hotspot</h3>
+
+<p>As introduced in objective 1.2, a device's <span class="key-term">hotspot</span> feature shares its existing cellular data connection with other nearby devices. From a configuration standpoint, enabling a hotspot typically involves a dedicated settings toggle, naming the hotspot network, and setting a connection password — essentially turning the phone into a temporary small wireless access point for other devices to join.</p>
+
+<h3 class="section">Wi-Fi</h3>
+
+<p>A mobile device's <span class="key-term">Wi-Fi</span> radio is enabled/disabled independently from cellular data, and configuring it follows the same general principles as any wireless client device — selecting the correct network (SSID), entering the appropriate security credentials, and verifying a successful connection. Most mobile operating systems prioritize Wi-Fi over cellular data when both are available and connected, since Wi-Fi typically offers faster speeds and doesn't consume the device's cellular data allowance.</p>
+
+<h3 class="section">SIM / eSIM</h3>
+
+<p>A <span class="key-term">SIM (Subscriber Identity Module)</span> is a small physical card that identifies a device to the cellular carrier's network and stores subscriber-specific information, traditionally inserted into a dedicated SIM tray/slot on the device. An <span class="key-term">eSIM (embedded SIM)</span> performs the same fundamental function — identifying the device and subscriber to the carrier — but is built directly into the device's hardware rather than requiring a removable physical card, and is provisioned/activated digitally (often via a QR code or carrier app) rather than through physical card insertion.</p>
+
+<table class="data-table">
+  <thead><tr><th>Factor</th><th>Physical SIM</th><th>eSIM</th></tr></thead>
+  <tbody>
+    <tr><td>Form</td><td>Removable physical card</td><td>Built into the device, non-removable</td></tr>
+    <tr><td>Carrier switching</td><td>Requires physically swapping the card</td><td>Can often be reprovisioned digitally without a physical swap</td></tr>
+    <tr><td>Multiple profiles</td><td>One active SIM per physical slot (or dual-SIM trays on some devices)</td><td>Can often store/switch between multiple carrier profiles digitally</td></tr>
+    <tr><td>Physical failure point</td><td>Card or tray can be lost, damaged, or improperly seated</td><td>No physical card to lose or damage</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>A scenario describing a device with no cellular signal at all (while Wi-Fi works fine) should prompt checking SIM/eSIM status — is the SIM properly seated, is the eSIM profile active, has the SIM been disabled or deactivated by the carrier (e.g., for a missed payment), or has cellular data simply been toggled off in settings. Distinguishing a SIM/cellular problem from a Wi-Fi problem is a foundational triage skill this objective expects.</p>
+</div>
+
+<!-- ═══ PART 2: BLUETOOTH ═══ -->
+<h2 class="chapter"><span class="ch-num">PART 2</span>Bluetooth — Pairing Process</h2>
+
+<p>Pairing a Bluetooth accessory with a mobile device follows a consistent, repeatable sequence. The exam tests this as a literal step-by-step process, since Bluetooth pairing problems are an extremely common real-world support scenario.</p>
+
+<div class="process-flow">
+  <div class="flow-title">Bluetooth Pairing — Step by Step</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Enable Bluetooth</strong> on the mobile device, via the quick-settings toggle or main settings menu — Bluetooth must be turned on before any pairing can occur.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Enable pairing mode</strong> on the accessory itself (the headset, speaker, keyboard, etc.), typically by holding down a dedicated pairing button until an indicator light begins flashing, signaling the accessory is discoverable and ready to be found.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Find the device for pairing</strong> by opening the Bluetooth settings menu on the mobile device and scanning/searching the list of nearby discoverable devices until the accessory's name appears.</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Enter the appropriate PIN code</strong> if prompted — many accessories use a simple default PIN (such as <code>0000</code> or <code>1234</code>), while others use a "just works" pairing process with no PIN required at all, or display a code on both devices that the user simply confirms matches.</div></div>
+  <div class="flow-step"><span class="flow-num">05</span><div class="flow-text"><strong>Test connectivity</strong> once paired — confirm the accessory functions as expected (audio plays through a paired speaker/headset, a paired keyboard types correctly) before considering the pairing process complete.</div></div>
+</div>
+
+<div class="callout callout-tip">
+  <p class="callout-title">Why "Test Connectivity" Is Its Own Step</p>
+  <p>A device can sometimes report a "successful" pairing at the Bluetooth protocol level while a specific function still doesn't work correctly in practice — for example, a headset pairs successfully but audio continues playing through the phone's built-in speaker instead of routing to the headset. Treating connectivity testing as a distinct final step (not just assuming pairing success means everything works) reflects good real-world troubleshooting practice and is exactly the kind of thoroughness the exam rewards.</p>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>A scenario describing a Bluetooth accessory that "won't connect" or "can't be found" should walk through this sequence in order: is Bluetooth enabled on the phone? Is the accessory actually in pairing mode (not just powered on)? Is the device list being refreshed/searched? Was the correct PIN entered if one was required? Most real-world Bluetooth pairing failures trace back to a missed step early in this sequence rather than a deeper hardware fault.</p>
+</div>
+
+<!-- ═══ PART 3: LOCATION SERVICES ═══ -->
+<h2 class="chapter"><span class="ch-num">PART 3</span>Location Services</h2>
+
+<h3 class="section">GPS Services</h3>
+
+<p><span class="key-term">GPS (Global Positioning System)</span> determines a device's location by receiving signals from a network of satellites orbiting Earth, calculating precise position based on the timing differences between signals received from multiple satellites simultaneously. GPS generally provides the most accurate location data of the methods covered here, particularly outdoors with a clear view of the sky, but can struggle indoors or in dense urban areas where satellite signal is obstructed or reflected.</p>
+
+<h3 class="section">Cellular Location Services</h3>
+
+<p><span class="key-term">Cellular location services</span> estimate a device's location based on its proximity to and signal strength from nearby cellular towers, sometimes supplemented by known Wi-Fi network locations. This method is generally less precise than GPS, but works well indoors and in situations where GPS satellite signal is weak or unavailable, and can also provide a much faster initial location fix than waiting for a GPS satellite lock.</p>
+
+<div class="callout callout-info">
+  <p class="callout-title">Layered, Not Competing, Location Methods</p>
+  <p>Modern mobile operating systems typically combine GPS, cellular location, and Wi-Fi-based location data together (sometimes referred to as "assisted GPS" or A-GPS) rather than relying on just one method exclusively — using whichever combination of signals is available and most accurate in the moment to determine location faster and more reliably than any single method alone. Don't think of these as competing alternatives where only one is ever "the" location method in use; in practice they typically work together.</p>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>A scenario describing inaccurate or slow location detection indoors points toward GPS signal limitations in that environment, with cellular/Wi-Fi-based location serving as the more reliable fallback in that specific situation. Also remember that location services as a whole can be enabled/disabled at the device level, and individual apps typically require separate permission to access location data even when the device-level location service itself is turned on.</p>
+</div>
+
+<!-- ═══ PART 4: MOBILE DEVICE MANAGEMENT (MDM) ═══ -->
+<h2 class="chapter"><span class="ch-num">PART 4</span>Mobile Device Management (MDM)</h2>
+
+<p><span class="key-term">Mobile Device Management (MDM)</span> is software/platform infrastructure that allows an organization to centrally configure, monitor, secure, and manage mobile devices used to access corporate resources — covering everything from enforcing a device passcode policy to remotely wiping a lost or stolen device.</p>
+
+<h3 class="section">Device Configurations — Corporate vs. BYOD</h3>
+
+<div class="card-grid">
+  <div class="mdm-card">
+    <div class="mdm-card-head mdm-corp">CORPORATE-OWNED</div>
+    <ul>
+      <li><strong>Ownership</strong> — Purchased and owned entirely by the organization</li>
+      <li><strong>Control level</strong> — Organization has full administrative control over the entire device</li>
+      <li><strong>Personal use</strong> — Often restricted or entirely disallowed by policy</li>
+      <li><strong>Remote wipe scope</strong> — Can wipe the entire device without concern for personal data</li>
+      <li><strong>Typical use</strong> — Standardized hardware/software fleets, high-security environments</li>
+    </ul>
+  </div>
+  <div class="mdm-card">
+    <div class="mdm-card-head mdm-byod">BYOD (BRING YOUR OWN DEVICE)</div>
+    <ul>
+      <li><strong>Ownership</strong> — Purchased and owned by the individual employee</li>
+      <li><strong>Control level</strong> — Organization typically manages only a work-related container/profile, not the whole device</li>
+      <li><strong>Personal use</strong> — Fully expected; the device is the employee's personal property</li>
+      <li><strong>Remote wipe scope</strong> — Usually limited to the corporate container/profile, preserving personal data and apps</li>
+      <li><strong>Typical use</strong> — Flexible, cost-saving for the organization, popular for convenience</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>The key distinction the exam wants: a <strong>corporate-owned</strong> device gives the organization broad, often complete control (including full-device wipe), while a <strong>BYOD</strong> device requires the organization to be more surgical — typically managing only a separated corporate profile/container, since wiping an employee's entire personal device (photos, personal apps, personal data) over a lost-device or termination scenario would be both impractical and legally/ethically problematic.</p>
+</div>
+
+<h3 class="section">Policy Enforcement</h3>
+
+<p>MDM platforms enforce organizational security policies automatically and consistently across all managed devices — common examples include requiring a minimum passcode complexity/length, mandating device encryption, enforcing automatic screen lock timeouts, restricting installation of unapproved apps, and requiring OS updates to be applied within a certain timeframe. Devices failing to meet policy requirements can typically be automatically restricted from accessing corporate resources (email, internal apps) until brought into compliance.</p>
+
+<h3 class="section">Corporate Applications</h3>
+
+<p>MDM platforms commonly provide a curated <span class="key-term">enterprise app store</span> or app deployment mechanism, allowing an organization to push approved business applications directly to managed devices, and in many cases to remove or restrict access to those corporate apps independently of the rest of the device — particularly relevant in BYOD scenarios, where this allows the organization to manage only its own apps/data without touching the employee's personal apps.</p>
+
+<!-- ═══ PART 5: MOBILE DEVICE SYNCHRONIZATION ═══ -->
+<h2 class="chapter"><span class="ch-num">PART 5</span>Mobile Device Synchronization</h2>
+
+<p><span class="key-term">Synchronization</span> keeps data consistent across a mobile device and the various cloud services/accounts it's connected to, ensuring changes made on one device (or in a web interface) appear correctly everywhere else.</p>
+
+<h3 class="section">Recognizing Data Caps</h3>
+
+<p>Synchronization activity — especially large or frequent syncs (full photo libraries, large file uploads to cloud storage, video content) — consumes cellular data, and a technician/user should be aware of a device's <span class="key-term">data cap</span> (the maximum monthly cellular data allowance under a given carrier plan) when configuring sync settings. Many devices/apps offer a setting to restrict certain sync activities (particularly large media uploads/downloads) to Wi-Fi only, specifically to avoid unexpectedly consuming a limited cellular data allowance.</p>
+
+<div class="callout callout-warn">
+  <p class="callout-title">Common Pitfall</p>
+  <p>A user traveling without reliable Wi-Fi access who has photo/video cloud backup or large file sync enabled without a "Wi-Fi only" restriction can rapidly exhaust a monthly cellular data cap, sometimes resulting in unexpected overage charges or a carrier-imposed data slowdown for the remainder of the billing cycle. This is a frequently tested practical scenario — the fix is adjusting sync settings to require Wi-Fi for large transfers, not disabling sync entirely (which would stop data backup/protection altogether).</p>
+</div>
+
+<h3 class="section">Calendar</h3>
+
+<p>Calendar synchronization keeps appointments, meetings, and events consistent across a mobile device and connected accounts (such as a corporate Exchange/Microsoft 365 account or a personal cloud calendar service), so changes made on any synced device or platform are reflected everywhere.</p>
+
+<h3 class="section">Contacts</h3>
+
+<p>Contact synchronization keeps a user's address book/contact list consistent across devices and accounts in the same way, commonly tied to the same underlying account (corporate or personal) used for calendar and mail sync.
+
+<h3 class="section">Business Applications</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Mail</span>
+    <span>Email synchronization, typically configured via the protocols introduced in objective 2.1 — IMAP (syncs and persists on the server, the modern standard) or, less commonly today, POP3 (downloads and often removes from the server) — or via a dedicated corporate mail platform's own sync protocol (such as Exchange ActiveSync).</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Cloud storage</span>
+    <span>Synchronization of files and documents with a cloud storage service, allowing a user to access, edit, and share files consistently across their mobile device, computer, and the web — central to most modern business and personal productivity workflows.</span>
+  </div>
+</div>
+
+<div class="callout callout-tip">
+  <p class="callout-title">Connecting Back to Objective 2.1</p>
+  <p>Mail synchronization on a mobile device is a direct, practical application of the IMAP vs. POP3 distinction covered in objective 2.1: IMAP's server-side persistence is exactly why it's the standard choice for mobile mail sync today — a user reasonably expects to see the same mailbox state (read/unread, folders, recently deleted) whether checking mail on their phone, laptop, or a webmail interface, which is precisely what IMAP enables and POP3 does not.</p>
+</div>
+
+<!-- MASTER REFERENCE -->
+<div class="ch-divider"></div>
+
+<div class="summary-box">
+  <h3>Master Reference — Network Connectivity and Application Support</h3>
+  <div class="summary-grid">
+    <div class="summary-item"><span class="s-sym">3G/4G/5G</span><span>Cellular generations; 5G is current, fastest, lowest latency</span></div>
+    <div class="summary-item"><span class="s-sym">Hotspot</span><span>Shares cellular data with other nearby devices</span></div>
+    <div class="summary-item"><span class="s-sym">SIM vs. eSIM</span><span>Removable physical card vs. built-in, digitally provisioned</span></div>
+    <div class="summary-item"><span class="s-sym">Bluetooth pairing</span><span>Enable BT → pairing mode → find device → PIN → test</span></div>
+    <div class="summary-item"><span class="s-sym">GPS</span><span>Most accurate outdoors; satellite-based</span></div>
+    <div class="summary-item"><span class="s-sym">Cellular location</span><span>Less precise, works well indoors/as fallback</span></div>
+    <div class="summary-item"><span class="s-sym">MDM</span><span>Centralized mobile device configuration/security platform</span></div>
+    <div class="summary-item"><span class="s-sym">Corporate-owned</span><span>Full device control; full-device wipe possible</span></div>
+    <div class="summary-item"><span class="s-sym">BYOD</span><span>Employee-owned; org manages only a corporate container</span></div>
+    <div class="summary-item"><span class="s-sym">Policy enforcement</span><span>Passcode, encryption, app restrictions, update compliance</span></div>
+    <div class="summary-item"><span class="s-sym">Data caps</span><span>Restrict large syncs to Wi-Fi to avoid overage</span></div>
+    <div class="summary-item"><span class="s-sym">Mail sync</span><span>IMAP (server-persistent) standard for mobile today</span></div>
+  </div>
+</div>
+
+<!-- QUICK REFERENCE TOOLS -->
+<h2 class="chapter"><span class="ch-num">REFERENCE</span>1.3 Quick Reference</h2>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>No Cellular Signal — Triage Order</h4>
+    <ul>
+      <li><strong>1.</strong> Cellular data toggled on?</li>
+      <li><strong>2.</strong> SIM/eSIM properly seated/active?</li>
+      <li><strong>3.</strong> Carrier account in good standing?</li>
+      <li><strong>4.</strong> Confirm it's not actually a Wi-Fi-only issue</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Bluetooth Won't Pair — Triage Order</h4>
+    <ul>
+      <li><strong>1.</strong> Bluetooth enabled on phone?</li>
+      <li><strong>2.</strong> Accessory actually in pairing mode?</li>
+      <li><strong>3.</strong> Device visible in scan/search?</li>
+      <li><strong>4.</strong> Correct PIN entered if prompted?</li>
+      <li><strong>5.</strong> Test actual functionality, not just "paired" status</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>MDM By Ownership Model</h4>
+    <ul>
+      <li><strong>Corporate device</strong> → Full control, full wipe OK</li>
+      <li><strong>BYOD device</strong> → Container-only control, container wipe only</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Sync Best Practices</h4>
+    <ul>
+      <li><strong>Large media/files on limited plan</strong> → Restrict sync to Wi-Fi only</li>
+      <li><strong>Mobile mail today</strong> → Prefer IMAP over POP3</li>
+      <li><strong>Calendar/contacts</strong> → Tie to the same account as mail when possible</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout callout-exam" style="margin-top: 28px;">
+  <p class="callout-title">Final Exam Reminders</p>
+  <p><strong>SIM vs. eSIM</strong> = removable physical card vs. built-in, digitally provisioned profile.</p>
+  <p><strong>Bluetooth pairing</strong> = a strict sequence — enable, pairing mode, find, PIN, test — and most failures trace back to an early step being skipped.</p>
+  <p><strong>GPS</strong> = most accurate outdoors via satellites. <strong>Cellular location</strong> = less precise but works indoors/as fallback; modern devices blend both.</p>
+  <p><strong>Corporate-owned</strong> = full device control and full-wipe capability. <strong>BYOD</strong> = container/profile-level control only, preserving personal data.</p>
+  <p><strong>Data caps</strong> = restrict large syncs (photos, video, big files) to Wi-Fi only rather than disabling sync entirely.</p>
+  <p><strong>Mail sync</strong> = IMAP is the modern standard because it persists state on the server across all devices, unlike POP3.</p>
+</div>
+
+</div>
+</body>
+</html>

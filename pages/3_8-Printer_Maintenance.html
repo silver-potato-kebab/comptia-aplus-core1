@@ -1,0 +1,1546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CompTIA A+ 3.8 — Perform Appropriate Printer Maintenance</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --surface2: #f5f4f0;
+    --border: #e5e2d9;
+    --border2: #d4d0c4;
+    --text: #1a1a18;
+    --muted: #6b6860;
+    --accent: #c0392b;
+    --accent2: #2c3e6b;
+    --accent3: #1a6b3a;
+    --accent4: #b5590a;
+    --accent-light: #fdf2f1;
+    --accent2-light: #f0f2f8;
+    --accent3-light: #f0f8f3;
+    --accent4-light: #fdf5ed;
+    --serif: 'Crimson Pro', Georgia, serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── TOP NAV ── */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .top-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .nav-home {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+  .nav-home:hover { color: var(--accent2); }
+  .nav-home::before {
+    content: '←';
+    font-size: 12px;
+  }
+  .nav-sep {
+    font-size: 12px;
+    color: var(--border2);
+    flex-shrink: 0;
+  }
+  .nav-current {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nav-current strong {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    margin-right: 6px;
+  }
+  .top-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .nav-prev, .nav-next {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 4px 9px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    white-space: nowrap;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .nav-prev:hover, .nav-next:hover {
+    border-color: var(--border2);
+    color: var(--accent2);
+  }
+  .nav-prev::before { content: '← '; }
+  .nav-next::after  { content: ' →'; }
+
+  @media (max-width: 600px) {
+    .top-nav { padding: 0 16px; }
+    .nav-current { display: none; }
+    .nav-sep { display: none; }
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  .page { max-width: 860px; margin: 0 auto; padding: 0 40px 80px; }
+
+  /* HEADER */
+  .book-header {
+    border-bottom: 3px double var(--border2);
+    padding: 56px 0 32px;
+    margin-bottom: 48px;
+  }
+  .book-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .book-eyebrow span {
+    background: var(--accent);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-right: 10px;
+    font-size: 10px;
+  }
+  .book-title {
+    font-family: var(--serif);
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+  .book-subtitle {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .book-subtitle span { display: flex; align-items: center; gap: 6px; }
+  .book-subtitle span::before { content: '·'; color: var(--border2); }
+  .book-subtitle span:first-child::before { display: none; }
+
+  /* HEADINGS */
+  h2.chapter {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 600;
+    margin: 52px 0 6px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    letter-spacing: -0.01em;
+  }
+  h2.chapter .ch-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+    letter-spacing: 0.1em;
+    font-weight: 400;
+  }
+  h3.section {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    margin: 36px 0 12px;
+  }
+  h3.section::before { content: '§ '; color: var(--muted); font-weight: 300; }
+
+  p { margin-bottom: 16px; }
+
+  /* CALLOUTS */
+  .callout {
+    border-left: 3px solid;
+    padding: 14px 20px;
+    margin: 24px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 15.5px;
+  }
+  .callout p { margin-bottom: 6px; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout-title {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px !important;
+  }
+  .callout-exam { border-color: var(--accent);  background: var(--accent-light); }
+  .callout-exam .callout-title { color: var(--accent); }
+  .callout-info { border-color: var(--accent2); background: var(--accent2-light); }
+  .callout-info .callout-title { color: var(--accent2); }
+  .callout-tip  { border-color: var(--accent3); background: var(--accent3-light); }
+  .callout-tip  .callout-title { color: var(--accent3); }
+  .callout-warn { border-color: var(--accent4); background: var(--accent4-light); }
+  .callout-warn .callout-title { color: var(--accent4); }
+
+  /* TABLES */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+    font-family: var(--sans);
+    margin: 16px 0 24px;
+  }
+  .data-table thead th {
+    background: var(--surface2);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 9px 13px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .data-table tbody tr { border-bottom: 1px solid var(--border); }
+  .data-table tbody tr:last-child { border-bottom: none; }
+  .data-table td { padding: 9px 13px; vertical-align: top; line-height: 1.5; }
+  .data-table td:first-child {
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 13.5px;
+  }
+
+  /* PROCESS FLOW */
+  .process-flow {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: var(--sans);
+    font-size: 14px;
+  }
+  .flow-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .flow-step:last-child { border-bottom: none; }
+  .flow-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+    min-width: 24px;
+    padding-top: 2px;
+  }
+  .flow-text { color: var(--text); line-height: 1.55; }
+  .flow-text strong { font-weight: 600; }
+
+  /* DEF LIST */
+  .def-list { margin: 16px 0 24px; }
+  .def-item {
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 210px 1fr;
+    gap: 20px;
+    font-size: 15px;
+  }
+  .def-item:last-child { border-bottom: none; }
+  .def-term {
+    font-family: var(--sans);
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 14px;
+    padding-top: 1px;
+    line-height: 1.4;
+  }
+
+  /* GRID CARDS */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 16px 18px;
+  }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 10px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card ul { list-style: none; font-family: var(--sans); font-size: 13.5px; }
+  .card ul li {
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .card ul li:last-child { border-bottom: none; }
+  .card ul li strong { color: var(--text); }
+
+  /* BODY LIST */
+  ul.body-list {
+    list-style: none;
+    font-family: var(--sans);
+    font-size: 15px;
+    padding: 0;
+    margin: 12px 0 20px;
+  }
+  ul.body-list li {
+    padding: 5px 0 5px 18px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  ul.body-list li:last-child { border-bottom: none; }
+  ul.body-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--border2);
+    font-size: 12px;
+  }
+  ul.body-list li strong { color: var(--text); }
+
+  /* ARCH DIAGRAM */
+  .arch-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+  .arch-diagram-header {
+    background: var(--text);
+    color: rgba(255,255,255,0.85);
+    padding: 10px 18px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .arch-body { padding: 20px 24px; }
+
+  /* COMPARE GRID */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 20px 0;
+  }
+  .compare-col { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+  .compare-head {
+    padding: 10px 14px;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 700;
+    text-align: center;
+  }
+  .compare-head.ch-a { background: #e3f2fd; color: #1565c0; }
+  .compare-head.ch-b { background: #fdf2f1; color: #b71c1c; }
+  .compare-head.ch-c { background: #e8f5e9; color: #1b5e20; }
+  .compare-head.ch-d { background: #fff3e0; color: #e65100; }
+  .compare-body { padding: 12px 14px; }
+  .compare-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+  .compare-row:last-child { border-bottom: none; }
+  .compare-row .cr-icon { font-size: 11px; min-width: 14px; margin-top: 2px; }
+  .compare-row strong { color: var(--text); }
+
+  /* BENEFIT ROW */
+  .benefit-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--sans);
+    font-size: 14px;
+  }
+  .benefit-row:last-child { border-bottom: none; }
+  .benefit-icon { font-size: 18px; min-width: 28px; text-align: center; padding-top: 1px; }
+  .benefit-body { line-height: 1.5; }
+  .benefit-body strong { color: var(--text); display: block; font-size: 14.5px; margin-bottom: 2px; }
+  .benefit-body span { color: var(--muted); }
+
+  code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: var(--accent);
+  }
+
+  .key-term { font-style: italic; font-weight: 500; color: var(--accent2); }
+
+  /* STAGE BANNER — printer type label */
+  .printer-banner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    border-radius: 6px;
+    margin: 28px 0 8px;
+    border: 1px solid;
+  }
+  .pb-laser  { background: #f0f2f8; border-color: #b0bce8; }
+  .pb-inkjet { background: #e8f5e9; border-color: #b0d8bc; }
+  .pb-thermal{ background: #fff3e0; border-color: #e8c880; }
+  .pb-impact { background: #fdf2f1; border-color: #e8b0b0; }
+  .pb-icon { font-size: 32px; }
+  .pb-body { flex: 1; }
+  .pb-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 2px;
+  }
+  .pb-title {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+  }
+  .pb-laser  .pb-title { color: var(--accent2); }
+  .pb-inkjet .pb-title { color: var(--accent3); }
+  .pb-thermal .pb-title { color: var(--accent4); }
+  .pb-impact .pb-title { color: var(--accent); }
+  .pb-desc { font-family: var(--sans); font-size: 13px; color: var(--muted); margin-top: 3px; }
+
+  /* LASER PROCESS STAGES */
+  .laser-stages {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    margin: 20px 0;
+  }
+  .ls-stage {
+    border-radius: 5px;
+    padding: 10px 6px;
+    text-align: center;
+    border: 1px solid var(--border);
+  }
+  .ls-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 4px;
+    color: var(--muted);
+  }
+  .ls-name {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 4px;
+    line-height: 1.2;
+  }
+  .ls-icon { font-size: 16px; display: block; }
+  .ls-1 { background: #fdf2f1; } .ls-1 .ls-name { color: var(--accent); }
+  .ls-2 { background: #f0f2f8; } .ls-2 .ls-name { color: var(--accent2); }
+  .ls-3 { background: #e8f5e9; } .ls-3 .ls-name { color: var(--accent3); }
+  .ls-4 { background: #fff3e0; } .ls-4 .ls-name { color: var(--accent4); }
+  .ls-5 { background: #f5f0f8; } .ls-5 .ls-name { color: #6a1b9a; }
+  .ls-6 { background: #f0f8f8; } .ls-6 .ls-name { color: #1b5e5e; }
+  .ls-7 { background: var(--surface2); } .ls-7 .ls-name { color: var(--muted); }
+
+  /* MAINTENANCE CHECKLIST */
+  .maint-list { margin: 16px 0 24px; }
+  .maint-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--sans);
+    font-size: 14px;
+  }
+  .maint-item:last-child { border-bottom: none; }
+  .maint-check {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--border2);
+    border-radius: 3px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: var(--accent3);
+  }
+  .maint-body { line-height: 1.5; }
+  .maint-body strong { color: var(--text); display: block; font-size: 14.5px; }
+  .maint-body span { color: var(--muted); }
+
+  /* SYMPTOM → CAUSE TABLE ROW */
+  .symptom-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--sans);
+    font-size: 13.5px;
+    align-items: start;
+  }
+  .symptom-row:last-child { border-bottom: none; }
+  .symptom-row .sr-symptom { color: var(--accent); font-weight: 600; line-height: 1.4; }
+  .symptom-row .sr-cause   { color: var(--text);   line-height: 1.4; }
+  .symptom-row .sr-fix     { color: var(--accent3); font-weight: 500; line-height: 1.4; }
+  .symptom-head {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    padding: 6px 0;
+    border-bottom: 2px solid var(--border2);
+    font-family: var(--sans);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 2px;
+  }
+
+  /* SUMMARY */
+  .summary-box {
+    background: var(--text);
+    color: #f0ede6;
+    border-radius: 6px;
+    padding: 28px 32px;
+    margin: 40px 0;
+  }
+  .summary-box h3 {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 18px;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 32px;
+  }
+  .summary-item {
+    font-family: var(--sans);
+    font-size: 13.5px;
+    color: #c4bfb4;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .summary-item .s-sym {
+    color: #fff;
+    font-weight: 600;
+    min-width: 155px;
+    line-height: 1.4;
+  }
+
+  .ch-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--border2), transparent);
+    margin: 48px 0;
+  }
+
+  @media (max-width: 680px) {
+    .page { padding: 0 20px 60px; }
+    .summary-grid, .card-grid, .compare-grid { grid-template-columns: 1fr; }
+    .def-item { grid-template-columns: 1fr; gap: 4px; }
+    .laser-stages { grid-template-columns: repeat(4, 1fr); }
+    .symptom-row, .symptom-head { grid-template-columns: 1fr 1fr; }
+    .symptom-row .sr-fix, .symptom-head span:last-child { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV — update href values to match your actual file names -->
+<nav class="top-nav">
+  <div class="top-nav-left">
+    <a class="nav-home" href="../index.html">Study Guide</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current"><strong>3.8</strong> Perform Appropriate Printer Maintenance</span>
+  </div>
+  <div class="top-nav-right">
+    <!-- Point these to the adjacent section files, or remove if not applicable -->
+    <a class="nav-prev" href="./3_7-Multifunction-Devices-Printers.html">3.7</a>
+    <a class="nav-next" href="./4_1-Virtualization.html">4.1</a>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- HEADER -->
+<div class="book-header">
+  <div class="book-eyebrow">
+    <span>3.8</span>
+    CompTIA A+ · Core 1 (220-1201) · Domain 3 — Hardware
+  </div>
+  <h1 class="book-title">Perform Appropriate<br>Printer Maintenance</h1>
+  <div class="book-subtitle">
+    <span>Objective 3.8</span>
+    <span>Domain weight: 15%</span>
+    <span>Laser · Inkjet · Thermal · Impact</span>
+  </div>
+</div>
+
+
+<!-- OVERVIEW -->
+<h2 class="chapter"><span class="ch-num">OVERVIEW</span>Printer Technologies and Maintenance</h2>
+
+<p>Printers remain among the most common hardware devices a technician is asked to install, configure, and maintain. The A+ exam covers four fundamentally different printing technologies — laser, inkjet, thermal, and impact — each with its own imaging process, consumables, failure modes, and maintenance procedures. Understanding how each technology works is the foundation for knowing why specific maintenance steps are performed and what symptoms indicate specific problems.</p>
+
+<p>This objective is heavily scenario-based on the exam: a question will describe a symptom (ghosted images, smeared ink, faded text, paper jams) and ask you to identify the correct maintenance action or identify the failing component. Memorizing symptoms alongside their causes and fixes — not just maintenance steps in isolation — is the key to performing well on 3.8.</p>
+
+<div class="callout callout-info">
+  <p class="callout-title">Four Printer Types at a Glance</p>
+  <p><strong>Laser:</strong> Uses a laser beam to draw a charge pattern on a drum; toner (dry powder) adheres to the charged areas; heat fuses toner to paper. High volume, fast, sharp text. <strong>Inkjet:</strong> Sprays microscopic droplets of liquid ink directly onto paper through tiny nozzles. Best for photos and color; lower cost upfront but higher per-page cost. <strong>Thermal:</strong> Heat activates a chemical coating on special paper (or melts wax ribbon onto paper). No ink, no toner. Used for receipts, labels, and shipping. <strong>Impact:</strong> A pin-studded printhead physically strikes an inked ribbon against paper. Creates carbon copies of the same document simultaneously. Used for multipart forms in regulated industries.</p>
+</div>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>When Each Type Is Used</h4>
+    <ul>
+      <li><strong>Laser</strong> — Office printing; high volume; fast; sharp text and graphics</li>
+      <li><strong>Inkjet</strong> — Photos; color documents; home/small office; lower volume</li>
+      <li><strong>Thermal (direct)</strong> — Receipts, shipping labels, tickets; no supplies except paper</li>
+      <li><strong>Thermal (transfer)</strong> — Durable barcode labels; wax or resin ribbon needed</li>
+      <li><strong>Impact (dot matrix)</strong> — Multipart forms; invoices; environments requiring carbon copies</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Key Consumables by Type</h4>
+    <ul>
+      <li><strong>Laser</strong> — Toner cartridge, drum unit, fuser, transfer belt/roller</li>
+      <li><strong>Inkjet</strong> — Ink cartridges (cyan, magenta, yellow, black), printhead</li>
+      <li><strong>Thermal direct</strong> — Thermal paper only (no ink or toner)</li>
+      <li><strong>Thermal transfer</strong> — Thermal ribbon + thermal transfer paper/labels</li>
+      <li><strong>Impact</strong> — Ink ribbon, paper (plain or multipart NCR forms)</li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- ═══ LASER PRINTERS ═══ -->
+<h2 class="chapter"><span class="ch-num">SECTION 1</span>Laser Printers</h2>
+
+<div class="printer-banner pb-laser">
+  <div class="pb-icon">🖨️</div>
+  <div class="pb-body">
+    <div class="pb-label">Printer Type 1</div>
+    <div class="pb-title">Laser Printer</div>
+    <div class="pb-desc">Electrophotographic process · Dry toner · Fuser heat bonding · High-volume office standard</div>
+  </div>
+</div>
+
+<p>A laser printer uses an <span class="key-term">electrophotographic (EP) process</span> to create images. Unlike inkjet printers that deposit wet ink, laser printers use fine dry powder — called <span class="key-term">toner</span> — that is attracted to electrostatically charged areas of a photosensitive drum and then permanently fused to the paper using heat and pressure. This produces sharp, smear-proof output at high speeds.</p>
+
+<p>Understanding the laser printing process in order is critical for the A+ exam — many troubleshooting questions require knowing which stage a symptom implicates. The imaging process follows seven distinct stages, and a failure at any stage produces a characteristic, diagnosable symptom.</p>
+
+<h3 class="section">The Laser Printing Process — 7 Stages</h3>
+
+<div class="laser-stages">
+  <div class="ls-stage ls-1">
+    <span class="ls-num">01</span>
+    <span class="ls-icon">⚡</span>
+    <span class="ls-name">Processing</span>
+  </div>
+  <div class="ls-stage ls-2">
+    <span class="ls-num">02</span>
+    <span class="ls-icon">🔋</span>
+    <span class="ls-name">Charging</span>
+  </div>
+  <div class="ls-stage ls-3">
+    <span class="ls-num">03</span>
+    <span class="ls-icon">💡</span>
+    <span class="ls-name">Exposing</span>
+  </div>
+  <div class="ls-stage ls-4">
+    <span class="ls-num">04</span>
+    <span class="ls-icon">🖤</span>
+    <span class="ls-name">Developing</span>
+  </div>
+  <div class="ls-stage ls-5">
+    <span class="ls-num">05</span>
+    <span class="ls-icon">📄</span>
+    <span class="ls-name">Transferring</span>
+  </div>
+  <div class="ls-stage ls-6">
+    <span class="ls-num">06</span>
+    <span class="ls-icon">🔥</span>
+    <span class="ls-name">Fusing</span>
+  </div>
+  <div class="ls-stage ls-7">
+    <span class="ls-num">07</span>
+    <span class="ls-icon">🧹</span>
+    <span class="ls-name">Cleaning</span>
+  </div>
+</div>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">1. Processing</span>
+    <span>The printer's controller board receives the print job from the computer and converts it into a full-page bitmap raster image using the <strong>Page Description Language (PDL)</strong> — typically PostScript or PCL. This rasterized image describes exactly where each dot of toner must land on the page. Until this step is complete, no physical printing can begin.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">2. Charging</span>
+    <span>The <strong>primary charge roller (PCR)</strong> (or older high-voltage corona wire) applies a uniform high-voltage negative charge (typically –600 to –1,000 volts DC) to the entire surface of the <strong>photosensitive drum</strong>. This charge is uniform — the whole drum surface is at the same voltage, ready to be selectively discharged by the laser. A defective PCR causes uneven background shading or vertical lines on prints.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">3. Exposing</span>
+    <span>A precisely controlled <strong>laser beam</strong> (steered by a rotating polygon mirror) scans across the charged drum surface line by line. Wherever the laser hits the drum, it <strong>discharges</strong> that area — reducing the charge from –600V to approximately –100V. This creates an invisible electrostatic latent image matching the page bitmap. The laser never physically contacts the drum; it writes the image through light. A failed laser unit results in completely blank pages.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">4. Developing</span>
+    <span>The <strong>developer roller</strong> (magnetized) carries toner particles from the toner hopper past the drum surface. Toner carries a slight negative charge. The discharged (lower-voltage) areas of the drum attract toner; the still-highly-charged areas repel it. Toner adheres only to the areas written by the laser, making the invisible electrostatic image visible. Low toner causes faded, light prints. A dirty developer roller causes uneven toner application.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">5. Transferring</span>
+    <span>Paper is picked from the tray and fed toward the drum. The <strong>transfer roller</strong> (or transfer corona wire in older designs) applies a high positive charge to the back of the paper as it passes between the paper and drum. This positive charge pulls the negatively-charged toner off the drum surface and onto the paper. The toner is now on the paper but is only loosely held by electrostatic attraction — it can be brushed off easily at this stage. A dirty or worn transfer roller causes streaks, missing sections, or toner that doesn't adhere.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">6. Fusing</span>
+    <span>The paper passes between the <strong>fuser assembly</strong> — a hot roller (heated to approximately 180–200°C / 356–392°F) and a pressure roller. The heat melts the toner particles; the pressure bonds them permanently into the paper fibers. After fusing, the toner is permanent and cannot be wiped off. This is why laser-printed pages come out warm to the touch. A worn or cold fuser causes toner smearing (toner wipes off the page), which is a primary fuser failure symptom.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">7. Cleaning</span>
+    <span>After transfer, residual toner remains on the drum surface (not all toner transfers cleanly). A <strong>cleaning blade</strong> (a rubber blade pressing against the drum) scrapes the residual toner off into a waste toner reservoir. The drum is now clean and ready for the next page's charging cycle. A dirty or worn cleaning blade causes <strong>ghost images</strong> (faint repeat of previous page content appearing later on the page) — a classic exam symptom.</span>
+  </div>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus — The EP Process</p>
+  <p>Memorize the stages in order: <strong>Processing → Charging → Exposing → Developing → Transferring → Fusing → Cleaning.</strong> A common mnemonic: <em>"Please Charge Everyone During The First Class."</em> Know which stage each symptom implicates: <strong>ghosting → cleaning blade or drum.</strong> <strong>Toner smears → fuser.</strong> <strong>Blank page → laser/exposing or toner empty.</strong> <strong>Vertical white lines → dirty developer or clogged toner.</strong> <strong>Vertical black lines → dirty or scratched drum.</strong></p>
+</div>
+
+<h3 class="section">Laser Printer Components</h3>
+
+<div class="arch-diagram">
+  <div class="arch-diagram-header">Key Laser Printer Components</div>
+  <div class="arch-body">
+    <div class="def-list" style="margin:0;">
+      <div class="def-item">
+        <span class="def-term">Photosensitive Drum</span>
+        <span>A cylinder coated with a light-sensitive organic compound. Holds the electrostatic latent image during the EP process. Typically housed inside the toner cartridge. Scratches or physical damage cause consistent dark vertical lines on every page. Must never be exposed to bright light for extended periods — light destroys the charge on the drum coating.</span>
+      </div>
+      <div class="def-item">
+        <span class="def-term">Toner Cartridge</span>
+        <span>Contains the toner powder, developer roller, primary charge roller, and often the drum unit in an integrated all-in-one design. When toner runs low, prints become faded or streaky. Shaking the cartridge gently can temporarily redistribute remaining toner and extend usable life slightly — useful in a pinch but not a permanent solution.</span>
+      </div>
+      <div class="def-item">
+        <span class="def-term">Fuser Assembly</span>
+        <span>Contains the fuser roller (heat element), pressure roller, thermistor (temperature sensor), and thermoprotector (safety cutoff). The fuser is a consumable — it wears out and must be replaced as part of a maintenance kit. A fuser that runs too cool produces smearing; one that runs too hot can damage paper or cause jams. Most printers display a fuser error code when the thermistor detects a temperature outside its operating range.</span>
+      </div>
+      <div class="def-item">
+        <span class="def-term">Transfer Roller/Belt</span>
+        <span>Applies the positive charge that pulls toner from drum to paper. In color laser printers, a <strong>transfer belt</strong> (intermediate transfer belt, or ITB) first collects all four color toner layers (CMYK) in registration before transferring the complete color image to paper in one pass — preventing misregistration. Worn transfer components cause streaks, incomplete transfers, or color misregistration.</span>
+      </div>
+      <div class="def-item">
+        <span class="def-term">Paper Feed Assembly</span>
+        <span>Includes pickup rollers, separation pads, and registration rollers. The <strong>pickup roller</strong> contacts the top sheet of the paper stack and moves it into the printer. The <strong>separation pad</strong> or roller prevents multiple sheets from feeding at once (multi-feed). The <strong>registration roller</strong> holds the paper momentarily to ensure it enters the imaging area at precisely the right time for proper vertical alignment.</span>
+      </div>
+      <div class="def-item">
+        <span class="def-term">High-Voltage Power Supply</span>
+        <span>Generates the high-voltage AC and DC potentials required by the charging and transfer assemblies. Failure causes print quality issues across multiple stages simultaneously, since both the PCR charging voltage and transfer voltage are affected. Distinguished from low-voltage power supply issues (which affect motors and logic) by the specific pattern of print defects.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3 class="section">Laser Printer Maintenance</h3>
+
+<p>Laser printer maintenance follows a structured approach tied to page count milestones. Most enterprise laser printers track total pages printed (the <span class="key-term">page count</span> or <span class="key-term">page counter</span>) and use this value to alert technicians when scheduled maintenance is due. Proactive maintenance prevents failures during business-critical periods and extends printer lifespan significantly.</p>
+
+<div class="process-flow">
+  <div class="flow-title">Replacing the Toner Cartridge — Step-by-Step Procedure</div>
+  <div class="flow-step">
+    <div class="flow-num">01</div>
+    <div class="flow-text"><strong>Power consideration.</strong> For toner replacement, the printer does not need to be powered off — most printers have a "replace toner" mode with the printer on. However, be aware the fuser assembly may be hot. Do not touch fuser components during cartridge replacement.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">02</div>
+    <div class="flow-text"><strong>Open the front or top access panel.</strong> Locate and open the cartridge access door. The mechanism varies by printer model — refer to the printer's documentation for the correct access panel location and locking mechanism.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">03</div>
+    <div class="flow-text"><strong>Remove the old cartridge.</strong> Grasp the cartridge handle and slide or lift it out per the printer's removal path. Do not expose the drum (green or blue cylinder) to direct light for more than a few seconds — the photosensitive coating degrades with prolonged light exposure.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">04</div>
+    <div class="flow-text"><strong>Unpack and prepare the new cartridge.</strong> Remove the cartridge from its packaging and gently shake it side-to-side (not front-to-back) 5–6 times to evenly distribute the toner powder that may have settled during shipping. Pull the sealing tape/strip if present — some cartridges have a pull-tab that seals the toner supply during shipping.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">05</div>
+    <div class="flow-text"><strong>Install the new cartridge.</strong> Insert the cartridge into its slot, aligning guides with the printer's tracks. Slide or click it firmly into its installed position. An improperly seated cartridge will trigger an error code or produce print defects immediately.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">06</div>
+    <div class="flow-text"><strong>Close the access panel and print a test page.</strong> Confirm the printer clears its "replace toner" message and prints a clean test page. Check for even density across the full page width. Reset the toner page counter in the printer's administration menu if required.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">07</div>
+    <div class="flow-text"><strong>Dispose of the old cartridge properly.</strong> Empty toner cartridges contain residual toner powder and are not regular trash. Most manufacturers offer free cartridge return/recycling programs. Do not attempt to refill cartridges with loose toner unless you are in a controlled environment — toner is a fine particulate that is a respiratory hazard if inhaled.</div>
+  </div>
+</div>
+
+<h3 class="section">Maintenance Kit</h3>
+
+<p>A <span class="key-term">laser printer maintenance kit</span> contains all the high-wear components that should be replaced together at a scheduled page count interval (typically every 100,000–200,000 pages). The kit approach ensures that components at the end of their service life are replaced before they fail and cause paper jams, print defects, or damage to other printer components.</p>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>Typical Maintenance Kit Contents</h4>
+    <ul>
+      <li><strong>Fuser assembly</strong> — most expensive and critical; primary heat/pressure bonding component</li>
+      <li><strong>Transfer roller</strong> — applies charge to pull toner to paper; wears with page count</li>
+      <li><strong>Pickup rollers</strong> — rubber rollers that degrade and harden over time, causing feed failures</li>
+      <li><strong>Separation pad/roller</strong> — prevents multi-feed; wear causes double-sheet picks</li>
+      <li><strong>Registration rollers</strong> — align paper timing into imaging area</li>
+      <li><strong>Installation instructions</strong> — always read before starting; varies significantly by model</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Maintenance Kit — Procedure</h4>
+    <ul>
+      <li><strong>Power off and unplug</strong> — fuser assembly retains dangerous heat for 30+ minutes after shutdown; allow adequate cool-down time</li>
+      <li><strong>Replace fuser first</strong> — largest component; requires most clearance space</li>
+      <li><strong>Replace rollers</strong> — note orientation and seating direction; rollers can be installed backward</li>
+      <li><strong>Reset page counter</strong> — after kit installation, reset the maintenance page counter in printer admin menu or NVRAM; printer will not stop alarming otherwise</li>
+      <li><strong>Print test pages</strong> — verify all components installed correctly before returning to service</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout callout-warn">
+  <p class="callout-title">Fuser Safety — Heat Hazard</p>
+  <p>The fuser assembly operates at temperatures of approximately 180–200°C (356–392°F) during printing and retains significant heat after the printer is powered off. Always allow at least 30 minutes after powering down before touching the fuser assembly during a maintenance kit installation. Burns from a hot fuser are severe. Most maintenance kit instructions specify a cool-down warning prominently — do not ignore it.</p>
+</div>
+
+<h3 class="section">Calibration</h3>
+
+<p>Laser printer <span class="key-term">calibration</span> adjusts the printer's output to ensure accurate color reproduction, correct density levels, and proper alignment between the printed image and the paper. Calibration is performed after replacing consumables, when print quality degrades, or on a scheduled maintenance cycle.</p>
+
+<ul class="body-list">
+  <li><strong>Color calibration:</strong> Adjusts the relative density of each CMYK toner to ensure neutral grays are truly neutral and colors match expected values. Most color laser printers have a built-in color calibration routine accessible through the printer's control panel or web interface that prints test patterns and uses internal sensors to automatically adjust toner density</li>
+  <li><strong>Print density calibration:</strong> Sets the overall darkness/lightness of toner application. Too light = faded output; too dark = filled-in fine details and wasted toner. Accessed through printer driver settings or the printer's local control panel</li>
+  <li><strong>Color registration (alignment):</strong> In color printers, each CMYK color is applied in a separate pass on the transfer belt before combining. Misregistration causes a colored fringe or "shadow" around text and objects. The printer's registration calibration routine prints alignment patterns and adjusts the timing offsets for each color plane to align them precisely</li>
+  <li><strong>When to calibrate:</strong> After toner cartridge replacement, after any maintenance kit installation, if color accuracy problems appear, after moving the printer, or on the scheduled maintenance interval defined by the manufacturer</li>
+</ul>
+
+<h3 class="section">Cleaning a Laser Printer</h3>
+
+<p>Toner dust accumulates inside a laser printer during normal operation — some toner misses the drum, spills during transfer, or escapes from the waste toner container. Accumulated toner contaminates rollers, sensors, and optical components, causing print quality degradation and mechanical failures over time.</p>
+
+<div class="maint-list">
+  <div class="maint-item">
+    <div class="maint-check">✓</div>
+    <div class="maint-body">
+      <strong>Use compressed air cautiously</strong>
+      <span>Compressed air can dislodge accumulated toner but will also spread it throughout the printer if not directed carefully. Use very short bursts in a well-ventilated area or outdoors, never indoors near people. Better alternatives exist for toner — see below.</span>
+    </div>
+  </div>
+  <div class="maint-item">
+    <div class="maint-check">✓</div>
+    <div class="maint-body">
+      <strong>Use a toner-rated vacuum</strong>
+      <span>Standard vacuums cannot filter toner particles — they pass through and are exhausted back into the air. Use a dedicated <strong>ESD-safe toner vacuum</strong> with HEPA-equivalent filtration designed specifically for laser printer service. This is the safest and most effective method for removing loose toner from the interior.</span>
+    </div>
+  </div>
+  <div class="maint-item">
+    <div class="maint-check">✓</div>
+    <div class="maint-body">
+      <strong>Clean the paper path with a damp lint-free cloth</strong>
+      <span>Wipe down accessible rollers, guides, and the registration area with a lint-free cloth lightly dampened with water or isopropyl alcohol. Dirty pickup rollers and paper guides are a leading cause of paper jams and multi-feeds. Ensure the surfaces are fully dry before printing.</span>
+    </div>
+  </div>
+  <div class="maint-item">
+    <div class="maint-check">✓</div>
+    <div class="maint-body">
+      <strong>Clean the corona wire (if present)</strong>
+      <span>Older laser printers with a corona wire rather than a PCR include a small cleaning tool stored in the printer. Slide this tool back and forth along the wire to remove toner and dust buildup. A dirty corona wire causes uneven charging, which appears as background shading across the entire page.</span>
+    </div>
+  </div>
+  <div class="maint-item">
+    <div class="maint-check">✓</div>
+    <div class="maint-body">
+      <strong>Clean the fuser entrance guide</strong>
+      <span>Paper dust, toner, and debris accumulate on the guide plate that feeds paper into the fuser. Accumulated debris can cause paper jams at the fuser entrance or deposit contamination on the fuser roller, leading to periodic spots or streaks on output.</span>
+    </div>
+  </div>
+  <div class="maint-item">
+    <div class="maint-check">✓</div>
+    <div class="maint-body">
+      <strong>Never use regular household cleaners</strong>
+      <span>Ammonia-based cleaners, oil-based products, and abrasive cleaners damage printer plastics, rubber rollers, and drum surfaces. Use only water, isopropyl alcohol (IPA), or cleaning products specifically rated for laser printer service.</span>
+    </div>
+  </div>
+</div>
+
+<h3 class="section">Laser Printer Symptom Troubleshooting</h3>
+
+<div class="arch-diagram">
+  <div class="arch-diagram-header">Symptom → Stage → Fix Reference</div>
+  <div class="arch-body">
+    <div class="symptom-head">
+      <span>Symptom</span><span>Likely Cause / Stage</span><span>Fix</span>
+    </div>
+    <div class="symptom-row">
+      <span class="sr-symptom">Toner smears when rubbed</span>
+      <span class="sr-cause">Fuser assembly (Fusing stage) — not bonding toner to paper</span>
+      <span class="sr-fix">Replace fuser; check fuser temperature settings</span>
+    </div>
+    <div class="symptom-row">
+      <span class="sr-symptom">Ghost images (faint repeat of previous page)</span>
+      <span class="sr-cause">Worn cleaning blade (Cleaning stage) or weak drum charge</span>
+      <span class="sr-fix">Replace toner/drum cartridge; replace cleaning assembly</span>
+    </div>
+    <div class="symptom-row">
+      <span class="sr-symptom">Blank pages (no output)</span>
+      <span class="sr-cause">Empty toner; failed laser; missing sealing tape on new cartridge</span>
+      <span class="sr-fix">Replace toner cartridge; verify sealing tape removed</span>
+    </div>
+    <div class="symptom-row">
+      <span class="sr-symptom">Vertical white streaks</span>
+      <span class="sr-cause">Low toner; clogged developer slot; damaged drum</span>
+      <span class="sr-fix">Shake/replace toner; replace drum cartridge</span>
+    </div>
+    <div class="symptom-row">
+      <span class="sr-symptom">Vertical black lines</span>
+      <span class="sr-cause">Scratch on drum surface; dirty charging roller</span>
+      <span class="sr-fix">Replace toner/drum cartridge</span>
+    </div>
+    <div class="symptom-row">
+      <span class="sr-symptom">Background toner (gray speckles)</span>
+      <span class="sr-cause">Dirty corona/PCR (Charging stage); old drum</span>
+      <span class="sr-fix">Clean corona wire; replace cartridge</span>
+    </div>
+    <div class="symptom-row">
+      <span class="sr-symptom">Color misregistration (color fringe on text)</span>
+      <span class="sr-cause">Transfer belt alignment; needs color registration calibration</span>
+      <span class="sr-fix">Run printer's color registration calibration routine</span>
+    </div>
+    <div class="symptom-row">
+      <span class="sr-symptom">Paper jams at same location repeatedly</span>
+      <span class="sr-cause">Worn pickup/feed roller; debris in paper path</span>
+      <span class="sr-fix">Replace rollers (maintenance kit); clear debris; clean paper path</span>
+    </div>
+    <div class="symptom-row">
+      <span class="sr-symptom">Multiple sheets feed at once</span>
+      <span class="sr-cause">Worn separation pad/roller; incorrect paper type; static</span>
+      <span class="sr-fix">Replace separation pad; fan paper before loading; check paper type</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ INKJET PRINTERS ═══ -->
+<h2 class="chapter"><span class="ch-num">SECTION 2</span>Inkjet Printers</h2>
+
+<div class="printer-banner pb-inkjet">
+  <div class="pb-icon">🖨️</div>
+  <div class="pb-body">
+    <div class="pb-label">Printer Type 2</div>
+    <div class="pb-title">Inkjet Printer</div>
+    <div class="pb-desc">Liquid ink droplet deposition · CMYK cartridges · Best photo/color quality · No heat fusing required</div>
+  </div>
+</div>
+
+<p>An inkjet printer creates images by propelling microscopic droplets of liquid ink through an array of tiny nozzles onto paper. The nozzles are extremely precise — modern inkjet printheads can produce droplets as small as 1–2 picoliters (trillionths of a liter) with drop placement accuracy measured in microns. This precision enables photographic-quality output at color resolutions exceeding 5,000 DPI in professional models.</p>
+
+<p>There are two primary inkjet firing technologies. <span class="key-term">Thermal inkjet</span> (used by HP and Canon) uses a small resistive heating element in each nozzle to rapidly vaporize a tiny amount of ink, creating a bubble that ejects a droplet. <span class="key-term">Piezoelectric inkjet</span> (used by Epson) uses a piezoelectric crystal that deforms when voltage is applied, mechanically forcing ink out of the nozzle. Piezo technology allows a wider range of ink types and more precise droplet control.</p>
+
+<h3 class="section">Inkjet Printer Components</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Ink Cartridges</span>
+    <span>Inkjet printers use liquid dye-based or pigment-based inks in separate cartridges for each color. Standard configurations use four cartridges: <strong>Cyan, Magenta, Yellow, and Black (CMYK)</strong>. Photo printers may add light cyan, light magenta, and sometimes gray cartridges for smoother gradient rendering. Dye-based inks produce vivid colors but may fade over time; pigment-based inks are more durable and water-resistant but have slightly lower gamut on glossy papers. Cartridges have a use-by date — old ink can thicken and clog nozzles even if unused.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Printhead</span>
+    <span>The printhead contains the nozzle array through which ink is fired. In some designs (HP, Canon), the printhead is integrated into the ink cartridge — replaced every time you replace a cartridge, preventing nozzle wear buildup. In other designs (Epson, Brother), the printhead is a permanent component of the printer separate from the ink cartridges. Permanent printheads offer better print quality consistency but are more vulnerable to damage from dried ink or running the printer out of ink. A clogged or damaged printhead is the most common cause of streaks, missing colors, and banding in inkjet output.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Printhead Carriage</span>
+    <span>The carriage is the movable assembly that carries the printhead across the width of the paper on a carriage rod. A <strong>carriage motor</strong> drives a belt that moves the carriage left and right. The carriage position is tracked by an <strong>encoder strip</strong> — a clear plastic strip with fine markings that an optical sensor on the carriage reads. A dirty encoder strip causes horizontal banding or mis-positioned print output. The carriage must have clear, obstruction-free travel across its full range.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Rollers</span>
+    <span>Inkjet printers use several rollers for paper handling. The <strong>feed roller</strong> (or input roller) moves paper from the tray into the print zone. The <strong>pinch rollers</strong> work with the feed roller to control paper position precisely. After printing, the <strong>star-wheel rollers</strong> above the output area advance the paper toward the exit tray without smearing freshly printed ink — the star-wheel design minimizes contact with the wet ink surface. Worn rollers cause paper slipping, misalignment, skewing, and jams.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Paper Feeder / ADF</span>
+    <span>The paper feed mechanism moves paper from the input tray into the print area with precise timing and position control. An <strong>Automatic Document Feeder (ADF)</strong>, present on all-in-one models, feeds originals through the scanner. The feeder's separator pad, pickup roller, and feed timing are critical — a feeder that slips or double-feeds causes misaligned output or paper jams. Keeping the feeder clean and using the correct paper type and weight for the tray is essential for reliable operation.</span>
+  </div>
+</div>
+
+<h3 class="section">Inkjet Printer Maintenance</h3>
+
+<div class="process-flow">
+  <div class="flow-title">Printhead Cleaning — Step-by-Step Procedure</div>
+  <div class="flow-step">
+    <div class="flow-num">01</div>
+    <div class="flow-text"><strong>Identify the problem.</strong> Before cleaning, print a <strong>nozzle check pattern</strong> (accessible through the printer driver or printer's control panel utility). This pattern prints test lines for each ink color. Missing segments, broken lines, or streaks in the nozzle check confirm clogged nozzles requiring cleaning.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">02</div>
+    <div class="flow-text"><strong>Run the automated cleaning cycle.</strong> Most inkjet printers have a built-in printhead cleaning utility accessible through the printer's software (Printer Properties → Maintenance tab in Windows, or the printer's control panel). The printer draws ink through the nozzles at higher pressure to dissolve and flush clogs. This uses a small amount of ink.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">03</div>
+    <div class="flow-text"><strong>Print another nozzle check.</strong> After the cleaning cycle completes (typically 2–3 minutes), print another nozzle check pattern. If the pattern has improved but is not fully clear, run up to two more cleaning cycles. Running excessive cycles wastes ink and can flood the printhead service station.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">04</div>
+    <div class="flow-text"><strong>Run a deep clean if regular cleaning fails.</strong> Most printers offer a "deep clean" or "power clean" option that uses more aggressive flushing. Use sparingly — it consumes significantly more ink. If three regular cleans + one deep clean don't resolve the issue, the printhead may need manual cleaning or replacement.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">05</div>
+    <div class="flow-text"><strong>Manual printhead cleaning (last resort).</strong> For severe clogs, the printhead can be removed (on printers with removable heads) and soaked in warm distilled water or printhead cleaning solution for several hours, then blotted dry on a lint-free cloth. Never use paper towels — fibers contaminate nozzles. Never rub the nozzle plate.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">06</div>
+    <div class="flow-text"><strong>Prevent future clogs.</strong> The primary cause of inkjet clogs is ink drying in the nozzles during periods of non-use. Print at least a small test page every 1–2 weeks. When not printing for extended periods, the printer's automatic maintenance cycles (capping station, periodic spit cycles) help prevent drying if the printer remains powered on.</div>
+  </div>
+</div>
+
+<h3 class="section">Replacing Ink Cartridges</h3>
+
+<p>Inkjet cartridge replacement is a routine maintenance task, but performing it correctly prevents print quality issues and premature cartridge failures.</p>
+
+<ul class="body-list">
+  <li><strong>Replace when low, not empty:</strong> Running a cartridge fully empty can draw air into the ink delivery system and damage the printhead on printers with integrated printhead cartridges. Replace when the printer's ink level monitor shows low</li>
+  <li><strong>Use OEM or quality-compatible cartridges:</strong> Third-party compatible cartridges vary significantly in quality. Poor-quality ink can clog nozzles, produce off-colors, and void printer warranties. If using compatibles, verify they are designed specifically for your printer model</li>
+  <li><strong>Do not touch the nozzle plate or electrical contacts:</strong> The gold electrical contacts on the cartridge must make clean contact with the printer's carriage contacts. Skin oils on the contacts prevent proper electrical connection, causing cartridge not-recognized errors</li>
+  <li><strong>Seal removed cartridges immediately:</strong> If removing a cartridge temporarily (e.g., to store the printer), cap the nozzle with its protective tape or a replacement cap. Exposed nozzles dry out within hours in low-humidity environments</li>
+  <li><strong>Check alignment after replacement:</strong> Print an alignment page after installing new cartridges. The printer can automatically adjust carriage timing to optimize dot placement accuracy for the new cartridge position</li>
+</ul>
+
+<h3 class="section">Calibration</h3>
+
+<p>Inkjet calibration aligns the printhead's firing timing so that ink droplets land at precisely the correct position on the paper. Misalignment causes visible banding (horizontal stripes across the print) and blurry or doubled text, particularly noticeable in bidirectional printing modes where the printhead fires in both left-to-right and right-to-left passes.</p>
+
+<ul class="body-list">
+  <li><strong>Printhead alignment:</strong> Most inkjet printer software (accessible via Printers & Scanners → Manage → Printer Properties → Maintenance) includes a printhead alignment routine. The printer prints a series of alignment patterns and you (or an optical sensor) identify the best-aligned pattern from the series</li>
+  <li><strong>Bidirectional alignment:</strong> Separately adjusts the timing offset for the return pass of the printhead, ensuring dots from left-to-right and right-to-left passes land in the same position. Bidirectional misalignment appears as horizontal lines or "shadows" on text edges</li>
+  <li><strong>Color calibration:</strong> Adjusts the relative firing rates of each color nozzle to achieve neutral gray balance and accurate color output. Performed through the printer's advanced maintenance utilities or through the driver's color management settings</li>
+  <li><strong>When to calibrate:</strong> After any cartridge replacement, after printhead cleaning, after moving the printer, or whenever output shows alignment artifacts (banding, blurry text, color fringing)</li>
+</ul>
+
+<h3 class="section">Clearing Inkjet Paper Jams</h3>
+
+<div class="callout callout-warn">
+  <p class="callout-title">Inkjet Jam Removal — Critical Rules</p>
+  <p><strong>Never pull jammed paper forward through the printer</strong> — always pull toward you in the direction the paper entered. Forcing paper forward pushes it across the printhead nozzle plate, potentially tearing pieces off or dragging abrasive paper fibers across nozzles, causing permanent damage. <strong>Remove jams slowly and evenly</strong> to prevent tearing paper, which leaves fragments in the paper path. Use both hands for even tension. <strong>Remove all torn fragments</strong> — a small paper remnant in the feed path will cause recurring jams and may become lodged near rollers or the carriage mechanism.</p>
+  </div>
+
+<div class="process-flow">
+  <div class="flow-title">Clearing an Inkjet Paper Jam</div>
+  <div class="flow-step">
+    <div class="flow-num">01</div>
+    <div class="flow-text"><strong>Power off the printer.</strong> Powering off stops the carriage motor and prevents the printer from attempting to continue feeding while you're clearing the jam. On inkjet printers, the printer powers off with the carriage in the home/capped position, protecting the nozzles.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">02</div>
+    <div class="flow-text"><strong>Open all access panels and locate the jammed paper.</strong> Check the rear access panel (most inkjets have a removable rear panel for jam access), the front tray, and the output area. Never reach blindly into the printer — locate the paper fully before attempting removal.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">03</div>
+    <div class="flow-text"><strong>Remove the paper slowly in the direction of paper travel.</strong> For paper in the output area, gently pull it out toward the front in the direction the printer would have fed it. For paper stuck in the feed area, pull it gently back out the input direction. Steady, even tension prevents tearing.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">04</div>
+    <div class="flow-text"><strong>Check for and remove all torn fragments.</strong> Illuminate the interior with a flashlight and visually inspect the full paper path for any remnants. Even small pieces cause recurring jams. Use fine-tipped tweezers for fragments near rollers — never reach near the carriage track.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">05</div>
+    <div class="flow-text"><strong>Reload paper correctly and power on.</strong> Fan the paper stack and reload it squarely in the tray within the paper guides. Do not overfill — excessive paper stack height is a common cause of jams. Power on and print a test page to confirm the jam is fully cleared.</div>
+  </div>
+</div>
+
+<h3 class="section">Inkjet Troubleshooting Quick Reference</h3>
+
+<div class="arch-diagram">
+  <div class="arch-diagram-header">Symptom → Cause → Fix</div>
+  <div class="arch-body">
+    <div class="symptom-head">
+      <span>Symptom</span><span>Likely Cause</span><span>Fix</span>
+    </div>
+    <div class="symptom-row">
+      <span class="sr-symptom">Horizontal banding (white stripes)</span>
+      <span class="sr-cause">Clogged nozzles; low ink in one color</span>
+      <span class="sr-fix">Run printhead cleaning; replace low cartridges; run alignment</span>
+    </div>
+    <div class="symptom-row">
+      <span class="sr-symptom">Missing color in output</span>
+      <span class="sr-cause">Empty or clogged color cartridge; failed nozzle section</span>
+      <span class="sr-fix">Replace cartridge; run deep cleaning cycle</span>
+    </div>
+    <div class="symptom-row">
+      <span class="sr-symptom">Blurry or doubled text</span>
+      <span class="sr-cause">Printhead alignment needed; dirty encoder strip</span>
+      <span class="sr-fix">Run printhead alignment; clean encoder strip with lint-free cloth</span>
+    </div>
+    <div class="symptom-row">
+      <span class="sr-symptom">Smeared output</span>
+      <span class="sr-cause">Wrong paper type; ink not drying; star wheel touching wet ink</span>
+      <span class="sr-fix">Use correct paper; reduce print speed; check star wheel height</span>
+    </div>
+    <div class="symptom-row">
+      <span class="sr-symptom">Paper feeds skewed</span>
+      <span class="sr-cause">Paper not loaded squarely; worn feed roller; misadjusted guides</span>
+      <span class="sr-fix">Reload paper; adjust width guides; clean/replace feed roller</span>
+    </div>
+    <div class="symptom-row">
+      <span class="sr-symptom">Cartridge not recognized</span>
+      <span class="sr-cause">Dirty electrical contacts; wrong cartridge model; defective cartridge</span>
+      <span class="sr-fix">Clean cartridge contacts with IPA and lint-free cloth; verify cartridge compatibility</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ THERMAL PRINTERS ═══ -->
+<h2 class="chapter"><span class="ch-num">SECTION 3</span>Thermal Printers</h2>
+
+<div class="printer-banner pb-thermal">
+  <div class="pb-icon">🧾</div>
+  <div class="pb-body">
+    <div class="pb-label">Printer Type 3</div>
+    <div class="pb-title">Thermal Printer</div>
+    <div class="pb-desc">Heat-activated imaging · No ink or toner · Special coated paper · POS receipts, labels, shipping</div>
+  </div>
+</div>
+
+<p>Thermal printers create images using heat rather than ink or toner. A <span class="key-term">thermal print head</span> — a bar containing dozens to hundreds of tiny resistive heating elements — applies precisely controlled heat to special thermally-sensitive media. There are two distinct thermal printing technologies:</p>
+
+<div class="compare-grid">
+  <div class="compare-col">
+    <div class="compare-head ch-c">Direct Thermal</div>
+    <div class="compare-body">
+      <div class="compare-row"><span class="cr-icon">🌡️</span><div><strong>How it works:</strong> Heats directly on chemically-coated thermal paper; dark areas appear where heat is applied</div></div>
+      <div class="compare-row"><span class="cr-icon">📄</span><div><strong>Paper:</strong> Requires special thermal paper with heat-reactive coating; plain paper does NOT work</div></div>
+      <div class="compare-row"><span class="cr-icon">🛒</span><div><strong>Uses:</strong> POS receipts, ATM receipts, parking tickets, shipping labels (short-term use)</div></div>
+      <div class="compare-row"><span class="cr-icon">⚠️</span><div><strong>Limitation:</strong> Images fade over time; heat/light sensitive; not for archival use</div></div>
+      <div class="compare-row"><span class="cr-icon">✅</span><div><strong>Advantage:</strong> No ribbon or ink needed — only paper; lowest operating cost; simple mechanism</div></div>
+    </div>
+  </div>
+  <div class="compare-col">
+    <div class="compare-head ch-d">Thermal Transfer</div>
+    <div class="compare-body">
+      <div class="compare-row"><span class="cr-icon">🌡️</span><div><strong>How it works:</strong> Heat melts wax or resin from a ribbon onto the label/paper substrate</div></div>
+      <div class="compare-row"><span class="cr-icon">📄</span><div><strong>Paper:</strong> Thermal transfer labels/paper + ink ribbon required; more substrate options available</div></div>
+      <div class="compare-row"><span class="cr-icon">📦</span><div><strong>Uses:</strong> Durable barcode labels, asset tags, outdoor labels, product labels</div></div>
+      <div class="compare-row"><span class="cr-icon">✅</span><div><strong>Advantage:</strong> Much more durable output; resists heat, light, and moisture; archival-quality</div></div>
+      <div class="compare-row"><span class="cr-icon">💰</span><div><strong>Cost:</strong> Requires ribbon replacement in addition to label stock</div></div>
+    </div>
+  </div>
+</div>
+
+<h3 class="section">Thermal Printer Components</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Thermal Print Head</span>
+    <span>A bar containing a dense linear array of resistive heating elements (typically 200–300 dots per inch across the print width). Individual elements are selectively activated to form characters and graphics row by row as paper advances beneath the head. The print head makes direct contact with the paper surface. This contact causes gradual abrasive wear — the thermal head is a consumable component with a defined page-life rating. Thermal head damage or contamination produces white vertical streaks in output (dead heating elements appear as white lines).</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Feed Assembly (Platen Roller)</span>
+    <span>The <strong>platen roller</strong> is a rubber roller positioned directly beneath the thermal print head. It serves two functions: advancing the paper (or label stock) at a precisely controlled rate, and pressing the paper firmly against the thermal head to ensure consistent thermal contact across the full width. Inconsistent pressure causes uneven print density (lighter on one side). The platen roller also accumulates adhesive residue from label backing, paper coatings, and dust — a primary source of print quality degradation requiring regular cleaning.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Special Thermal Paper</span>
+    <span>Direct thermal paper has a chemically-treated coating — typically a mixture of leuco dye and developer compound — that reacts to heat above a threshold temperature (typically 60–70°C) by producing a dark color. <strong>Critical properties:</strong> Thermal paper is heat, light, and chemical sensitive. Exposing thermal paper to sunlight, heat sources, or certain hand lotions causes the background to darken or the image to fade prematurely. Always store thermal paper in a cool, dark environment. Loading the paper backward (shiny/coated side should face the print head) produces blank output — a common field mistake.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Label Sensor</span>
+    <span>Label printers use optical or reflective sensors to detect label gaps (the spaces between labels on backing material) or black mark registration lines on continuous label stock. The sensor tells the printer where one label ends and the next begins, ensuring content is printed at the correct position on each label. A contaminated sensor or incorrect sensor calibration for the media type causes labels to print in the wrong position or feed through blank.</span>
+  </div>
+</div>
+
+<h3 class="section">Thermal Printer Maintenance</h3>
+
+<div class="process-flow">
+  <div class="flow-title">Complete Thermal Printer Maintenance Procedure</div>
+  <div class="flow-step">
+    <div class="flow-num">01</div>
+    <div class="flow-text"><strong>Power off and open the media compartment.</strong> Allow the printer to cool for a few minutes if it has been running — the thermal head retains heat after use. Open the paper/label loading cover to access the print head and platen roller.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">02</div>
+    <div class="flow-text"><strong>Remove media (paper or labels).</strong> Remove the paper roll or label stock from the printer. This provides clear access to the print head, platen roller, and paper path for cleaning. Inspect the media for any tears or adhesive residue that may have accumulated on the platen.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">03</div>
+    <div class="flow-text"><strong>Clean the thermal print head.</strong> Using a pre-saturated <strong>IPA (isopropyl alcohol) thermal head cleaning pen or swab</strong> (99% IPA — not standard rubbing alcohol which contains water and oils), gently wipe along the full length of the print head element row. The head surface will appear as a dark strip. Remove any adhesive residue, paper dust, or coating buildup. Never use metal tools or abrasives near the head surface — the heating elements are extremely fragile.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">04</div>
+    <div class="flow-text"><strong>Clean the platen roller.</strong> While rotating the platen roller by hand (on printers where this is accessible), wipe the entire rubber surface with an IPA swab. Label printers accumulate adhesive residue on the platen that eventually causes label skew, inconsistent feed, and print head pressure variation. This is the most critical cleaning step for label printers.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">05</div>
+    <div class="flow-text"><strong>Clean the paper path and sensors.</strong> Use compressed air or a dry lint-free cloth to clear paper dust and debris from the paper path guides and the media sensor area. A dirty media sensor cannot correctly detect label gaps, causing misfeeds or printing on label backing.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">06</div>
+    <div class="flow-text"><strong>Allow to dry completely before reloading media.</strong> Allow IPA to fully evaporate (30–60 seconds) before reloading paper or labels. Residual alcohol on the thermal head can cause initial print quality variation on the first few prints after cleaning.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">07</div>
+    <div class="flow-text"><strong>Reload media correctly and calibrate.</strong> Reload paper or label stock with the coated/shiny side facing the print head. For label printers, perform a label calibration (feed/gap calibration) after reloading to re-establish label gap detection — consult the printer's manual for the specific button sequence to trigger calibration on your model.</div>
+  </div>
+</div>
+
+<div class="callout callout-warn">
+  <p class="callout-title">Thermal Paper — Loaded Backward</p>
+  <p>One of the most common thermal printer service calls is "the printer is printing blank receipts." The cause is almost always thermal paper loaded backward — the uncoated side is facing the print head. Direct thermal paper only reacts on the coated side. Verify which side is coated by scratching the paper surface with a fingernail — the coated side darkens with friction heat. That side must face the print head. After correcting, always test print before dismissing the call.</p>
+</div>
+
+<h3 class="section">Replacing Thermal Paper</h3>
+
+<ul class="body-list">
+  <li><strong>Verify paper type compatibility:</strong> Different thermal printers require specific paper widths, core sizes, and thermal sensitivity ratings. Using incorrect media produces faded output, jams, or sensor errors. Always match the paper specification in the printer's documentation</li>
+  <li><strong>Identify the correct face:</strong> Load thermal paper with the coated (reactive) side facing the print head — typically the inside of the roll for receipt printers. Confirm by the scratch test before loading</li>
+  <li><strong>Do not touch the paper surface:</strong> Fingerprints on thermal paper from skin oils and heat can cause dark marks on output. Handle paper at the edges or with clean gloves when loading into the printer</li>
+  <li><strong>Watch for "end of roll" warning:</strong> Many thermal paper rolls include a colored stripe (usually pink or red) near the end of the roll as a visual indicator that the roll is almost exhausted. Replace before the roll runs out completely to avoid mid-print failures</li>
+  <li><strong>Storage:</strong> Store thermal paper rolls away from heat sources, direct sunlight, and chemicals. Heat exposure before use can pre-activate the coating, causing general background darkening</li>
+</ul>
+
+<h3 class="section">Thermal Printer Symptom Troubleshooting</h3>
+
+<table class="data-table">
+  <thead><tr><th>Symptom</th><th>Likely Cause</th><th>Fix</th></tr></thead>
+  <tbody>
+    <tr><td>Blank output</td><td>Paper loaded backward (wrong side up); empty media</td><td>Reload paper coated-side toward head; replace roll</td></tr>
+    <tr><td>White vertical streaks</td><td>Contaminated or failed thermal head elements</td><td>Clean thermal head with IPA; if persistent, replace head</td></tr>
+    <tr><td>Faded output overall</td><td>Low print density setting; old/incorrect thermal paper; dirty head</td><td>Increase density setting; use correct paper; clean head</td></tr>
+    <tr><td>Labels printing off-center</td><td>Media sensor needs calibration; incorrect label type setting</td><td>Run label calibration (gap/feed calibration)</td></tr>
+    <tr><td>Paper feed skewing</td><td>Dirty or worn platen roller; adhesive buildup</td><td>Clean platen roller thoroughly with IPA</td></tr>
+    <tr><td>Printer stops mid-print</td><td>End of roll; paper jam; overheated print head (thermal protection triggered)</td><td>Replace roll; clear jam; allow printer to cool down</td></tr>
+    <tr><td>Output fades quickly after printing</td><td>Wrong thermal paper (too low sensitivity); stored improperly</td><td>Use correct thermal paper grade; store properly</td></tr>
+  </tbody>
+</table>
+
+
+<!-- ═══ IMPACT PRINTERS ═══ -->
+<h2 class="chapter"><span class="ch-num">SECTION 4</span>Impact Printers</h2>
+
+<div class="printer-banner pb-impact">
+  <div class="pb-icon">⌨️</div>
+  <div class="pb-body">
+    <div class="pb-label">Printer Type 4</div>
+    <div class="pb-title">Impact Printer (Dot Matrix)</div>
+    <div class="pb-desc">Physical pin strike · Ink ribbon · Multipart forms · NCR paper · Loud but durable</div>
+  </div>
+</div>
+
+<p>An impact printer creates images by physically striking a <span class="key-term">printhead</span> — containing an array of metal pins — against an inked ribbon, which transfers ink to the paper. The most common form is the <span class="key-term">dot matrix printer</span>, which uses 9 or 24 pins arranged in a vertical column. The 24-pin design produces near-letter-quality (NLQ) output by placing more dots per inch with finer pins.</p>
+
+<p>Impact printers are loud, slow, and produce lower resolution output than laser or inkjet printers — but they have one irreplaceable capability: <span class="key-term">multipart form printing</span>. Because the printhead physically strikes the paper, it can simultaneously print through multiple layers of paper at once (carbon or NCR paper), producing identical copies of the same document. This is essential for legal forms, shipping manifests, pharmacy prescriptions, and restaurant orders — any environment requiring simultaneous self-replicating paper copies. No other printer technology can produce true simultaneous multipart copies.</p>
+
+<h3 class="section">Impact Printer Components</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Printhead (Pin Matrix)</span>
+    <span>The printhead contains a vertical column of 9 or 24 small metal pins. Each pin is driven by a tiny solenoid electromagnet — when the solenoid fires, the pin is rapidly projected forward against the ribbon and paper, then retracted by a return spring. The 24-pin head fires pairs of pins in two interleaved passes to achieve finer dot density and smoother character appearance. The printhead slides on a carriage rail across the paper width, activating pins in precise patterns row by row to form characters and graphics. Printheads wear out over millions of character operations — bent or broken pins produce missing dot patterns in output.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Ink Ribbon</span>
+    <span>The ink ribbon is a fabric tape (typically nylon) saturated with ink, stretched across the paper path between the printhead and the paper. As pins strike the ribbon, they transfer ink from the ribbon fabric onto the paper. The ribbon moves incrementally (typically in one direction, then reverses) to continuously present fresh ink-saturated sections to the printhead strike zone. Ribbons are housed in a cartridge for easy replacement. An old, dry ribbon produces progressively lighter output — the ribbon must be replaced when prints become consistently faded rather than waiting for output to become unreadable.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Platen</span>
+    <span>The platen is a rubber cylinder or flat surface positioned behind the paper, against which the printhead pins strike. The platen absorbs the impact energy and provides a firm backing surface for consistent impression. The platen also sets the critical <span class="key-term">head gap</span> — the distance between the printhead and the paper surface. The head gap must be adjusted when switching paper thickness (e.g., from single-part paper to 3-part or 4-part multipart forms). Incorrect head gap settings cause light printing (gap too wide) or printhead damage and paper tears (gap too narrow).</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Paper Feed Mechanism</span>
+    <span>Impact printers use two paper feeding methods. <strong>Friction feed</strong> uses rollers to grip cut sheets or single pages, similar to other printer types. <strong>Tractor feed</strong> (sprocket feed) uses rotating sprocket wheels that engage perforations along both edges of continuous-form paper, providing precise, consistent advancement of long paper rolls — essential for multipart forms and computer-generated report runs. Most impact printers support both methods, with tractor feed being preferred for multipart forms.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Multipart Paper / NCR Paper</span>
+    <span><strong>NCR (No Carbon Required)</strong> paper uses a chemical system: the back of the top sheet is coated with micro-encapsulated dye; the front of each copy sheet below is coated with a developer chemical. When pressure from the printhead pin strike breaks the microcapsules, the dye reacts with the developer on the copy below, creating an identical mark without actual carbon paper. Multipart forms typically come in 2, 3, or 4-part configurations. <strong>Head gap adjustment is critical</strong> — thicker stacks require a wider gap setting. Using the wrong gap damages the printhead on forms with too many layers.</span>
+  </div>
+</div>
+
+<h3 class="section">Impact Printer Maintenance</h3>
+
+<h3 class="section" style="margin-top:24px;">Replacing the Ribbon</h3>
+
+<p>The ink ribbon is the primary consumable in an impact printer. Unlike laser toner or inkjet cartridges, ribbon depletion is gradual — print fades slowly over millions of character strikes rather than displaying a sudden "low ink" warning. Replace the ribbon when output consistently appears lighter than normal and the ribbon is confirmed to be properly seated.</p>
+
+<div class="process-flow">
+  <div class="flow-title">Ribbon Replacement Procedure</div>
+  <div class="flow-step">
+    <div class="flow-num">01</div>
+    <div class="flow-text"><strong>Power off the printer.</strong> Do not attempt ribbon replacement with the printer powered on — the carriage can move unexpectedly, pinching fingers. Allow the printhead to cool if the printer has been in heavy use (the printhead generates heat during operation).</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">02</div>
+    <div class="flow-text"><strong>Open the top cover and locate the ribbon cartridge.</strong> The ribbon cartridge sits directly in front of the printhead carriage. Note the routing of the ribbon through the printhead guide before removing — some cartridges require threading the ribbon through a narrow slot between the printhead and the platen.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">03</div>
+    <div class="flow-text"><strong>Remove the old ribbon cartridge.</strong> Lift the cartridge out of its retaining clips. Move the carriage to the center position (some printers require manual carriage movement when powered off) to gain better access. Avoid touching the ribbon fabric — ink stains are difficult to remove.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">04</div>
+    <div class="flow-text"><strong>Install the new ribbon cartridge.</strong> Insert the new cartridge into its mounting clips, ensuring the ribbon passes correctly between the printhead pins and the platen. Engage any guide tabs that hold the ribbon in the correct lateral position. Turn the ribbon advance knob (usually on the side of the cartridge) to take up any slack before printing.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">05</div>
+    <div class="flow-text"><strong>Verify ribbon advance mechanism.</strong> Advance the ribbon manually a few turns to confirm it moves freely and the advance mechanism engages correctly. A ribbon that doesn't advance will deplete a single section rapidly and return to faded printing within minutes.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">06</div>
+    <div class="flow-text"><strong>Print a test page and verify output quality.</strong> Print a self-test page (usually triggered by holding a button while powering on — consult the printer manual). Verify that output is uniformly dark and all pins are producing dots — consistent light areas indicate a failed pin, not a ribbon issue.</div>
+  </div>
+</div>
+
+<h3 class="section">Replacing the Printhead</h3>
+
+<p>The impact printhead is a wear item — pins bend or break after millions of impact cycles, and the printhead's solenoids can fail. A printhead should be replaced when the ribbon is confirmed fresh but output still shows consistent missing dots in the same location (indicating a dead pin rather than an ink issue).</p>
+
+<div class="callout callout-warn">
+  <p class="callout-title">Printhead Heat Warning</p>
+  <p>The impact printer printhead generates significant heat during heavy-use print runs through repeated solenoid firing. After extended printing, the printhead can reach temperatures that cause burns on contact. Always allow the printer to cool for several minutes after heavy printing before reaching in to replace the printhead. Many printhead packages include a warning label noting that the head may be hot immediately after use.</p>
+</div>
+
+<ul class="body-list">
+  <li><strong>Power off completely</strong> and allow to cool — disconnect power if the head has been printing continuously</li>
+  <li><strong>Move carriage to center</strong> for access — some printers lock the carriage at the left margin when powered off; manually slide it to the center position</li>
+  <li><strong>Disconnect the printhead cable connector</strong> — the printhead connects to the carriage board via a flat ribbon cable; gently unlock the connector's retaining clip and pull the cable straight out without bending it</li>
+  <li><strong>Remove the printhead mounting screws</strong> — typically two screws hold the head to the carriage; retain these screws as they are not included with all replacement heads</li>
+  <li><strong>Install new head and reconnect cable</strong> — insert the ribbon cable fully into the new head's connector and lock it; ensure the pin guide plate is properly aligned before securing</li>
+  <li><strong>Adjust head gap if needed</strong> — after head replacement, verify or readjust the head gap setting for the paper type being used; an incorrect gap after head replacement causes immediate print quality issues</li>
+</ul>
+
+<h3 class="section">Paper Replacement and Handling</h3>
+
+<p>Impact printers use either cut-sheet paper (friction feed) or continuous-form paper with tractor holes along the edges (tractor feed). Multipart forms require careful loading to ensure all layers are properly aligned before printing begins.</p>
+
+<ul class="body-list">
+  <li><strong>Tractor feed loading:</strong> Open the tractor sprocket covers, align the paper perforations with the sprocket pins on both tractors simultaneously to prevent skewing, close the covers, and advance paper to the top-of-form position before beginning print jobs</li>
+  <li><strong>Fan continuous-form paper:</strong> If paper has been sitting folded for an extended time, gently fan and straighten it before loading. Folded-over continuous paper jams when the fold reaches the paper path</li>
+  <li><strong>Set correct head gap for paper thickness:</strong> Most impact printers have a manual head gap lever or dial (common positions: 1 for single-part, 2–3 for 2-3 part forms, etc.). Using too-narrow a gap on thick multipart forms damages the printhead; too-wide a gap on single-part paper produces faded output</li>
+  <li><strong>Separate multipart forms after printing:</strong> Tear multipart forms apart carefully at the perforations. NCR copy paper produces copies at the time of printing — do not attempt to run a form through the printer a second time expecting another copy to be produced</li>
+  <li><strong>Tear-off bar:</strong> Most impact printers have a serrated tear-off bar at the top. After a form completes, advance the paper to the tear bar position, tear off the completed form, then reverse-feed back to top-of-form position before the next job</li>
+</ul>
+
+<h3 class="section">Impact Printer Symptom Troubleshooting</h3>
+
+<table class="data-table">
+  <thead><tr><th>Symptom</th><th>Likely Cause</th><th>Fix</th></tr></thead>
+  <tbody>
+    <tr><td>Faded output across the whole print area</td><td>Depleted ribbon; ribbon not advancing; head gap too wide</td><td>Replace ribbon; verify ribbon advance; adjust head gap</td></tr>
+    <tr><td>Consistent white horizontal line through all characters</td><td>Broken or bent pin in that row position</td><td>Replace printhead</td></tr>
+    <tr><td>Print getting lighter from left to right</td><td>Ribbon advance not working; ribbon jammed</td><td>Check ribbon advance mechanism; re-seat or replace ribbon</td></tr>
+    <tr><td>Paper tears or multiple sheets jammed</td><td>Head gap too narrow; paper misaligned in tractors</td><td>Increase head gap; realign tractor paper loading</td></tr>
+    <tr><td>Output smearing (ink smear across page)</td><td>Head gap too narrow; ribbon over-inked or new ribbon excess ink</td><td>Increase head gap; wipe ribbon with cloth to remove excess ink</td></tr>
+    <tr><td>Copies not legible on bottom layers of multipart</td><td>Head gap too wide; too many form layers for head strength</td><td>Decrease head gap; verify form layer count is within printer spec</td></tr>
+    <tr><td>Printhead carriage stuck or won't move</td><td>Paper jam in carriage path; debris on carriage rod; worn carriage belt</td><td>Clear paper jam; clean and lightly lubricate carriage rod; inspect belt</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus — Impact Printers</p>
+  <p>The defining characteristic is <strong>multipart forms</strong> — only impact printers can produce simultaneous carbon/NCR copies. The primary consumable is the <strong>ink ribbon</strong>, replaced when output becomes faded. <strong>Head gap</strong> must be adjusted for paper thickness — too narrow damages the head; too wide fades copies. <strong>Tractor feed</strong> (sprocket holes) is used for continuous-form paper. A missing dot <em>consistently in the same position</em> = broken pin = replace printhead. All-over fading = ribbon replacement needed.</p>
+</div>
+
+
+<!-- COMPARISON -->
+<h2 class="chapter"><span class="ch-num">SECTION 5</span>Printer Type Comparison</h2>
+
+<table class="data-table">
+  <thead><tr><th>Printer Type</th><th>Primary Consumable</th><th>Key Maintenance Task</th><th>Primary Failure Symptom</th><th>Unique Capability</th></tr></thead>
+  <tbody>
+    <tr><td>Laser</td><td>Toner cartridge; fuser (in kit)</td><td>Replace toner; apply maintenance kit; calibrate; clean with toner vac</td><td>Toner smearing = fuser; ghosting = cleaning blade; streaks = drum/toner</td><td>High volume; fast; sharp; dry output</td></tr>
+    <tr><td>Inkjet</td><td>Ink cartridges (CMYK)</td><td>Clean printheads; replace cartridges; calibrate alignment; clear jams</td><td>Banding / missing color = clogged nozzles; blurry = alignment; smear = paper/ink type</td><td>Best color/photo quality; widest format options</td></tr>
+    <tr><td>Thermal (direct)</td><td>Thermal paper only</td><td>Clean print head with IPA; clean platen roller; replace paper; remove debris</td><td>Blank output = paper loaded backward; white streaks = dirty/failed head elements</td><td>No ink/toner required; silent; used for receipts/labels</td></tr>
+    <tr><td>Impact (dot matrix)</td><td>Ink ribbon</td><td>Replace ribbon; replace printhead (pin failure); replace paper; adjust head gap</td><td>Faded = ribbon; missing dot row = broken pin; paper tears = head gap too narrow</td><td>Multipart form printing; works in harsh environments</td></tr>
+  </tbody>
+</table>
+
+
+<!-- MASTER REFERENCE -->
+<div class="ch-divider"></div>
+
+<div class="summary-box">
+  <h3>Master Reference — Objective 3.8 Key Concepts</h3>
+  <div class="summary-grid">
+    <div class="summary-item"><span class="s-sym">Laser — EP stages</span><span>Processing → Charging → Exposing → Developing → Transferring → Fusing → Cleaning</span></div>
+    <div class="summary-item"><span class="s-sym">Laser — Toner smear</span><span>Fusing stage failure; replace fuser assembly</span></div>
+    <div class="summary-item"><span class="s-sym">Laser — Ghost image</span><span>Cleaning stage; worn cleaning blade; replace toner/drum</span></div>
+    <div class="summary-item"><span class="s-sym">Laser — Vertical lines</span><span>White = low toner/clogged dev. Black = scratched drum</span></div>
+    <div class="summary-item"><span class="s-sym">Laser — Maintenance kit</span><span>Fuser, transfer roller, pickup rollers, separation pad; reset page counter after install</span></div>
+    <div class="summary-item"><span class="s-sym">Laser — Calibration</span><span>Color, density, and registration calibration; after consumable replacement</span></div>
+    <div class="summary-item"><span class="s-sym">Laser — Cleaning</span><span>Toner-rated HEPA vac; IPA on rollers; never regular household cleaners</span></div>
+    <div class="summary-item"><span class="s-sym">Inkjet — Printhead</span><span>Integrated (in cartridge, HP/Canon) or permanent (Epson/Brother); clogs = main failure</span></div>
+    <div class="summary-item"><span class="s-sym">Inkjet — Banding</span><span>Clogged nozzles; run cleaning cycle; nozzle check pattern to diagnose</span></div>
+    <div class="summary-item"><span class="s-sym">Inkjet — Jam removal</span><span>Pull in paper travel direction; never force forward across printhead</span></div>
+    <div class="summary-item"><span class="s-sym">Inkjet — Calibration</span><span>Printhead alignment after cartridge replacement; bidirectional alignment for banding</span></div>
+    <div class="summary-item"><span class="s-sym">Thermal — Paper</span><span>Coated (reactive) side must face print head; blank output = loaded backward</span></div>
+    <div class="summary-item"><span class="s-sym">Thermal — Head cleaning</span><span>99% IPA swab along full head element row; clean platen roller for adhesive buildup</span></div>
+    <div class="summary-item"><span class="s-sym">Thermal — White streaks</span><span>Dead heating elements in print head; clean first; replace head if persistent</span></div>
+    <div class="summary-item"><span class="s-sym">Impact — Multipart forms</span><span>Only impact printers produce simultaneous NCR/carbon copies; unique capability</span></div>
+    <div class="summary-item"><span class="s-sym">Impact — Ribbon</span><span>Replace when output fades uniformly; primary consumable; ribbon not advancing = one-area fade</span></div>
+    <div class="summary-item"><span class="s-sym">Impact — Broken pin</span><span>Consistent white horizontal line at same vertical position; replace printhead</span></div>
+    <div class="summary-item"><span class="s-sym">Impact — Head gap</span><span>Must be adjusted for paper thickness; too narrow = head damage; too wide = faded multipart</span></div>
+    <div class="summary-item"><span class="s-sym">Impact — Tractor feed</span><span>Sprocket holes engage continuous-form paper; preferred for multipart forms</span></div>
+    <div class="summary-item"><span class="s-sym">Impact — Printhead heat</span><span>Hot after heavy use; allow to cool before replacing; burn hazard</span></div>
+  </div>
+</div>
+
+
+<!-- QUICK REFERENCE CARDS -->
+<h2 class="chapter"><span class="ch-num">REFERENCE</span>Maintenance Quick Reference</h2>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>Laser — Symptoms & Stages</h4>
+    <ul>
+      <li><strong>Smeared toner</strong> — Fuser; fusing stage</li>
+      <li><strong>Ghost images</strong> — Cleaning blade; cleaning stage</li>
+      <li><strong>Background gray shading</strong> — Dirty corona/PCR; charging stage</li>
+      <li><strong>White vertical streaks</strong> — Low toner; developing stage</li>
+      <li><strong>Black vertical lines</strong> — Scratched drum; charging/developing</li>
+      <li><strong>Blank page</strong> — Empty toner; laser failure; tape not removed</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Laser Maintenance Kit</h4>
+    <ul>
+      <li><strong>When:</strong> At printer's scheduled page count (100K–200K pages)</li>
+      <li><strong>Contains:</strong> Fuser, transfer roller, pickup rollers, separation pad</li>
+      <li><strong>Safety:</strong> Allow fuser to cool 30 min before touching</li>
+      <li><strong>After install:</strong> Reset page counter in admin menu</li>
+      <li><strong>Test:</strong> Print full-page test after kit; verify even toner density</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Inkjet Maintenance Steps</h4>
+    <ul>
+      <li><strong>Nozzle clog:</strong> Print nozzle check → automated clean → recheck (up to 3×) → deep clean</li>
+      <li><strong>After cartridge swap:</strong> Always run printhead alignment</li>
+      <li><strong>Jam removal:</strong> Pull in direction of paper travel only</li>
+      <li><strong>Prevention:</strong> Print weekly to prevent nozzle drying</li>
+      <li><strong>Clean contacts:</strong> IPA + lint-free cloth if cartridge unrecognized</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Thermal &amp; Impact Quick Facts</h4>
+    <ul>
+      <li><strong>Thermal blank output</strong> — paper loaded backward; coated side must face head</li>
+      <li><strong>Thermal white streak</strong> — dirty or dead head element; clean with IPA</li>
+      <li><strong>Thermal platen</strong> — clean regularly for label printers (adhesive buildup)</li>
+      <li><strong>Impact faded output</strong> — replace ribbon first</li>
+      <li><strong>Impact consistent dot missing</strong> — broken pin; replace printhead</li>
+      <li><strong>Impact head gap</strong> — wider for thicker multipart forms</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout callout-exam" style="margin-top:28px;">
+  <p class="callout-title">Final Exam Reminders</p>
+  <p><strong>Laser EP process order:</strong> Processing → Charging → Exposing → Developing → Transferring → Fusing → Cleaning. <em>Mnemonic: "Please Charge Everyone During The First Class."</em></p>
+  <p><strong>Toner smearing (wipes off page)</strong> = fuser problem. This is the #1 laser symptom on the exam. The fuser heat-bonds toner — if toner isn't bonded, the fuser failed.</p>
+  <p><strong>Ghost images</strong> = cleaning blade worn/failed — residual toner from a previous page cycle didn't get wiped off the drum before the next image was placed.</p>
+  <p><strong>Inkjet banding</strong> = clogged nozzles. Run the printhead cleaning utility in the printer software. Always print a nozzle check pattern first to confirm the diagnosis.</p>
+  <p><strong>Inkjet jam rule:</strong> Always remove jammed paper in the direction of paper travel. Pulling backward over the printhead causes nozzle damage.</p>
+  <p><strong>Thermal blank output</strong> = paper is almost certainly loaded backward. Test with fingernail scratch — coated side darkens. Load that side toward the print head.</p>
+  <p><strong>Impact faded output</strong> = ribbon depleted or not advancing. A white horizontal line in the same position on every character = broken pin = replace printhead.</p>
+  <p><strong>Multipart forms require impact printers.</strong> No other technology can produce simultaneous copies. If a scenario involves carbon copies or NCR forms, the answer is impact/dot matrix printer.</p>
+  <p><strong>Maintenance kit fuser safety</strong>: allow 30 minutes of cooling time before handling. The fuser operates at ~200°C and retains heat well after shutdown.</p>
+</div>
+
+</div>
+</body>
+</html>

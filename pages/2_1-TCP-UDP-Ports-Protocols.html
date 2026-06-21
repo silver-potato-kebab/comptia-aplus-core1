@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CompTIA A+ 2.1 — TCP and UDP Ports, Protocols, and Their Purposes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --surface2: #f5f4f0;
+    --border: #e5e2d9;
+    --border2: #d4d0c4;
+    --text: #1a1a18;
+    --muted: #6b6860;
+    --accent: #c0392b;
+    --accent2: #2c3e6b;
+    --accent3: #1a6b3a;
+    --accent4: #b5590a;
+    --accent-light: #fdf2f1;
+    --accent2-light: #f0f2f8;
+    --accent3-light: #f0f8f3;
+    --accent4-light: #fdf5ed;
+    --serif: 'Crimson Pro', Georgia, serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── TOP NAV ── */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .top-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .nav-home {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+  .nav-home:hover { color: var(--accent2); }
+  .nav-home::before {
+    content: '←';
+    font-size: 12px;
+  }
+  .nav-sep {
+    font-size: 12px;
+    color: var(--border2);
+    flex-shrink: 0;
+  }
+  .nav-current {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nav-current strong {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    margin-right: 6px;
+  }
+  .top-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .nav-prev, .nav-next {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 4px 9px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    white-space: nowrap;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .nav-prev:hover, .nav-next:hover {
+    border-color: var(--border2);
+    color: var(--accent2);
+  }
+  .nav-prev::before { content: '← '; }
+  .nav-next::after  { content: ' →'; }
+
+  @media (max-width: 600px) {
+    .top-nav { padding: 0 16px; }
+    .nav-current { display: none; }
+    .nav-sep { display: none; }
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  .page { max-width: 860px; margin: 0 auto; padding: 0 40px 80px; }
+
+  /* HEADER */
+  .book-header {
+    border-bottom: 3px double var(--border2);
+    padding: 56px 0 32px;
+    margin-bottom: 48px;
+  }
+  .book-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .book-eyebrow span {
+    background: var(--accent);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-right: 10px;
+    font-size: 10px;
+  }
+  .book-title {
+    font-family: var(--serif);
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+  .book-subtitle {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .book-subtitle span { display: flex; align-items: center; gap: 6px; }
+  .book-subtitle span::before { content: '·'; color: var(--border2); }
+  .book-subtitle span:first-child::before { display: none; }
+
+  /* HEADINGS */
+  h2.chapter {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 600;
+    margin: 52px 0 6px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    letter-spacing: -0.01em;
+  }
+  h2.chapter .ch-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+    letter-spacing: 0.1em;
+    font-weight: 400;
+  }
+  h3.section {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    margin: 36px 0 12px;
+  }
+  h3.section::before { content: '§ '; color: var(--muted); font-weight: 300; }
+
+  p { margin-bottom: 16px; }
+
+  /* CALLOUTS */
+  .callout {
+    border-left: 3px solid;
+    padding: 14px 20px;
+    margin: 24px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 15.5px;
+  }
+  .callout p { margin-bottom: 6px; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout-title {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px !important;
+  }
+  .callout-exam { border-color: var(--accent); background: var(--accent-light); }
+  .callout-exam .callout-title { color: var(--accent); }
+  .callout-info { border-color: var(--accent2); background: var(--accent2-light); }
+  .callout-info .callout-title { color: var(--accent2); }
+  .callout-tip { border-color: var(--accent3); background: var(--accent3-light); }
+  .callout-tip .callout-title { color: var(--accent3); }
+  .callout-warn { border-color: var(--accent4); background: var(--accent4-light); }
+  .callout-warn .callout-title { color: var(--accent4); }
+
+  /* TABLES */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+    font-family: var(--sans);
+    margin: 16px 0 24px;
+  }
+  .data-table thead th {
+    background: var(--surface2);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 9px 13px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .data-table tbody tr { border-bottom: 1px solid var(--border); }
+  .data-table tbody tr:last-child { border-bottom: none; }
+  .data-table td { padding: 9px 13px; vertical-align: top; line-height: 1.5; }
+  .data-table td:first-child {
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 13.5px;
+  }
+
+  /* PROCESS FLOW */
+  .process-flow {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: var(--sans);
+    font-size: 14px;
+  }
+  .flow-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .flow-step:last-child { border-bottom: none; }
+  .flow-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+    min-width: 24px;
+    padding-top: 2px;
+  }
+  .flow-text { color: var(--text); line-height: 1.55; }
+  .flow-text strong { font-weight: 600; }
+
+  /* DEF LIST */
+  .def-list { margin: 16px 0 24px; }
+  .def-item {
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 210px 1fr;
+    gap: 20px;
+    font-size: 15px;
+  }
+  .def-item:last-child { border-bottom: none; }
+  .def-term {
+    font-family: var(--sans);
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 14px;
+    padding-top: 1px;
+    line-height: 1.4;
+  }
+
+  /* GRID CARDS */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 16px 18px;
+  }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 10px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card ul { list-style: none; font-family: var(--sans); font-size: 13.5px; }
+  .card ul li {
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .card ul li:last-child { border-bottom: none; }
+  .card ul li strong { color: var(--text); }
+
+  /* BODY LIST */
+  ul.body-list {
+    list-style: none;
+    font-family: var(--sans);
+    font-size: 15px;
+    padding: 0;
+    margin: 12px 0 20px;
+  }
+  ul.body-list li {
+    padding: 5px 0 5px 18px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  ul.body-list li:last-child { border-bottom: none; }
+  ul.body-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--border2);
+    font-size: 12px;
+  }
+  ul.body-list li strong { color: var(--text); }
+
+  /* PORT BADGE */
+  .port-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-weight: 600;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    color: var(--accent2);
+    margin-right: 4px;
+  }
+  .proto-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .proto-tcp { background: #f0f2f8; color: #2c3e6b; border: 1px solid #b9c2dc; }
+  .proto-udp { background: #f0f8f3; color: #1a6b3a; border: 1px solid #a8d4b8; }
+  .proto-both { background: #fdf5ed; color: #b5590a; border: 1px solid #e8c79a; }
+
+  /* PROTOCOL CARD (port reference) */
+  .proto-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-family: var(--sans);
+  }
+  .proto-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .proto-card-head h4 {
+    font-family: var(--serif);
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .proto-card-badges { display: flex; gap: 6px; align-items: center; }
+  .proto-card p {
+    font-size: 13.5px;
+    color: var(--muted);
+    margin-bottom: 0;
+    line-height: 1.55;
+  }
+
+  /* CODE */
+  code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: var(--accent);
+  }
+
+  .key-term { font-style: italic; font-weight: 500; color: var(--accent2); }
+
+  /* SUMMARY BOX */
+  .summary-box {
+    background: var(--text);
+    color: #f0ede6;
+    border-radius: 6px;
+    padding: 28px 32px;
+    margin: 40px 0;
+  }
+  .summary-box h3 {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 18px;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 32px;
+  }
+  .summary-item {
+    font-family: var(--sans);
+    font-size: 13.5px;
+    color: #c4bfb4;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .summary-item .s-sym {
+    color: #fff;
+    font-weight: 600;
+    min-width: 175px;
+    line-height: 1.4;
+  }
+
+  .ch-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--border2), transparent);
+    margin: 48px 0;
+  }
+
+  /* INDICATOR DOTS */
+  .malware-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .ind-high { background: var(--accent); }
+  .ind-med { background: var(--accent4); }
+  .ind-low { background: var(--accent3); }
+
+  @media (max-width: 680px) {
+    .page { padding: 0 20px 60px; }
+    .summary-grid, .card-grid { grid-template-columns: 1fr; }
+    .def-item { grid-template-columns: 1fr; gap: 4px; }
+    .proto-card-head { flex-direction: column; align-items: flex-start; gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV — update href values to match your actual file names -->
+<nav class="top-nav">
+  <div class="top-nav-left">
+    <a class="nav-home" href="../index.html">Study Guide</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current"><strong>2.1</strong> TCP and UDP Ports, Protocols, and Their Purposes</span>
+  </div>
+  <div class="top-nav-right">
+    <!-- Point these to the adjacent section files, or remove if not applicable -->
+    <a class="nav-prev" href="./1_3-Mobile-Network-Connectivity-App-Support.html">1.3</a>
+    <a class="nav-next" href="./2_2-Wireless-Networking-Technologies.html">2.2</a>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- HEADER -->
+<div class="book-header">
+  <div class="book-eyebrow">
+    <span>2.1</span>
+    CompTIA A+ · Core 1 (220-1201) · Domain 2 — Networking
+  </div>
+  <h1 class="book-title">TCP and UDP Ports,<br>Protocols, and Their Purposes</h1>
+  <div class="book-subtitle">
+    <span>Objective 2.1</span>
+    <span>Domain weight: 20%</span>
+    <span>14 ports/protocols · TCP vs. UDP</span>
+  </div>
+</div>
+
+<!-- INTRO -->
+<h2 class="chapter"><span class="ch-num">OVERVIEW</span>Introduction</h2>
+
+<p>Objective 2.1 is pure memorization wrapped around one important concept. Every network conversation happens over a <span class="key-term">port</span> — a numbered logical endpoint that identifies which service or application a piece of traffic belongs to — using one of two transport-layer protocols, <strong>TCP</strong> or <strong>UDP</strong>, that determine how that traffic is actually delivered. Knowing which port goes with which service, and whether that service rides on TCP or UDP, is foundational vocabulary you'll lean on throughout the rest of the networking domain and well into security topics later in the exam.</p>
+
+<p>There's no way around it: the port numbers themselves simply have to be memorized. But understanding <em>why</em> a protocol uses the port it uses, and <em>why</em> it picked TCP or UDP for its transport, turns rote memorization into something you can reason your way back to if your memory blanks during the exam.</p>
+
+<div class="callout callout-info">
+  <p class="callout-title">What a Port Actually Is</p>
+  <p>An IP address gets traffic to the correct <em>device</em>. A port number gets that traffic to the correct <em>service or application</em> running on that device. A single server with one IP address can simultaneously run a web server (port 80/443), a mail server (port 25), and an SSH service (port 22) — the port number in each packet is what tells the operating system which of those services should receive the incoming data.</p>
+</div>
+
+<!-- ═══ PART 1: PORTS AND PROTOCOLS ═══ -->
+<h2 class="chapter"><span class="ch-num">PART 1</span>Ports and Protocols</h2>
+
+<p>The following fourteen port assignments are the most heavily tested in the entire networking domain. Each entry below states the port number(s), the transport protocol it uses, and what the protocol/service actually does.</p>
+
+<div class="proto-card">
+  <div class="proto-card-head">
+    <h4>FTP — File Transfer Protocol</h4>
+    <div class="proto-card-badges"><span class="port-badge">20–21</span><span class="proto-badge proto-tcp">TCP</span></div>
+  </div>
+  <p>Transfers files between a client and a server. FTP actually uses <strong>two</strong> ports: <strong>port 21</strong> is the control connection, used to send commands (login, navigate directories, initiate a transfer), while <strong>port 20</strong> is used for the actual data transfer itself in active mode. FTP transmits credentials and data in plaintext, which is why <strong>FTPS</strong> (FTP over SSL/TLS) or <strong>SFTP</strong> (FTP over SSH, port 22) are preferred in security-conscious environments.</p>
+</div>
+
+<div class="proto-card">
+  <div class="proto-card-head">
+    <h4>SSH — Secure Shell</h4>
+    <div class="proto-card-badges"><span class="port-badge">22</span><span class="proto-badge proto-tcp">TCP</span></div>
+  </div>
+  <p>Provides an encrypted command-line connection to a remote device, allowing secure remote administration of servers, network equipment, and other systems. SSH replaced the older, insecure Telnet protocol for this purpose because all traffic — including login credentials — is encrypted. SSH is also commonly used as the secure transport underneath SFTP (secure file transfer) and SCP (secure copy).</p>
+</div>
+
+<div class="proto-card">
+  <div class="proto-card-head">
+    <h4>Telnet</h4>
+    <div class="proto-card-badges"><span class="port-badge">23</span><span class="proto-badge proto-tcp">TCP</span></div>
+  </div>
+  <p>An older protocol providing remote command-line access to a device, functionally similar to SSH but with one critical difference: Telnet transmits everything — including usernames and passwords — in <strong>plaintext</strong>, with no encryption whatsoever. Telnet is considered obsolete and insecure for any sensitive use today, retained mostly for legacy equipment or specific diagnostic purposes, and is almost universally replaced by SSH in modern practice.</p>
+</div>
+
+<div class="proto-card">
+  <div class="proto-card-head">
+    <h4>SMTP — Simple Mail Transfer Protocol</h4>
+    <div class="proto-card-badges"><span class="port-badge">25</span><span class="proto-badge proto-tcp">TCP</span></div>
+  </div>
+  <p>Handles the <strong>sending</strong> and relaying of email between mail servers, and from a mail client to its outgoing mail server. SMTP is a "push" protocol — it's responsible for getting a message from sender to recipient's mail server, but it does not handle a client retrieving/reading mail from a mailbox (that's the job of POP3 or IMAP, covered below).</p>
+</div>
+
+<div class="proto-card">
+  <div class="proto-card-head">
+    <h4>DNS — Domain Name System</h4>
+    <div class="proto-card-badges"><span class="port-badge">53</span><span class="proto-badge proto-both">TCP/UDP</span></div>
+  </div>
+  <p>Resolves human-readable domain names to IP addresses (and vice versa), as covered in objective 2.3. DNS primarily uses <strong>UDP</strong> for standard, fast lookup queries, since speed matters more than guaranteed delivery for a quick name lookup (and a client will simply retry if no response comes back). DNS falls back to <strong>TCP</strong> for larger transfers, such as zone transfers between DNS servers or responses too large to fit in a single UDP packet.</p>
+</div>
+
+<div class="proto-card">
+  <div class="proto-card-head">
+    <h4>DHCP — Dynamic Host Configuration Protocol</h4>
+    <div class="proto-card-badges"><span class="port-badge">67/68</span><span class="proto-badge proto-udp">UDP</span></div>
+  </div>
+  <p>Automatically assigns IP addressing information to clients via the DORA process (objective 2.6). <strong>Port 67</strong> is used by the DHCP server, while <strong>port 68</strong> is used by the DHCP client. DHCP uses UDP because, at the moment a client needs an address, it has no IP address yet at all — UDP's connectionless, broadcast-friendly nature fits this "I don't even have an address yet" bootstrapping scenario far better than TCP, which requires an established connection between two addressed endpoints first.</p>
+</div>
+
+<div class="proto-card">
+  <div class="proto-card-head">
+    <h4>HTTP — Hypertext Transfer Protocol</h4>
+    <div class="proto-card-badges"><span class="port-badge">80</span><span class="proto-badge proto-tcp">TCP</span></div>
+  </div>
+  <p>Transfers web page content — HTML, images, scripts — between a web server and a client's browser, as introduced in objective 2.3. HTTP traffic is sent in <strong>plaintext</strong>, meaning anyone able to intercept the traffic could read it, which is the core reason HTTPS (below) has become the standard for the modern web.</p>
+</div>
+
+<div class="proto-card">
+  <div class="proto-card-head">
+    <h4>POP3 — Post Office Protocol 3</h4>
+    <div class="proto-card-badges"><span class="port-badge">110</span><span class="proto-badge proto-tcp">TCP</span></div>
+  </div>
+  <p>Allows a mail client to <strong>retrieve</strong> email from a mail server. POP3's defining behavior: by default, it downloads messages to the local client and then deletes them from the server, making mail essentially local to whichever single device retrieved it. This made sense in an era of one computer per person, but is a poor fit for anyone who checks email from multiple devices — which is exactly the gap IMAP fills.</p>
+</div>
+
+<div class="proto-card">
+  <div class="proto-card-head">
+    <h4>IMAP — Internet Mail Access Protocol</h4>
+    <div class="proto-card-badges"><span class="port-badge">143</span><span class="proto-badge proto-tcp">TCP</span></div>
+  </div>
+  <p>Also retrieves email from a mail server, but unlike POP3, IMAP <strong>keeps mail synchronized on the server</strong> — messages, folders, and read/unread status remain on the server and are mirrored across every device that connects, rather than being downloaded and removed. This is why IMAP is the standard choice today: a user can check the same mailbox from a phone, laptop, and webmail interface and see a consistent state everywhere.</p>
+</div>
+
+<div class="proto-card">
+  <div class="proto-card-head">
+    <h4>NetBIOS / NetBT — NetBIOS over TCP/IP</h4>
+    <div class="proto-card-badges"><span class="port-badge">137–139</span><span class="proto-badge proto-both">TCP/UDP</span></div>
+  </div>
+  <p>A legacy Windows networking protocol suite used for name resolution, datagram services, and session services on local networks — historically the basis for early Windows file/printer sharing before SMB took over those responsibilities more directly. <strong>Port 137</strong> handles name service, <strong>port 138</strong> handles datagram service, and <strong>port 139</strong> handles session service. NetBIOS is largely legacy at this point but is still occasionally encountered, especially in older or mixed-OS environments.</p>
+</div>
+
+<div class="proto-card">
+  <div class="proto-card-head">
+    <h4>LDAP — Lightweight Directory Access Protocol</h4>
+    <div class="proto-card-badges"><span class="port-badge">389</span><span class="proto-badge proto-tcp">TCP</span></div>
+  </div>
+  <p>Used to access and maintain distributed directory information services — most commonly associated with <strong>Microsoft Active Directory</strong>, where it's used to query and authenticate against information like user accounts, group memberships, and organizational structure. LDAP is central to how centralized authentication and authorization (AAA, objective 2.3) works in a Windows domain environment. A secure variant, <strong>LDAPS</strong> (LDAP over SSL/TLS), typically runs on port 636.</p>
+</div>
+
+<div class="proto-card">
+  <div class="proto-card-head">
+    <h4>HTTPS — HTTP Secure</h4>
+    <div class="proto-card-badges"><span class="port-badge">443</span><span class="proto-badge proto-tcp">TCP</span></div>
+  </div>
+  <p>The encrypted version of HTTP, using <strong>TLS (Transport Layer Security)</strong> to encrypt traffic between the browser and the web server, protecting against eavesdropping and tampering. HTTPS is now the default expectation for virtually all websites, particularly anything involving logins, payments, or personal data — modern browsers actively flag plain HTTP sites as "Not Secure."</p>
+</div>
+
+<div class="proto-card">
+  <div class="proto-card-head">
+    <h4>SMB/CIFS — Server Message Block / Common Internet File System</h4>
+    <div class="proto-card-badges"><span class="port-badge">445</span><span class="proto-badge proto-tcp">TCP</span></div>
+  </div>
+  <p>The protocol behind Windows file and printer sharing — when a user maps a network drive or accesses a shared folder on a Windows network (objective 2.3's fileshare role), SMB is doing the work underneath. <strong>CIFS</strong> is an older, specific dialect/implementation of SMB; the two terms are frequently used interchangeably, though "SMB" is the more current and accurate umbrella term for the modern protocol used by Windows file sharing today.</p>
+</div>
+
+<div class="proto-card">
+  <div class="proto-card-head">
+    <h4>RDP — Remote Desktop Protocol</h4>
+    <div class="proto-card-badges"><span class="port-badge">3389</span><span class="proto-badge proto-tcp">TCP</span></div>
+  </div>
+  <p>A Microsoft protocol that provides a full <strong>graphical</strong> remote desktop session to a Windows machine — unlike SSH or Telnet, which provide command-line-only access, RDP lets a remote user see and interact with the entire graphical desktop as if sitting in front of the machine. Widely used for remote IT support and remote work scenarios involving Windows systems.</p>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>Expect direct recall questions ("Which port does RDP use?") as well as scenario questions that require you to work backward from a symptom to a port — "a user cannot remotely access their Windows desktop graphically" points to <strong>port 3389 (RDP)</strong> being blocked; "a user's email client can send mail but not receive new messages" points to a problem with <strong>port 110/143 (POP3/IMAP)</strong> rather than port 25 (SMTP, which only handles sending).</p>
+</div>
+
+<!-- ═══ PART 2: TCP VS UDP ═══ -->
+<h2 class="chapter"><span class="ch-num">PART 2</span>TCP vs. UDP</h2>
+
+<p>Every port above rides on top of one of two transport-layer protocols. Understanding the fundamental difference between them — and being able to explain <em>why</em> a given service chose one over the other — is the conceptual core of this entire objective.</p>
+
+<h3 class="section">TCP — Transmission Control Protocol</h3>
+
+<p><span class="key-term">TCP</span> is a <strong>connection-oriented</strong> protocol that guarantees reliable, ordered delivery of data. Before any actual data is sent, TCP performs a <strong>three-way handshake</strong> to establish a connection between sender and receiver, and throughout the conversation it tracks every packet, requests retransmission of anything lost, and reassembles packets in the correct order even if they arrive out of sequence.</p>
+
+<div class="process-flow">
+  <div class="flow-title">TCP Three-Way Handshake</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>SYN</strong> — the client sends a synchronize packet to the server, proposing to open a connection.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>SYN-ACK</strong> — the server responds, acknowledging the client's request and proposing its own synchronization.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>ACK</strong> — the client acknowledges the server's response. The connection is now fully established, and data transfer begins.</div></div>
+</div>
+
+<h3 class="section">UDP — User Datagram Protocol</h3>
+
+<p><span class="key-term">UDP</span> is a <strong>connectionless</strong> protocol that sends data without first establishing a connection, without guaranteeing delivery, and without guaranteeing that packets arrive in the order they were sent. There's no handshake, no acknowledgment of receipt, and no automatic retransmission of lost data — UDP simply sends the data and moves on, trusting the application above it to handle any problems if it cares to.</p>
+
+<p>This sounds like a disadvantage, and for many applications it would be — but for certain use cases, UDP's lack of overhead is exactly the point. UDP is dramatically faster and lighter-weight than TCP precisely because it skips all the reliability machinery, which makes it the right choice whenever speed matters more than guaranteed delivery, or whenever an application can tolerate occasional lost data better than it can tolerate delay.</p>
+
+<table class="data-table">
+  <thead><tr><th>Characteristic</th><th>TCP</th><th>UDP</th></tr></thead>
+  <tbody>
+    <tr><td>Connection</td><td>Connection-oriented (three-way handshake)</td><td>Connectionless (no handshake)</td></tr>
+    <tr><td>Reliability</td><td>Guaranteed delivery; lost packets retransmitted</td><td>No delivery guarantee; lost packets are simply lost</td></tr>
+    <tr><td>Ordering</td><td>Packets reassembled in correct order</td><td>No ordering guarantee</td></tr>
+    <tr><td>Speed/overhead</td><td>Slower; more overhead from reliability features</td><td>Faster; minimal overhead</td></tr>
+    <tr><td>Error checking</td><td>Extensive — acknowledgments, retransmission</td><td>Basic checksum only; no recovery mechanism</td></tr>
+    <tr><td>Best for</td><td>Web browsing, email, file transfer — anything where every byte must arrive correctly</td><td>Streaming media, VoIP, online gaming, DNS lookups — anything where speed matters more than perfection</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-tip">
+  <p class="callout-title">The Phone Call vs. Postcard Analogy</p>
+  <p>TCP is like a phone call: you establish the connection first ("hello, can you hear me?"), confirm receipt of what's said, and ask the other person to repeat anything you missed. UDP is like sending a postcard: you write it and send it, with no confirmation it ever arrives, no way to know if it arrived out of order relative to other postcards you sent, and no built-in way to resend it if it's lost. Both are valid depending on what you need — a contract needs the phone call's reliability; a quick "running 5 minutes late" doesn't need that overhead.</p>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle — Why DHCP and DNS Use UDP</p>
+  <p>Two of the most commonly misunderstood UDP choices: <strong>DHCP</strong> uses UDP because a device requesting an address has no IP address yet — TCP's connection-oriented model requires two addressed endpoints, which doesn't fit a "bootstrapping" broadcast scenario. <strong>DNS</strong> primarily uses UDP because a typical lookup is a single small request/response — establishing a full TCP connection for that would add unnecessary delay, and if a UDP query fails, the client simply re-sends it, which is cheap and fast for such a small exchange.</p>
+</div>
+
+<!-- MASTER REFERENCE -->
+<div class="ch-divider"></div>
+
+<div class="summary-box">
+  <h3>Master Reference — All 14 Ports and Protocols</h3>
+  <div class="summary-grid">
+    <div class="summary-item"><span class="s-sym">20–21 · FTP</span><span>TCP — file transfer (data / control)</span></div>
+    <div class="summary-item"><span class="s-sym">22 · SSH</span><span>TCP — encrypted remote CLI access</span></div>
+    <div class="summary-item"><span class="s-sym">23 · Telnet</span><span>TCP — unencrypted remote CLI access (legacy)</span></div>
+    <div class="summary-item"><span class="s-sym">25 · SMTP</span><span>TCP — sending/relaying email</span></div>
+    <div class="summary-item"><span class="s-sym">53 · DNS</span><span>TCP/UDP — name ↔ IP resolution</span></div>
+    <div class="summary-item"><span class="s-sym">67/68 · DHCP</span><span>UDP — automatic IP assignment</span></div>
+    <div class="summary-item"><span class="s-sym">80 · HTTP</span><span>TCP — unencrypted web traffic</span></div>
+    <div class="summary-item"><span class="s-sym">110 · POP3</span><span>TCP — retrieve mail; downloads &amp; deletes from server</span></div>
+    <div class="summary-item"><span class="s-sym">143 · IMAP</span><span>TCP — retrieve mail; syncs/stays on server</span></div>
+    <div class="summary-item"><span class="s-sym">137–139 · NetBIOS</span><span>TCP/UDP — legacy Windows name/session services</span></div>
+    <div class="summary-item"><span class="s-sym">389 · LDAP</span><span>TCP — directory services (Active Directory)</span></div>
+    <div class="summary-item"><span class="s-sym">443 · HTTPS</span><span>TCP — encrypted web traffic (TLS)</span></div>
+    <div class="summary-item"><span class="s-sym">445 · SMB/CIFS</span><span>TCP — Windows file/printer sharing</span></div>
+    <div class="summary-item"><span class="s-sym">3389 · RDP</span><span>TCP — graphical remote desktop access</span></div>
+  </div>
+</div>
+
+<!-- QUICK REFERENCE TOOLS -->
+<h2 class="chapter"><span class="ch-num">REFERENCE</span>Port Number Quick Reference</h2>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>Remote Access Ports</h4>
+    <ul>
+      <li><strong>22</strong> → SSH (encrypted CLI)</li>
+      <li><strong>23</strong> → Telnet (unencrypted CLI, legacy)</li>
+      <li><strong>3389</strong> → RDP (graphical desktop)</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Email Ports</h4>
+    <ul>
+      <li><strong>25</strong> → SMTP (sending)</li>
+      <li><strong>110</strong> → POP3 (download &amp; delete)</li>
+      <li><strong>143</strong> → IMAP (sync/keep on server)</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Web Ports</h4>
+    <ul>
+      <li><strong>80</strong> → HTTP (plaintext)</li>
+      <li><strong>443</strong> → HTTPS (TLS-encrypted)</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>File &amp; Directory Ports</h4>
+    <ul>
+      <li><strong>20–21</strong> → FTP (file transfer)</li>
+      <li><strong>445</strong> → SMB/CIFS (Windows file sharing)</li>
+      <li><strong>389</strong> → LDAP (directory services)</li>
+      <li><strong>137–139</strong> → NetBIOS (legacy Windows networking)</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout callout-exam" style="margin-top: 28px;">
+  <p class="callout-title">Final Exam Reminders</p>
+  <p><strong>FTP</strong> = 20 (data) / 21 (control), TCP. <strong>SSH</strong> = 22, TCP, encrypted. <strong>Telnet</strong> = 23, TCP, unencrypted — never use for sensitive access.</p>
+  <p><strong>SMTP (25)</strong> sends mail; <strong>POP3 (110)</strong> and <strong>IMAP (143)</strong> retrieve mail. POP3 deletes from server after download; IMAP keeps everything synced on the server.</p>
+  <p><strong>DNS (53)</strong> = mostly UDP, TCP for large transfers. <strong>DHCP (67/68)</strong> = UDP, because the client has no IP address yet.</p>
+  <p><strong>HTTP (80)</strong> = unencrypted. <strong>HTTPS (443)</strong> = encrypted via TLS. Always prefer 443 for anything sensitive.</p>
+  <p><strong>SMB/CIFS (445)</strong> = Windows file/printer sharing. <strong>LDAP (389)</strong> = directory services, commonly Active Directory.</p>
+  <p><strong>RDP (3389)</strong> = full graphical remote desktop, distinct from SSH/Telnet's command-line-only access.</p>
+  <p><strong>TCP</strong> = connection-oriented, reliable, ordered, slower (three-way handshake). <strong>UDP</strong> = connectionless, no guarantees, faster, lower overhead.</p>
+  <p><strong>TCP use cases</strong> = web, email, file transfer. <strong>UDP use cases</strong> = streaming, VoIP, gaming, DNS lookups, DHCP.</p>
+</div>
+
+</div>
+</body>
+</html>

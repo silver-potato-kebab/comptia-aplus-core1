@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CompTIA A+ 3.5 — Motherboards, CPUs, and Add-on Cards</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --surface2: #f5f4f0;
+    --border: #e5e2d9;
+    --border2: #d4d0c4;
+    --text: #1a1a18;
+    --muted: #6b6860;
+    --accent: #c0392b;
+    --accent2: #2c3e6b;
+    --accent3: #1a6b3a;
+    --accent4: #b5590a;
+    --accent-light: #fdf2f1;
+    --accent2-light: #f0f2f8;
+    --accent3-light: #f0f8f3;
+    --accent4-light: #fdf5ed;
+    --serif: 'Crimson Pro', Georgia, serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── TOP NAV ── */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .top-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .nav-home {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+  .nav-home:hover { color: var(--accent2); }
+  .nav-home::before {
+    content: '←';
+    font-size: 12px;
+  }
+  .nav-sep {
+    font-size: 12px;
+    color: var(--border2);
+    flex-shrink: 0;
+  }
+  .nav-current {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nav-current strong {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    margin-right: 6px;
+  }
+  .top-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .nav-prev, .nav-next {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 4px 9px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    white-space: nowrap;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .nav-prev:hover, .nav-next:hover {
+    border-color: var(--border2);
+    color: var(--accent2);
+  }
+  .nav-prev::before { content: '← '; }
+  .nav-next::after  { content: ' →'; }
+
+  @media (max-width: 600px) {
+    .top-nav { padding: 0 16px; }
+    .nav-current { display: none; }
+    .nav-sep { display: none; }
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  .page { max-width: 860px; margin: 0 auto; padding: 0 40px 80px; }
+
+  /* HEADER */
+  .book-header {
+    border-bottom: 3px double var(--border2);
+    padding: 56px 0 32px;
+    margin-bottom: 48px;
+  }
+  .book-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .book-eyebrow span {
+    background: var(--accent);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-right: 10px;
+    font-size: 10px;
+  }
+  .book-title {
+    font-family: var(--serif);
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+  .book-subtitle {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .book-subtitle span { display: flex; align-items: center; gap: 6px; }
+  .book-subtitle span::before { content: '·'; color: var(--border2); }
+  .book-subtitle span:first-child::before { display: none; }
+
+  /* HEADINGS */
+  h2.chapter {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 600;
+    margin: 52px 0 6px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    letter-spacing: -0.01em;
+  }
+  h2.chapter .ch-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+    letter-spacing: 0.1em;
+    font-weight: 400;
+  }
+  h3.section {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    margin: 36px 0 12px;
+  }
+  h3.section::before { content: '§ '; color: var(--muted); font-weight: 300; }
+
+  p { margin-bottom: 16px; }
+
+  /* CALLOUTS */
+  .callout {
+    border-left: 3px solid;
+    padding: 14px 20px;
+    margin: 24px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 15.5px;
+  }
+  .callout p { margin-bottom: 6px; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout-title {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px !important;
+  }
+  .callout-exam { border-color: var(--accent); background: var(--accent-light); }
+  .callout-exam .callout-title { color: var(--accent); }
+  .callout-info { border-color: var(--accent2); background: var(--accent2-light); }
+  .callout-info .callout-title { color: var(--accent2); }
+  .callout-tip { border-color: var(--accent3); background: var(--accent3-light); }
+  .callout-tip .callout-title { color: var(--accent3); }
+  .callout-warn { border-color: var(--accent4); background: var(--accent4-light); }
+  .callout-warn .callout-title { color: var(--accent4); }
+
+  /* TABLES */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+    font-family: var(--sans);
+    margin: 16px 0 24px;
+  }
+  .data-table thead th {
+    background: var(--surface2);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 9px 13px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .data-table tbody tr { border-bottom: 1px solid var(--border); }
+  .data-table tbody tr:last-child { border-bottom: none; }
+  .data-table td { padding: 9px 13px; vertical-align: top; line-height: 1.5; }
+  .data-table td:first-child {
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 13.5px;
+  }
+
+  /* PROCESS FLOW */
+  .process-flow {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: var(--sans);
+    font-size: 14px;
+  }
+  .flow-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .flow-step:last-child { border-bottom: none; }
+  .flow-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+    min-width: 24px;
+    padding-top: 2px;
+  }
+  .flow-text { color: var(--text); line-height: 1.55; }
+  .flow-text strong { font-weight: 600; }
+
+  /* DEF LIST */
+  .def-list { margin: 16px 0 24px; }
+  .def-item {
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 210px 1fr;
+    gap: 20px;
+    font-size: 15px;
+  }
+  .def-item:last-child { border-bottom: none; }
+  .def-term {
+    font-family: var(--sans);
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 14px;
+    padding-top: 1px;
+    line-height: 1.4;
+  }
+
+  /* GRID CARDS */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 16px 18px;
+  }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 10px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card ul { list-style: none; font-family: var(--sans); font-size: 13.5px; }
+  .card ul li {
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .card ul li:last-child { border-bottom: none; }
+  .card ul li strong { color: var(--text); }
+
+  /* BODY LIST */
+  ul.body-list {
+    list-style: none;
+    font-family: var(--sans);
+    font-size: 15px;
+    padding: 0;
+    margin: 12px 0 20px;
+  }
+  ul.body-list li {
+    padding: 5px 0 5px 18px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  ul.body-list li:last-child { border-bottom: none; }
+  ul.body-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--border2);
+    font-size: 12px;
+  }
+  ul.body-list li strong { color: var(--text); }
+
+  /* SPEC DIAGRAM (range bars) */
+  .spec-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: var(--sans);
+  }
+  .spec-diagram h4 {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .spec-bar-wrap { margin-bottom: 10px; }
+  .spec-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .spec-label strong { color: var(--text); }
+  .spec-bar {
+    height: 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .spec-fill {
+    height: 100%;
+    border-radius: 2px;
+  }
+  .fill-blue { background: #2c3e6b; }
+  .fill-green { background: #4caf50; }
+  .fill-amber { background: #ffc107; }
+  .fill-orange { background: #ff9800; }
+  .fill-red { background: #f44336; }
+  .fill-purple { background: #8e44ad; }
+  .fill-gray { background: #9e9e9e; }
+
+  /* SOCKET COMPATIBILITY GRID */
+  .socket-grid {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 18px 22px;
+    margin: 20px 0;
+    font-family: var(--sans);
+  }
+  .socket-grid h4 {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .socket-col-head {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .socket-vendor {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 6px 10px;
+    border-radius: 4px;
+    text-align: center;
+  }
+  .vendor-amd { background: #fdf2f1; color: #c0392b; }
+  .vendor-intel { background: #f0f2f8; color: #2c3e6b; }
+  .socket-list {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .socket-pill {
+    font-family: var(--mono);
+    font-size: 11px;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    padding: 3px 9px;
+    border-radius: 12px;
+    color: var(--text);
+  }
+
+  /* CHECKLIST */
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 18px 22px;
+    margin: 20px 0;
+    font-family: var(--sans);
+  }
+  .checklist h4 {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .check-item {
+    display: grid;
+    grid-template-columns: 24px 150px 1fr;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    align-items: baseline;
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-mark { color: var(--accent3); font-weight: 700; }
+  .check-name { font-weight: 600; color: var(--text); }
+  .check-desc { color: var(--muted); line-height: 1.5; }
+
+  /* CODE */
+  code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: var(--accent);
+  }
+
+  .key-term { font-style: italic; font-weight: 500; color: var(--accent2); }
+
+  /* SUMMARY BOX */
+  .summary-box {
+    background: var(--text);
+    color: #f0ede6;
+    border-radius: 6px;
+    padding: 28px 32px;
+    margin: 40px 0;
+  }
+  .summary-box h3 {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 18px;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 32px;
+  }
+  .summary-item {
+    font-family: var(--sans);
+    font-size: 13.5px;
+    color: #c4bfb4;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .summary-item .s-sym {
+    color: #fff;
+    font-weight: 600;
+    min-width: 175px;
+    line-height: 1.4;
+  }
+
+  .ch-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--border2), transparent);
+    margin: 48px 0;
+  }
+
+  /* INDICATOR DOTS */
+  .malware-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .ind-high { background: var(--accent); }
+  .ind-med { background: var(--accent4); }
+  .ind-low { background: var(--accent3); }
+
+  @media (max-width: 680px) {
+    .page { padding: 0 20px 60px; }
+    .summary-grid, .card-grid { grid-template-columns: 1fr; }
+    .def-item { grid-template-columns: 1fr; gap: 4px; }
+    .socket-col-head { grid-template-columns: 1fr; }
+    .check-item { grid-template-columns: 1fr; gap: 2px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV — update href values to match your actual file names -->
+<nav class="top-nav">
+  <div class="top-nav-left">
+    <a class="nav-home" href="../index.html">Study Guide</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current"><strong>3.5</strong> Install and Configure Motherboards, CPUs, and Add-on Cards</span>
+  </div>
+  <div class="top-nav-right">
+    <!-- Point these to the adjacent section files, or remove if not applicable -->
+    <a class="nav-prev" href="./3_4-Storage-Devices.html">3.4</a>
+    <a class="nav-next" href="./3_6-Power-Supply.html">3.6</a>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- HEADER -->
+<div class="book-header">
+  <div class="book-eyebrow">
+    <span>3.5</span>
+    CompTIA A+ · Core 1 (220-1201) · Domain 3 — Hardware
+  </div>
+  <h1 class="book-title">Install and Configure Motherboards,<br>CPUs, and Add-on Cards</h1>
+  <div class="book-subtitle">
+    <span>Objective 3.5</span>
+    <span>Domain weight: 25%</span>
+    <span>Largest objective in Domain 3</span>
+  </div>
+</div>
+
+<!-- INTRO -->
+<h2 class="chapter"><span class="ch-num">OVERVIEW</span>Introduction</h2>
+
+<p>Objective 3.5 is the broadest single objective in Domain 3, covering the central physical and firmware components that everything else in a computer connects to and depends on. The <span class="key-term">motherboard</span> is the foundation that determines what size case you need, what CPU you can install, what expansion cards will fit, and what firmware-level security and configuration options are available. Get any of these compatibility decisions wrong, and the build simply won't work — which is exactly why this objective is scenario-heavy on the exam.</p>
+
+<p>This guide follows the order of the objective itself: motherboard form factors, connector types, CPU/socket compatibility, BIOS/UEFI settings, virtualization and encryption support, CPU architecture, expansion cards, and cooling. Treat the early sections (form factor, sockets) as the physical foundation everything else builds on, and the later sections (BIOS/UEFI, cooling) as the configuration and maintenance layer on top of that foundation.</p>
+
+<div class="callout callout-info">
+  <p class="callout-title">The Central Compatibility Chain</p>
+  <p>Building or upgrading a system is fundamentally a chain of compatibility checks: <strong>case → motherboard form factor → CPU socket → RAM type (objective 3.3) → expansion card slots → power supply connectors.</strong> A mismatch at any link breaks the whole chain. Most of this objective's scenario questions are testing whether you can correctly identify where in that chain a described problem actually lives.</p>
+</div>
+
+<!-- ═══ PART 1: MOTHERBOARD FORM FACTORS ═══ -->
+<h2 class="chapter"><span class="ch-num">PART 1</span>Motherboard Form Factors</h2>
+
+<p>A motherboard's <span class="key-term">form factor</span> defines its physical dimensions, mounting hole layout, and (generally) how many expansion slots it can fit — which in turn determines what size case it requires and how much room is available for expansion cards, drives, and cooling.</p>
+
+<div class="spec-diagram">
+  <h4>Motherboard Form Factors — Relative Physical Size</h4>
+  <div class="spec-bar-wrap">
+    <div class="spec-label"><strong>ITX (Mini-ITX)</strong><span>~17cm × 17cm — smallest, most compact builds</span></div>
+    <div class="spec-bar"><div class="spec-fill fill-blue" style="width:35%"></div></div>
+  </div>
+  <div class="spec-bar-wrap">
+    <div class="spec-label"><strong>microATX</strong><span>~24cm × 24cm — mid-size, fewer slots than ATX</span></div>
+    <div class="spec-bar"><div class="spec-fill fill-green" style="width:65%"></div></div>
+  </div>
+  <div class="spec-bar-wrap">
+    <div class="spec-label"><strong>ATX</strong><span>~30cm × 24cm — standard full-size, most expansion room</span></div>
+    <div class="spec-bar"><div class="spec-fill fill-amber" style="width:100%"></div></div>
+  </div>
+</div>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">ATX</span>
+    <span>Advanced Technology eXtended — the standard full-size form factor, offering the most expansion slots, RAM slots, and overall room for components. The default choice for most desktop towers and the baseline that other form factors are compared against.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">microATX</span>
+    <span>A smaller variant of ATX, fitting into more compact cases while typically retaining most mounting-hole compatibility with ATX cases (a microATX board can usually be installed in a case designed for ATX, though not vice versa). Offers fewer expansion slots than full ATX, trading some expansion capacity for a smaller footprint.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">ITX (Mini-ITX)</span>
+    <span>The smallest common standard form factor, designed for compact builds such as home theater PCs, small-form-factor desktops, and space-constrained installations. Typically has only a single expansion slot and limited RAM slots, prioritizing minimal footprint over expansion capacity.</span>
+  </div>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>Remember the general size relationship — <strong>ATX > microATX > ITX</strong> — and that this same relationship usually holds for expansion slot count and overall flexibility. A smaller form factor board generally fits in a case designed for a larger form factor (a microATX board in an ATX case), but not the reverse. If a scenario emphasizes "smallest possible build" or "limited space," ITX is almost always the answer.</p>
+</div>
+
+<!-- ═══ PART 2: MOTHERBOARD CONNECTOR TYPES ═══ -->
+<h2 class="chapter"><span class="ch-num">PART 2</span>Motherboard Connector Types</h2>
+
+<p>A motherboard exposes a range of connector types for expansion cards, storage, power, and front-panel/internal peripherals. Recognizing each connector by name and purpose is directly testable, often via photo identification.</p>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">PCI</span>
+    <span>Peripheral Component Interconnect — the legacy expansion slot standard, now almost entirely superseded by PCIe in modern systems. You may still encounter PCI slots on older motherboards or in environments maintaining legacy expansion cards.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">PCIe</span>
+    <span>PCI Express — the modern expansion slot standard used for graphics cards, NVMe storage adapters, network cards, capture cards, and most other add-in cards today. PCIe slots come in different physical sizes/lane counts — commonly seen as x1, x4, x8, and x16 — with x16 (the longest slot) typically reserved for graphics cards due to its highest available bandwidth.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Power connectors</span>
+    <span>The motherboard requires power delivered via specific connectors from the power supply — most notably the main 24-pin ATX power connector, plus a separate 4-pin or 8-pin CPU power connector (sometimes called EPS) that delivers dedicated power directly to the CPU socket area.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">SATA</span>
+    <span>Serial ATA — the standard internal data connector for HDDs and SATA-based SSDs/optical drives, as introduced in objective 3.4. SATA data connectors are paired with a separate SATA power connector from the power supply.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">eSATA</span>
+    <span>External SATA — a SATA variant designed for connecting <strong>external</strong> drives, offering SATA's native data speeds without USB's protocol overhead. Less common today as USB and Thunderbolt external storage standards have largely taken over this role, but still occasionally found on motherboards/expansion brackets.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Headers</span>
+    <span>Small pin connector blocks on the motherboard used for internal, non-expansion-slot connections — front panel power/reset buttons and LEDs, internal USB ports, fan connectors, and front-panel audio jacks all connect via headers rather than full-size slots or connectors.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">M.2</span>
+    <span>A motherboard-mounted slot for compact SSDs (and some Wi-Fi cards), introduced in objective 3.4 — included here as a reminder that M.2 is fundamentally a <em>motherboard connector type</em>, not just a drive form factor, and that the specific M.2 slot on a given motherboard determines whether it supports SATA signaling, PCIe/NVMe signaling, or both.</span>
+  </div>
+</div>
+
+<div class="callout callout-tip">
+  <p class="callout-title">PCIe Slot Size vs. Bandwidth</p>
+  <p>A larger physical PCIe slot (x16) doesn't necessarily mean every lane is electrically wired — some motherboards have physically x16-sized slots that are only electrically wired as x4 or x8 to save cost, often noted in the motherboard's documentation. Most cards will still function in a slot with fewer wired lanes than the card supports, just at reduced bandwidth — this is a real-world nuance worth knowing conceptually, even though the exam focuses mainly on recognizing slot types rather than this electrical detail.</p>
+</div>
+
+<!-- ═══ PART 3: MOTHERBOARD COMPATIBILITY ═══ -->
+<h2 class="chapter"><span class="ch-num">PART 3</span>Motherboard Compatibility — CPU Sockets</h2>
+
+<p>A motherboard's <span class="key-term">CPU socket</span> is the physical interface the processor plugs into, and it is brand- and generation-specific — a CPU will only physically fit (and only function correctly) in a socket it was specifically designed for. This is the single most important compatibility check when selecting a CPU and motherboard together.</p>
+
+<div class="socket-grid">
+  <h4>CPU Socket Families By Vendor (Representative, Not Exhaustive)</h4>
+  <div class="socket-col-head">
+    <span class="socket-vendor vendor-amd">AMD</span>
+    <div class="socket-list">
+      <span class="socket-pill">AM4</span>
+      <span class="socket-pill">AM5</span>
+      <span class="socket-pill">TRX (Threadripper)</span>
+    </div>
+  </div>
+  <div class="socket-col-head">
+    <span class="socket-vendor vendor-intel">INTEL</span>
+    <div class="socket-list">
+      <span class="socket-pill">LGA 1200</span>
+      <span class="socket-pill">LGA 1700</span>
+      <span class="socket-pill">LGA 1851</span>
+    </div>
+  </div>
+</div>
+
+<div class="callout callout-warn">
+  <p class="callout-title">Common Pitfall — Socket Compatibility Is Absolute</p>
+  <p>An <strong>AMD</strong> CPU will never fit an <strong>Intel</strong> socket, and vice versa — there is no cross-brand compatibility at all. Beyond brand, even within the same brand, different socket generations are typically incompatible with each other (an older AMD AM4 CPU will not fit a newer AM5 socket, for example). Always verify the exact socket type supported by the motherboard against the exact socket type required by the CPU before purchasing or attempting installation — specific socket names and numbers change over time and should be verified against current manufacturer documentation rather than memorized as fixed facts.</p>
+</div>
+
+<h3 class="section">Multisocket Motherboards</h3>
+
+<p>A <span class="key-term">multisocket</span> motherboard contains two or more physical CPU sockets, allowing multiple processors to be installed and work together in the same system. This is exclusively a <strong>server/workstation-class</strong> feature, used in scenarios demanding extreme processing power, memory capacity, or core counts beyond what a single-CPU system can provide — virtualization hosts, high-performance computing, and large database servers are common examples. Consumer desktop and laptop motherboards are single-socket only.</p>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>Expect direct matching: "Which CPU socket family does this AMD/Intel processor require?" tests brand-level recognition rather than requiring you to memorize every specific socket number, since those change with each new CPU generation. The conceptual takeaway the exam wants is simpler and more durable: <strong>brand and generation must match exactly between CPU and socket</strong>, and <strong>multisocket boards are a server-class feature</strong>, not something found in typical consumer builds.</p>
+</div>
+
+<!-- ═══ PART 4: BIOS/UEFI SETTINGS ═══ -->
+<h2 class="chapter"><span class="ch-num">PART 4</span>BIOS/UEFI Settings</h2>
+
+<p>The <span class="key-term">BIOS (Basic Input/Output System)</span> and its modern successor <span class="key-term">UEFI (Unified Extensible Firmware Interface)</span> are firmware built into the motherboard that initialize hardware and hand off control to the operating system during boot. UEFI is the modern standard, offering a graphical interface, support for larger boot drives, faster boot times, and more advanced security features compared to legacy BIOS — though the terms are still frequently used interchangeably in casual conversation, including occasionally on the exam itself.</p>
+
+<div class="checklist">
+  <h4>Key BIOS/UEFI Settings Covered by This Objective</h4>
+  <div class="check-item"><span class="check-mark">✓</span><span class="check-name">Boot options</span><span class="check-desc">Controls boot device order (which drive/device the system attempts to boot from first) and boot mode (legacy BIOS-compatible vs. native UEFI).</span></div>
+  <div class="check-item"><span class="check-mark">✓</span><span class="check-name">USB permissions</span><span class="check-desc">Can enable/disable USB ports or USB boot capability entirely — a security-relevant setting used to prevent unauthorized booting from a USB drive or to block USB storage devices altogether in locked-down environments.</span></div>
+  <div class="check-item"><span class="check-mark">✓</span><span class="check-name">TPM security features</span><span class="check-desc">Enables/disables the Trusted Platform Module (detailed in Part 5 below) and related settings such as clearing stored TPM keys.</span></div>
+  <div class="check-item"><span class="check-mark">✓</span><span class="check-name">Fan considerations</span><span class="check-desc">Fan speed curves and control profiles, allowing fans to ramp up/down based on measured temperature rather than running at a fixed speed at all times.</span></div>
+  <div class="check-item"><span class="check-mark">✓</span><span class="check-name">Secure Boot</span><span class="check-desc">A UEFI feature that only allows the system to boot using software signed with a trusted, recognized digital signature, preventing unsigned or maliciously modified bootloaders/OS images (such as rootkits or bootkits) from loading during startup.</span></div>
+  <div class="check-item"><span class="check-mark">✓</span><span class="check-name">Boot password</span><span class="check-desc">Requires a password before the system will boot into the operating system at all — distinct from a Windows login password, since this check happens at the firmware level before the OS even begins loading.</span></div>
+  <div class="check-item"><span class="check-mark">✓</span><span class="check-name">BIOS/UEFI password</span><span class="check-desc">Requires a separate password specifically to enter and modify the BIOS/UEFI setup utility itself, preventing unauthorized changes to firmware settings even if someone has physical access to the machine.</span></div>
+  <div class="check-item"><span class="check-mark">✓</span><span class="check-name">Temperature monitoring</span><span class="check-desc">Displays real-time CPU, GPU, and system temperatures directly within the BIOS/UEFI interface, useful for diagnosing overheating issues or verifying proper cooling installation before ever booting into an OS.</span></div>
+</div>
+
+<div class="callout callout-info">
+  <p class="callout-title">Boot Password vs. BIOS Password — Don't Conflate Them</p>
+  <p>These are two distinct security layers that are easy to confuse. A <strong>boot password</strong> (sometimes called a "power-on password" or "user password") blocks the system from booting into the OS at all without it. A <strong>BIOS/UEFI password</strong> (sometimes called a "supervisor" or "administrator" password) specifically protects access to the firmware settings menu, preventing changes to boot order, security settings, etc. — but doesn't necessarily prevent the system from booting normally. A system can implement either, both, or neither.</p>
+</div>
+
+<!-- ═══ PART 5: VIRTUALIZATION SUPPORT & ENCRYPTION ═══ -->
+<h2 class="chapter"><span class="ch-num">PART 5</span>Virtualization Support and Encryption</h2>
+
+<h3 class="section">Virtualization Support</h3>
+
+<p><span class="key-term">Hardware virtualization support</span> (commonly Intel VT-x or AMD-V) is a CPU feature, enabled/disabled via a BIOS/UEFI setting, that allows a hypervisor to run virtual machines efficiently by handling certain virtualization-related operations directly in hardware rather than relying entirely on slower software emulation. This setting must typically be manually enabled in BIOS/UEFI before virtualization software (such as Hyper-V, VMware, or VirtualBox running hardware-accelerated VMs) will function — a very common real-world troubleshooting scenario when virtualization software reports it cannot start a VM.</p>
+
+<h3 class="section">TPM — Trusted Platform Module</h3>
+
+<p>A <span class="key-term">TPM</span> is a dedicated, tamper-resistant hardware chip (or firmware-based equivalent) built into or integrated with the motherboard, used to generate, store, and protect cryptographic keys used for disk encryption, secure boot verification, and other hardware-based security functions. Critically, the TPM stores its keys in a way that's tied to the specific physical hardware — if certain hardware changes occur, or someone attempts to move an encrypted drive to different hardware, the TPM can detect this and block key release, providing protection against many forms of offline/physical tampering.</p>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle — TPM and BitLocker</p>
+  <p>TPM is most commonly referenced on the exam in connection with Windows <strong>BitLocker</strong> full-disk encryption, which by default relies on the TPM to securely store its encryption keys and verify system integrity before unlocking the drive at boot. TPM is also a hard requirement for modern Windows operating system installations on supported hardware — a frequently tested real-world compatibility checkpoint.</p>
+</div>
+
+<h3 class="section">HSM — Hardware Security Module</h3>
+
+<p>A <span class="key-term">HSM (Hardware Security Module)</span> is a dedicated, often external or rack-mounted physical device specifically built to generate, store, and manage cryptographic keys and perform cryptographic operations (encryption, decryption, digital signing) at scale, typically for an entire organization rather than a single device.</p>
+
+<div class="callout callout-info">
+  <p class="callout-title">TPM vs. HSM — Scale Is the Key Difference</p>
+  <p>Think of a <strong>TPM</strong> as protecting the cryptographic keys for <em>one specific device</em> — it's built into or attached to that single motherboard. An <strong>HSM</strong>, by contrast, is typically a separate, dedicated, often network-attached or rack-mounted device protecting cryptographic operations for <em>many systems or an entire organization</em> — commonly used by certificate authorities, payment processors, and enterprises with heavy compliance or large-scale key-management requirements. Both protect cryptographic keys; they differ primarily in scale and deployment context.</p>
+</div>
+
+<!-- ═══ PART 6: CPU ARCHITECTURE ═══ -->
+<h2 class="chapter"><span class="ch-num">PART 6</span>CPU Architecture</h2>
+
+<h3 class="section">x86 / x64</h3>
+
+<p><span class="key-term">x86</span> refers to the instruction set architecture originally developed by Intel, historically referring to 32-bit processors and software. <span class="key-term">x64</span> (also called x86-64 or AMD64) is the 64-bit extension of that same architecture family, now the standard for virtually all modern desktop, laptop, and server CPUs from both Intel and AMD. A 64-bit (x64) CPU and operating system can address vastly more system RAM than a 32-bit system was ever capable of, among other performance and capability advantages.</p>
+
+<h3 class="section">ARM</h3>
+
+<p><span class="key-term">ARM (Advanced RISC Machine)</span> is a fundamentally different processor architecture family, built on <span class="key-term">RISC (Reduced Instruction Set Computer)</span> design principles — using a smaller, simpler set of instructions compared to x86/x64's more complex instruction set (CISC-style design). ARM processors are widely known for excellent power efficiency relative to performance, which is why they dominate smartphones, tablets, and increasingly appear in laptops and even some servers/desktops (such as Apple Silicon Macs) where battery life or power efficiency at scale is a priority.</p>
+
+<table class="data-table">
+  <thead><tr><th>Factor</th><th>x86/x64</th><th>ARM</th></tr></thead>
+  <tbody>
+    <tr><td>Design philosophy</td><td>CISC-influenced, complex instruction set</td><td>RISC — reduced, simpler instruction set</td></tr>
+    <tr><td>Power efficiency</td><td>Generally higher power consumption</td><td>Generally much more power-efficient</td></tr>
+    <tr><td>Typical devices</td><td>Traditional desktops, laptops, servers</td><td>Smartphones, tablets, increasingly some laptops/servers</td></tr>
+    <tr><td>Software compatibility</td><td>Vast existing software library built for this architecture</td><td>Requires ARM-native software, or emulation/translation of x86 software</td></tr>
+  </tbody>
+</table>
+
+<h3 class="section">Core Configurations</h3>
+
+<p>A modern CPU contains multiple processing <span class="key-term">cores</span> — independent processing units within a single physical CPU package, each capable of executing instructions somewhat independently. More cores generally allow better performance on workloads that can be split across multiple simultaneous tasks (multithreaded applications, running many programs at once), though single-threaded application performance depends more on individual core speed/efficiency than on core count alone. Common consumer configurations include dual-core, quad-core, hexa-core (6), octa-core (8), and higher core counts increasingly common on enthusiast and workstation-class CPUs.</p>
+
+<div class="callout callout-tip">
+  <p class="callout-title">More Cores ≠ Automatically Faster for Every Task</p>
+  <p>A higher core count helps most with workloads designed to run in parallel — video editing/rendering, virtualization, heavily multitasked environments. But software that isn't written to take advantage of multiple cores (some older or simpler applications) won't see proportional benefit from additional cores, and in some cases a CPU with fewer but faster/higher-clocked cores can outperform a higher-core-count CPU on single-threaded tasks. Matching CPU core configuration to the actual workload matters more than simply maximizing core count.</p>
+</div>
+
+<!-- ═══ PART 7: EXPANSION CARDS ═══ -->
+<h2 class="chapter"><span class="ch-num">PART 7</span>Expansion Cards</h2>
+
+<p>Expansion cards add capabilities to a system beyond what's built into the motherboard, typically installed into a PCIe slot (Part 2, above).</p>
+
+<table class="data-table">
+  <thead><tr><th>Card Type</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td>Sound card</td><td>Provides dedicated audio processing, often offering higher fidelity, more inputs/outputs, or lower latency than a motherboard's built-in (onboard) audio</td></tr>
+    <tr><td>Video card (GPU)</td><td>Provides dedicated graphics processing, essential for gaming, video editing/rendering, 3D work, and machine learning workloads beyond what integrated graphics can handle</td></tr>
+    <tr><td>Capture card</td><td>Captures video/audio input from an external source (a gaming console, camera, or another computer) for recording or live streaming</td></tr>
+    <tr><td>Network interface card (NIC)</td><td>Adds or upgrades network connectivity — covered in depth in objective 2.5 — commonly added when a motherboard's onboard NIC is insufficient (e.g., adding 10 Gigabit Ethernet, or adding Wi-Fi to a desktop without built-in wireless)</td></tr>
+  </tbody>
+</table>
+
+<!-- ═══ PART 8: COOLING ═══ -->
+<h2 class="chapter"><span class="ch-num">PART 8</span>Cooling</h2>
+
+<p>CPUs (and other components, like GPUs) generate significant heat under load, and effective cooling is essential to prevent thermal throttling (the CPU automatically slowing itself down to avoid damage) or outright hardware failure.</p>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Fans</span>
+    <span>Move air through the case and across heat-generating components, including dedicated CPU cooler fans, case intake/exhaust fans, and fans built into power supplies and graphics cards. Proper case airflow design (intake low/front, exhaust high/rear) supports all other cooling methods.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Heat sink</span>
+    <span>A metal component (typically aluminum or copper, often with fins to maximize surface area) that sits directly on top of the CPU, absorbing heat and dispersing it into the surrounding air — usually paired with a fan to actively pull that heat away (an "air cooler").</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Thermal paste/pads</span>
+    <span>A thermally conductive compound (paste) or pre-formed material (pad) applied between the CPU and the heat sink, filling microscopic gaps and imperfections in both surfaces that would otherwise trap insulating air and reduce heat transfer efficiency. Thermal paste must be reapplied any time a heat sink is removed and reinstalled — reusing old, dried-out paste significantly reduces cooling effectiveness.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Liquid cooling</span>
+    <span>Uses circulating liquid coolant to absorb and transport heat away from the CPU (or GPU) to a radiator, where fans dissipate that heat into the air — generally more effective at heat removal than air cooling alone, especially under sustained heavy load, and often quieter for an equivalent cooling capacity. Available as pre-built, sealed "all-in-one" (AIO) closed-loop systems or as custom open-loop setups.</span>
+  </div>
+</div>
+
+<div class="callout callout-warn">
+  <p class="callout-title">Common Pitfall</p>
+  <p>Installing a heat sink without thermal paste, with too little paste, or with old/dried paste left over from a previous installation are among the most common real-world causes of unexpected overheating and thermal throttling after a CPU or cooler swap — always clean off old paste completely and apply a fresh, appropriately-sized application before reseating any heat sink.</p>
+</div>
+
+<!-- MASTER REFERENCE -->
+<div class="ch-divider"></div>
+
+<div class="summary-box">
+  <h3>Master Reference — Motherboards, CPUs, and Add-on Cards</h3>
+  <div class="summary-grid">
+    <div class="summary-item"><span class="s-sym">ATX / microATX / ITX</span><span>Largest to smallest; ATX has the most expansion room</span></div>
+    <div class="summary-item"><span class="s-sym">PCI vs. PCIe</span><span>Legacy vs. modern expansion slot standard</span></div>
+    <div class="summary-item"><span class="s-sym">SATA vs. eSATA</span><span>Internal drive data vs. external drive data</span></div>
+    <div class="summary-item"><span class="s-sym">CPU socket</span><span>Brand- and generation-specific; no cross-compatibility</span></div>
+    <div class="summary-item"><span class="s-sym">Multisocket</span><span>Server/workstation feature; multiple physical CPUs</span></div>
+    <div class="summary-item"><span class="s-sym">Secure Boot</span><span>Only allows signed/trusted bootloaders to load</span></div>
+    <div class="summary-item"><span class="s-sym">Boot vs. BIOS password</span><span>Blocks booting vs. blocks firmware setting changes</span></div>
+    <div class="summary-item"><span class="s-sym">Virtualization support</span><span>VT-x/AMD-V; must be enabled in firmware for hypervisors</span></div>
+    <div class="summary-item"><span class="s-sym">TPM</span><span>Per-device key storage; used by BitLocker, Windows req.</span></div>
+    <div class="summary-item"><span class="s-sym">HSM</span><span>Org-scale dedicated cryptographic key management</span></div>
+    <div class="summary-item"><span class="s-sym">x86/x64</span><span>Traditional CISC-style architecture; desktops/servers</span></div>
+    <div class="summary-item"><span class="s-sym">ARM</span><span>RISC architecture; power-efficient; mobile and growing elsewhere</span></div>
+    <div class="summary-item"><span class="s-sym">Thermal paste</span><span>Fills microscopic gaps between CPU and heat sink</span></div>
+    <div class="summary-item"><span class="s-sym">Liquid cooling</span><span>Generally more effective/quieter than air under heavy load</span></div>
+  </div>
+</div>
+
+<!-- QUICK REFERENCE TOOLS -->
+<h2 class="chapter"><span class="ch-num">REFERENCE</span>3.5 Quick Reference</h2>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>Form Factor By Build Goal</h4>
+    <ul>
+      <li><strong>Max expansion/RAM slots</strong> → ATX</li>
+      <li><strong>Balanced, smaller footprint</strong> → microATX</li>
+      <li><strong>Smallest possible build</strong> → ITX</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>BIOS/UEFI Security Settings</h4>
+    <ul>
+      <li><strong>Block unsigned bootloaders</strong> → Secure Boot</li>
+      <li><strong>Block booting without a password</strong> → Boot password</li>
+      <li><strong>Block firmware setting changes</strong> → BIOS/UEFI password</li>
+      <li><strong>Enable VM hardware acceleration</strong> → Virtualization support</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>CPU Architecture By Use Case</h4>
+    <ul>
+      <li><strong>Traditional desktop/laptop/server</strong> → x86/x64</li>
+      <li><strong>Power-efficiency priority, mobile</strong> → ARM</li>
+      <li><strong>Heavy multitasking/rendering</strong> → Higher core count</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Cooling By Need</h4>
+    <ul>
+      <li><strong>Standard cooling</strong> → Heat sink + fan (air)</li>
+      <li><strong>Heavy sustained load, quieter</strong> → Liquid (AIO)</li>
+      <li><strong>Always required with any heat sink</strong> → Fresh thermal paste</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout callout-exam" style="margin-top: 28px;">
+  <p class="callout-title">Final Exam Reminders</p>
+  <p><strong>Form factor size order</strong> = ATX (largest) > microATX > ITX (smallest); smaller boards generally fit in larger cases, not vice versa.</p>
+  <p><strong>CPU socket compatibility</strong> = brand AND generation must match exactly; AMD never fits Intel, and old generations rarely fit new sockets.</p>
+  <p><strong>Multisocket</strong> = server/workstation only, never consumer desktops/laptops.</p>
+  <p><strong>Secure Boot</strong> = blocks unsigned bootloaders. <strong>Boot password</strong> = blocks booting at all. <strong>BIOS/UEFI password</strong> = blocks firmware setting changes. Three distinct protections.</p>
+  <p><strong>TPM</strong> = single-device key storage, ties to BitLocker and modern Windows requirements. <strong>HSM</strong> = organization-scale, dedicated, often external.</p>
+  <p><strong>x86/x64</strong> = traditional CISC-influenced architecture. <strong>ARM</strong> = RISC, power-efficient, dominant in mobile.</p>
+  <p><strong>Thermal paste</strong> = always reapply fresh when reseating any heat sink — never reuse old, dried paste.</p>
+  <p><strong>Liquid cooling</strong> = generally outperforms air cooling under sustained heavy load.</p>
+</div>
+
+</div>
+</body>
+</html>

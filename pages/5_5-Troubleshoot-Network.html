@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CompTIA A+ 5.5 — Troubleshoot Network Issues</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --surface2: #f5f4f0;
+    --border: #e5e2d9;
+    --border2: #d4d0c4;
+    --text: #1a1a18;
+    --muted: #6b6860;
+    --accent: #c0392b;
+    --accent2: #2c3e6b;
+    --accent3: #1a6b3a;
+    --accent4: #b5590a;
+    --accent-light: #fdf2f1;
+    --accent2-light: #f0f2f8;
+    --accent3-light: #f0f8f3;
+    --accent4-light: #fdf5ed;
+    --serif: 'Crimson Pro', Georgia, serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── TOP NAV ── */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .top-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .nav-home {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+  .nav-home:hover { color: var(--accent2); }
+  .nav-home::before {
+    content: '←';
+    font-size: 12px;
+  }
+  .nav-sep {
+    font-size: 12px;
+    color: var(--border2);
+    flex-shrink: 0;
+  }
+  .nav-current {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nav-current strong {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    margin-right: 6px;
+  }
+  .top-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .nav-prev, .nav-next {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 4px 9px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    white-space: nowrap;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .nav-prev:hover, .nav-next:hover {
+    border-color: var(--border2);
+    color: var(--accent2);
+  }
+  .nav-prev::before { content: '← '; }
+  .nav-next::after  { content: ' →'; }
+
+  @media (max-width: 600px) {
+    .top-nav { padding: 0 16px; }
+    .nav-current { display: none; }
+    .nav-sep { display: none; }
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  .page { max-width: 860px; margin: 0 auto; padding: 0 40px 80px; }
+
+  /* HEADER */
+  .book-header {
+    border-bottom: 3px double var(--border2);
+    padding: 56px 0 32px;
+    margin-bottom: 48px;
+  }
+  .book-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .book-eyebrow span {
+    background: var(--accent);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-right: 10px;
+    font-size: 10px;
+  }
+  .book-title {
+    font-family: var(--serif);
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+  .book-subtitle {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .book-subtitle span { display: flex; align-items: center; gap: 6px; }
+  .book-subtitle span::before { content: '·'; color: var(--border2); }
+  .book-subtitle span:first-child::before { display: none; }
+
+  /* HEADINGS */
+  h2.chapter {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 600;
+    margin: 52px 0 6px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    letter-spacing: -0.01em;
+  }
+  h2.chapter .ch-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+    letter-spacing: 0.1em;
+    font-weight: 400;
+  }
+  h3.section {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    margin: 36px 0 12px;
+  }
+  h3.section::before { content: '§ '; color: var(--muted); font-weight: 300; }
+
+  p { margin-bottom: 16px; }
+
+  /* CALLOUTS */
+  .callout {
+    border-left: 3px solid;
+    padding: 14px 20px;
+    margin: 24px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 15.5px;
+  }
+  .callout p { margin-bottom: 6px; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout-title {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px !important;
+  }
+  .callout-exam { border-color: var(--accent); background: var(--accent-light); }
+  .callout-exam .callout-title { color: var(--accent); }
+  .callout-info { border-color: var(--accent2); background: var(--accent2-light); }
+  .callout-info .callout-title { color: var(--accent2); }
+  .callout-tip { border-color: var(--accent3); background: var(--accent3-light); }
+  .callout-tip .callout-title { color: var(--accent3); }
+  .callout-warn { border-color: var(--accent4); background: var(--accent4-light); }
+  .callout-warn .callout-title { color: var(--accent4); }
+
+  /* TABLES */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+    font-family: var(--sans);
+    margin: 16px 0 24px;
+  }
+  .data-table thead th {
+    background: var(--surface2);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 9px 13px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .data-table tbody tr { border-bottom: 1px solid var(--border); }
+  .data-table tbody tr:last-child { border-bottom: none; }
+  .data-table td { padding: 9px 13px; vertical-align: top; line-height: 1.5; }
+  .data-table td:first-child {
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 13.5px;
+  }
+
+  /* PROCESS FLOW */
+  .process-flow {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: var(--sans);
+    font-size: 14px;
+  }
+  .flow-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .flow-step:last-child { border-bottom: none; }
+  .flow-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+    min-width: 24px;
+    padding-top: 2px;
+  }
+  .flow-text { color: var(--text); line-height: 1.55; }
+  .flow-text strong { font-weight: 600; }
+
+  /* DEF LIST */
+  .def-list { margin: 16px 0 24px; }
+  .def-item {
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 20px;
+    font-size: 15px;
+  }
+  .def-item:last-child { border-bottom: none; }
+  .def-term {
+    font-family: var(--sans);
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 14px;
+    padding-top: 1px;
+    line-height: 1.4;
+  }
+
+  /* GRID CARDS */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 16px 18px;
+  }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 10px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card ul { list-style: none; font-family: var(--sans); font-size: 13.5px; }
+  .card ul li {
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .card ul li:last-child { border-bottom: none; }
+  .card ul li strong { color: var(--text); }
+
+  /* BODY LIST */
+  ul.body-list {
+    list-style: none;
+    font-family: var(--sans);
+    font-size: 15px;
+    padding: 0;
+    margin: 12px 0 20px;
+  }
+  ul.body-list li {
+    padding: 5px 0 5px 18px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  ul.body-list li:last-child { border-bottom: none; }
+  ul.body-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--border2);
+    font-size: 12px;
+  }
+  ul.body-list li strong { color: var(--text); }
+
+  /* CODE BLOCKS */
+  code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: var(--accent);
+  }
+  .cmd-block {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 5px;
+    padding: 16px 20px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: #79c0ff;
+    margin: 16px 0;
+    overflow-x: auto;
+    line-height: 1.8;
+  }
+  .cmd-block .cmt { color: #6e7681; }
+  .cmd-block .ok  { color: #56d364; }
+  .cmd-block .err { color: #f85149; }
+  .cmd-block .hl  { color: #e3b341; }
+  .cmd-block .wh  { color: #f0f6fc; }
+
+  /* NETWORK TOPOLOGY PANEL */
+  .topology-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+  .topology-header {
+    background: var(--text);
+    color: rgba(255,255,255,0.8);
+    padding: 10px 18px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .topology-body {
+    padding: 20px 24px;
+    font-family: var(--sans);
+    font-size: 13.5px;
+  }
+  .topo-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    color: var(--muted);
+  }
+  .topo-node {
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent2);
+    white-space: nowrap;
+  }
+  .topo-node.problem { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+  .topo-arrow { color: var(--border2); font-size: 14px; }
+  .topo-label { font-size: 12px; color: var(--muted); }
+
+  /* SIGNAL QUALITY BARS */
+  .signal-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--sans);
+    font-size: 13.5px;
+  }
+  .signal-row:last-child { border-bottom: none; }
+  .signal-label { min-width: 140px; color: var(--text); font-weight: 500; }
+  .signal-bars { display: flex; gap: 2px; }
+  .signal-bar {
+    width: 8px;
+    border-radius: 1px;
+  }
+  .signal-bar.on  { background: var(--accent3); }
+  .signal-bar.off { background: var(--border2); }
+  .signal-desc { font-size: 12.5px; color: var(--muted); }
+
+  /* LATENCY SCALE */
+  .latency-scale {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-family: var(--sans);
+  }
+  .latency-bar {
+    height: 16px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, #4caf50 0%, #8bc34a 20%, #ffc107 45%, #ff9800 65%, #f44336 85%, #9c27b0 100%);
+    margin: 10px 0 6px;
+    position: relative;
+  }
+  .latency-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+  .latency-markers {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11.5px;
+    color: var(--text);
+    margin-top: 10px;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .lat-marker {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 3px 8px;
+    text-align: center;
+    line-height: 1.4;
+  }
+  .lat-marker .ms { font-family: var(--mono); font-weight: 600; font-size: 12px; }
+  .lat-marker .use { font-size: 11px; color: var(--muted); }
+
+  /* JITTER VISUAL */
+  .jitter-visual {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 24px;
+    margin: 16px 0;
+  }
+  .jitter-visual h4 {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .packet-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 10px;
+    font-family: var(--sans);
+    font-size: 12.5px;
+  }
+  .packet-row .row-label { min-width: 80px; color: var(--muted); }
+  .pkt {
+    width: 28px;
+    height: 20px;
+    border-radius: 3px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 600;
+    color: #fff;
+  }
+  .pkt.even { background: var(--accent2); }
+  .pkt.late { background: var(--accent4); margin-left: 14px; }
+  .pkt.dropped { background: var(--accent); opacity: 0.4; }
+  .pkt-gap { width: 14px; }
+
+  .key-term { font-style: italic; font-weight: 500; color: var(--accent2); }
+
+  /* SUMMARY */
+  .summary-box {
+    background: var(--text);
+    color: #f0ede6;
+    border-radius: 6px;
+    padding: 28px 32px;
+    margin: 40px 0;
+  }
+  .summary-box h3 {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 18px;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 32px;
+  }
+  .summary-item {
+    font-family: var(--sans);
+    font-size: 13.5px;
+    color: #c4bfb4;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .summary-item .s-sym {
+    color: #fff;
+    font-weight: 600;
+    min-width: 175px;
+    line-height: 1.4;
+  }
+
+  .ch-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--border2), transparent);
+    margin: 48px 0;
+  }
+
+  @media (max-width: 680px) {
+    .page { padding: 0 20px 60px; }
+    .summary-grid, .card-grid { grid-template-columns: 1fr; }
+    .def-item { grid-template-columns: 1fr; gap: 4px; }
+    .latency-markers { justify-content: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV — update href values to match your actual file names -->
+<nav class="top-nav">
+  <div class="top-nav-left">
+    <a class="nav-home" href="../index.html">Study Guide</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current"><strong>5.5</strong> Troubleshooting Network Issues</span>
+  </div>
+  <div class="top-nav-right">
+    <!-- Point these to the adjacent section files, or remove if not applicable -->
+    <a class="nav-prev" href="./5_4-Troubleshoot-Mobile-Device.html">5.4</a>
+    <a class="nav-next" href="./5_6-Troubleshoot-Printer.html">5.6</a>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- HEADER -->
+<div class="book-header">
+  <div class="book-eyebrow">
+    <span>5.5</span>
+    CompTIA A+ · Core 1 (220-1201) · Domain 5 — Hardware & Network Troubleshooting
+  </div>
+  <h1 class="book-title">Troubleshooting<br>Network Issues</h1>
+  <div class="book-subtitle">
+    <span>Objective 5.5</span>
+    <span>Domain weight: 28%</span>
+    <span>10 testable symptoms</span>
+  </div>
+</div>
+
+
+<!-- INTRO -->
+<h2 class="chapter"><span class="ch-num">OVERVIEW</span>Introduction</h2>
+
+<p>Network troubleshooting sits at the intersection of hardware, software, and infrastructure. A user who cannot reach the internet may have a failed network adapter, a misconfigured IP address, a faulty cable, an overloaded router, a failing ISP connection, or a misconfigured firewall — and the symptoms may look identical from the user's perspective. The technician's job is to isolate which layer of the network stack the problem lives in and work systematically from the most likely and simplest cause toward the most complex.</p>
+
+<p>Objective 5.5 covers ten distinct network symptoms that range from physical layer problems (external interference, port flapping) through transport layer issues (high latency, jitter) to application-level failures (VoIP quality, authentication failures). This section provides the foundational networking concepts needed to understand each symptom, followed by comprehensive coverage of each symptom's causes, diagnostic approach, and resolution.</p>
+
+<div class="callout callout-info">
+  <p class="callout-title">The OSI Model as a Troubleshooting Framework</p>
+  <p>The most effective approach to network troubleshooting follows the OSI model — either bottom-up (start at Layer 1 physical, work up) or top-down (start at Layer 7 application, work down). Bottom-up is preferred for hardware-suspected issues; top-down for software-suspected issues. When in doubt, start at Layer 1: verify physical connectivity before investigating software or configuration.</p>
+</div>
+
+
+<!-- NETWORKING FOUNDATION -->
+<h2 class="chapter"><span class="ch-num">FOUNDATION</span>Network Concepts for Troubleshooting</h2>
+
+<p>Several foundational concepts appear repeatedly across the ten symptoms in this objective. Understanding them deeply — not just their definitions — enables faster, more accurate diagnosis.</p>
+
+<h3 class="section">The Network Path</h3>
+
+<p>Every network problem exists somewhere along a path from the client device to the destination. Understanding this path is the most important mental model for network troubleshooting:</p>
+
+<div class="topology-panel">
+  <div class="topology-header">Typical Client-to-Internet Network Path</div>
+  <div class="topology-body">
+    <div class="topo-row">
+      <div class="topo-node">Client Device</div>
+      <span class="topo-arrow">→</span>
+      <div class="topo-node">NIC / Wi-Fi Adapter</div>
+      <span class="topo-arrow">→</span>
+      <div class="topo-node">Network Cable / Wi-Fi</div>
+      <span class="topo-arrow">→</span>
+      <div class="topo-node">Switch / AP</div>
+    </div>
+    <div class="topo-row">
+      <span style="min-width:90px"></span>
+      <span class="topo-arrow" style="transform:rotate(90deg)">↓</span>
+    </div>
+    <div class="topo-row">
+      <div class="topo-node">ISP Network</div>
+      <span class="topo-arrow">←</span>
+      <div class="topo-node">Modem / ONT</div>
+      <span class="topo-arrow">←</span>
+      <div class="topo-node">Router / Firewall</div>
+      <span class="topo-label" style="margin-left:8px">← NAT / DHCP here</span>
+    </div>
+    <div class="topo-row" style="margin-top:10px; font-size:12.5px; color:var(--muted)">
+      Each hop is a potential point of failure. Isolating which segment is affected is the primary diagnostic goal.
+    </div>
+  </div>
+</div>
+
+<h3 class="section">Key Network Metrics</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Bandwidth</span>
+    <span>The maximum theoretical data transfer rate of a connection, measured in Mbps or Gbps. Bandwidth is the capacity of the pipe. A 100 Mbps connection can transfer at most 100 megabits per second. Bandwidth is shared — multiple users on the same network segment divide the available bandwidth.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Throughput</span>
+    <span>The actual data transfer rate achieved in practice, always lower than the rated bandwidth. Throughput is reduced by overhead, congestion, errors, and protocol inefficiencies. A 100 Mbps connection may achieve only 85 Mbps throughput under ideal conditions.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Latency (Round-Trip Time)</span>
+    <span>The time it takes for a packet to travel from source to destination and a response to return. Measured in milliseconds (ms). Lower is always better. Latency is determined by physical distance, number of hops, and congestion at each hop. Latency is the primary metric for real-time applications like VoIP and gaming.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Jitter</span>
+    <span>The variation in packet arrival times. If packets that should arrive every 20ms instead arrive at 15ms, 32ms, 18ms, and 40ms intervals, that variation is jitter. Jitter causes real-time audio and video to stutter and break up even when average latency is acceptable.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Packet Loss</span>
+    <span>The percentage of packets sent that never arrive at the destination. Even 1% packet loss is significant for real-time applications. TCP retransmits lost packets (causing latency spikes); UDP does not (causing missing audio/video frames in VoIP and streaming).</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">SNR (Signal-to-Noise Ratio)</span>
+    <span>For wireless networks, the ratio of the useful signal strength to background noise. Measured in dB. Higher SNR means cleaner, more reliable wireless connection. Low SNR from interference or weak signal causes retransmissions, lower data rates, and connectivity issues.</span>
+  </div>
+</div>
+
+<h3 class="section">Essential Diagnostic Commands</h3>
+
+<div class="cmd-block">
+<span class="cmt"># --- CONNECTIVITY TESTING ---</span>
+<span class="hl">ping 8.8.8.8</span>              <span class="cmt"># Test internet connectivity (Google DNS)</span>
+<span class="hl">ping 192.168.1.1</span>         <span class="cmt"># Test gateway connectivity</span>
+<span class="hl">ping localhost</span>            <span class="cmt"># Test TCP/IP stack (127.0.0.1)</span>
+<span class="hl">ping -t 8.8.8.8</span>          <span class="cmt"># Continuous ping — watch for packet loss</span>
+<span class="hl">ping -n 100 8.8.8.8</span>      <span class="cmt"># 100 pings — statistical packet loss measurement</span>
+
+<span class="cmt"># --- PATH TRACING ---</span>
+<span class="hl">tracert 8.8.8.8</span>           <span class="cmt"># Trace route — shows each hop and latency per hop</span>
+<span class="hl">pathping 8.8.8.8</span>          <span class="cmt"># Combines ping + tracert + packet loss per hop</span>
+
+<span class="cmt"># --- IP CONFIGURATION ---</span>
+<span class="hl">ipconfig /all</span>             <span class="cmt"># Full IP config: IP, subnet, gateway, DNS, DHCP server</span>
+<span class="hl">ipconfig /release</span>         <span class="cmt"># Release current DHCP lease</span>
+<span class="hl">ipconfig /renew</span>           <span class="cmt"># Request new IP from DHCP server</span>
+<span class="hl">ipconfig /flushdns</span>        <span class="cmt"># Clear DNS resolver cache</span>
+
+<span class="cmt"># --- NAME RESOLUTION ---</span>
+<span class="hl">nslookup google.com</span>       <span class="cmt"># Test DNS resolution</span>
+<span class="hl">nslookup google.com 8.8.8.8</span> <span class="cmt"># Test against specific DNS server</span>
+
+<span class="cmt"># --- CONNECTIONS ---</span>
+<span class="hl">netstat -an</span>               <span class="cmt"># All active connections and listening ports</span>
+<span class="hl">netstat -b</span>                <span class="cmt"># Connections with owning process (run as admin)</span>
+<span class="hl">arp -a</span>                    <span class="cmt"># ARP cache — IP to MAC address mappings</span>
+</div>
+
+<h3 class="section">The Ping Isolation Method</h3>
+
+<p>When a user cannot reach the internet, pinging specific targets in sequence isolates exactly where the problem lies. This is one of the most powerful and efficient diagnostic techniques available:</p>
+
+<div class="process-flow">
+  <div class="flow-title">Ping Isolation — Step-by-Step</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Ping 127.0.0.1 (loopback).</strong> Tests the local TCP/IP stack. If this fails, the network adapter or TCP/IP stack itself is broken — reinstall the adapter driver or TCP/IP stack. This virtually never fails.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Ping your own IP address.</strong> Run <code>ipconfig</code> first to find it. If this fails, the NIC is not properly configured or the driver is faulty.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Ping the default gateway (router).</strong> If steps 01–02 pass but this fails, the problem is between the computer and the router — check the cable, switch port, NIC, or Wi-Fi connection. If you got an APIPA address (169.254.x.x), DHCP is not responding.</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Ping a known IP on the internet (e.g., 8.8.8.8).</strong> If the gateway pings but this fails, the problem is between the router and the internet — check the modem, WAN connection, or contact the ISP.</div></div>
+  <div class="flow-step"><span class="flow-num">05</span><div class="flow-text"><strong>Ping a domain name (e.g., google.com).</strong> If 8.8.8.8 pings but google.com does not, DNS resolution is failing. Run <code>ipconfig /flushdns</code>, check DNS server settings, or try a different DNS server (8.8.8.8 or 1.1.1.1).</div></div>
+</div>
+
+
+<!-- ═══ SYMPTOM 1: INTERMITTENT WIRELESS CONNECTIVITY ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 01</span>Intermittent Wireless Connectivity</h2>
+
+<p><span class="key-term">Intermittent wireless connectivity</span> describes a Wi-Fi connection that connects and disconnects unpredictably — the user can browse the web, then suddenly loses connection, then it returns, then drops again. Unlike consistent poor performance (Symptom 02) or complete failure to connect, the defining characteristic is unpredictability. This makes it one of the more frustrating symptoms to diagnose.</p>
+
+<h3 class="section">Causes and Characteristics</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Signal strength fluctuation</span>
+    <span>The client device is on the boundary of the access point's reliable range. When the user moves or the environment changes (a door closes, someone walks between the device and the AP), signal drops below the minimum reliable threshold and the connection drops. The connection returns when conditions improve. Confirmed by checking signal strength in real time — Wi-Fi analyzer apps show signal in dBm; below -75 dBm is marginal, below -85 dBm is typically unreliable.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Channel interference</span>
+    <span>Multiple access points (neighbor networks, corporate APs) using the same or overlapping 2.4 GHz channels compete for the same radio spectrum. On 2.4 GHz, only channels 1, 6, and 11 are non-overlapping. When a neighboring AP on the same channel transmits, your AP must wait — causing latency spikes and dropped connections under heavy traffic. Use a Wi-Fi analyzer to identify congested channels and switch to the least-used non-overlapping channel.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">DHCP lease issues</span>
+    <span>A DHCP lease that expires and is not successfully renewed causes the device to lose its IP address and connectivity — even though the Wi-Fi association remains. The device appears connected to Wi-Fi but cannot communicate. Running <code>ipconfig /release</code> then <code>ipconfig /renew</code> resolves this temporarily; the root cause may be a DHCP server that is overloaded, running out of available addresses, or experiencing a bug.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Power management</span>
+    <span>Windows and laptop firmware include Wi-Fi adapter power management features that reduce the adapter's power consumption when idle. Aggressive power management settings cause the adapter to enter a low-power state during periods of inactivity and may take a moment to fully wake when traffic resumes — causing apparent disconnections. Disable in Device Manager → Wi-Fi adapter → Properties → Power Management → uncheck "Allow the computer to turn off this device to save power."</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Access point overload</span>
+    <span>An AP that has more clients than it can efficiently serve begins dropping connections or de-authenticating clients. Common in high-density environments (offices, schools, apartment buildings with many APs in range). Adding additional APs or adjusting the AP's transmit power to reduce its coverage area (so clients associate with the closest AP rather than all clients fighting for one) resolves this.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Outdated driver or firmware</span>
+    <span>A Wi-Fi adapter driver with bugs, or an access point running old firmware, can cause intermittent disconnections. Driver updates from the adapter manufacturer and firmware updates from the AP manufacturer are worth applying when intermittent issues cannot be attributed to environmental factors.</span>
+  </div>
+</div>
+
+<div class="process-flow">
+  <div class="flow-title">Intermittent Wireless — Diagnostic Steps</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Check signal strength.</strong> Use a Wi-Fi analyzer app to measure signal strength (dBm) at the problem location. Values between -30 and -67 dBm are excellent to good; -68 to -75 is acceptable; below -75 is marginal and intermittent behavior is expected.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Check which channel neighboring networks are using.</strong> Wi-Fi analyzer shows all visible SSIDs and their channels. If your AP is on channel 6 and five neighbors are also on channel 6, switch to channel 1 or 11.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Test with a wired connection.</strong> Connect via Ethernet. If the problem disappears, it is definitively wireless-related — not a router, modem, or ISP issue.</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Disable Wi-Fi adapter power management.</strong> Device Manager → Network Adapters → Wi-Fi adapter → Properties → Power Management tab → uncheck the power saving option.</div></div>
+  <div class="flow-step"><span class="flow-num">05</span><div class="flow-text"><strong>Update Wi-Fi adapter driver and AP firmware.</strong> Download the latest driver from the manufacturer's website (not Windows Update, which may have older drivers). Update AP firmware from the router's admin interface.</div></div>
+  <div class="flow-step"><span class="flow-num">06</span><div class="flow-text"><strong>Switch from 2.4 GHz to 5 GHz (or vice versa).</strong> If the AP broadcasts both bands, try the other band. 5 GHz has more non-overlapping channels and less interference but shorter range.</div></div>
+</div>
+
+
+<!-- ═══ SYMPTOM 2: SLOW NETWORK SPEEDS ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 02</span>Slow Network Speeds</h2>
+
+<p><span class="key-term">Slow network speeds</span> manifest as web pages loading slowly, file transfers taking far longer than expected, streaming buffering frequently, or general network unresponsiveness. The cause may be at the client device level, the local network level, or the ISP/WAN level — and these must be distinguished before troubleshooting can proceed.</p>
+
+<h3 class="section">Isolating the Scope</h3>
+
+<p>The first and most critical question is: <em>is the slowness affecting one device, all devices on the local network, or specific destinations on the internet?</em></p>
+
+<table class="data-table">
+  <thead><tr><th>Scope</th><th>Likely Location of Problem</th><th>Starting Point</th></tr></thead>
+  <tbody>
+    <tr><td>One device only</td><td>Client device NIC, driver, or configuration</td><td>Check NIC speed/duplex, driver, cable; compare to another device on same network</td></tr>
+    <tr><td>All devices, LAN is fast but internet is slow</td><td>ISP connection or WAN link</td><td>Run speed test; call ISP; check modem lights; check for ISP outage</td></tr>
+    <tr><td>All devices, LAN and internet both slow</td><td>Router, switch, or DHCP server</td><td>Restart router and switch; check router CPU/memory utilization</td></tr>
+    <tr><td>Specific destination slow (e.g., one website)</td><td>Routing to that destination or the destination server</td><td>Tracert to destination; issue is outside your control if slow beyond your ISP</td></tr>
+  </tbody>
+</table>
+
+<h3 class="section">Causes of Slow Network Speeds</h3>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>Local / Device Causes</h4>
+    <ul>
+      <li><strong>Speed/duplex mismatch</strong> — NIC and switch port negotiated different speeds (see below)</li>
+      <li><strong>Damaged cable</strong> — Cat5e cable running at 100 Mbps instead of 1 Gbps due to a broken pair</li>
+      <li><strong>Wrong cable category</strong> — Cat5 cable (max 100 Mbps) where Cat5e/Cat6 needed</li>
+      <li><strong>Wi-Fi instead of wired</strong> — unexpected Wi-Fi fallback at lower speed</li>
+      <li><strong>Malware</strong> — consuming upload bandwidth for spam or mining</li>
+      <li><strong>Background downloads</strong> — Windows Update, cloud sync saturating link</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Network Infrastructure Causes</h4>
+    <ul>
+      <li><strong>Network congestion</strong> — too many users sharing limited bandwidth</li>
+      <li><strong>ISP throttling</strong> — ISP reducing speeds after data cap exceeded</li>
+      <li><strong>Overloaded router</strong> — consumer router CPU overwhelmed by many connections</li>
+      <li><strong>Half-duplex collision domain</strong> — hub instead of switch causing collisions</li>
+      <li><strong>QoS misconfiguration</strong> — traffic not being prioritized correctly</li>
+      <li><strong>Broadcast storm</strong> — excessive broadcast traffic consuming bandwidth</li>
+    </ul>
+  </div>
+</div>
+
+<h3 class="section">Speed/Duplex Mismatch</h3>
+
+<p>A <span class="key-term">speed/duplex mismatch</span> occurs when a NIC and a switch port auto-negotiate to different settings — one ends up at full duplex and the other at half duplex, or at different speeds (10/100/1000 Mbps). The result is dramatically reduced throughput — often 10–20% of expected speed — and high error rates. In Device Manager → NIC Properties → Advanced, the speed and duplex can be forced to a specific setting. The switch port must match.</p>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus</p>
+  <p>Speed/duplex mismatch is a classic exam scenario: a user gets much slower speeds than expected on a wired connection, the cable and hardware appear fine, but performance is consistently poor. The answer is to check and correct the speed/duplex settings on the NIC and switch port — set both to the same value (auto-negotiate, or manually set both to 1Gbps Full Duplex).</p>
+</div>
+
+
+<!-- ═══ SYMPTOM 3: LIMITED CONNECTIVITY ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 03</span>Limited Connectivity</h2>
+
+<p><span class="key-term">Limited connectivity</span> is the Windows status message displayed when a device is connected to the network but cannot access the internet or certain network resources. The device has a network connection but something is preventing full communication — typically an IP addressing, DNS, or routing problem rather than a physical failure.</p>
+
+<h3 class="section">APIPA — The Most Common Cause</h3>
+
+<p>The most frequent cause of limited connectivity is the device failing to obtain a valid IP address from the DHCP server and instead self-assigning an <span class="key-term">APIPA (Automatic Private IP Addressing)</span> address in the 169.254.0.0/16 range. APIPA addresses are automatically assigned by the OS when no DHCP server responds within a timeout period.</p>
+
+<p>A device with a 169.254.x.x address can communicate with other devices on the same segment that also have APIPA addresses, but cannot reach the router (which has a real IP like 192.168.1.1) or the internet. This is why Windows shows "Limited connectivity" — the device is physically connected to the network but functionally isolated from anything useful.</p>
+
+<div class="cmd-block">
+<span class="cmt"># Check current IP — is it APIPA?</span>
+<span class="hl">ipconfig</span>
+
+<span class="cmt"># If you see 169.254.x.x — DHCP failed. Try:</span>
+<span class="hl">ipconfig /release</span>
+<span class="hl">ipconfig /renew</span>
+
+<span class="cmt"># If renewal fails — check DHCP server or assign static IP manually</span>
+<span class="cmt"># Expected IP format for home/SOHO: 192.168.x.x or 10.x.x.x</span>
+<span class="cmt"># Gateway: usually .1 (192.168.1.1 or 10.0.0.1)</span>
+<span class="cmt"># Subnet mask: 255.255.255.0 (/24) for most SOHO networks</span>
+</div>
+
+<h3 class="section">Other Causes of Limited Connectivity</h3>
+
+<table class="data-table">
+  <thead><tr><th>Cause</th><th>Indicator</th><th>Resolution</th></tr></thead>
+  <tbody>
+    <tr><td>APIPA address (169.254.x.x)</td><td>ipconfig shows 169.254.x.x; no DHCP response</td><td>ipconfig /release + /renew; check DHCP server; check cable; assign static IP</td></tr>
+    <tr><td>Incorrect static IP</td><td>Has a manually assigned IP but wrong subnet, gateway, or DNS</td><td>Verify IP settings match the network's addressing scheme</td></tr>
+    <tr><td>DNS failure</td><td>Can ping IP addresses (8.8.8.8) but not domain names</td><td>ipconfig /flushdns; change DNS to 8.8.8.8 or 1.1.1.1; check DNS server setting</td></tr>
+    <tr><td>Default gateway unreachable</td><td>Can ping own IP but cannot ping gateway</td><td>Check router is powered on; check cable to switch; check Wi-Fi association</td></tr>
+    <tr><td>IP address conflict</td><td>Windows "IP address conflict" warning; sporadic connectivity</td><td>Two devices have same IP; one must be changed; check DHCP server for duplicates</td></tr>
+    <tr><td>Firewall blocking traffic</td><td>Connected but specific ports/services unreachable</td><td>Check Windows Firewall rules; check router firewall/ACL settings</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Limited vs. No Connectivity</p>
+  <p><strong>Limited connectivity</strong> = physically connected, has network link, but IP/DNS/routing issue prevents full communication. <strong>No connectivity</strong> = no physical link at all — cable unplugged, switch port off, NIC failed. The distinction is important: limited connectivity is almost always a software/configuration problem; no connectivity is often a physical/hardware problem.</p>
+</div>
+
+
+<!-- ═══ SYMPTOM 4: JITTER ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 04</span>Jitter</h2>
+
+<p><span class="key-term">Jitter</span> is the variation in the timing of packet delivery. In a perfect network, packets sent at regular intervals arrive at regular intervals. In the real world, network congestion, queuing delays, and routing inconsistencies cause packets to arrive with uneven spacing — some arrive early, some late, and some may be reordered.</p>
+
+<h3 class="section">Visualizing Jitter</h3>
+
+<div class="jitter-visual">
+  <h4>Packet Arrival: Low Jitter vs High Jitter</h4>
+  <div class="packet-row">
+    <span class="row-label">Sent (regular)</span>
+    <div class="pkt even">P1</div>
+    <div class="pkt even">P2</div>
+    <div class="pkt even">P3</div>
+    <div class="pkt even">P4</div>
+    <div class="pkt even">P5</div>
+    <div class="pkt even">P6</div>
+    <span style="font-size:12px;color:var(--muted);margin-left:8px">Equal spacing</span>
+  </div>
+  <div class="packet-row">
+    <span class="row-label">Low jitter</span>
+    <div class="pkt even">P1</div>
+    <div class="pkt even">P2</div>
+    <div class="pkt even">P3</div>
+    <div class="pkt even">P4</div>
+    <div class="pkt even">P5</div>
+    <div class="pkt even">P6</div>
+    <span style="font-size:12px;color:var(--accent3);margin-left:8px">≈ Consistent arrival ✓</span>
+  </div>
+  <div class="packet-row">
+    <span class="row-label">High jitter</span>
+    <div class="pkt even">P1</div>
+    <div class="pkt late">P3</div>
+    <div class="pkt even">P2</div>
+    <div class="pkt late" style="margin-left:28px">P5</div>
+    <div class="pkt dropped">P4</div>
+    <div class="pkt late">P6</div>
+    <span style="font-size:12px;color:var(--accent);margin-left:8px">Irregular, reordered, dropped</span>
+  </div>
+</div>
+
+<h3 class="section">Why Jitter Matters for VoIP and Real-Time Audio</h3>
+
+<p>Voice over IP transmits voice as a stream of small UDP packets sent at regular intervals (typically every 20ms). The receiving device must play back these packets in order, at the correct timing, to produce intelligible speech. When jitter causes packets to arrive out of order or at irregular intervals, the receiving device's <span class="key-term">jitter buffer</span> compensates by holding packets briefly before playing them back — smoothing out the irregularity. However, jitter buffers have limits: if jitter exceeds the buffer size, packets play back incorrectly or are dropped, causing choppy, robotic, or broken audio.</p>
+
+<p>Acceptable jitter for VoIP is generally below <strong>30ms</strong>. Above 50ms, call quality degrades noticeably. Above 100ms, calls become unintelligible.</p>
+
+<h3 class="section">Causes of Jitter</h3>
+
+<ul class="body-list">
+  <li><strong>Network congestion</strong> — queues at overloaded routers/switches cause variable delays as packets wait for transmission slots</li>
+  <li><strong>Wi-Fi contention</strong> — wireless medium access is inherently non-deterministic; multiple devices competing for transmission cause irregular packet timing</li>
+  <li><strong>Insufficient QoS (Quality of Service)</strong> — without QoS, voice packets compete equally with large file downloads; one large packet in front of a voice packet adds significant delay to that voice packet</li>
+  <li><strong>Overloaded router</strong> — a consumer router at high CPU utilization introduces variable processing delays</li>
+  <li><strong>Long network path with many hops</strong> — each hop adds variable delay; paths with many hops accumulate more jitter</li>
+</ul>
+
+<h3 class="section">Measuring and Resolving Jitter</h3>
+
+<p>Jitter is measured using tools like <code>ping</code> (observe the variance in round-trip times across many pings), <strong>iPerf</strong>, or dedicated VoIP testing tools. The variance between the minimum and maximum RTT in a ping test approximates jitter.</p>
+
+<p>Resolution centers on reducing congestion: implement QoS to prioritize voice traffic (DSCP marking), reduce overall network utilization during VoIP usage, switch VoIP devices to wired connections, and upgrade network hardware if the router is the bottleneck.</p>
+
+
+<!-- ═══ SYMPTOM 5: POOR VOIP QUALITY ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 05</span>Poor VoIP Quality</h2>
+
+<p><span class="key-term">Voice over IP (VoIP)</span> transmits voice calls as data packets over IP networks. Because voice is a real-time application with strict timing requirements, it is extraordinarily sensitive to network conditions that other applications tolerate easily. A network that appears perfectly functional for web browsing or file transfers can be completely inadequate for VoIP.</p>
+
+<h3 class="section">VoIP-Specific Network Requirements</h3>
+
+<table class="data-table">
+  <thead><tr><th>Metric</th><th>Acceptable Range</th><th>Poor Quality Threshold</th><th>Impact if Exceeded</th></tr></thead>
+  <tbody>
+    <tr><td>Latency (one-way)</td><td>Below 150ms</td><td>Above 150ms one-way (300ms RTT)</td><td>Noticeable conversation delay; talking over each other</td></tr>
+    <tr><td>Jitter</td><td>Below 30ms</td><td>Above 50ms</td><td>Choppy, robotic, broken audio</td></tr>
+    <tr><td>Packet loss</td><td>Below 1%</td><td>Above 3%</td><td>Gaps in audio; clipping; dropped syllables</td></tr>
+    <tr><td>Bandwidth per call</td><td>80–120 Kbps per call (bidirectional)</td><td>N/A — insufficient bandwidth</td><td>All calls degraded; audio compression artifacts</td></tr>
+  </tbody>
+</table>
+
+<h3 class="section">VoIP Quality Issues and Their Causes</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Echo</span>
+    <span>The caller hears their own voice played back with a delay. Caused by acoustic echo (microphone picking up speaker output) or electrical echo in the phone equipment. Most VoIP systems include echo cancellation — if echo persists, the echo cancellation algorithm is not working, or the hardware is causing the echo. Also caused by high latency — when one-way delay exceeds ~50ms, the speaker's voice returns audibly.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Choppy / robotic voice</span>
+    <span>Audio breaks up into fragments, sounds digitized, or has a mechanical quality. The primary causes are high jitter (jitter buffer overflow causing packet reordering or drops) and packet loss. A jitter buffer that is undersized for the network conditions cannot smooth out the irregularity — the gaps become audible.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">One-way audio</span>
+    <span>One party can hear the other but not vice versa. A firewall or NAT issue preventing the return audio stream is the most common cause. VoIP uses RTP (Real-time Transport Protocol) for audio on dynamically assigned UDP ports — firewalls that don't properly track these sessions may block the return path.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Calls drop unexpectedly</span>
+    <span>VoIP calls disconnect mid-conversation. Causes include: intermittent internet connectivity (the SIP signaling session times out), NAT timeout (the NAT table entry for the VoIP session expires), or network congestion causing SIP keepalive packets to be lost.</span>
+  </div>
+</div>
+
+<h3 class="section">QoS — The Primary VoIP Fix</h3>
+
+<p><span class="key-term">Quality of Service (QoS)</span> is a set of router/switch features that prioritize certain types of traffic over others. For VoIP, QoS ensures that voice packets are processed before large data transfers even when the network is congested. Without QoS, a large file download happening simultaneously with a VoIP call can cause the router's output queue to fill with file transfer packets — voice packets sit in queue behind them, arriving late and causing jitter.</p>
+
+<p>VoIP traffic is typically marked with a DSCP (Differentiated Services Code Point) value of EF (Expedited Forwarding) — the highest priority class. Configuring QoS on the router to honor this marking, or using application-aware QoS to detect and prioritize VoIP ports, is the standard solution for VoIP quality issues on shared networks.</p>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus — VoIP Quality</p>
+  <p>On the exam, poor VoIP quality questions almost always point to one of three causes: <strong>high latency</strong>, <strong>jitter</strong>, or <strong>insufficient bandwidth</strong>. The recommended fixes are: enable QoS on the router, switch VoIP devices to wired connections, and ensure adequate internet bandwidth. Know that VoIP uses UDP (not TCP) — lost packets are not retransmitted, they are simply gaps in the audio.</p>
+</div>
+
+
+<!-- ═══ SYMPTOM 6: PORT FLAPPING ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 06</span>Port Flapping</h2>
+
+<p><span class="key-term">Port flapping</span> describes a switch or router port that rapidly and repeatedly cycles between an up (active) and down (inactive) state — potentially dozens of times per minute. The term comes from the log entries it generates, which appear as alternating "link up" and "link down" messages for the same interface. From the user's perspective, the device experiences frequent, brief connectivity interruptions.</p>
+
+<h3 class="section">Causes</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Faulty network cable</span>
+    <span>The most common cause. A cable with a broken conductor that makes intermittent contact — bending with vibration or small movements — causes the link to drop when the conductor loses contact and return when contact is reestablished. The fault is usually near the RJ-45 connector end where the cable is flexed most often. Replace the cable to confirm.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Failing NIC</span>
+    <span>A network interface card that is electrically unstable — due to a failing capacitor, overheating, or physical damage — may repeatedly lose synchronization with the switch port, causing the link to cycle. Test by substituting a known-good NIC.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Speed/duplex mismatch</span>
+    <span>When auto-negotiation fails and the NIC and switch port cannot agree on operating parameters, some hardware implementations respond by repeatedly attempting to re-establish the link — causing flapping. Manually setting both ends to the same speed/duplex resolves this.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Failing switch port or switch hardware</span>
+    <span>The switch port's physical interface has degraded. Moving the cable to a different port on the switch and observing whether the flapping follows the cable (cable/NIC issue) or stays on the original port (switch port issue) isolates this.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Spanning Tree Protocol (STP) instability</span>
+    <span>In networks with redundant links, STP manages which paths are active to prevent loops. STP instability — caused by misconfiguration, a misbehaving switch, or topology changes — can cause ports to cycle between STP states, appearing as port flapping in logs. This is more common in managed enterprise networks.</span>
+  </div>
+</div>
+
+<div class="callout callout-tip">
+  <p class="callout-title">Diagnostic Approach</p>
+  <p>The fastest diagnostic for port flapping: <strong>replace the cable first</strong>. It's free, takes 30 seconds, and resolves the majority of port flapping cases. If flapping continues with a new cable, move the connection to a different switch port. If it follows the original switch port, the switch port is faulty. If it follows the device, the NIC is faulty.</p>
+</div>
+
+
+<!-- ═══ SYMPTOM 7: HIGH LATENCY ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 07</span>High Latency</h2>
+
+<p><span class="key-term">Latency</span> is the time delay between sending data and receiving a response. It is measured in milliseconds (ms) using the ping command. High latency makes the network feel slow and unresponsive even when bandwidth is adequate — web pages begin loading slowly, interactive applications feel sluggish, remote desktop sessions lag, and games become unplayable.</p>
+
+<h3 class="section">Latency Reference Scale</h3>
+
+<div class="latency-scale">
+  <div style="font-family:var(--sans);font-size:12px;color:var(--muted);margin-bottom:6px;">Round-Trip Time (RTT) — lower is better</div>
+  <div class="latency-bar"></div>
+  <div class="latency-labels">
+    <span>0ms</span>
+    <span>50ms</span>
+    <span>100ms</span>
+    <span>200ms</span>
+    <span>500ms</span>
+    <span>1000ms+</span>
+  </div>
+  <div class="latency-markers">
+    <div class="lat-marker"><div class="ms">&lt;10ms</div><div class="use">LAN / SSD</div></div>
+    <div class="lat-marker"><div class="ms">10–50ms</div><div class="use">Excellent internet</div></div>
+    <div class="lat-marker"><div class="ms">50–100ms</div><div class="use">Good; gaming ok</div></div>
+    <div class="lat-marker"><div class="ms">100–200ms</div><div class="use">Noticeable delay</div></div>
+    <div class="lat-marker"><div class="ms">200–500ms</div><div class="use">VoIP degraded</div></div>
+    <div class="lat-marker"><div class="ms">500ms+</div><div class="use">Severe impairment</div></div>
+  </div>
+</div>
+
+<h3 class="section">Causes of High Latency</h3>
+
+<table class="data-table">
+  <thead><tr><th>Cause</th><th>Where Latency Is Added</th><th>Diagnosis</th></tr></thead>
+  <tbody>
+    <tr><td>Network congestion</td><td>Overloaded router/switch buffers; queuing delay</td><td>Latency is higher during peak hours; improves at off-peak; tracert shows high latency at specific hop</td></tr>
+    <tr><td>ISP issues</td><td>WAN link or ISP backbone congestion</td><td>Ping to gateway is low but ping to internet IPs is high; call ISP</td></tr>
+    <tr><td>Wireless interference</td><td>Wi-Fi retransmissions add delay</td><td>High latency on Wi-Fi, normal on wired from same location</td></tr>
+    <tr><td>Geographic distance</td><td>Physical propagation delay — light travels ~200km/ms in fiber</td><td>Normal for servers far away; tracert shows geographically distant hops</td></tr>
+    <tr><td>Overloaded router</td><td>Router CPU at 100%; packets queued waiting for processing</td><td>Check router CPU in admin interface; high CPU during peak usage</td></tr>
+    <tr><td>DNS lookup delay</td><td>Slow DNS resolution adds to perceived latency</td><td>IP addresses load fast; domain names load slowly; test with nslookup</td></tr>
+  </tbody>
+</table>
+
+<h3 class="section">Using Tracert to Locate High Latency</h3>
+
+<div class="cmd-block">
+<span class="cmt"># tracert shows latency at each hop</span>
+<span class="hl">tracert google.com</span>
+
+<span class="cmt"># Example output — latency spikes at hop 4 indicate ISP issue</span>
+<span class="wh">  1    1 ms    1 ms    1 ms   192.168.1.1     </span><span class="ok"># Your router — fast = good</span>
+<span class="wh">  2    8 ms    9 ms    8 ms   10.0.0.1        </span><span class="ok"># ISP gateway — normal</span>
+<span class="wh">  3   12 ms   11 ms   12 ms   172.16.x.x      </span><span class="ok"># ISP backbone — normal</span>
+<span class="wh">  4  210 ms  198 ms  215 ms   203.x.x.x       </span><span class="err"># ← SPIKE HERE — problem at this hop</span>
+<span class="wh">  5  212 ms  205 ms  211 ms   64.x.x.x        </span><span class="cmt"># Remains high after the spike hop</span>
+
+<span class="cmt"># Key: latency that appears at a specific hop and stays high = problem at that hop</span>
+<span class="cmt"># Latency at hop 4 with hop 3 normal = hop 4 router/link is congested</span>
+<span class="cmt"># * * * = hop does not respond to ICMP (not necessarily an error)</span>
+</div>
+
+
+<!-- ═══ SYMPTOM 8: EXTERNAL INTERFERENCE ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 08</span>External Interference</h2>
+
+<p><span class="key-term">External interference</span> refers to electromagnetic signals from outside sources that corrupt or compete with network signals — primarily affecting wireless (Wi-Fi) networks and, to a lesser extent, unshielded wired networks. Understanding interference sources is critical because many intermittent wireless problems that appear to be hardware or configuration issues are actually environmental.</p>
+
+<h3 class="section">Wireless Interference Sources</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Microwave ovens</span>
+    <span>Operate at 2.45 GHz — directly overlapping the 2.4 GHz Wi-Fi band. When a microwave is in use, it radiates significant RF energy that severely degrades nearby 2.4 GHz Wi-Fi. The interference is intermittent — only when the microwave is running — which can make it difficult to identify. Mitigation: switch to 5 GHz Wi-Fi; relocate AP away from the break room.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Bluetooth devices</span>
+    <span>Bluetooth operates in the 2.4 GHz band using frequency hopping spread spectrum (FHSS). In environments with many Bluetooth devices (wireless headphones, keyboards, mice, speakers), Bluetooth can cause interference to 2.4 GHz Wi-Fi. Modern devices use adaptive frequency hopping to minimize this, but high-density Bluetooth environments (conference rooms, gaming setups) can still cause issues.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Cordless phones (2.4 GHz)</span>
+    <span>Older 2.4 GHz cordless phones transmit continuously when in use, causing severe 2.4 GHz Wi-Fi interference. Less common today as most newer cordless phones use 1.9 GHz DECT or 5.8 GHz, but still found in many offices.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Neighboring Wi-Fi networks</span>
+    <span>The most common source of Wi-Fi interference in urban and multi-tenant environments. Neighboring SSIDs on the same or overlapping channels compete for airtime. Use a Wi-Fi analyzer to identify channel congestion and select the least-used non-overlapping channel (1, 6, or 11 for 2.4 GHz).</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Physical obstructions and materials</span>
+    <span>Not electromagnetic interference, but physical impedance. Concrete walls (especially reinforced with rebar), metal structures, filing cabinets, elevator shafts, and thick glass all significantly attenuate Wi-Fi signals. 5 GHz is more affected by physical obstructions than 2.4 GHz due to its shorter wavelength.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">EMI from electrical equipment</span>
+    <span>Fluorescent light ballasts, large electric motors, industrial equipment, and poorly shielded electrical wiring generate electromagnetic interference that can affect both wireless networks and unshielded twisted pair (UTP) wired networks. Shielded twisted pair (STP) or fiber optic cabling is immune to EMI. Running UTP cable alongside high-voltage power cables in the same conduit causes induced interference.</span>
+  </div>
+</div>
+
+<h3 class="section">Identifying and Mitigating Interference</h3>
+
+<div class="process-flow">
+  <div class="flow-title">External Interference — Diagnostic and Mitigation</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Use a Wi-Fi analyzer app.</strong> Tools like NetSpot (Windows/Mac), Wi-Fi Analyzer (Android), or inSSIDer show signal strength, channel usage, and noise floor in real time. A high noise floor (above -85 dBm) confirms interference regardless of source.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Switch from 2.4 GHz to 5 GHz.</strong> Eliminates microwave, Bluetooth, cordless phone, and most neighboring network interference simultaneously. Most modern dual-band routers support both bands.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Change Wi-Fi channel.</strong> Use Wi-Fi analyzer to identify which channels neighbors use, and select the channel with the least competing networks. Stick to non-overlapping channels: 1, 6, or 11 (2.4 GHz); any 20/40 MHz channel (5 GHz has many non-overlapping options).</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Relocate the access point.</strong> Move the AP away from identified interference sources (microwaves, cordless phone bases, industrial equipment). Physically center the AP in the coverage area.</div></div>
+  <div class="flow-step"><span class="flow-num">05</span><div class="flow-text"><strong>For wired interference:</strong> replace UTP with shielded twisted pair (STP) or fiber optic cabling in high-EMI environments. Ensure wired cables are not running parallel to high-voltage electrical wiring.</div></div>
+</div>
+
+
+<!-- ═══ SYMPTOM 9: AUTHENTICATION FAILURES ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 09</span>Authentication Failures</h2>
+
+<p><span class="key-term">Authentication failures</span> occur when a device or user cannot prove their identity to the network, preventing access. In network troubleshooting, authentication failures most commonly manifest as inability to connect to a Wi-Fi network (wrong password, incorrect security settings), inability to log on to a domain, or inability to access network resources.</p>
+
+<h3 class="section">Wireless Authentication Failures</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Incorrect WPA2/WPA3 passphrase</span>
+    <span>The most common cause of Wi-Fi authentication failure. The pre-shared key (PSK) entered on the client does not match the AP configuration. Case-sensitive — verify capitalization. Check for hidden characters (spaces at the end, substituted special characters). Solution: retype the passphrase carefully, or use the AP's admin interface to confirm or reset it.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Security protocol mismatch</span>
+    <span>The client device supports only WPA2 but the AP is configured for WPA3-only (or vice versa). Older devices may not support WPA3. AP configuration should be set to WPA2/WPA3 transition mode to support both simultaneously. WEP should never be used — it is completely broken cryptographically.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">802.1X / RADIUS authentication</span>
+    <span>Enterprise Wi-Fi networks use 802.1X authentication where each user authenticates with their own credentials (username/password or certificate) against a RADIUS server, rather than a shared passphrase. Authentication failures can be caused by: expired user credentials, certificate errors (untrusted CA), incorrect RADIUS server configuration, or a RADIUS server that is unreachable. The client may need the RADIUS server's root certificate installed to validate the server's identity.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">MAC address filtering</span>
+    <span>Some APs are configured to only allow connections from devices whose MAC addresses are explicitly listed. A new or replaced device will fail to connect even with the correct passphrase because its MAC address is not in the allowed list. Add the new device's MAC address to the AP's allowed list, or disable MAC filtering (it provides minimal security benefit and significant administrative overhead).</span>
+  </div>
+</div>
+
+<h3 class="section">Domain / Network Resource Authentication Failures</h3>
+
+<table class="data-table">
+  <thead><tr><th>Symptom</th><th>Cause</th><th>Resolution</th></tr></thead>
+  <tbody>
+    <tr><td>Cannot log on to domain</td><td>Domain controller unreachable; incorrect credentials; account locked or disabled</td><td>Check network connectivity to DC; verify credentials; check AD for account status; check DNS points to DC</td></tr>
+    <tr><td>Network share access denied</td><td>NTFS or share permissions do not allow the user's account</td><td>Check share permissions and NTFS permissions on the target folder; verify user is in correct group</td></tr>
+    <tr><td>Kerberos authentication errors</td><td>System clock is not synchronized with domain controller (Kerberos requires clocks within 5 minutes)</td><td>Sync the client's clock to the domain's NTP server: <code>w32tm /resync</code></td></tr>
+    <tr><td>Certificate authentication errors</td><td>Client certificate expired; untrusted CA; wrong certificate store</td><td>Renew or reissue certificate; add CA certificate to Trusted Root store</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus — Kerberos Clock Skew</p>
+  <p>Kerberos (the authentication protocol used by Windows Active Directory) requires the client's system clock to be within <strong>5 minutes</strong> of the domain controller's clock. If the clocks drift beyond this threshold — most commonly from a dead CMOS battery (see Objective 5.1) or a workstation that was offline for an extended period — domain authentication fails with a cryptic error. The fix is to synchronize the client clock: <code>net time /domain /set /y</code> or <code>w32tm /resync</code>.</p>
+</div>
+
+
+<!-- ═══ SYMPTOM 10: INTERMITTENT INTERNET CONNECTIVITY ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 10</span>Intermittent Internet Connectivity</h2>
+
+<p><span class="key-term">Intermittent internet connectivity</span> differs from intermittent wireless connectivity (Symptom 01) in an important way: the local network is functioning normally, but internet access drops in and out. The LAN is healthy — file shares, printers, and local servers work — but websites and external services are intermittently unreachable.</p>
+
+<h3 class="section">Distinguishing Local vs WAN Issues</h3>
+
+<p>The most important diagnostic distinction for this symptom is confirming that the local network is working. If users can access local resources (internal file shares, local printers, internal servers) but internet access is intermittent, the problem is at the WAN boundary — the router, modem, or ISP.</p>
+
+<h3 class="section">Causes and Diagnosis</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">ISP connection instability</span>
+    <span>The physical connection between the modem/ONT and the ISP's network is unstable. For cable internet, this can be caused by a deteriorated coaxial cable, a failing splitter, or line noise from water intrusion in the junction box. For DSL, line quality degrades with distance and moisture. Checking the modem's diagnostic page (log in to modem admin interface) shows line statistics: downstream power, SNR margin, and error counts. Abnormal values confirm a physical line issue — ISP dispatch is required.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">ISP outage or maintenance</span>
+    <span>The ISP's network is experiencing planned maintenance or an unplanned outage. Intermittent connectivity that affects all users in an area simultaneously and correlates with no local changes. Check the ISP's status page or outage reporting services (Downdetector). Call the ISP support line. No action is possible on the customer side.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Failing or overheating modem/router</span>
+    <span>A modem or router that has been running continuously for years may develop thermal issues — overheating under load causes it to drop the WAN connection and reboot. If the router is hot to the touch and connectivity drops under heavy usage, overheating is suspect. Ensure the router has adequate ventilation, is not enclosed, and is not stacked with other heat-generating equipment. Old routers may simply require replacement.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">DNS server instability</span>
+    <span>The DNS server is intermittently unreachable or slow. Web browsing appears to fail intermittently because DNS lookups time out — but IP addresses (like 8.8.8.8) can still be pinged. Confirmed by: <code>nslookup google.com</code> intermittently fails. Resolution: change the DNS server in network settings to a reliable public DNS — Google (8.8.8.8 / 8.8.4.4) or Cloudflare (1.1.1.1).</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">DHCP WAN lease not renewing</span>
+    <span>The modem/router obtains its WAN IP from the ISP via DHCP. If the lease expires and the ISP's DHCP server does not respond to the renewal, the router loses its WAN IP and internet access drops until the lease is renewed. Most routers handle this gracefully, but a bug in the router firmware or an ISP DHCP server issue can cause this to fail intermittently. Power cycling the router forces a fresh DHCP lease.</span>
+  </div>
+</div>
+
+<div class="process-flow">
+  <div class="flow-title">Intermittent Internet Connectivity — Diagnostic Sequence</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Confirm local network is working.</strong> Can you access a local network resource (printer, NAS, another computer on the LAN)? Can you ping the default gateway? If yes, the problem is WAN-side only.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Check modem/ONT indicator lights.</strong> Most modems have LEDs for power, downstream sync, upstream sync, and internet connectivity. A flashing or unlit "internet" or "online" LED during outage periods confirms a WAN sync issue.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Check ISP status.</strong> Visit the ISP's status page (from a mobile data connection) or Downdetector to see if a regional outage is reported. If yes, wait for ISP resolution — no local action needed.</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Power cycle the modem and router.</strong> Turn off the modem, wait 30 seconds, power it on. After the modem fully synchronizes (all lights stable), power on the router. This forces new DHCP leases at both the WAN and LAN levels and resolves many transient issues.</div></div>
+  <div class="flow-step"><span class="flow-num">05</span><div class="flow-text"><strong>Log into the modem's admin interface.</strong> Check signal levels, SNR margin, and the event log. High error counts, low SNR, or repeated re-synchronization events confirm a physical line problem — contact the ISP for a line quality check or technician visit.</div></div>
+  <div class="flow-step"><span class="flow-num">06</span><div class="flow-text"><strong>Change DNS servers.</strong> Set the router's upstream DNS to 8.8.8.8 / 8.8.4.4 or 1.1.1.1 / 1.0.0.1. This rules out ISP DNS instability as a contributing factor.</div></div>
+  <div class="flow-step"><span class="flow-num">07</span><div class="flow-text"><strong>Set up a continuous ping log.</strong> Run <code>ping -t 8.8.8.8 &gt; ping_log.txt</code> and let it run for hours. Review the log to identify the exact times and frequency of connectivity drops — useful data when calling ISP support.</div></div>
+</div>
+
+
+<!-- MASTER REFERENCE -->
+<div class="ch-divider"></div>
+
+<div class="summary-box">
+  <h3>Master Reference — All 10 Symptoms</h3>
+  <div class="summary-grid">
+    <div class="summary-item"><span class="s-sym">Intermittent wireless</span><span>Signal strength, channel interference, power management, AP overload, driver</span></div>
+    <div class="summary-item"><span class="s-sym">Slow network speeds</span><span>Speed/duplex mismatch, damaged cable, congestion, ISP throttling — isolate scope first</span></div>
+    <div class="summary-item"><span class="s-sym">Limited connectivity</span><span>APIPA (169.254.x.x) = DHCP failed; also check DNS, IP conflict, gateway</span></div>
+    <div class="summary-item"><span class="s-sym">Jitter</span><span>Variable packet timing; caused by congestion; measured in ms; implement QoS</span></div>
+    <div class="summary-item"><span class="s-sym">Poor VoIP quality</span><span>Latency &lt;150ms, jitter &lt;30ms, loss &lt;1% — QoS and wired connection are primary fixes</span></div>
+    <div class="summary-item"><span class="s-sym">Port flapping</span><span>Replace cable first; then move to different switch port; then test NIC</span></div>
+    <div class="summary-item"><span class="s-sym">High latency</span><span>Use tracert to find which hop adds delay; congestion, ISP, or wireless</span></div>
+    <div class="summary-item"><span class="s-sym">External interference</span><span>2.4 GHz: microwaves, BT, phones, neighbors. Fix: switch to 5 GHz, change channel</span></div>
+    <div class="summary-item"><span class="s-sym">Authentication failures</span><span>Wi-Fi: wrong PSK, security mismatch, MAC filter. Domain: clock skew, DC unreachable</span></div>
+    <div class="summary-item"><span class="s-sym">Intermittent internet</span><span>Confirm LAN works; check modem lights; ISP outage; power cycle modem+router; DNS</span></div>
+  </div>
+</div>
+
+
+<!-- TOOLS REFERENCE -->
+<h2 class="chapter"><span class="ch-num">REFERENCE</span>Diagnostic Tools & Commands Summary</h2>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>Windows CLI Tools</h4>
+    <ul>
+      <li><code>ipconfig /all</code> — full IP configuration including DHCP server</li>
+      <li><code>ipconfig /release</code> + <code>/renew</code> — refresh DHCP lease</li>
+      <li><code>ipconfig /flushdns</code> — clear DNS resolver cache</li>
+      <li><code>ping -t [host]</code> — continuous ping for packet loss monitoring</li>
+      <li><code>ping -n 100 8.8.8.8</code> — statistical packet loss over 100 pings</li>
+      <li><code>tracert [host]</code> — hop-by-hop latency to destination</li>
+      <li><code>pathping [host]</code> — combined tracert + packet loss per hop</li>
+      <li><code>nslookup [domain]</code> — DNS resolution test</li>
+      <li><code>netstat -an</code> — active connections and listening ports</li>
+      <li><code>arp -a</code> — ARP cache; IP to MAC mappings</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Additional Tools & Concepts</h4>
+    <ul>
+      <li><strong>Wi-Fi Analyzer</strong> — channel usage, signal strength, noise floor</li>
+      <li><strong>iPerf</strong> — bandwidth and jitter testing between two endpoints</li>
+      <li><strong>Speedtest.net</strong> — ISP bandwidth and latency test</li>
+      <li><strong>Ping isolation method</strong> — loopback → own IP → gateway → internet IP → domain name</li>
+      <li><strong>APIPA range</strong> — 169.254.0.0/16 = DHCP failure indicator</li>
+      <li><strong>QoS / DSCP EF</strong> — VoIP traffic prioritization</li>
+      <li><strong>Non-overlapping 2.4 GHz channels</strong> — 1, 6, and 11 only</li>
+      <li><code>w32tm /resync</code> — synchronize Windows clock to domain</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout callout-exam" style="margin-top: 28px;">
+  <p class="callout-title">Final Exam Reminders</p>
+  <p><strong>APIPA (169.254.x.x)</strong> = DHCP server unreachable. Release/renew; check cable; check DHCP server.</p>
+  <p><strong>Limited connectivity</strong> = has link, no full communication. Check IP config, DNS, gateway reachability.</p>
+  <p><strong>Ping isolation</strong> = loopback → own IP → gateway → 8.8.8.8 → domain name. Failure at each step points to a different layer.</p>
+  <p><strong>VoIP quality</strong> = latency below 150ms, jitter below 30ms, packet loss below 1%. Fix: QoS + wired connection.</p>
+  <p><strong>VoIP uses UDP</strong> — lost packets create audio gaps, not retransmissions.</p>
+  <p><strong>Port flapping</strong> = replace the cable first. Then move switch port. Then test NIC.</p>
+  <p><strong>Speed/duplex mismatch</strong> = wired connection much slower than expected with no other explanation.</p>
+  <p><strong>Tracert spike at hop N</strong> = congestion or failure at that hop; stays high for all subsequent hops.</p>
+  <p><strong>Kerberos authentication fails</strong> = check system clock — must be within 5 minutes of domain controller.</p>
+  <p><strong>Intermittent internet, LAN works</strong> = check modem lights → ISP outage → power cycle → modem line stats → call ISP.</p>
+  <p><strong>2.4 GHz interference</strong> = microwaves, Bluetooth, cordless phones, neighbors. Switch to 5 GHz or change to channels 1, 6, or 11.</p>
+</div>
+
+</div>
+</body>
+</html>

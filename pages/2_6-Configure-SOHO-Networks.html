@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CompTIA A+ 2.6 — Configure Basic SOHO Networks: IP Addressing</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --surface2: #f5f4f0;
+    --border: #e5e2d9;
+    --border2: #d4d0c4;
+    --text: #1a1a18;
+    --muted: #6b6860;
+    --accent: #c0392b;
+    --accent2: #2c3e6b;
+    --accent3: #1a6b3a;
+    --accent4: #b5590a;
+    --accent-light: #fdf2f1;
+    --accent2-light: #f0f2f8;
+    --accent3-light: #f0f8f3;
+    --accent4-light: #fdf5ed;
+    --serif: 'Crimson Pro', Georgia, serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── TOP NAV ── */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .top-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .nav-home {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+  .nav-home:hover { color: var(--accent2); }
+  .nav-home::before {
+    content: '←';
+    font-size: 12px;
+  }
+  .nav-sep {
+    font-size: 12px;
+    color: var(--border2);
+    flex-shrink: 0;
+  }
+  .nav-current {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nav-current strong {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    margin-right: 6px;
+  }
+  .top-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .nav-prev, .nav-next {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 4px 9px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    white-space: nowrap;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .nav-prev:hover, .nav-next:hover {
+    border-color: var(--border2);
+    color: var(--accent2);
+  }
+  .nav-prev::before { content: '← '; }
+  .nav-next::after  { content: ' →'; }
+
+  @media (max-width: 600px) {
+    .top-nav { padding: 0 16px; }
+    .nav-current { display: none; }
+    .nav-sep { display: none; }
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  .page { max-width: 860px; margin: 0 auto; padding: 0 40px 80px; }
+
+  /* HEADER */
+  .book-header {
+    border-bottom: 3px double var(--border2);
+    padding: 56px 0 32px;
+    margin-bottom: 48px;
+  }
+  .book-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .book-eyebrow span {
+    background: var(--accent);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-right: 10px;
+    font-size: 10px;
+  }
+  .book-title {
+    font-family: var(--serif);
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+  .book-subtitle {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .book-subtitle span { display: flex; align-items: center; gap: 6px; }
+  .book-subtitle span::before { content: '·'; color: var(--border2); }
+  .book-subtitle span:first-child::before { display: none; }
+
+  /* HEADINGS */
+  h2.chapter {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 600;
+    margin: 52px 0 6px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    letter-spacing: -0.01em;
+  }
+  h2.chapter .ch-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+    letter-spacing: 0.1em;
+    font-weight: 400;
+  }
+  h3.section {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    margin: 36px 0 12px;
+  }
+  h3.section::before { content: '§ '; color: var(--muted); font-weight: 300; }
+
+  p { margin-bottom: 16px; }
+
+  /* CALLOUTS */
+  .callout {
+    border-left: 3px solid;
+    padding: 14px 20px;
+    margin: 24px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 15.5px;
+  }
+  .callout p { margin-bottom: 6px; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout-title {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px !important;
+  }
+  .callout-exam { border-color: var(--accent); background: var(--accent-light); }
+  .callout-exam .callout-title { color: var(--accent); }
+  .callout-info { border-color: var(--accent2); background: var(--accent2-light); }
+  .callout-info .callout-title { color: var(--accent2); }
+  .callout-tip { border-color: var(--accent3); background: var(--accent3-light); }
+  .callout-tip .callout-title { color: var(--accent3); }
+  .callout-warn { border-color: var(--accent4); background: var(--accent4-light); }
+  .callout-warn .callout-title { color: var(--accent4); }
+
+  /* TABLES */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+    font-family: var(--sans);
+    margin: 16px 0 24px;
+  }
+  .data-table thead th {
+    background: var(--surface2);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 9px 13px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .data-table tbody tr { border-bottom: 1px solid var(--border); }
+  .data-table tbody tr:last-child { border-bottom: none; }
+  .data-table td { padding: 9px 13px; vertical-align: top; line-height: 1.5; }
+  .data-table td:first-child {
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 13.5px;
+  }
+
+  /* PROCESS FLOW */
+  .process-flow {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: var(--sans);
+    font-size: 14px;
+  }
+  .flow-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .flow-step:last-child { border-bottom: none; }
+  .flow-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+    min-width: 24px;
+    padding-top: 2px;
+  }
+  .flow-text { color: var(--text); line-height: 1.55; }
+  .flow-text strong { font-weight: 600; }
+
+  /* DEF LIST */
+  .def-list { margin: 16px 0 24px; }
+  .def-item {
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 210px 1fr;
+    gap: 20px;
+    font-size: 15px;
+  }
+  .def-item:last-child { border-bottom: none; }
+  .def-term {
+    font-family: var(--sans);
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 14px;
+    padding-top: 1px;
+    line-height: 1.4;
+  }
+
+  /* GRID CARDS */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 16px 18px;
+  }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 10px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card ul { list-style: none; font-family: var(--sans); font-size: 13.5px; }
+  .card ul li {
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .card ul li:last-child { border-bottom: none; }
+  .card ul li strong { color: var(--text); }
+
+  /* BODY LIST */
+  ul.body-list {
+    list-style: none;
+    font-family: var(--sans);
+    font-size: 15px;
+    padding: 0;
+    margin: 12px 0 20px;
+  }
+  ul.body-list li {
+    padding: 5px 0 5px 18px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  ul.body-list li:last-child { border-bottom: none; }
+  ul.body-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--border2);
+    font-size: 12px;
+  }
+  ul.body-list li strong { color: var(--text); }
+
+  /* SPEC DIAGRAM (range bars) */
+  .spec-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: var(--sans);
+  }
+  .spec-diagram h4 {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .spec-bar-wrap { margin-bottom: 10px; }
+  .spec-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .spec-label strong { color: var(--text); }
+  .spec-bar {
+    height: 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .spec-fill {
+    height: 100%;
+    border-radius: 2px;
+  }
+  .fill-blue { background: #2c3e6b; }
+  .fill-green { background: #4caf50; }
+  .fill-amber { background: #ffc107; }
+  .fill-orange { background: #ff9800; }
+  .fill-red { background: #f44336; }
+  .fill-purple { background: #8e44ad; }
+  .fill-gray { background: #9e9e9e; }
+
+  /* BADGES */
+  .conn-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-weight: 600;
+    margin-right: 4px;
+  }
+  .badge-wifi { background: #e3f2fd; color: #1565c0; border: 1px solid #90caf9; }
+  .badge-cell { background: #f3e5f5; color: #6a1b9a; border: 1px solid #ce93d8; }
+  .badge-bt { background: #e8f5e9; color: #1b5e20; border: 1px solid #a5d6a7; }
+  .badge-nfc { background: #fff3e0; color: #e65100; border: 1px solid #ffcc80; }
+  .badge-poe { background: #fdf2f1; color: #c0392b; border: 1px solid #e8b4ae; }
+
+  /* CODE */
+  code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: var(--accent);
+  }
+
+  .key-term { font-style: italic; font-weight: 500; color: var(--accent2); }
+
+  /* SUMMARY BOX */
+  .summary-box {
+    background: var(--text);
+    color: #f0ede6;
+    border-radius: 6px;
+    padding: 28px 32px;
+    margin: 40px 0;
+  }
+  .summary-box h3 {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 18px;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 32px;
+  }
+  .summary-item {
+    font-family: var(--sans);
+    font-size: 13.5px;
+    color: #c4bfb4;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .summary-item .s-sym {
+    color: #fff;
+    font-weight: 600;
+    min-width: 175px;
+    line-height: 1.4;
+  }
+
+  .ch-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--border2), transparent);
+    margin: 48px 0;
+  }
+
+  /* INDICATOR DOTS */
+  .malware-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .ind-high { background: var(--accent); }
+  .ind-med { background: var(--accent4); }
+  .ind-low { background: var(--accent3); }
+
+  @media (max-width: 680px) {
+    .page { padding: 0 20px 60px; }
+    .summary-grid, .card-grid { grid-template-columns: 1fr; }
+    .def-item { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV — update href values to match your actual file names -->
+<nav class="top-nav">
+  <div class="top-nav-left">
+    <a class="nav-home" href="../index.html">Study Guide</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current"><strong>2.6</strong> Configure Basic Wired/Wireless SOHO Networks — IP Addressing</span>
+  </div>
+  <div class="top-nav-right">
+    <!-- Point these to the adjacent section files, or remove if not applicable -->
+    <a class="nav-prev" href="./2_5-Common-Network-Hardware-Devices.html">2.5</a>
+    <a class="nav-next" href="./2_7-Internet-Connection-Network-Types.html">2.7</a>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- HEADER -->
+<div class="book-header">
+  <div class="book-eyebrow">
+    <span>2.6</span>
+    CompTIA A+ · Core 1 (220-1201) · Domain 2 — Networking
+  </div>
+  <h1 class="book-title">Configure Basic Wired/Wireless<br>SOHO Networks — IP Addressing</h1>
+  <div class="book-subtitle">
+    <span>Objective 2.6</span>
+    <span>Domain weight: 20%</span>
+    <span>IP addressing fundamentals</span>
+  </div>
+</div>
+
+<!-- INTRO -->
+<h2 class="chapter"><span class="ch-num">OVERVIEW</span>Introduction</h2>
+
+<p>Objective 2.6 moves from naming hardware (2.5) to actually making a small office/home office network function — and the foundation of "function" is correct IP addressing. Every device on a network needs a unique address to send and receive traffic, a way to know which addresses are "local" versus "remote," and a way to reach the outside world. This guide covers the addressing portion of 2.6: IPv4 (public and private), IPv6, APIPA, static versus dynamic assignment, subnet masks, and the default gateway.</p>
+
+<p>This is one of the most heavily scenario-tested areas on the exam. You will be given a symptom — "the PC has an address starting with 169.254," "two computers on the same switch can't reach each other," "a device can reach the LAN but not the internet" — and asked to identify the addressing concept responsible. Understanding <em>why</em> each piece of an IP configuration exists, not just memorizing definitions, is what gets these questions right under time pressure.</p>
+
+<div class="callout callout-info">
+  <p class="callout-title">The Four Pieces of a Basic IP Configuration</p>
+  <p>Every properly configured device needs four pieces of information to communicate normally on a network and reach the internet: an <strong>IP address</strong> (its own identity), a <strong>subnet mask</strong> (which part of that address is the network vs. the host), a <strong>default gateway</strong> (where to send traffic destined for outside the local network), and usually a <strong>DNS server</strong> (to resolve names to addresses — covered in a later objective). This guide focuses on the first three.</p>
+</div>
+
+<!-- ═══ SECTION 1: IPv4 OVERVIEW ═══ -->
+<h2 class="chapter"><span class="ch-num">CONCEPT 01</span>IPv4 Addressing</h2>
+
+<p><span class="key-term">IPv4 (Internet Protocol version 4)</span> is the addressing scheme that has underpinned the internet and most local networks since the 1980s. An IPv4 address is a <strong>32-bit</strong> number, almost always written in <span class="key-term">dotted decimal notation</span> — four numbers ("octets") from 0–255, separated by periods, such as <code>192.168.1.105</code>. Each octet represents 8 bits, and 4 × 8 = 32 bits total.</p>
+
+<p>Because IPv4 addresses are only 32 bits long, there are a finite number of them — roughly 4.3 billion. That number sounds large, but it was exhausted years ago relative to the number of internet-connected devices in the world, which is the entire reason private addressing, NAT, and ultimately IPv6 exist.</p>
+
+<h3 class="section">Private Addresses</h3>
+
+<p><span class="key-term">Private IP addresses</span> are reserved address ranges defined in RFC 1918 that are not routable on the public internet. Any organization or home network can use these ranges internally without coordinating with anyone else, because traffic using these addresses is never supposed to leave the local network directly — it's translated by NAT at the router before going out to the internet (see the Router discussion in objective 2.5).</p>
+
+<table class="data-table">
+  <thead><tr><th>Class</th><th>Private Range</th><th>Typical Use</th></tr></thead>
+  <tbody>
+    <tr><td>Class A</td><td>10.0.0.0 – 10.255.255.255</td><td>Large enterprise networks; huge address space</td></tr>
+    <tr><td>Class B</td><td>172.16.0.0 – 172.31.255.255</td><td>Mid-sized networks</td></tr>
+    <tr><td>Class C</td><td>192.168.0.0 – 192.168.255.255</td><td>Home and small office networks (most common default)</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>Memorize all three private ranges cold: <strong>10.x.x.x</strong>, <strong>172.16.x.x–172.31.x.x</strong>, and <strong>192.168.x.x</strong>. The exam will show you an IP address and expect you to instantly identify it as private (and therefore non-routable on the internet) versus public. The vast majority of consumer routers default to the <strong>192.168.1.x</strong> or <strong>192.168.0.x</strong> subnet out of the box.</p>
+</div>
+
+<h3 class="section">Public Addresses</h3>
+
+<p><span class="key-term">Public IP addresses</span> are globally unique addresses that are routable across the internet. Your ISP assigns a public address to your router's WAN/internet-facing interface. Every device on the public internet that wants to be reachable directly needs a public address — web servers, mail servers, and the WAN interface of your home router are common examples.</p>
+
+<p>In a typical home network, there is exactly <strong>one</strong> public IP address (assigned to the router by the ISP) and many private IP addresses (assigned by the router to internal devices via DHCP). NAT on the router translates between the many private addresses inside and the single public address outside, so that dozens of devices can all share one internet connection.</p>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Loopback address</span>
+    <span><code>127.0.0.1</code> always refers to "this device" — used for testing the local TCP/IP stack itself. The entire <code>127.0.0.0/8</code> range is reserved for loopback, though 127.0.0.1 is what's actually used in practice.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Public vs. private — the core distinction</span>
+    <span>Private = usable only inside a local network, reused by millions of different networks worldwide simultaneously. Public = globally unique, routable on the internet, assigned by regional internet registries down through ISPs.</span>
+  </div>
+</div>
+
+<!-- ═══ SECTION 2: IPv6 ═══ -->
+<h2 class="chapter"><span class="ch-num">CONCEPT 02</span>IPv6 Addressing</h2>
+
+<p><span class="key-term">IPv6 (Internet Protocol version 6)</span> was created to solve IPv4's address exhaustion problem. Instead of 32 bits, an IPv6 address is <strong>128 bits</strong> long, providing an astronomically larger address pool — large enough that private addressing and NAT are no longer strictly necessary (though IPv6 has its own concept of private/local addressing too).</p>
+
+<h3 class="section">IPv6 Format</h3>
+
+<p>An IPv6 address is written as eight groups of four hexadecimal digits, separated by colons, for example:</p>
+
+<p style="font-family: var(--mono); font-size: 14px; background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 10px 16px; color: var(--accent2);">2001:0db8:85a3:0000:0000:8a2e:0370:7334</p>
+
+<p>Two shorthand rules make these addresses easier to write and read, and both are testable:</p>
+
+<ul class="body-list">
+  <li><strong>Leading zero omission</strong> — leading zeros within each group can be dropped (<code>0db8</code> becomes <code>db8</code>).</li>
+  <li><strong>Double-colon compression</strong> — one contiguous run of all-zero groups can be replaced with <code>::</code>, but this shorthand can only be used <strong>once</strong> in an address, since using it twice would make the address ambiguous (the device wouldn't know how many zero groups belong to each <code>::</code>).</li>
+</ul>
+
+<table class="data-table">
+  <thead><tr><th>Full Address</th><th>Compressed Form</th></tr></thead>
+  <tbody>
+    <tr><td>2001:0db8:0000:0000:0000:0000:1428:57ab</td><td>2001:db8::1428:57ab</td></tr>
+    <tr><td>0000:0000:0000:0000:0000:0000:0000:0001</td><td>::1 (this is the IPv6 loopback address)</td></tr>
+    <tr><td>fe80:0000:0000:0000:0202:b3ff:fe1e:8329</td><td>fe80::202:b3ff:fe1e:8329</td></tr>
+  </tbody>
+</table>
+
+<h3 class="section">Key IPv6 Address Types</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Global unicast</span>
+    <span>The IPv6 equivalent of a public IPv4 address — globally unique and routable across the internet. Typically begins with <code>2000::/3</code> (in practice, most start with <code>2</code>).</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Link-local</span>
+    <span>Automatically assigned to every IPv6-enabled interface, always begins with <code>fe80::</code>. Valid only on the local network segment, never routed beyond it — conceptually similar in role to IPv4's APIPA address, except link-local addresses are normal and expected on every IPv6 interface, not a sign of failure.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Unique local</span>
+    <span>The IPv6 equivalent of private IPv4 addressing (RFC 1918 ranges) — used for internal addressing not meant to be routed on the public internet. Begins with <code>fc00::/7</code> (commonly seen as <code>fd</code> in practice).</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Loopback</span>
+    <span><code>::1</code> — the IPv6 equivalent of IPv4's 127.0.0.1, referring to the local device itself.</span>
+  </div>
+</div>
+
+<div class="callout callout-tip">
+  <p class="callout-title">Why IPv6 Exists</p>
+  <p>IPv4's 32-bit address space (~4.3 billion addresses) was exhausted years ago given the explosion of internet-connected devices. IPv6's 128-bit address space provides roughly 340 undecillion addresses — for all practical purposes, an inexhaustible supply, eliminating the need for the workarounds (NAT, private addressing) that IPv4 has relied on for decades. Most modern networks run IPv4 and IPv6 simultaneously, a configuration called <span class="key-term">dual stack</span>.</p>
+</div>
+
+<!-- ═══ SECTION 3: APIPA ═══ -->
+<h2 class="chapter"><span class="ch-num">CONCEPT 03</span>Automatic Private IP Addressing (APIPA)</h2>
+
+<p><span class="key-term">Automatic Private IP Addressing (APIPA)</span> is a fallback mechanism in Windows (and supported elsewhere) that automatically assigns a device an IP address from the <strong>169.254.0.0 – 169.254.255.255</strong> range when the device is configured for DHCP but <strong>cannot reach a DHCP server</strong>. It is the operating system's way of saying "I expected to get an address automatically, and that process failed."</p>
+
+<div class="spec-diagram">
+  <h4>Why a Device Ends Up With an APIPA Address</h4>
+  <div class="spec-bar-wrap">
+    <div class="spec-label"><strong>DHCP server is down or unreachable</strong><span>Most common cause</span></div>
+    <div class="spec-bar"><div class="spec-fill fill-red" style="width:90%"></div></div>
+  </div>
+  <div class="spec-bar-wrap">
+    <div class="spec-label"><strong>Faulty/disconnected cable or switch port</strong><span>Physical layer failure</span></div>
+    <div class="spec-bar"><div class="spec-fill fill-orange" style="width:75%"></div></div>
+  </div>
+  <div class="spec-bar-wrap">
+    <div class="spec-label"><strong>NIC driver issue</strong><span>Less common, but possible</span></div>
+    <div class="spec-bar"><div class="spec-fill fill-amber" style="width:45%"></div></div>
+  </div>
+  <div class="spec-bar-wrap">
+    <div class="spec-label"><strong>VLAN/switch misconfiguration blocking DHCP traffic</strong><span>Network-side issue</span></div>
+    <div class="spec-bar"><div class="spec-fill fill-blue" style="width:60%"></div></div>
+  </div>
+</div>
+
+<h3 class="section">What APIPA Means in Practice</h3>
+
+<p>A device with an APIPA address can typically communicate with <em>other</em> devices on the same local segment that also have APIPA addresses (since they're all in the same 169.254.x.x range), but it <strong>cannot reach the default gateway, the internet, or any device outside the local broadcast domain</strong> — because APIPA never assigns a gateway address. Seeing 169.254.x.x is one of the single most recognizable troubleshooting signals on the entire exam.</p>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle — Recognize This Instantly</p>
+  <p>If a question describes a computer that "can't access the internet or any network resources" and gives you an IP address starting with <strong>169.254</strong>, the answer is almost always: <strong>the device failed to obtain an address from DHCP</strong>, and a logical next troubleshooting step is to check the physical connection, the DHCP server's availability, or release/renew the lease (<code>ipconfig /release</code> then <code>ipconfig /renew</code> on Windows).</p>
+</div>
+
+<!-- ═══ SECTION 4: STATIC VS DYNAMIC ═══ -->
+<h2 class="chapter"><span class="ch-num">CONCEPT 04</span>Static vs. Dynamic Addressing</h2>
+
+<p>Every device needs to get its IP address from somewhere. There are two fundamental approaches: an administrator manually types in a fixed address (<strong>static</strong>), or the device automatically requests and receives an address from a server on the network (<strong>dynamic</strong>, via DHCP).</p>
+
+<table class="data-table">
+  <thead><tr><th>Factor</th><th>Static IP Addressing</th><th>Dynamic (DHCP) Addressing</th></tr></thead>
+  <tbody>
+    <tr><td>How it's assigned</td><td>Manually entered by an administrator on each device</td><td>Automatically leased from a DHCP server on the network</td></tr>
+    <tr><td>Consistency</td><td>Never changes unless manually edited</td><td>Can change when the lease expires/renews (though often stays the same in practice)</td></tr>
+    <tr><td>Administrative effort</td><td>High — must be configured and tracked per device, and conflicts must be manually avoided</td><td>Low — DHCP server handles assignment and avoids duplicate addresses automatically</td></tr>
+    <tr><td>Best used for</td><td>Servers, printers, network devices (routers/switches/APs), anything that needs a predictable, unchanging address</td><td>End-user workstations, laptops, phones, guest devices — anything that doesn't need a fixed address</td></tr>
+    <tr><td>Risk if misconfigured</td><td>IP address conflicts if two devices are manually given the same address</td><td>Very low conflict risk; DHCP server tracks leases and avoids duplicates</td></tr>
+  </tbody>
+</table>
+
+<h3 class="section">How DHCP Assigns an Address (DORA)</h3>
+
+<div class="process-flow">
+  <div class="flow-title">DHCP Lease Process — "DORA"</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Discover.</strong> The client broadcasts a DHCPDISCOVER message onto the local network, since it has no IP address yet and doesn't know where the DHCP server is.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Offer.</strong> The DHCP server responds with a DHCPOFFER, proposing an available IP address along with the subnet mask, default gateway, DNS servers, and lease duration.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Request.</strong> The client broadcasts a DHCPREQUEST, formally asking to accept the offered address (broadcast so any other DHCP servers on the segment know the offer was accepted).</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Acknowledge.</strong> The server responds with a DHCPACK, finalizing the lease. The client now configures its NIC with the assigned address and begins using it.</div></div>
+</div>
+
+<p>If this process fails at any point — most commonly because no DHCP server responds — the device falls back to APIPA, as discussed above. This is the direct link between the DORA process and the 169.254.x.x symptom: APIPA only kicks in when DORA never completes.</p>
+
+<div class="callout callout-info">
+  <p class="callout-title">DHCP Reservation — A Middle Ground</p>
+  <p>A <span class="key-term">DHCP reservation</span> lets an administrator configure the DHCP server to always hand out the same IP address to a specific device, identified by its MAC address. This gives the predictability of a static address (the device always gets the same IP) while retaining the centralized management of DHCP (the address is still defined and tracked on the server, not manually typed into every client). This is a very common best practice for network printers and similar devices.</p>
+</div>
+
+<!-- ═══ SECTION 5: SUBNET MASK ═══ -->
+<h2 class="chapter"><span class="ch-num">CONCEPT 05</span>Subnet Mask</h2>
+
+<p>A <span class="key-term">subnet mask</span> is a 32-bit value, written in the same dotted-decimal format as an IPv4 address, that defines which portion of an IP address represents the <strong>network</strong> and which portion represents the <strong>host</strong> (the individual device). Without a subnet mask, a device would have no way of knowing whether another IP address is on its own local network or somewhere else that requires going through the gateway.</p>
+
+<h3 class="section">How a Subnet Mask Works</h3>
+
+<p>In a subnet mask, a binary <strong>1</strong> means "this bit is part of the network portion," and a binary <strong>0</strong> means "this bit is part of the host portion." The most common subnet mask used in home and small office networks is <code>255.255.255.0</code>, which in binary is twenty-four 1s followed by eight 0s — meaning the first three octets identify the network, and the last octet identifies the individual host.</p>
+
+<table class="data-table">
+  <thead><tr><th>Subnet Mask (decimal)</th><th>CIDR Notation</th><th>Usable Hosts</th><th>Typical Use</th></tr></thead>
+  <tbody>
+    <tr><td>255.255.255.0</td><td>/24</td><td>254</td><td>Most common — typical home/SOHO network</td></tr>
+    <tr><td>255.255.255.128</td><td>/25</td><td>126</td><td>Smaller segmented subnet</td></tr>
+    <tr><td>255.255.255.192</td><td>/26</td><td>62</td><td>Small department or VLAN</td></tr>
+    <tr><td>255.255.0.0</td><td>/16</td><td>65,534</td><td>Larger network — bigger organizations</td></tr>
+    <tr><td>255.0.0.0</td><td>/8</td><td>16,777,214</td><td>Very large network — rarely seen outside huge enterprises/ISPs</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>You are unlikely to be asked to perform deep subnetting math on the A+ exam (that's more of a Network+ skill), but you <strong>do</strong> need to recognize <code>255.255.255.0</code> (/24) as the standard SOHO subnet mask, understand that it allows <strong>254 usable host addresses</strong> (256 total addresses, minus the network address and the broadcast address), and understand conceptually that the subnet mask is what lets a device determine whether a destination is "local" (same network — send directly) or "remote" (different network — send to the gateway).</p>
+</div>
+
+<h3 class="section">Network Address and Broadcast Address</h3>
+
+<p>Within any subnet, two addresses are reserved and cannot be assigned to a device. In a typical <code>192.168.1.0/24</code> network: <code>192.168.1.0</code> is the <span class="key-term">network address</span> (identifies the subnet itself, not a host), and <code>192.168.1.255</code> is the <span class="key-term">broadcast address</span> (sends a message to every device on that subnet simultaneously). That leaves <code>192.168.1.1</code> through <code>192.168.1.254</code> — 254 addresses — actually usable by devices, which is why a /24 network is described as having 254 usable hosts rather than 256.</p>
+
+<!-- ═══ SECTION 6: DEFAULT GATEWAY ═══ -->
+<h2 class="chapter"><span class="ch-num">CONCEPT 06</span>Default Gateway</h2>
+
+<p>The <span class="key-term">default gateway</span> is the IP address of the device — almost always a router — that a device sends traffic to when the destination is <strong>not</strong> on its local network. Working together with the subnet mask, a device's TCP/IP stack performs a simple check for every outgoing packet: is the destination address inside my own subnet? If yes, send the packet directly to that device on the local network. If no, send it to the default gateway, which is responsible for forwarding it onward (potentially through several more hops) toward its actual destination.</p>
+
+<div class="callout callout-tip">
+  <p class="callout-title">The Gateway Is Usually the Router's LAN Address</p>
+  <p>In a typical home network, the default gateway address is the router's own internal (LAN-side) IP address — commonly something like <code>192.168.1.1</code> or <code>192.168.0.1</code>. Every device on the network is configured with this same gateway address (whether manually or via DHCP), since they all rely on the same router to reach anything outside the local network, including the internet.</p>
+</div>
+
+<h3 class="section">What Happens Without a Valid Gateway</h3>
+
+<p>A device with a correctly configured IP address and subnet mask but a <strong>missing or incorrect default gateway</strong> can still communicate normally with other devices on its own local subnet — file sharing, printing, local games, etc. — but cannot reach anything beyond the local network, including the internet. This produces a very specific and testable symptom: <strong>local connectivity works, internet connectivity does not.</strong></p>
+
+<table class="data-table">
+  <thead><tr><th>Symptom</th><th>Likely Cause</th></tr></thead>
+  <tbody>
+    <tr><td>Device has a 169.254.x.x address; nothing works, not even local resources beyond other APIPA devices</td><td>DHCP failure → APIPA fallback (no gateway assigned at all)</td></tr>
+    <tr><td>Device has a normal-looking private IP; can reach other local devices but not the internet</td><td>Missing, incorrect, or unreachable default gateway</td></tr>
+    <tr><td>Device can reach the internet by IP address but not by name (e.g., can ping 8.8.8.8 but not google.com)</td><td>DNS misconfiguration — not a gateway issue (covered in a later objective)</td></tr>
+    <tr><td>Device cannot reach anything at all, including other local devices</td><td>Physical/Layer 1 problem, wrong subnet mask, or NIC/driver failure</td></tr>
+  </tbody>
+</table>
+
+<!-- MASTER REFERENCE -->
+<div class="ch-divider"></div>
+
+<div class="summary-box">
+  <h3>Master Reference — IP Addressing Concepts</h3>
+  <div class="summary-grid">
+    <div class="summary-item"><span class="s-sym">IPv4</span><span>32-bit, dotted decimal (e.g., 192.168.1.1)</span></div>
+    <div class="summary-item"><span class="s-sym">Private ranges</span><span>10.x, 172.16–31.x, 192.168.x — not internet routable</span></div>
+    <div class="summary-item"><span class="s-sym">Public addresses</span><span>Globally unique, internet-routable, assigned by ISP</span></div>
+    <div class="summary-item"><span class="s-sym">IPv6</span><span>128-bit, hex, colon-separated; :: compresses zero groups (once only)</span></div>
+    <div class="summary-item"><span class="s-sym">IPv6 link-local</span><span>fe80::/10 — auto-assigned, local segment only</span></div>
+    <div class="summary-item"><span class="s-sym">APIPA</span><span>169.254.x.x — DHCP failed; local-only, no gateway</span></div>
+    <div class="summary-item"><span class="s-sym">Static addressing</span><span>Manually set; predictable; used for servers/printers/network gear</span></div>
+    <div class="summary-item"><span class="s-sym">Dynamic addressing</span><span>DHCP-assigned via DORA; used for everyday end-user devices</span></div>
+    <div class="summary-item"><span class="s-sym">Subnet mask</span><span>Defines network vs. host portion; 255.255.255.0 (/24) most common</span></div>
+    <div class="summary-item"><span class="s-sym">Default gateway</span><span>Router's LAN IP; destination for any off-subnet traffic</span></div>
+    <div class="summary-item"><span class="s-sym">No gateway symptom</span><span>Local works, internet doesn't</span></div>
+    <div class="summary-item"><span class="s-sym">DHCP reservation</span><span>Same IP always handed out to a given MAC address</span></div>
+  </div>
+</div>
+
+<!-- QUICK REFERENCE TOOLS -->
+<h2 class="chapter"><span class="ch-num">REFERENCE</span>SOHO IP Addressing Quick Reference</h2>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>Private IPv4 Ranges</h4>
+    <ul>
+      <li><strong>10.0.0.0/8</strong> → 10.0.0.0 – 10.255.255.255</li>
+      <li><strong>172.16.0.0/12</strong> → 172.16.0.0 – 172.31.255.255</li>
+      <li><strong>192.168.0.0/16</strong> → 192.168.0.0 – 192.168.255.255</li>
+      <li><strong>169.254.0.0/16</strong> → APIPA (not a normal private range)</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Special Addresses</h4>
+    <ul>
+      <li><strong>127.0.0.1</strong> → IPv4 loopback (this device)</li>
+      <li><strong>::1</strong> → IPv6 loopback (this device)</li>
+      <li><strong>x.x.x.0</strong> → Network address (in a /24)</li>
+      <li><strong>x.x.x.255</strong> → Broadcast address (in a /24)</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>DORA — DHCP in 4 Steps</h4>
+    <ul>
+      <li><strong>D</strong>iscover → Client broadcasts for a server</li>
+      <li><strong>O</strong>ffer → Server proposes an address</li>
+      <li><strong>R</strong>equest → Client accepts the offer</li>
+      <li><strong>A</strong>cknowledge → Server finalizes the lease</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Static vs. Dynamic — When to Use Each</h4>
+    <ul>
+      <li><strong>Static</strong> → Routers, switches, APs, servers, printers</li>
+      <li><strong>Dynamic</strong> → Laptops, phones, guest devices, workstations</li>
+      <li><strong>Reservation</strong> → Best of both: fixed IP, managed centrally</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout callout-exam" style="margin-top: 28px;">
+  <p class="callout-title">Final Exam Reminders</p>
+  <p><strong>169.254.x.x</strong> = APIPA = DHCP failure. Device can only talk to other APIPA devices on the same segment.</p>
+  <p><strong>Private vs. public</strong> = private (10.x / 172.16–31.x / 192.168.x) never routes on the internet directly; NAT translates it at the router.</p>
+  <p><strong>Subnet mask 255.255.255.0 (/24)</strong> = the standard SOHO mask; 254 usable host addresses.</p>
+  <p><strong>Default gateway</strong> = router's LAN address; missing gateway = local works, internet doesn't.</p>
+  <p><strong>Static IP</strong> = predictable, manual, used for infrastructure devices. <strong>Dynamic IP</strong> = automatic via DHCP, used for end-user devices.</p>
+  <p><strong>IPv6 :: shorthand</strong> = compresses one run of all-zero groups; can only appear once per address.</p>
+  <p><strong>IPv6 fe80::</strong> = link-local, automatically assigned, local segment only — not an error condition (unlike IPv4 APIPA).</p>
+  <p><strong>DHCP reservation</strong> = fixed IP tied to a MAC address, managed from the DHCP server rather than typed locally.</p>
+</div>
+
+</div>
+</body>
+</html>

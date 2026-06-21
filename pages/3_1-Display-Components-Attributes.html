@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CompTIA A+ 3.1 — Compare and Contrast Display Components and Attributes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --surface2: #f5f4f0;
+    --border: #e5e2d9;
+    --border2: #d4d0c4;
+    --text: #1a1a18;
+    --muted: #6b6860;
+    --accent: #c0392b;
+    --accent2: #2c3e6b;
+    --accent3: #1a6b3a;
+    --accent4: #b5590a;
+    --accent-light: #fdf2f1;
+    --accent2-light: #f0f2f8;
+    --accent3-light: #f0f8f3;
+    --accent4-light: #fdf5ed;
+    --serif: 'Crimson Pro', Georgia, serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── TOP NAV ── */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .top-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .nav-home {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+  .nav-home:hover { color: var(--accent2); }
+  .nav-home::before {
+    content: '←';
+    font-size: 12px;
+  }
+  .nav-sep {
+    font-size: 12px;
+    color: var(--border2);
+    flex-shrink: 0;
+  }
+  .nav-current {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nav-current strong {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    margin-right: 6px;
+  }
+  .top-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .nav-prev, .nav-next {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 4px 9px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    white-space: nowrap;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .nav-prev:hover, .nav-next:hover {
+    border-color: var(--border2);
+    color: var(--accent2);
+  }
+  .nav-prev::before { content: '← '; }
+  .nav-next::after  { content: ' →'; }
+
+  @media (max-width: 600px) {
+    .top-nav { padding: 0 16px; }
+    .nav-current { display: none; }
+    .nav-sep { display: none; }
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.75;
+  }
+  .page { max-width: 860px; margin: 0 auto; padding: 0 40px 80px; }
+
+  /* HEADER */
+  .book-header {
+    border-bottom: 3px double var(--border2);
+    padding: 56px 0 32px;
+    margin-bottom: 48px;
+  }
+  .book-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .book-eyebrow span {
+    background: var(--accent);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-right: 10px;
+    font-size: 10px;
+  }
+  .book-title {
+    font-family: var(--serif);
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+  .book-subtitle {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .book-subtitle span { display: flex; align-items: center; gap: 6px; }
+  .book-subtitle span::before { content: '·'; color: var(--border2); }
+  .book-subtitle span:first-child::before { display: none; }
+
+  /* HEADINGS */
+  h2.chapter {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 600;
+    margin: 52px 0 6px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    letter-spacing: -0.01em;
+  }
+  h2.chapter .ch-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+    letter-spacing: 0.1em;
+    font-weight: 400;
+  }
+  h3.section {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    margin: 36px 0 12px;
+  }
+  h3.section::before { content: '§ '; color: var(--muted); font-weight: 300; }
+
+  p { margin-bottom: 16px; }
+
+  /* CALLOUTS */
+  .callout {
+    border-left: 3px solid;
+    padding: 14px 20px;
+    margin: 24px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 15.5px;
+  }
+  .callout p { margin-bottom: 6px; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout-title {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px !important;
+  }
+  .callout-exam  { border-color: var(--accent);  background: var(--accent-light); }
+  .callout-exam .callout-title  { color: var(--accent); }
+  .callout-info  { border-color: var(--accent2); background: var(--accent2-light); }
+  .callout-info .callout-title  { color: var(--accent2); }
+  .callout-tip   { border-color: var(--accent3); background: var(--accent3-light); }
+  .callout-tip .callout-title   { color: var(--accent3); }
+  .callout-warn  { border-color: var(--accent4); background: var(--accent4-light); }
+  .callout-warn .callout-title  { color: var(--accent4); }
+
+  /* TABLES */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+    font-family: var(--sans);
+    margin: 16px 0 24px;
+  }
+  .data-table thead th {
+    background: var(--surface2);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 9px 13px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .data-table tbody tr { border-bottom: 1px solid var(--border); }
+  .data-table tbody tr:last-child { border-bottom: none; }
+  .data-table td { padding: 9px 13px; vertical-align: top; line-height: 1.5; }
+  .data-table td:first-child { font-weight: 600; color: var(--accent2); font-size: 13.5px; }
+
+  /* DEF LIST */
+  .def-list { margin: 16px 0 24px; }
+  .def-item {
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 210px 1fr;
+    gap: 20px;
+    font-size: 15px;
+  }
+  .def-item:last-child { border-bottom: none; }
+  .def-term {
+    font-family: var(--sans);
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 14px;
+    padding-top: 1px;
+    line-height: 1.4;
+  }
+
+  /* GRID CARDS */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .card-grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 16px 18px;
+  }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 10px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card ul { list-style: none; font-family: var(--sans); font-size: 13.5px; }
+  .card ul li {
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .card ul li:last-child { border-bottom: none; }
+  .card ul li strong { color: var(--text); }
+
+  /* BODY LIST */
+  ul.body-list {
+    list-style: none;
+    font-family: var(--sans);
+    font-size: 15px;
+    padding: 0;
+    margin: 12px 0 20px;
+  }
+  ul.body-list li {
+    padding: 5px 0 5px 18px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  ul.body-list li:last-child { border-bottom: none; }
+  ul.body-list li::before { content: '—'; position: absolute; left: 0; color: var(--border2); font-size: 12px; }
+  ul.body-list li strong { color: var(--text); }
+
+  /* PANEL ANATOMY */
+  .anatomy-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+  .anatomy-header {
+    background: var(--text);
+    color: rgba(255,255,255,0.85);
+    padding: 10px 18px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .anatomy-body { padding: 20px 24px; }
+  .layer-stack { margin-bottom: 6px; }
+  .layer-block {
+    border: 1px solid;
+    border-radius: 3px;
+    padding: 9px 14px;
+    margin-bottom: 4px;
+    font-family: var(--sans);
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .layer-block .lb-num { font-family: var(--mono); font-size: 10px; color: var(--muted); min-width: 20px; }
+  .layer-block .lb-name { font-weight: 600; min-width: 180px; }
+  .layer-block .lb-desc { color: var(--muted); font-size: 12.5px; line-height: 1.4; }
+  .lb-glass   { background: #e8f4f8; border-color: #90cae8; }
+  .lb-glass .lb-name { color: #0d5c8a; }
+  .lb-polar   { background: #f0f8f3; border-color: #90d8a5; }
+  .lb-polar .lb-name { color: #1b5e20; }
+  .lb-cf      { background: #fff8e1; border-color: #ffe082; }
+  .lb-cf .lb-name { color: #7a5500; }
+  .lb-lc      { background: #e8f0fe; border-color: #90aaf0; }
+  .lb-lc .lb-name { color: #1a3a7c; }
+  .lb-bl      { background: #fce4ec; border-color: #f090b0; }
+  .lb-bl .lb-name { color: #7a0032; }
+  .lb-driver  { background: var(--surface2); border-color: var(--border2); }
+  .lb-driver .lb-name { color: var(--muted); }
+  .layer-arrow { text-align: center; color: var(--border2); font-size: 12px; margin: 1px 0; }
+
+  /* LCD TECHNOLOGY COMPARISON */
+  .tech-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 20px 0;
+    font-family: var(--sans);
+    font-size: 13.5px;
+  }
+  .tc-head {
+    padding: 12px 14px;
+    font-weight: 700;
+    font-size: 13px;
+    text-align: center;
+    border-bottom: 2px solid var(--border);
+  }
+  .tc-tn   { background: #e8f0fe; color: #1a3a7c; }
+  .tc-ips  { background: #e8f5e9; color: #1b5e20; }
+  .tc-va   { background: #fff3e0; color: #7a3a00; }
+  .tc-row {
+    display: contents;
+  }
+  .tc-cell {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    line-height: 1.4;
+    color: var(--muted);
+  }
+  .tc-cell:nth-child(3n) { border-right: none; }
+  .tc-label {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    font-weight: 600;
+    color: var(--text);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    background: var(--surface2);
+    grid-column: 1 / -1;
+  }
+
+  /* RATING BARS */
+  .rating-bar-wrap { margin: 3px 0; }
+  .rating-bar {
+    height: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    display: inline-block;
+    width: 70px;
+    vertical-align: middle;
+    margin-right: 6px;
+  }
+  .rating-fill { height: 100%; border-radius: 3px; }
+  .r-blue   { background: #4a90d9; }
+  .r-green  { background: #4caf50; }
+  .r-orange { background: #ff9800; }
+  .r-red    { background: var(--accent); }
+
+  /* PIXEL DENSITY SCALE */
+  .ppi-scale {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 18px 22px;
+    margin: 16px 0;
+    font-family: var(--sans);
+  }
+  .ppi-bar {
+    height: 20px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #e8e8e8 0%, #a8d8a8 25%, #4caf50 50%, #1a6b3a 75%, #0d3b1e 100%);
+    margin: 10px 0 6px;
+    position: relative;
+  }
+  .ppi-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11.5px;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+  .ppi-markers {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+  .ppi-marker {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 4px 10px;
+    font-size: 12px;
+    text-align: center;
+    line-height: 1.4;
+  }
+  .ppi-marker .pv { font-family: var(--mono); font-weight: 700; font-size: 13px; color: var(--accent2); display: block; }
+  .ppi-marker .pl { font-size: 11px; color: var(--muted); }
+
+  /* RESOLUTION GRID */
+  .res-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 8px;
+    margin: 16px 0;
+  }
+  .res-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 10px 12px;
+    font-family: var(--sans);
+    text-align: center;
+  }
+  .res-name { font-size: 12px; font-weight: 700; color: var(--text); display: block; margin-bottom: 2px; }
+  .res-px   { font-family: var(--mono); font-size: 11px; color: var(--accent2); display: block; margin-bottom: 3px; }
+  .res-note { font-size: 11px; color: var(--muted); line-height: 1.3; display: block; }
+  .res-card.res-hd  { border-color: #90caf9; background: #f3f8ff; }
+  .res-card.res-fhd { border-color: #a5d6a7; background: #f3fff5; }
+  .res-card.res-4k  { border-color: #ffe082; background: #fffdf0; }
+  .res-card.res-8k  { border-color: #f090b0; background: #fff3f7; }
+
+  /* REFRESH RATE TIMELINE */
+  .hz-scale {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 18px 22px;
+    margin: 16px 0;
+    font-family: var(--sans);
+  }
+  .hz-scale h4 {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .hz-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13.5px;
+  }
+  .hz-row:last-child { border-bottom: none; }
+  .hz-val {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--accent2);
+    min-width: 60px;
+  }
+  .hz-bar-wrap { width: 120px; }
+  .hz-bar { height: 10px; background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+  .hz-fill { height: 100%; border-radius: 3px; background: var(--accent2); }
+  .hz-desc { color: var(--muted); font-size: 13px; line-height: 1.4; }
+
+  /* GAMUT VISUAL */
+  .gamut-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 16px 0;
+  }
+  .gamut-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--sans);
+    font-size: 13.5px;
+  }
+  .gamut-label { min-width: 130px; font-weight: 500; color: var(--text); }
+  .gamut-bar-outer {
+    flex: 1;
+    height: 16px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+  .gamut-fill {
+    height: 100%;
+    border-radius: 3px;
+    position: relative;
+  }
+  .gf-srgb   { background: linear-gradient(90deg, #e8284e, #28b428, #2850e8); }
+  .gf-dcip3  { background: linear-gradient(90deg, #f03060, #20d020, #3060f0); }
+  .gf-adober { background: linear-gradient(90deg, #d82040, #18a818, #2848d8); }
+  .gf-rec2020{ background: linear-gradient(90deg, #c01838, #109010, #1838c0); }
+  .gamut-pct { font-family: var(--mono); font-size: 12px; color: var(--muted); min-width: 50px; text-align: right; }
+
+  /* OLED pixel diagram */
+  .pixel-demo {
+    display: inline-flex;
+    gap: 3px;
+    padding: 12px;
+    background: #111;
+    border-radius: 6px;
+    margin: 8px 0 16px;
+  }
+  .pixel-cell {
+    width: 20px;
+    height: 20px;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    font-family: var(--mono);
+    font-weight: 700;
+  }
+  .pc-r  { background: #ff2020; color: rgba(255,255,255,0.7); }
+  .pc-g  { background: #20ff20; color: rgba(0,0,0,0.5); }
+  .pc-b  { background: #2040ff; color: rgba(255,255,255,0.7); }
+  .pc-off{ background: #111; border: 1px solid #333; color: #444; }
+
+  code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: var(--accent);
+  }
+  .key-term { font-style: italic; font-weight: 500; color: var(--accent2); }
+
+  /* SUMMARY */
+  .summary-box {
+    background: var(--text);
+    color: #f0ede6;
+    border-radius: 6px;
+    padding: 28px 32px;
+    margin: 40px 0;
+  }
+  .summary-box h3 {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 18px;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 32px;
+  }
+  .summary-item {
+    font-family: var(--sans);
+    font-size: 13.5px;
+    color: #c4bfb4;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .summary-item .s-sym { color: #fff; font-weight: 600; min-width: 160px; line-height: 1.4; }
+
+  .ch-divider { height: 1px; background: linear-gradient(90deg, var(--border2), transparent); margin: 48px 0; }
+
+  @media (max-width: 700px) {
+    .page { padding: 0 20px 60px; }
+    .summary-grid, .card-grid { grid-template-columns: 1fr; }
+    .card-grid-3 { grid-template-columns: 1fr; }
+    .tech-compare { grid-template-columns: 1fr; }
+    .def-item { grid-template-columns: 1fr; gap: 4px; }
+    .res-grid { grid-template-columns: repeat(2, 1fr); }
+    .layer-block { flex-wrap: wrap; }
+    .layer-block .lb-name { min-width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV — update href values to match your actual file names -->
+<nav class="top-nav">
+  <div class="top-nav-left">
+    <a class="nav-home" href="../index.html">Study Guide</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current"><strong>3.1</strong> Compare and Contrast Display Components and Attributes</span>
+  </div>
+  <div class="top-nav-right">
+    <!-- Point these to the adjacent section files, or remove if not applicable -->
+    <a class="nav-prev" href="./2_8-Networking-Tools.html">2.8</a>
+    <a class="nav-next" href="./3_2-Cable-Types-Connectors.html">3.2</a>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- HEADER -->
+<div class="book-header">
+  <div class="book-eyebrow">
+    <span>3.1</span>
+    CompTIA A+ · Core 1 (220-1201) · Domain 3 — Hardware
+  </div>
+  <h1 class="book-title">Compare and Contrast Display<br>Components and Attributes</h1>
+  <div class="book-subtitle">
+    <span>Objective 3.1</span>
+    <span>Domain weight: 25%</span>
+    <span>LCD · OLED · Mini-LED · Digitizer · Inverter · PPI · Refresh Rate · Resolution · Color Gamut</span>
+  </div>
+</div>
+
+
+<!-- INTRO -->
+<h2 class="chapter"><span class="ch-num">OVERVIEW</span>Introduction to Display Technology</h2>
+
+<p>Displays are the primary output interface between computers and their users. An IT technician encounters displays constantly — monitors attached to desktops, built-in panels in laptops, projector screens in conference rooms, and touchscreen interfaces on portable devices. Understanding how displays work at a component level enables accurate diagnosis of display problems and informed purchasing decisions when recommending or replacing equipment.</p>
+
+<p>Objective 3.1 covers display technology from two angles: <em>types</em> (the underlying technology that produces the image) and <em>attributes</em> (the measurable specifications that describe image quality and performance). These are interconnected — the technology limits what attributes are achievable, and the attributes determine whether a display is suitable for a given use case.</p>
+
+<div class="callout callout-info">
+  <p class="callout-title">How to Use This Section</p>
+  <p>The A+ exam presents display questions in two ways: direct knowledge questions ("Which panel type has the best viewing angles?") and troubleshooting scenarios ("A user reports the display looks washed out at angles — what type of panel is likely in use?"). Study both the technical characteristics and their practical implications for each technology.</p>
+</div>
+
+
+<!-- ═══ HOW LCD WORKS — FOUNDATION ═══ -->
+<h2 class="chapter"><span class="ch-num">FOUNDATION</span>How LCD Displays Work</h2>
+
+<p>Before comparing the three LCD panel subtypes, understanding the common anatomy shared by all LCD displays is essential. All LCD panels share the same fundamental layer structure — the differences between IPS, TN, and VA lie in how the liquid crystal molecules are oriented and how they twist in response to an electric field.</p>
+
+<h3 class="section">LCD Panel Layer Structure</h3>
+
+<p>An LCD panel does not produce its own light. It is a light-modulating device that selectively blocks or passes light from a backlight source. From back to front, the layers are:</p>
+
+<div class="anatomy-panel">
+  <div class="anatomy-header">LCD Panel Cross-Section — Layers (back to front)</div>
+  <div class="anatomy-body">
+    <div class="layer-block lb-bl">
+      <span class="lb-num">1</span>
+      <span class="lb-name">LED Backlight</span>
+      <span class="lb-desc">Produces white light that travels through all subsequent layers. Modern panels use LED edge lighting or a full-array LED grid. Older panels used CCFL (fluorescent) backlights requiring an inverter.</span>
+    </div>
+    <div class="layer-arrow">▼</div>
+    <div class="layer-block lb-polar">
+      <span class="lb-num">2</span>
+      <span class="lb-name">Rear Polarizer</span>
+      <span class="lb-desc">A polarizing filter oriented at 0°. Allows only light oscillating in one direction to pass. Converts the backlight from unpolarized to linearly polarized light.</span>
+    </div>
+    <div class="layer-arrow">▼</div>
+    <div class="layer-block lb-lc">
+      <span class="lb-num">3</span>
+      <span class="lb-name">Liquid Crystal Layer + TFT Array</span>
+      <span class="lb-desc">Liquid crystal molecules respond to electrical fields applied by the Thin-Film Transistor (TFT) array. The degree of molecular rotation determines how much polarized light passes through. This is where IPS, TN, and VA differ — each type orients and rotates crystals differently.</span>
+    </div>
+    <div class="layer-arrow">▼</div>
+    <div class="layer-block lb-cf">
+      <span class="lb-num">4</span>
+      <span class="lb-name">Color Filter Array</span>
+      <span class="lb-desc">Each pixel position is divided into three sub-pixels with red, green, and blue filters. The light passing through the liquid crystal layer is colored here. The relative intensity of R, G, B for each pixel combines to produce the full color spectrum.</span>
+    </div>
+    <div class="layer-arrow">▼</div>
+    <div class="layer-block lb-polar">
+      <span class="lb-num">5</span>
+      <span class="lb-name">Front Polarizer</span>
+      <span class="lb-desc">Oriented at 90° to the rear polarizer. When liquid crystals are rotated by the correct amount, they rotate the polarized light to pass through this filter. When unrotated, light is blocked entirely (black pixel). Intermediate rotation produces intermediate brightness.</span>
+    </div>
+    <div class="layer-arrow">▼</div>
+    <div class="layer-block lb-glass">
+      <span class="lb-num">6</span>
+      <span class="lb-name">Glass Substrate + Cover Glass</span>
+      <span class="lb-desc">The outermost protective layer. May be coated with anti-glare (matte) or anti-reflective (glossy) treatments. On touch-capable displays, the digitizer layer is bonded here.</span>
+    </div>
+  </div>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus — Why LCDs Require a Backlight</p>
+  <p>LCD panels do <strong>not</strong> emit light — they <strong>modulate</strong> light from the backlight. This is why an LCD's black pixels are never truly black (the backlight leaks through imperfectly closed crystals). It is also why a dim LCD screen is almost always a <strong>backlight or inverter failure</strong>, not a display panel failure. OLED panels, by contrast, emit their own light per-pixel — they can achieve true black by turning pixels off entirely.</p>
+</div>
+
+
+<!-- ═══ LCD SUBTYPES ═══ -->
+<h2 class="chapter"><span class="ch-num">SECTION 1</span>LCD Panel Subtypes: IPS, TN, VA</h2>
+
+<p>All three LCD subtypes use the same backlight-and-polarizer structure described above. What differs is the <em>resting orientation</em> of the liquid crystal molecules and the direction in which they twist when voltage is applied. These differences produce distinct performance profiles that make each panel type better suited to specific use cases.</p>
+
+<div class="tech-compare">
+  <!-- Headers -->
+  <div class="tc-head tc-tn">TN<br><span style="font-weight:400;font-size:11px;">Twisted Nematic</span></div>
+  <div class="tc-head tc-ips">IPS<br><span style="font-weight:400;font-size:11px;">In-Plane Switching</span></div>
+  <div class="tc-head tc-va">VA<br><span style="font-weight:400;font-size:11px;">Vertical Alignment</span></div>
+
+  <!-- Viewing Angles -->
+  <div class="tc-cell tc-label">Viewing Angles (horizontal / vertical)</div>
+  <div class="tc-cell"><div class="rating-bar-wrap"><div class="rating-bar"><div class="rating-fill r-red" style="width:45%"></div></div></div> ~170°/160° — color shifts noticeably off-axis; worst of three</div>
+  <div class="tc-cell"><div class="rating-bar-wrap"><div class="rating-bar"><div class="rating-fill r-green" style="width:95%"></div></div></div> 178°/178° — essentially no shift; best of three</div>
+  <div class="tc-cell"><div class="rating-bar-wrap"><div class="rating-bar"><div class="rating-fill r-blue" style="width:75%"></div></div></div> ~178°/178° — good; some contrast shift but less color shift than TN</div>
+
+  <!-- Response Time -->
+  <div class="tc-cell tc-label">Response Time</div>
+  <div class="tc-cell"><div class="rating-bar-wrap"><div class="rating-bar"><div class="rating-fill r-green" style="width:92%"></div></div></div> 1–5ms GTG — fastest; ideal for competitive gaming</div>
+  <div class="tc-cell"><div class="rating-bar-wrap"><div class="rating-bar"><div class="rating-fill r-blue" style="width:65%"></div></div></div> 4–15ms GTG — good; modern high-end IPS reaches 1ms</div>
+  <div class="tc-cell"><div class="rating-bar-wrap"><div class="rating-bar"><div class="rating-fill r-orange" style="width:45%"></div></div></div> 8–30ms GTG — slowest; noticeable ghosting in fast motion</div>
+
+  <!-- Contrast Ratio -->
+  <div class="tc-cell tc-label">Native Contrast Ratio</div>
+  <div class="tc-cell"><div class="rating-bar-wrap"><div class="rating-bar"><div class="rating-fill r-blue" style="width:55%"></div></div></div> 600:1 – 1,000:1 — mediocre blacks</div>
+  <div class="tc-cell"><div class="rating-bar-wrap"><div class="rating-bar"><div class="rating-fill r-blue" style="width:60%"></div></div></div> 700:1 – 1,500:1 — good but not deep blacks; IPS glow in corners</div>
+  <div class="tc-cell"><div class="rating-bar-wrap"><div class="rating-bar"><div class="rating-fill r-green" style="width:90%"></div></div></div> 2,000:1 – 6,000:1 — deepest blacks of LCD types; best for dark content</div>
+
+  <!-- Color Accuracy -->
+  <div class="tc-cell tc-label">Color Accuracy</div>
+  <div class="tc-cell"><div class="rating-bar-wrap"><div class="rating-bar"><div class="rating-fill r-red" style="width:38%"></div></div></div> Lowest; 6-bit native, dithered to 8-bit; shifted colors off-axis</div>
+  <div class="tc-cell"><div class="rating-bar-wrap"><div class="rating-bar"><div class="rating-fill r-green" style="width:95%"></div></div></div> Highest; true 8-bit or 10-bit; consistent across viewing angles; used in professional color work</div>
+  <div class="tc-cell"><div class="rating-bar-wrap"><div class="rating-bar"><div class="rating-fill r-blue" style="width:72%"></div></div></div> Good; 8-bit or 10-bit; better than TN but slightly behind IPS for accuracy</div>
+
+  <!-- Power Consumption -->
+  <div class="tc-cell tc-label">Power Consumption</div>
+  <div class="tc-cell">Lowest — crystals rotate fully and require minimal energy to maintain state</div>
+  <div class="tc-cell">Medium — in-plane movement requires more consistent voltage</div>
+  <div class="tc-cell">Medium-low — vertical alignment holds position efficiently</div>
+
+  <!-- Typical Use -->
+  <div class="tc-cell tc-label">Typical Use Cases</div>
+  <div class="tc-cell">Competitive gaming; fast-action displays; budget monitors; older laptops</div>
+  <div class="tc-cell">Professional color work; photo/video editing; office use; general-purpose quality monitors; most modern laptops</div>
+  <div class="tc-cell">Movie watching; productivity; dark-room use; curved monitors; consumer TVs</div>
+</div>
+
+<h3 class="section">TN (Twisted Nematic)</h3>
+
+<p>The oldest and most basic LCD panel technology. In a TN panel, liquid crystal molecules are twisted 90° in their natural (no voltage) state, rotating polarized light to allow passage. When voltage is applied, they untwist, blocking the light (dark pixel). The twist occurs in a single plane, which is why viewing the panel from the side or from above causes the image to shift in color or brightness — the crystals' optical properties change dramatically depending on the angle of view.</p>
+
+<p>TN panels' primary advantage is <span class="key-term">response time</span> — the speed at which a pixel can transition from one shade of gray to another (Gray-to-Gray, or GTG). TN panels routinely achieve 1ms GTG response, making them the historical choice for competitive gamers where motion blur and ghosting must be minimized. Their color accuracy and viewing angles are their significant weaknesses, making them inappropriate for professional creative work.</p>
+
+<h3 class="section">IPS (In-Plane Switching)</h3>
+
+<p>IPS panels address TN's main weakness — poor viewing angles and color accuracy — by changing the orientation of the liquid crystal molecules. Rather than twisting out of a plane, IPS crystals switch within the plane parallel to the glass (hence "in-plane"). This means the viewing angle of the crystal layer is consistent regardless of the direction from which it is viewed.</p>
+
+<p>The result is dramatically better color consistency across viewing angles and higher color accuracy. IPS panels are the standard choice for professional creative work — photography, video editing, graphic design — where accurate, consistent color is non-negotiable. The trade-off is a slightly higher response time than TN (though modern high-end IPS panels have closed this gap considerably) and a phenomenon called <span class="key-term">IPS glow</span> — a faint, bright glow visible in the corners of the panel when displaying dark content in a dark room, caused by the different light leakage pattern of in-plane switching.</p>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus — IPS Glow</p>
+  <p>IPS glow is a characteristic artifact unique to IPS panels. If a user reports bright areas in the corners of their screen when viewing dark content, this is IPS glow — a normal characteristic of the panel technology, not a defect. It is most visible when viewing black images in a dark room at an angle. Reducing brightness reduces IPS glow.</p>
+</div>
+
+<h3 class="section">VA (Vertical Alignment)</h3>
+
+<p>VA panels take a different approach: in their resting state (no voltage), the liquid crystal molecules are aligned vertically — perpendicular to the glass. In this position, they block virtually all backlight from passing through, producing the deepest black levels achievable among LCD technologies. When voltage is applied, they tilt to allow light through.</p>
+
+<p>This vertical resting position gives VA panels their defining advantage: <span class="key-term">contrast ratio</span>. Native contrast ratios of 2,000:1 to 6,000:1 are common — compared to ~1,000:1 for IPS and ~800:1 for TN. VA panels are the LCD of choice for consuming dark content: movies, dark-themed applications, and immersive gaming environments where deep blacks enhance visual impact.</p>
+
+<p>VA's weakness is <span class="key-term">ghosting</span> — slow-moving bright objects against dark backgrounds leave a visible trail because the crystals tilt back to their vertical resting position more slowly than TN or IPS crystals. This makes VA less ideal for fast-paced games but largely unnoticeable for video playback, office work, and casual gaming.</p>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus — The Three-Way Comparison</p>
+  <p>The A+ exam frequently asks you to match a panel type to a use case or symptom. The one-line summary: <strong>TN = fastest (gaming)</strong>; <strong>IPS = most accurate color (professional)</strong>; <strong>VA = deepest blacks (movies/dark content)</strong>. If the question says "best viewing angles" → IPS. "Color shifts at an angle" → TN. "Best contrast ratio" → VA. "Ghosting" → VA.</p>
+</div>
+
+
+<!-- ═══ OLED ═══ -->
+<h2 class="chapter"><span class="ch-num">SECTION 2</span>OLED — Organic Light-Emitting Diode</h2>
+
+<p><span class="key-term">OLED</span> represents a fundamental departure from LCD technology. Where every LCD type requires a separate backlight to illuminate the panel from behind, each individual pixel in an OLED display is itself a light source — it contains organic compounds that emit light when current flows through them. This single architectural difference has profound implications for every display attribute.</p>
+
+<h3 class="section">How OLED Works</h3>
+
+<p>An OLED pixel consists of an organic compound layer sandwiched between two electrodes. When current flows between the electrodes, the organic molecules are excited and emit photons directly — the pixel produces its own light. Each of the three subpixels (red, green, blue) in a pixel contains a different organic compound tuned to emit that specific wavelength of light.</p>
+
+<div style="margin: 16px 0 24px;">
+  <p style="font-family:var(--sans);font-size:13px;color:var(--muted);margin-bottom:8px;">Pixel structure — each cell emits its own light independently:</p>
+  <div class="pixel-demo">
+    <!-- Row 1 -->
+    <div class="pixel-cell pc-r">R</div><div class="pixel-cell pc-g">G</div><div class="pixel-cell pc-b">B</div>
+    <div class="pixel-cell pc-r">R</div><div class="pixel-cell pc-off">off</div><div class="pixel-cell pc-b">B</div>
+    <div class="pixel-cell pc-r">R</div><div class="pixel-cell pc-g">G</div><div class="pixel-cell pc-b">B</div>
+    <!-- Row 2 -->
+    <div class="pixel-cell pc-off">off</div><div class="pixel-cell pc-g">G</div><div class="pixel-cell pc-off">off</div>
+    <div class="pixel-cell pc-r">R</div><div class="pixel-cell pc-g">G</div><div class="pixel-cell pc-b">B</div>
+    <div class="pixel-cell pc-off">off</div><div class="pixel-cell pc-off">off</div><div class="pixel-cell pc-g">G</div>
+  </div>
+  <p style="font-family:var(--sans);font-size:12px;color:var(--muted);">Black pixels (labeled "off") emit zero light — they are completely dark. No backlight bleeds through.</p>
+</div>
+
+<h3 class="section">OLED Advantages Over LCD</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">True black / infinite contrast</span>
+    <span>When an OLED pixel displays black, it simply turns off — emitting zero photons. There is no backlight to leak through imperfect crystals. True black means infinite contrast ratio (measured as the ratio of peak white brightness to minimum black brightness). In practice, OLED contrast ratios are often stated as 1,000,000:1 or simply "infinite."</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Perfect per-pixel brightness control</span>
+    <span>Every pixel's brightness is controlled independently. A single bright star against a completely black sky — an impossible challenge for LCD (which lights the entire screen's backlight for the star) — is trivially natural for OLED. Each pixel is exactly as bright as needed and no brighter.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Wide color gamut</span>
+    <span>OLED organic compounds can be tuned to produce very saturated, pure primary colors, enabling wider color gamuts than most LCD panels. OLED displays commonly cover 100% DCI-P3 and often a significant portion of Rec.2020.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Near-instant response time</span>
+    <span>Individual organic compounds switch from off to on and back essentially instantaneously — response times below 0.1ms. There are no liquid crystal molecules that need to physically rotate. This eliminates ghosting entirely and enables the display to keep up with any motion regardless of content.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Thinner and flexible construction</span>
+    <span>Without a separate backlight layer, OLED panels can be made extremely thin. Flexible OLED panels (used in foldable smartphones and curved displays) are possible because the organic light-emitting layer can be deposited on flexible substrates.</span>
+  </div>
+</div>
+
+<h3 class="section">OLED Disadvantages</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Burn-in (image retention)</span>
+    <span>Organic compounds degrade with use — pixels that display the same content at high brightness for extended periods degrade faster than those showing varied content. The differential degradation creates permanent "ghost" images of static UI elements — a taskbar, a channel logo, a stock ticker. This is burn-in and it is permanent. Screensavers, auto-power-off, and pixel-shift features mitigate but do not eliminate this risk. OLED burn-in is the primary concern for monitors and TVs used with static UI elements for long hours daily.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Lower peak brightness</span>
+    <span>OLED panels are driven harder at higher brightness, accelerating organic compound degradation. This creates a design tension between peak brightness and longevity. LCD panels with powerful backlights can sustain higher peak brightness for longer than OLEDs can. In very bright ambient environments (sunlit rooms), OLED may appear dimmer than a high-brightness LCD.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Higher cost</span>
+    <span>OLED manufacturing is more complex and yields are lower than LCD. OLED monitors and laptops command a significant price premium over comparable LCD models.</span>
+  </div>
+</div>
+
+<h3 class="section">OLED Applications</h3>
+
+<ul class="body-list">
+  <li><strong>Smartphones:</strong> the dominant panel technology in flagship phones (Apple iPhone OLED, Samsung Galaxy AMOLED); ideal because phones display varied content and the use case doesn't create the conditions for rapid burn-in</li>
+  <li><strong>High-end laptops:</strong> growing presence in premium productivity and creative laptops (Dell XPS OLED, Samsung Galaxy Book, MacBook Pro via MicroOLED in future); excellent for photo/video work</li>
+  <li><strong>Gaming monitors:</strong> fast-growing category; near-zero response time and perfect contrast are compelling for gaming; manufacturers use pixel-shift and ABL (Automatic Brightness Limiter) to reduce burn-in risk</li>
+  <li><strong>High-end TVs:</strong> LG OLED, Sony OLED, Samsung QD-OLED are the premium TV category; superior to LCD for movie watching in dark rooms</li>
+</ul>
+
+
+<!-- ═══ MINI-LED ═══ -->
+<h2 class="chapter"><span class="ch-num">SECTION 3</span>Mini-LED</h2>
+
+<p><span class="key-term">Mini-LED</span> is an evolution of LED-backlit LCD technology, not a new display type. Standard LCD displays use either edge-lit LED strips (LEDs at the edges of the panel) or a relatively small number of full-array LEDs behind the panel for the backlight. Mini-LED replaces this backlight with thousands of tiny LEDs — each only a fraction of a millimeter in size — grouped into many independently controllable <span class="key-term">dimming zones</span>.</p>
+
+<h3 class="section">How Mini-LED Improves on Standard LCD</h3>
+
+<p>The key limitation of standard LCD with local dimming is that each dimming zone covers a large area of the screen — turning down a zone to improve black levels also dims nearby bright elements (called <span class="key-term">blooming</span> or <span class="key-term">halo effect</span>). With Mini-LED, having thousands of zones (compared to dozens in standard displays) means each zone covers a much smaller area, reducing blooming and allowing much more precise control of local brightness.</p>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>Mini-LED Advantages</h4>
+    <ul>
+      <li><strong>Much better contrast</strong> than standard LCD — thousands of dimming zones approach but don't match OLED's per-pixel control</li>
+      <li><strong>Very high peak brightness</strong> — thousands of tiny LEDs can be driven at high power simultaneously; some Mini-LED displays achieve 2,000–4,000 nits peak brightness</li>
+      <li><strong>No burn-in risk</strong> — it's still an LCD panel; organic compound degradation is not a concern</li>
+      <li><strong>Longer lifespan</strong> than OLED for static-content use cases</li>
+      <li><strong>HDR performance</strong> — high peak brightness + good local dimming = excellent HDR content reproduction</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Mini-LED Disadvantages</h4>
+    <ul>
+      <li><strong>Blooming still exists</strong> — not eliminated, just reduced vs. standard local dimming</li>
+      <li><strong>Not true per-pixel control</strong> — even with 10,000 zones, each zone covers multiple pixels; cannot match OLED's pixel-perfect control</li>
+      <li><strong>Thicker than OLED</strong> — still has a separate backlight layer</li>
+      <li><strong>Higher cost than standard LCD</strong> — manufacturing thousands of tiny LEDs and their control circuits adds cost</li>
+      <li><strong>Software/hardware complexity</strong> — managing thousands of dimming zones requires sophisticated real-time algorithms</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout callout-info">
+  <p class="callout-title">Mini-LED vs. MicroLED</p>
+  <p>Mini-LED should not be confused with <strong>MicroLED</strong> — a next-generation technology where each subpixel is an individual inorganic LED (similar concept to OLED but using inorganic LEDs). MicroLED has per-pixel control like OLED but without organic compounds, eliminating burn-in risk and achieving higher brightness. MicroLED is currently in early commercial deployment (Samsung The Wall, Apple Vision Pro display) and commands extreme pricing. The A+ exam only requires knowledge of Mini-LED, not MicroLED.</p>
+</div>
+
+<h3 class="section">Mini-LED Products</h3>
+
+<ul class="body-list">
+  <li><strong>Apple ProDisplay XDR</strong> — early high-profile Mini-LED monitor; 576 dimming zones in a 32" panel</li>
+  <li><strong>Apple MacBook Pro (M1 Pro/Max and later)</strong> — Liquid Retina XDR display uses Mini-LED; 10,000 dimming zones</li>
+  <li><strong>iPad Pro (M1 and later)</strong> — Liquid Retina XDR; first Apple product with Mini-LED</li>
+  <li><strong>High-end gaming monitors</strong> — ASUS ProArt, LG QNED, and Samsung Neo QLED use Mini-LED</li>
+</ul>
+
+
+<!-- ═══ TOUCH SCREEN / DIGITIZER ═══ -->
+<h2 class="chapter"><span class="ch-num">SECTION 4</span>Touch Screen and Digitizer</h2>
+
+<p>A <span class="key-term">touchscreen</span> integrates input functionality into the display itself, allowing the screen surface to detect touch and convert it into coordinate data that the OS can process as input events. The <span class="key-term">digitizer</span> is the specific component — a transparent layer overlaid on or fused to the display glass — that performs this detection and conversion.</p>
+
+<h3 class="section">Capacitive Touch Technology</h3>
+
+<p>The dominant touchscreen technology in modern devices is <span class="key-term">capacitive touch</span>. The human body conducts electricity and has a measurable capacitance. A capacitive digitizer consists of a transparent grid of conductive traces (Indium Tin Oxide, or ITO) that creates an electrostatic field across the display surface. When a finger (or any conductive object) contacts the surface, it distorts the local electrostatic field. Sensors at the edges of the grid detect this distortion and calculate the precise X,Y coordinates of the contact point.</p>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>Capacitive Touch — Key Properties</h4>
+    <ul>
+      <li><strong>Multi-touch:</strong> detects multiple simultaneous touch points (10+ fingers on modern devices)</li>
+      <li><strong>Does not respond to a gloved finger</strong> — gloves are non-conductive; use touchscreen-compatible gloves</li>
+      <li><strong>Requires conductive stylus</strong> — a passive (non-powered) capacitive stylus mimics a finger's capacitance</li>
+      <li><strong>Resistant to accidental activation</strong> — a hard object like a pen tip doesn't activate it (no conductivity)</li>
+      <li><strong>High sensitivity and accuracy</strong> — detects very light touch</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Resistive Touch (Legacy)</h4>
+    <ul>
+      <li><strong>Two flexible layers</strong> that make physical contact when pressed</li>
+      <li><strong>Any stylus works</strong> — fingernail, pen cap, toothpick</li>
+      <li><strong>Less accurate</strong> than capacitive</li>
+      <li><strong>Single-touch only</strong> in most implementations</li>
+      <li>Found in industrial terminals, older POS systems, medical devices</li>
+      <li><strong>Not used</strong> in modern smartphones or tablets</li>
+    </ul>
+  </div>
+</div>
+
+<h3 class="section">Digitizer Construction and Fusion</h3>
+
+<p>In modern premium devices, the digitizer is <span class="key-term">optically bonded</span> (fused) directly to the display glass. This eliminates the air gap between the two layers, which would otherwise reduce contrast, increase reflections, and add thickness. The visual result of optical bonding is a display that appears to be drawn directly on the glass surface rather than behind it.</p>
+
+<p>The practical consequence for repair: on fused displays, when the glass cracks, the digitizer (and often the display panel) must be replaced as a single assembly. Separate digitizer replacement — which was possible when layers were not bonded — is not feasible on fused assemblies. This is why screen replacements on modern smartphones are significantly more expensive than on older devices.</p>
+
+<h3 class="section">Active Stylus and Digitizer Technologies</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Active stylus (Bluetooth)</span>
+    <span>Devices like the Apple Pencil and Samsung S Pen use Bluetooth to communicate with the device, enabling features beyond simple touch: pressure sensitivity (up to 4,096 levels), tilt detection, palm rejection, and hover detection. The Apple Pencil uses the device's existing capacitive digitizer enhanced by Bluetooth for pressure data. Requires a battery (built into the stylus or charged from the device).</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">EMR (Electromagnetic Resonance)</span>
+    <span>Used in Samsung Galaxy Tab S series and Wacom tablets. A dedicated digitizer layer in the display resonates electromagnetically with the stylus. No battery required in the stylus — it is powered inductively by the display. Very high accuracy and pressure sensitivity. The EMR digitizer layer operates independently of the capacitive touch layer, so stylus and finger input work simultaneously.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Microsoft Pen Protocol (MPP)</span>
+    <span>Microsoft Surface Pro and compatible devices use MPP, which combines an active digitizer with Bluetooth. N-trig technology (acquired by Microsoft). Up to 4,096 pressure levels, tilt and rotation detection. Surface Pro pen works via the display's dedicated digitizer layer.</span>
+  </div>
+</div>
+
+
+<!-- ═══ INVERTER ═══ -->
+<h2 class="chapter"><span class="ch-num">SECTION 5</span>The Inverter</h2>
+
+<p>The <span class="key-term">inverter</span> is a circuit board component found in older LCD displays — specifically those that use <span class="key-term">CCFL (Cold Cathode Fluorescent Lamp)</span> backlights instead of the LED backlights found in all modern displays. Understanding the inverter is important for A+ because it explains a specific, diagnosable failure mode in older laptop and monitor displays.</p>
+
+<h3 class="section">Function of the Inverter</h3>
+
+<p>CCFL backlights require a high-voltage alternating current (AC) supply — typically 600–1,000 volts AC — to ionize the fluorescent gas inside the tube and produce light. Computer systems operate on low-voltage DC power (5V, 12V). The inverter's purpose is to convert low-voltage DC power from the system into the high-voltage AC required by the CCFL tubes.</p>
+
+<p>The inverter board typically mounts at the bottom edge of the display assembly in laptops and connects the main board's low-voltage supply on one side and the CCFL backlight connector on the other. When the inverter fails, the CCFL receives no power — the backlight goes dark while the display panel continues to function normally.</p>
+
+<h3 class="section">Inverter Failure — Symptoms and Diagnosis</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Dim display at startup, then darker</span>
+    <span>A failing inverter may supply partial voltage initially — the display is dim but visible — then fails completely as it warms up. The display progressively darkens over the first minutes of use.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Display appears black but works with flashlight</span>
+    <span>The definitive test for backlight/inverter failure: shine a flashlight at an angle across the screen in a dim room. If you can faintly see the desktop or login screen through the glass, the display panel and video signal are both fine — only the backlight is dark. This confirms a backlight or inverter failure, not a GPU or display panel failure.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Pink, reddish, or yellow tint</span>
+    <span>As CCFL tubes age, the phosphor coating inside them degrades, shifting the color temperature of the light they produce. A pink, purple, or yellow cast to an otherwise functional display on an older laptop indicates aging CCFL tubes, not display calibration or GPU issues.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Buzzing or high-pitched whine</span>
+    <span>The inverter operates at high frequency. A failing inverter may produce an audible high-pitched tone as its components degrade. This is particularly noticeable at low backlight brightness settings.</span>
+  </div>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus — Inverter</p>
+  <p>The inverter is a legacy component — modern LED-backlit displays do not have inverters (LEDs run on DC directly). The exam tests the inverter in the context of <strong>older laptop displays</strong>. The key diagnostic scenario: display appears completely dark but the image is faintly visible under a flashlight → backlight or inverter failure. On an older (CCFL) laptop, the likely culprit is the <strong>inverter</strong>. On a modern (LED) laptop, the backlight driver circuit or the LED strip itself has failed.</p>
+</div>
+
+<div class="callout callout-warn">
+  <p class="callout-title">Safety Note</p>
+  <p>Inverters operate at 600–1,000 volts. This is a lethal voltage level. Never touch an operating inverter with bare hands, even when the system appears to be off — capacitors may retain charge. Inverter replacement should only be performed on a fully powered-off, battery-disconnected system after verifying the capacitors have discharged.</p>
+</div>
+
+
+<!-- ═══ DISPLAY ATTRIBUTES ═══ -->
+<h2 class="chapter"><span class="ch-num">SECTION 6</span>Display Attributes</h2>
+
+<p>Display attributes are the measurable specifications that describe a panel's performance and visual quality. These attributes determine whether a display is appropriate for a given use case and are the basis for comparing displays when making purchasing decisions or diagnosing image quality problems.</p>
+
+<h3 class="section">Pixel Density (PPI — Pixels Per Inch)</h3>
+
+<p><span class="key-term">Pixel density</span> measures how many pixels are packed into each linear inch of the display surface, expressed as PPI (Pixels Per Inch). It is calculated from the screen resolution and physical screen size:</p>
+
+<p style="font-family:var(--mono);font-size:14px;background:var(--surface2);border:1px solid var(--border);padding:10px 16px;border-radius:4px;margin:12px 0;">PPI = √(horizontal_pixels² + vertical_pixels²) ÷ diagonal_inches</p>
+
+<p>A higher PPI means more pixels are packed into the same physical space — individual pixels become too small to distinguish at normal viewing distances, and the image appears smooth and sharp rather than pixelated. This is what Apple markets as <span class="key-term">Retina</span> — the point at which the pixel density at a given viewing distance exceeds the human eye's ability to distinguish individual pixels.</p>
+
+<div class="ppi-scale">
+  <div style="font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">PPI Scale — from low density to ultra-high</div>
+  <div class="ppi-bar"></div>
+  <div class="ppi-labels">
+    <span>72 PPI</span>
+    <span>100 PPI</span>
+    <span>150 PPI</span>
+    <span>200 PPI</span>
+    <span>300 PPI</span>
+    <span>500+ PPI</span>
+  </div>
+  <div class="ppi-markers">
+    <div class="ppi-marker"><span class="pv">72–96</span><span class="pl">Standard desktop monitor (24" 1080p = ~92 PPI)</span></div>
+    <div class="ppi-marker"><span class="pv">100–144</span><span class="pl">High-resolution desktop (27" 1440p = ~109 PPI)</span></div>
+    <div class="ppi-marker"><span class="pv">160–220</span><span class="pl">Retina MacBook Pro 15" (220 PPI); 4K 27" monitor (~163 PPI)</span></div>
+    <div class="ppi-marker"><span class="pv">260–330</span><span class="pl">Flagship smartphones (iPhone 15 = 460 PPI)</span></div>
+    <div class="ppi-marker"><span class="pv">450–600</span><span class="pl">Ultra-high-end VR headsets; smartphone flagships</span></div>
+  </div>
+</div>
+
+<p>Pixel density is more meaningful than resolution alone because it accounts for display size. A 4K (3840×2160) monitor at 85 inches has fewer pixels per inch than a 1080p (1920×1080) monitor at 24 inches. The smaller 1080p monitor will appear sharper at typical viewing distances despite having a lower total pixel count.</p>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus — PPI Calculation Concept</p>
+  <p>The exam does not require you to calculate PPI mathematically. It does require understanding that PPI is determined by both resolution AND physical size, and that higher PPI means sharper appearance. A display at 1440p native resolution appears sharper on a 24" panel than on a 32" panel because the same pixel count is spread over a smaller area — higher PPI on the smaller screen.</p>
+</div>
+
+<h3 class="section">Screen Resolution</h3>
+
+<p><span class="key-term">Screen resolution</span> describes the total number of pixels on a display, expressed as horizontal × vertical pixel counts. Resolution is the primary determinant of how much content can be displayed simultaneously — a higher-resolution display can show more on screen at the same time. It is distinct from pixel density, which additionally accounts for physical screen size.</p>
+
+<div class="res-grid">
+  <div class="res-card res-hd">
+    <span class="res-name">HD</span>
+    <span class="res-px">1280 × 720</span>
+    <span class="res-note">Legacy; minimum for video</span>
+  </div>
+  <div class="res-card res-hd">
+    <span class="res-name">HD+ / WXGA</span>
+    <span class="res-px">1366 × 768</span>
+    <span class="res-note">Old budget laptops</span>
+  </div>
+  <div class="res-card res-fhd">
+    <span class="res-name">FHD (1080p)</span>
+    <span class="res-px">1920 × 1080</span>
+    <span class="res-note">Current mainstream standard</span>
+  </div>
+  <div class="res-card res-fhd">
+    <span class="res-name">QHD (1440p)</span>
+    <span class="res-px">2560 × 1440</span>
+    <span class="res-note">Gaming monitors; mid-premium</span>
+  </div>
+  <div class="res-card res-fhd">
+    <span class="res-name">WQHD / 1440p Ultrawide</span>
+    <span class="res-px">3440 × 1440</span>
+    <span class="res-note">21:9 aspect ratio ultrawide</span>
+  </div>
+  <div class="res-card res-4k">
+    <span class="res-name">4K / UHD</span>
+    <span class="res-px">3840 × 2160</span>
+    <span class="res-note">Premium monitors; 4K video</span>
+  </div>
+  <div class="res-card res-4k">
+    <span class="res-name">5K</span>
+    <span class="res-px">5120 × 2880</span>
+    <span class="res-note">Apple Studio Display; Pro monitors</span>
+  </div>
+  <div class="res-card res-8k">
+    <span class="res-name">8K / UHD-2</span>
+    <span class="res-px">7680 × 4320</span>
+    <span class="res-note">Emerging premium; limited content</span>
+  </div>
+</div>
+
+<p>Displays have a <span class="key-term">native resolution</span> — the exact pixel count of the physical panel. Running a display at its native resolution produces the sharpest possible image because each logical pixel maps to exactly one physical pixel. Running at a lower-than-native resolution requires the display to scale the image, which produces visible blurring or softness. This is the most common cause of a fuzzy monitor image — the resolution is set below native in Windows Display Settings.</p>
+
+<h3 class="section">Refresh Rate</h3>
+
+<p>The <span class="key-term">refresh rate</span> is the number of times per second the display updates the image it is showing, measured in Hz (Hertz). A 60 Hz display redraws the entire screen 60 times per second; a 144 Hz display redraws it 144 times per second.</p>
+
+<div class="hz-scale">
+  <h4>Common Refresh Rates and Their Use Cases</h4>
+  <div class="hz-row">
+    <span class="hz-val">30 Hz</span>
+    <div class="hz-bar-wrap"><div class="hz-bar"><div class="hz-fill" style="width:15%"></div></div></div>
+    <span class="hz-desc">Legacy; minimum for film-like motion; some TVs and older monitors</span>
+  </div>
+  <div class="hz-row">
+    <span class="hz-val">60 Hz</span>
+    <div class="hz-bar-wrap"><div class="hz-bar"><div class="hz-fill" style="width:30%"></div></div></div>
+    <span class="hz-desc">Baseline for all modern displays; smooth for standard desktop use; minimum for comfortable daily use</span>
+  </div>
+  <div class="hz-row">
+    <span class="hz-val">75 Hz</span>
+    <div class="hz-bar-wrap"><div class="hz-bar"><div class="hz-fill" style="width:38%"></div></div></div>
+    <span class="hz-desc">Entry-level gaming upgrade; noticeably smoother than 60 Hz; found in budget gaming monitors</span>
+  </div>
+  <div class="hz-row">
+    <span class="hz-val">120 Hz</span>
+    <div class="hz-bar-wrap"><div class="hz-bar"><div class="hz-fill" style="width:56%"></div></div></div>
+    <span class="hz-desc">Standard for mid-range gaming; flagship smartphones (iPhone Pro, Samsung S series); noticeably smoother scrolling</span>
+  </div>
+  <div class="hz-row">
+    <span class="hz-val">144 Hz</span>
+    <div class="hz-bar-wrap"><div class="hz-bar"><div class="hz-fill" style="width:68%"></div></div></div>
+    <span class="hz-desc">Most popular gaming monitor refresh rate; significant improvement over 60 Hz for fast games</span>
+  </div>
+  <div class="hz-row">
+    <span class="hz-val">165 Hz</span>
+    <div class="hz-bar-wrap"><div class="hz-bar"><div class="hz-fill" style="width:78%"></div></div></div>
+    <span class="hz-desc">Common gaming tier; similar to 144 Hz in perceptible difference</span>
+  </div>
+  <div class="hz-row">
+    <span class="hz-val">240 Hz</span>
+    <div class="hz-bar-wrap"><div class="hz-bar"><div class="hz-fill" style="width:88%"></div></div></div>
+    <span class="hz-desc">High-end gaming; competitive esports players; requires powerful GPU to drive at high frame rates</span>
+  </div>
+  <div class="hz-row">
+    <span class="hz-val">360+ Hz</span>
+    <div class="hz-bar-wrap"><div class="hz-bar"><div class="hz-fill" style="width:100%"></div></div></div>
+    <span class="hz-desc">Extreme esports; professional competitive gaming; diminishing returns; nearly indistinguishable from 240 Hz for most users</span>
+  </div>
+</div>
+
+<p>Refresh rate and <span class="key-term">frame rate</span> (frames per second output by the GPU) are related but distinct. The display's refresh rate is fixed hardware; the GPU's frame rate is variable. When these don't match, visual artifacts occur — <span class="key-term">screen tearing</span> (partial frames from different render cycles displayed simultaneously, producing a horizontal "tear" line) when GPU FPS exceeds display Hz, and <span class="key-term">stuttering</span> when FPS drops below display Hz.</p>
+
+<p><span class="key-term">Variable Refresh Rate (VRR)</span> technologies synchronize the display's refresh rate to the GPU's output in real time: <strong>NVIDIA G-Sync</strong> and <strong>AMD FreeSync</strong> (also implemented as VESA AdaptiveSync) dynamically adjust the display's refresh rate to match the GPU's current frame rate, eliminating both tearing and stuttering simultaneously.</p>
+
+<h3 class="section">Color Gamut</h3>
+
+<p>A <span class="key-term">color gamut</span> is the range (or volume) of colors a display device can reproduce. Not all colors visible to the human eye can be reproduced by all displays — the gamut defines the boundaries of what is possible for a given device. Gamuts are typically visualized as a triangle on a chromaticity diagram; a larger triangle means a wider range of reproducible colors.</p>
+
+<p>Different industries have standardized different color gamuts for different use cases, and displays are evaluated against these standards:</p>
+
+<div class="gamut-bars">
+  <div class="gamut-row">
+    <span class="gamut-label">sRGB / Rec.709</span>
+    <div class="gamut-bar-outer"><div class="gamut-fill gf-srgb" style="width:67%"></div></div>
+    <span class="gamut-pct">~67%</span>
+  </div>
+  <div class="gamut-row">
+    <span class="gamut-label">DCI-P3</span>
+    <div class="gamut-bar-outer"><div class="gamut-fill gf-dcip3" style="width:75%"></div></div>
+    <span class="gamut-pct">~76%</span>
+  </div>
+  <div class="gamut-row">
+    <span class="gamut-label">Adobe RGB</span>
+    <div class="gamut-bar-outer"><div class="gamut-fill gf-adober" style="width:73%"></div></div>
+    <span class="gamut-pct">~73%</span>
+  </div>
+  <div class="gamut-row">
+    <span class="gamut-label">Rec.2020</span>
+    <div class="gamut-bar-outer"><div class="gamut-fill gf-rec2020" style="width:100%"></div></div>
+    <span class="gamut-pct">100%</span>
+  </div>
+</div>
+<p style="font-family:var(--sans);font-size:12px;color:var(--muted);margin-top:0;margin-bottom:16px;">Bar width represents each gamut as a percentage of the Rec.2020 (largest current standard) space.</p>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">sRGB / Rec.709</span>
+    <span>The baseline standard for consumer electronics, the web, and most digital content. Defined in the 1990s for PC monitors and standard-definition television. Virtually all consumer content (websites, office documents, most photos) is created in sRGB. A display that covers 100% sRGB will reproduce this content accurately. Most displays cover sRGB fully; the question is how accurately they hit the exact target colors within that range (delta-E measurement).</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">DCI-P3</span>
+    <span>The color standard for digital cinema projection — the gamut used when movies are graded for theater release. Covers significantly more saturated greens and reds than sRGB. Now the de facto standard for premium consumer displays (iPhone, iPad, MacBook Pro, high-end monitors). A display covering 100% DCI-P3 can accurately reproduce cinema-grade content and provides richer, more saturated colors than sRGB for everyday use.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Adobe RGB</span>
+    <span>Designed for print production — it covers a wider range of cyan-green colors that are reproducible in CMYK printing but invisible in sRGB. Used by professional photographers who work with raw files destined for high-quality printing. Wide-gamut displays covering Adobe RGB are standard in professional photography and print design workflows.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Rec.2020</span>
+    <span>The HDR television standard — the largest standardized color gamut, covering colors currently not reproducible by most displays. Content mastered for Rec.2020 is common in 4K HDR streaming (Netflix 4K, UHD Blu-ray). Few displays cover Rec.2020 fully today; most capable displays claim a percentage (e.g., 80% Rec.2020 coverage). This gamut represents the long-term future direction of display technology.</span>
+  </div>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus — Color Gamut</p>
+  <p>For the A+ exam, know the hierarchy: <strong>sRGB is the baseline</strong> standard for consumer and web content. <strong>DCI-P3 is wider</strong> than sRGB and used in cinema and premium consumer devices. <strong>Adobe RGB</strong> is for professional print work. A display covering a wider gamut can show more saturated, vibrant colors — but content must be created for that gamut to benefit; displaying sRGB content on a wide-gamut display without proper color management results in oversaturated colors.</p>
+</div>
+
+
+<!-- MASTER REFERENCE -->
+<div class="ch-divider"></div>
+
+<div class="summary-box">
+  <h3>Master Reference — Objective 3.1 Key Concepts</h3>
+  <div class="summary-grid">
+    <div class="summary-item"><span class="s-sym">TN panel</span><span>Fastest response (gaming); worst viewing angles and color; cheapest</span></div>
+    <div class="summary-item"><span class="s-sym">IPS panel</span><span>Best color accuracy and viewing angles; professional use; IPS glow in corners</span></div>
+    <div class="summary-item"><span class="s-sym">VA panel</span><span>Best contrast ratio (deepest blacks); slower response; ghosting; movies</span></div>
+    <div class="summary-item"><span class="s-sym">OLED</span><span>Each pixel emits own light; true black; infinite contrast; burn-in risk</span></div>
+    <div class="summary-item"><span class="s-sym">Mini-LED</span><span>LCD + thousands of tiny backlight LEDs; many dimming zones; no burn-in; near-OLED contrast</span></div>
+    <div class="summary-item"><span class="s-sym">LCD does not emit light</span><span>Requires backlight; crystals modulate light; black is imperfect (backlight leaks)</span></div>
+    <div class="summary-item"><span class="s-sym">Digitizer</span><span>Transparent touch-sensing layer; capacitive detects finger charge; fused = replaced as one unit with glass</span></div>
+    <div class="summary-item"><span class="s-sym">Inverter</span><span>Converts DC to high-voltage AC for CCFL backlight; older laptops only; failure = dark screen, faint image visible under flashlight</span></div>
+    <div class="summary-item"><span class="s-sym">PPI (pixel density)</span><span>Pixels per inch = sharpness; higher = sharper; depends on resolution AND physical size</span></div>
+    <div class="summary-item"><span class="s-sym">Native resolution</span><span>Exact pixel count of panel; run at native for sharpest image; below native = scaling = fuzzy</span></div>
+    <div class="summary-item"><span class="s-sym">Refresh rate</span><span>Times/second screen redraws; 60 Hz = standard; higher = smoother motion; measured in Hz</span></div>
+    <div class="summary-item"><span class="s-sym">Color gamut</span><span>Range of reproducible colors; sRGB = baseline; DCI-P3 = cinema/premium; Adobe RGB = print</span></div>
+  </div>
+</div>
+
+<!-- QUICK REFERENCE COMPARISON -->
+<h2 class="chapter"><span class="ch-num">REFERENCE</span>Technology Comparison at a Glance</h2>
+
+<table class="data-table">
+  <thead><tr><th>Technology</th><th>Light Source</th><th>True Black</th><th>Best Attribute</th><th>Worst Attribute</th><th>Primary Use Case</th></tr></thead>
+  <tbody>
+    <tr><td>TN LCD</td><td>LED backlight</td><td>No (backlight leaks)</td><td>Response time (1ms)</td><td>Viewing angles, color</td><td>Competitive gaming</td></tr>
+    <tr><td>IPS LCD</td><td>LED backlight</td><td>No (IPS glow)</td><td>Color accuracy, viewing angles</td><td>IPS glow, contrast vs VA</td><td>Professional creative, general use</td></tr>
+    <tr><td>VA LCD</td><td>LED backlight</td><td>No (but deepest of LCDs)</td><td>Contrast ratio (up to 6,000:1)</td><td>Ghosting, slow response</td><td>Movies, immersive gaming, dark content</td></tr>
+    <tr><td>OLED</td><td>Per-pixel self-emitting</td><td>Yes — pixel off = true black</td><td>Contrast, color, response time</td><td>Burn-in, cost, peak brightness</td><td>Flagship phones, premium monitors, TVs</td></tr>
+    <tr><td>Mini-LED LCD</td><td>LED backlight (1,000s of zones)</td><td>No (reduced blooming)</td><td>Peak brightness + improved contrast</td><td>Blooming still present, cost, thickness</td><td>Premium laptops, HDR monitors</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-exam" style="margin-top: 28px;">
+  <p class="callout-title">Final Exam Reminders</p>
+  <p><strong>Best viewing angles</strong> → IPS. <strong>Fastest response</strong> → TN. <strong>Best contrast</strong> → VA (LCD) or OLED. <strong>True black</strong> → OLED only.</p>
+  <p><strong>LCDs need a backlight; OLEDs do not.</strong> Dim image with faint display visible = backlight/inverter failure, not panel failure.</p>
+  <p><strong>Inverter</strong> = only in older CCFL-backlit LCDs; converts DC to high-voltage AC. Modern LED displays have no inverter.</p>
+  <p><strong>Fuzzy monitor</strong> = almost always running below native resolution. Set to the Recommended (native) resolution in Display Settings.</p>
+  <p><strong>IPS glow</strong> = bright areas in corners of dark images = normal IPS characteristic, not a defect.</p>
+  <p><strong>OLED burn-in</strong> = permanent ghost image from static content displayed too long at high brightness = permanent hardware damage.</p>
+  <p><strong>Digitizer fused to glass</strong> = cracked glass means replacing the whole assembly (glass + digitizer + often display panel).</p>
+  <p><strong>PPI</strong> = resolution ÷ screen size. Same resolution on a smaller screen = higher PPI = sharper image.</p>
+  <p><strong>Native resolution</strong> = the only resolution at which the panel is perfectly sharp. Any other resolution requires scaling.</p>
+  <p><strong>Higher Hz</strong> = smoother motion = important for gaming; 60 Hz is minimum for comfortable desktop use.</p>
+  <p><strong>sRGB = standard gamut</strong> for web and consumer content. DCI-P3 = wider; cinema and premium devices. Adobe RGB = print production.</p>
+</div>
+
+</div>
+</body>
+</html>

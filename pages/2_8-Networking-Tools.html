@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CompTIA A+ 2.8 — Networking Tools and Their Purposes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --surface2: #f5f4f0;
+    --border: #e5e2d9;
+    --border2: #d4d0c4;
+    --text: #1a1a18;
+    --muted: #6b6860;
+    --accent: #c0392b;
+    --accent2: #2c3e6b;
+    --accent3: #1a6b3a;
+    --accent4: #b5590a;
+    --accent-light: #fdf2f1;
+    --accent2-light: #f0f2f8;
+    --accent3-light: #f0f8f3;
+    --accent4-light: #fdf5ed;
+    --serif: 'Crimson Pro', Georgia, serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── TOP NAV ── */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .top-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .nav-home {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+  .nav-home:hover { color: var(--accent2); }
+  .nav-home::before {
+    content: '←';
+    font-size: 12px;
+  }
+  .nav-sep {
+    font-size: 12px;
+    color: var(--border2);
+    flex-shrink: 0;
+  }
+  .nav-current {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nav-current strong {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    margin-right: 6px;
+  }
+  .top-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .nav-prev, .nav-next {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 4px 9px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    white-space: nowrap;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .nav-prev:hover, .nav-next:hover {
+    border-color: var(--border2);
+    color: var(--accent2);
+  }
+  .nav-prev::before { content: '← '; }
+  .nav-next::after  { content: ' →'; }
+
+  @media (max-width: 600px) {
+    .top-nav { padding: 0 16px; }
+    .nav-current { display: none; }
+    .nav-sep { display: none; }
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  .page { max-width: 860px; margin: 0 auto; padding: 0 40px 80px; }
+
+  /* HEADER */
+  .book-header {
+    border-bottom: 3px double var(--border2);
+    padding: 56px 0 32px;
+    margin-bottom: 48px;
+  }
+  .book-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .book-eyebrow span {
+    background: var(--accent);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-right: 10px;
+    font-size: 10px;
+  }
+  .book-title {
+    font-family: var(--serif);
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+  .book-subtitle {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .book-subtitle span { display: flex; align-items: center; gap: 6px; }
+  .book-subtitle span::before { content: '·'; color: var(--border2); }
+  .book-subtitle span:first-child::before { display: none; }
+
+  /* HEADINGS */
+  h2.chapter {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 600;
+    margin: 52px 0 6px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    letter-spacing: -0.01em;
+  }
+  h2.chapter .ch-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+    letter-spacing: 0.1em;
+    font-weight: 400;
+  }
+  h3.section {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    margin: 36px 0 12px;
+  }
+  h3.section::before { content: '§ '; color: var(--muted); font-weight: 300; }
+
+  p { margin-bottom: 16px; }
+
+  /* CALLOUTS */
+  .callout {
+    border-left: 3px solid;
+    padding: 14px 20px;
+    margin: 24px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 15.5px;
+  }
+  .callout p { margin-bottom: 6px; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout-title {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px !important;
+  }
+  .callout-exam { border-color: var(--accent); background: var(--accent-light); }
+  .callout-exam .callout-title { color: var(--accent); }
+  .callout-info { border-color: var(--accent2); background: var(--accent2-light); }
+  .callout-info .callout-title { color: var(--accent2); }
+  .callout-tip { border-color: var(--accent3); background: var(--accent3-light); }
+  .callout-tip .callout-title { color: var(--accent3); }
+  .callout-warn { border-color: var(--accent4); background: var(--accent4-light); }
+  .callout-warn .callout-title { color: var(--accent4); }
+
+  /* TABLES */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+    font-family: var(--sans);
+    margin: 16px 0 24px;
+  }
+  .data-table thead th {
+    background: var(--surface2);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 9px 13px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .data-table tbody tr { border-bottom: 1px solid var(--border); }
+  .data-table tbody tr:last-child { border-bottom: none; }
+  .data-table td { padding: 9px 13px; vertical-align: top; line-height: 1.5; }
+  .data-table td:first-child {
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 13.5px;
+  }
+
+  /* PROCESS FLOW */
+  .process-flow {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: var(--sans);
+    font-size: 14px;
+  }
+  .flow-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .flow-step:last-child { border-bottom: none; }
+  .flow-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+    min-width: 24px;
+    padding-top: 2px;
+  }
+  .flow-text { color: var(--text); line-height: 1.55; }
+  .flow-text strong { font-weight: 600; }
+
+  /* DEF LIST */
+  .def-list { margin: 16px 0 24px; }
+  .def-item {
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 210px 1fr;
+    gap: 20px;
+    font-size: 15px;
+  }
+  .def-item:last-child { border-bottom: none; }
+  .def-term {
+    font-family: var(--sans);
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 14px;
+    padding-top: 1px;
+    line-height: 1.4;
+  }
+
+  /* GRID CARDS */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 16px 18px;
+  }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 10px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card ul { list-style: none; font-family: var(--sans); font-size: 13.5px; }
+  .card ul li {
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .card ul li:last-child { border-bottom: none; }
+  .card ul li strong { color: var(--text); }
+
+  /* BODY LIST */
+  ul.body-list {
+    list-style: none;
+    font-family: var(--sans);
+    font-size: 15px;
+    padding: 0;
+    margin: 12px 0 20px;
+  }
+  ul.body-list li {
+    padding: 5px 0 5px 18px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  ul.body-list li:last-child { border-bottom: none; }
+  ul.body-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--border2);
+    font-size: 12px;
+  }
+  ul.body-list li strong { color: var(--text); }
+
+  /* TOOL SPEC CARD */
+  .tool-spec {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 18px 22px;
+    margin: 20px 0;
+    font-family: var(--sans);
+  }
+  .tool-spec-row {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 16px;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13.5px;
+  }
+  .tool-spec-row:last-child { border-bottom: none; }
+  .tool-spec-label {
+    font-weight: 600;
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding-top: 2px;
+  }
+  .tool-spec-row span:last-child { color: var(--text); line-height: 1.5; }
+
+  /* CODE */
+  code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: var(--accent);
+  }
+
+  .key-term { font-style: italic; font-weight: 500; color: var(--accent2); }
+
+  /* SUMMARY BOX */
+  .summary-box {
+    background: var(--text);
+    color: #f0ede6;
+    border-radius: 6px;
+    padding: 28px 32px;
+    margin: 40px 0;
+  }
+  .summary-box h3 {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 18px;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 32px;
+  }
+  .summary-item {
+    font-family: var(--sans);
+    font-size: 13.5px;
+    color: #c4bfb4;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .summary-item .s-sym {
+    color: #fff;
+    font-weight: 600;
+    min-width: 175px;
+    line-height: 1.4;
+  }
+
+  .ch-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--border2), transparent);
+    margin: 48px 0;
+  }
+
+  /* INDICATOR DOTS */
+  .malware-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .ind-high { background: var(--accent); }
+  .ind-med { background: var(--accent4); }
+  .ind-low { background: var(--accent3); }
+
+  @media (max-width: 680px) {
+    .page { padding: 0 20px 60px; }
+    .summary-grid, .card-grid { grid-template-columns: 1fr; }
+    .def-item { grid-template-columns: 1fr; gap: 4px; }
+    .tool-spec-row { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV — update href values to match your actual file names -->
+<nav class="top-nav">
+  <div class="top-nav-left">
+    <a class="nav-home" href="../index.html">Study Guide</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current"><strong>2.8</strong> Networking Tools and Their Purposes</span>
+  </div>
+  <div class="top-nav-right">
+    <!-- Point these to the adjacent section files, or remove if not applicable -->
+    <a class="nav-prev" href="./2_7-Internet-Connection-Network-Types.html">2.7</a>
+    <a class="nav-next" href="./3_1-Display-Components-Attributes.html">3.1</a>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- HEADER -->
+<div class="book-header">
+  <div class="book-eyebrow">
+    <span>2.8</span>
+    CompTIA A+ · Core 1 (220-1201) · Domain 2 — Networking
+  </div>
+  <h1 class="book-title">Networking Tools<br>and Their Purposes</h1>
+  <div class="book-subtitle">
+    <span>Objective 2.8</span>
+    <span>Domain weight: 20%</span>
+    <span>8 testable tools</span>
+  </div>
+</div>
+
+<!-- INTRO -->
+<h2 class="chapter"><span class="ch-num">OVERVIEW</span>Introduction</h2>
+
+<p>Objective 2.8 covers the physical tools a technician uses to build, test, and troubleshoot wired network cabling and basic wireless infrastructure. Unlike previous objectives, which were largely conceptual, this one is concrete and visual — the exam frequently shows a photo of a tool and asks you to identify it, or describes a task ("terminate a cable into a wall jack") and asks which tool accomplishes it. Success here comes down to clean, confident matching between a tool's appearance, its purpose, and the specific job it's built for.</p>
+
+<p>Most of these tools cluster around one central activity: getting a copper Ethernet cable properly terminated, connected, and verified to be working correctly end-to-end. A smaller set of tools (Wi-Fi analyzer, network tap) address wireless surveying and traffic monitoring instead of physical cabling. Keeping that grouping in mind — "cable termination tools" vs. "cable testing tools" vs. "everything else" — makes the whole objective easier to organize in memory.</p>
+
+<div class="callout callout-info">
+  <p class="callout-title">Two Big Categories</p>
+  <p><strong>Termination tools</strong> (crimper, cable stripper, punchdown tool) physically attach a connector or terminate a cable into a jack/patch panel — they create a connection. <strong>Testing/diagnostic tools</strong> (cable tester, toner probe, loopback plug, Wi-Fi analyzer, network tap) verify that a connection works correctly or help you locate/inspect a cable or signal — they confirm or investigate a connection. Most exam questions are really asking you to sort a scenario into one of these two buckets, then narrow down to the specific tool.</p>
+</div>
+
+<!-- ═══ TOOL 1: CRIMPER ═══ -->
+<h2 class="chapter"><span class="ch-num">TOOL 01</span>Crimper</h2>
+
+<p>A <span class="key-term">crimper</span> (or crimping tool) is used to attach a connector — most commonly an <strong>RJ45</strong> connector for Ethernet, or an <strong>RJ11</strong> connector for telephone cable — onto the end of a cable. After the individual wire pairs inside the cable are arranged in the correct order and inserted into the connector, the crimper applies firm, even pressure that drives small metal contacts inside the connector down through the insulation of each wire, making electrical contact, while simultaneously crimping the connector body onto the cable jacket for strain relief.</p>
+
+<div class="tool-spec">
+  <div class="tool-spec-row"><span class="tool-spec-label">Primary Use</span><span>Attaching RJ45/RJ11 connectors to the end of a cable to create a patch cable</span></div>
+  <div class="tool-spec-row"><span class="tool-spec-label">Used With</span><span>Loose Ethernet cable + RJ45 connectors (or phone cable + RJ11 connectors)</span></div>
+  <div class="tool-spec-row"><span class="tool-spec-label">Typical Scenario</span><span>Building a custom-length patch cable when no pre-made cable of the right length is available</span></div>
+  <div class="tool-spec-row"><span class="tool-spec-label">Paired Standard</span><span>Wire order follows T568A or T568B; both ends of a straight-through cable must use the same standard</span></div>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>If a scenario describes creating a custom Ethernet cable from a spool of bulk cable, or replacing a damaged connector on the end of an existing cable, the answer is a <strong>crimper</strong>. Don't confuse this with a punchdown tool — a crimper attaches a connector to a loose cable <em>end</em>; a punchdown tool terminates a cable into a fixed jack or panel.</p>
+</div>
+
+<!-- ═══ TOOL 2: CABLE STRIPPER ═══ -->
+<h2 class="chapter"><span class="ch-num">TOOL 02</span>Cable Stripper</h2>
+
+<p>A <span class="key-term">cable stripper</span> (or wire stripper) removes the outer insulating jacket from a cable without damaging the individual wires or conductors inside. This is almost always the very first step before terminating a cable with any other tool — you can't crimp a connector or punch down a wire pair until the outer jacket has been cleanly removed to expose the conductors underneath.</p>
+
+<p>Many cable strippers designed for network cabling are adjustable to cut only through the outer jacket at a precise, consistent depth, preventing accidental nicks to the copper conductors inside — a nicked conductor can cause intermittent failures or signal loss that are notoriously difficult to diagnose later.</p>
+
+<div class="callout callout-warn">
+  <p class="callout-title">Common Pitfall</p>
+  <p>Using a generic utility knife or the wrong stripper setting can nick or partially cut through the internal conductors while removing the jacket. The damage may not be visible to the eye but can cause unreliable, intermittent connectivity that's hard to trace back to its source — always use a tool/setting designed for the cable's specific jacket thickness.</p>
+</div>
+
+<!-- ═══ TOOL 3: WI-FI ANALYZER ═══ -->
+<h2 class="chapter"><span class="ch-num">TOOL 03</span>Wi-Fi Analyzer</h2>
+
+<p>A <span class="key-term">Wi-Fi analyzer</span> is a software tool (often running on a laptop or smartphone) that scans the wireless spectrum to reveal information about nearby wireless networks — signal strength, channel usage, frequency band (2.4/5/6 GHz), and the presence of overlapping or congested channels. It is the primary tool for diagnosing wireless performance problems and planning access point placement.</p>
+
+<ul class="body-list">
+  <li><strong>Channel overlap detection</strong> — identifies when multiple nearby networks are using the same or overlapping channels, a common cause of interference and slow wireless performance.</li>
+  <li><strong>Signal strength mapping</strong> — helps determine dead zones or weak-coverage areas where an additional access point may be needed.</li>
+  <li><strong>Site surveys</strong> — used before deploying a new wireless network to understand the existing RF environment and choose the least congested channels.</li>
+  <li><strong>Rogue AP detection</strong> — can help identify unauthorized or unexpected access points broadcasting in the area.</li>
+</ul>
+
+<div class="callout callout-tip">
+  <p class="callout-title">When This Is the Right Tool</p>
+  <p>Any scenario describing slow or unreliable Wi-Fi, with no obvious wired/cabling component, points toward a <strong>Wi-Fi analyzer</strong>. It's the wireless equivalent of a cable tester — instead of verifying a physical copper connection, it verifies and diagnoses the health of the radio frequency environment.</p>
+</div>
+
+<!-- ═══ TOOL 4: TONER PROBE ═══ -->
+<h2 class="chapter"><span class="ch-num">TOOL 04</span>Toner Probe</h2>
+
+<p>A <span class="key-term">toner probe</span> (also called a "tone generator and probe" or simply "fox and hound") is a two-piece tool used to physically locate a specific cable among a bundle of many unlabeled cables, or to trace a cable run from one end to the other through walls, ceilings, or a crowded patch panel.</p>
+
+<div class="process-flow">
+  <div class="flow-title">How a Toner Probe Is Used</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Connect the tone generator</strong> to one end of the cable you need to identify — typically at a wall jack or a loose cable end.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>The generator sends an audible tone signal</strong> down the wire pair.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Use the probe</strong> (the "hound") near the other end of the cable bundle — often at a patch panel or punch-down block — sweeping it across the unlabeled cables.</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>The probe emits an audible beep</strong> when it detects the tone signal, identifying exactly which cable in the bundle corresponds to the one connected to the generator.</div></div>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>The classic scenario: "A technician needs to identify which of fifty unlabeled cables in a server closet corresponds to a specific wall jack." The answer is a <strong>toner probe</strong>. This is purely about <em>identification/tracing</em>, not about testing whether the cable is electrically good — that's the cable tester's job.</p>
+</div>
+
+<!-- ═══ TOOL 5: PUNCHDOWN TOOL ═══ -->
+<h2 class="chapter"><span class="ch-num">TOOL 05</span>Punchdown Tool</h2>
+
+<p>A <span class="key-term">punchdown tool</span> terminates individual wires into a <strong>punch-down block</strong> — found on the back of patch panels, wall jacks, and 110 blocks. Rather than crimping a connector onto the end of a cable, the punchdown tool pushes each individual conductor down into a small metal slot that pierces the wire's insulation and makes electrical contact, while simultaneously trimming off the excess wire in a single motion (on tools equipped with a cutting blade).</p>
+
+<div class="tool-spec">
+  <div class="tool-spec-row"><span class="tool-spec-label">Primary Use</span><span>Terminating individual conductors into a patch panel, wall jack, or 110 block</span></div>
+  <div class="tool-spec-row"><span class="tool-spec-label">Used With</span><span>Structured cabling runs (the permanent in-wall cabling discussed in objective 2.5's patch panel section)</span></div>
+  <div class="tool-spec-row"><span class="tool-spec-label">Typical Scenario</span><span>Installing or relocating a new wall jack; terminating the back side of a patch panel</span></div>
+  <div class="tool-spec-row"><span class="tool-spec-label">Paired Standard</span><span>T568A or T568B color-coded wiring diagram, same standard used end-to-end</span></div>
+</div>
+
+<div class="callout callout-info">
+  <p class="callout-title">Punchdown Tool vs. Crimper — The Core Distinction</p>
+  <p>Both tools terminate copper wiring, but onto fundamentally different things. A <strong>crimper</strong> attaches a connector (RJ45) onto the loose end of a cable so it can be plugged into a port. A <strong>punchdown tool</strong> terminates the individual conductors of a cable into a fixed block (patch panel or wall jack) that already has its own built-in connector on the front side. If the scenario involves a "wall jack" or "patch panel," think punchdown tool. If it involves "making a patch cable" or "plugging into a port," think crimper.</p>
+</div>
+
+<!-- ═══ TOOL 6: CABLE TESTER ═══ -->
+<h2 class="chapter"><span class="ch-num">TOOL 06</span>Cable Tester</h2>
+
+<p>A <span class="key-term">cable tester</span> verifies that a network cable is wired correctly and is electrically sound end-to-end. It typically consists of two parts — a main unit and a remote unit — connected to each end of the cable being tested. The tester checks for proper continuity and pinout (each wire correctly connected pin-to-pin) and can identify several common cabling faults.</p>
+
+<table class="data-table">
+  <thead><tr><th>Fault</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td>Open circuit</td><td>A break in one or more wires; no continuity at all on that conductor</td></tr>
+    <tr><td>Short circuit</td><td>Two conductors that should be separate are touching/connected to each other</td></tr>
+    <tr><td>Split pair</td><td>Wires from two different twisted pairs are incorrectly paired together, causing crosstalk and signal problems despite the cable appearing to "work"</td></tr>
+    <tr><td>Crossed pair / miswire</td><td>Wires connected to the wrong pins, not matching the intended T568A/T568B standard</td></tr>
+    <tr><td>Reversed pair</td><td>The two wires within a single pair are swapped (tip and ring reversed)</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>Use a <strong>cable tester</strong> any time the scenario is about verifying a cable's electrical integrity or correct pinout after termination — "confirm a newly terminated cable is wired correctly," "intermittent connectivity is suspected to be a cabling fault." This is different from a toner probe (which locates/identifies a cable, but doesn't confirm it's wired correctly) and different from a loopback plug (which tests a port/NIC, not the cable itself).</p>
+</div>
+
+<!-- ═══ TOOL 7: LOOPBACK PLUG ═══ -->
+<h2 class="chapter"><span class="ch-num">TOOL 07</span>Loopback Plug</h2>
+
+<p>A <span class="key-term">loopback plug</span> is a small connector inserted directly into a network port (or serial port) that electrically connects the transmit pins directly back to the receive pins. This causes any signal sent out of the port to immediately be looped back in as received data, allowing a technician to test whether the port and the device's NIC/network interface itself is functioning — completely independent of any cabling, switch, or external network infrastructure.</p>
+
+<div class="callout callout-tip">
+  <p class="callout-title">Isolating the Variable</p>
+  <p>The loopback plug's defining value is <strong>isolation</strong> — it removes every other variable (cable, switch, wall jack, far-end equipment) from the test, leaving only the port itself. If a port passes a loopback test, you know the physical interface and its associated hardware/drivers are functioning; any remaining connectivity problem must be somewhere else in the chain (cabling, switch port, configuration).</p>
+</div>
+
+<table class="data-table">
+  <thead><tr><th>Tool</th><th>What It Actually Tests</th></tr></thead>
+  <tbody>
+    <tr><td>Loopback plug</td><td>The port/NIC itself, in isolation from any cable or external device</td></tr>
+    <tr><td>Cable tester</td><td>The cable's wiring/continuity, end to end</td></tr>
+    <tr><td>Toner probe</td><td>Which physical cable is which (identification, not function)</td></tr>
+  </tbody>
+</table>
+
+<!-- ═══ TOOL 8: NETWORK TAP ═══ -->
+<h2 class="chapter"><span class="ch-num">TOOL 08</span>Network Tap</h2>
+
+<p>A <span class="key-term">network tap</span> is a hardware device inserted inline on a network connection that creates a copy of the traffic passing through it, allowing that traffic to be sent to a separate monitoring or analysis device without disrupting or altering the original traffic flow. It's used for packet capture, network monitoring, intrusion detection, and traffic analysis — situations where you need full visibility into raw network traffic.</p>
+
+<div class="callout callout-info">
+  <p class="callout-title">Network Tap vs. Port Mirroring</p>
+  <p>A network tap is a dedicated <strong>hardware</strong> device that physically sits inline on the connection being monitored. This is conceptually similar to the <strong>port mirroring (SPAN)</strong> feature available on managed switches (covered in objective 2.5), which accomplishes a similar goal — copying traffic for monitoring — but does so in <strong>software</strong>, configured on the switch itself, rather than via dedicated external hardware. A tap is considered more reliable for high-fidelity packet capture since it doesn't depend on the switch's CPU/resources and captures every bit, including malformed frames a switch might otherwise drop.</p>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>A scenario describing the need to monitor or capture all traffic on a link — for security analysis, an intrusion detection system (IDS), or deep packet inspection — without affecting the traffic itself, points to a <strong>network tap</strong>. This is a monitoring/visibility tool, not a cable-testing tool, which sets it apart from most of the rest of this objective.</p>
+</div>
+
+<!-- MASTER REFERENCE -->
+<div class="ch-divider"></div>
+
+<div class="summary-box">
+  <h3>Master Reference — All 8 Networking Tools</h3>
+  <div class="summary-grid">
+    <div class="summary-item"><span class="s-sym">Crimper</span><span>Attaches RJ45/RJ11 connector onto a loose cable end</span></div>
+    <div class="summary-item"><span class="s-sym">Cable stripper</span><span>Removes outer jacket without nicking internal conductors</span></div>
+    <div class="summary-item"><span class="s-sym">Wi-Fi analyzer</span><span>Scans RF spectrum: signal, channels, interference, site surveys</span></div>
+    <div class="summary-item"><span class="s-sym">Toner probe</span><span>Generator + probe; locates/traces one cable in a bundle</span></div>
+    <div class="summary-item"><span class="s-sym">Punchdown tool</span><span>Terminates wires into a patch panel/wall jack block</span></div>
+    <div class="summary-item"><span class="s-sym">Cable tester</span><span>Verifies continuity/pinout; finds opens, shorts, split pairs</span></div>
+    <div class="summary-item"><span class="s-sym">Loopback plug</span><span>Tests the port/NIC itself, isolated from cabling</span></div>
+    <div class="summary-item"><span class="s-sym">Network tap</span><span>Inline hardware that copies traffic for monitoring/capture</span></div>
+  </div>
+</div>
+
+<!-- QUICK REFERENCE TOOLS -->
+<h2 class="chapter"><span class="ch-num">REFERENCE</span>Tool Selection Quick Reference</h2>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>Termination Tools</h4>
+    <ul>
+      <li><strong>Crimper</strong> → Connector onto a loose cable end</li>
+      <li><strong>Cable stripper</strong> → Remove jacket before termination</li>
+      <li><strong>Punchdown tool</strong> → Wires into a fixed jack/panel block</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Testing &amp; Diagnostic Tools</h4>
+    <ul>
+      <li><strong>Cable tester</strong> → Verify wiring/continuity end-to-end</li>
+      <li><strong>Loopback plug</strong> → Verify the port/NIC in isolation</li>
+      <li><strong>Toner probe</strong> → Identify/trace one cable among many</li>
+      <li><strong>Wi-Fi analyzer</strong> → Diagnose RF/wireless performance</li>
+      <li><strong>Network tap</strong> → Capture/monitor live traffic</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>"Which Tool?" By Task</h4>
+    <ul>
+      <li><strong>Build a custom patch cable</strong> → Crimper + stripper</li>
+      <li><strong>Wire a new wall jack</strong> → Punchdown tool + stripper</li>
+      <li><strong>Confirm a cable is wired right</strong> → Cable tester</li>
+      <li><strong>Find which cable goes where</strong> → Toner probe</li>
+      <li><strong>Test if a port itself works</strong> → Loopback plug</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>"Which Tool?" By Symptom</h4>
+    <ul>
+      <li><strong>Slow/unreliable Wi-Fi</strong> → Wi-Fi analyzer</li>
+      <li><strong>Need full packet capture for IDS</strong> → Network tap</li>
+      <li><strong>Intermittent wired connection</strong> → Cable tester (check split pairs)</li>
+      <li><strong>Unlabeled cable bundle</strong> → Toner probe</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout callout-exam" style="margin-top: 28px;">
+  <p class="callout-title">Final Exam Reminders</p>
+  <p><strong>Crimper</strong> = connector onto a loose cable end. <strong>Punchdown tool</strong> = wires into a fixed jack/panel block. Don't mix these up.</p>
+  <p><strong>Cable stripper</strong> = always the first step before crimping or punching down; wrong technique can nick conductors.</p>
+  <p><strong>Toner probe</strong> = identification/tracing only — it does NOT confirm the cable is wired correctly.</p>
+  <p><strong>Cable tester</strong> = confirms wiring/continuity and catches opens, shorts, split pairs, miswires, reversed pairs.</p>
+  <p><strong>Loopback plug</strong> = isolates and tests the port/NIC itself, with no cable or external device involved.</p>
+  <p><strong>Wi-Fi analyzer</strong> = the wireless equivalent of cable diagnostics — channels, signal strength, interference.</p>
+  <p><strong>Network tap</strong> = dedicated inline hardware for full traffic capture; compare/contrast with switch-based port mirroring (SPAN).</p>
+</div>
+
+</div>
+</body>
+</html>

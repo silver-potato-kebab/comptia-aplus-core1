@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CompTIA A+ 3.7 — Deploy and Configure Multifunction Devices/Printers</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --surface2: #f5f4f0;
+    --border: #e5e2d9;
+    --border2: #d4d0c4;
+    --text: #1a1a18;
+    --muted: #6b6860;
+    --accent: #c0392b;
+    --accent2: #2c3e6b;
+    --accent3: #1a6b3a;
+    --accent4: #b5590a;
+    --accent-light: #fdf2f1;
+    --accent2-light: #f0f2f8;
+    --accent3-light: #f0f8f3;
+    --accent4-light: #fdf5ed;
+    --serif: 'Crimson Pro', Georgia, serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── TOP NAV ── */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .top-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .nav-home {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+  .nav-home:hover { color: var(--accent2); }
+  .nav-home::before {
+    content: '←';
+    font-size: 12px;
+  }
+  .nav-sep {
+    font-size: 12px;
+    color: var(--border2);
+    flex-shrink: 0;
+  }
+  .nav-current {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nav-current strong {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    margin-right: 6px;
+  }
+  .top-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .nav-prev, .nav-next {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 4px 9px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    white-space: nowrap;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .nav-prev:hover, .nav-next:hover {
+    border-color: var(--border2);
+    color: var(--accent2);
+  }
+  .nav-prev::before { content: '← '; }
+  .nav-next::after  { content: ' →'; }
+
+  @media (max-width: 600px) {
+    .top-nav { padding: 0 16px; }
+    .nav-current { display: none; }
+    .nav-sep { display: none; }
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  .page { max-width: 860px; margin: 0 auto; padding: 0 40px 80px; }
+
+  /* HEADER */
+  .book-header {
+    border-bottom: 3px double var(--border2);
+    padding: 56px 0 32px;
+    margin-bottom: 48px;
+  }
+  .book-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .book-eyebrow span {
+    background: var(--accent);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-right: 10px;
+    font-size: 10px;
+  }
+  .book-title {
+    font-family: var(--serif);
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+  .book-subtitle {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .book-subtitle span { display: flex; align-items: center; gap: 6px; }
+  .book-subtitle span::before { content: '·'; color: var(--border2); }
+  .book-subtitle span:first-child::before { display: none; }
+
+  /* HEADINGS */
+  h2.chapter {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 600;
+    margin: 52px 0 6px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    letter-spacing: -0.01em;
+  }
+  h2.chapter .ch-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+    letter-spacing: 0.1em;
+    font-weight: 400;
+  }
+  h3.section {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    margin: 36px 0 12px;
+  }
+  h3.section::before { content: '§ '; color: var(--muted); font-weight: 300; }
+
+  p { margin-bottom: 16px; }
+
+  /* CALLOUTS */
+  .callout {
+    border-left: 3px solid;
+    padding: 14px 20px;
+    margin: 24px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 15.5px;
+  }
+  .callout p { margin-bottom: 6px; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout-title {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px !important;
+  }
+  .callout-exam { border-color: var(--accent); background: var(--accent-light); }
+  .callout-exam .callout-title { color: var(--accent); }
+  .callout-info { border-color: var(--accent2); background: var(--accent2-light); }
+  .callout-info .callout-title { color: var(--accent2); }
+  .callout-tip { border-color: var(--accent3); background: var(--accent3-light); }
+  .callout-tip .callout-title { color: var(--accent3); }
+  .callout-warn { border-color: var(--accent4); background: var(--accent4-light); }
+  .callout-warn .callout-title { color: var(--accent4); }
+
+  /* TABLES */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+    font-family: var(--sans);
+    margin: 16px 0 24px;
+  }
+  .data-table thead th {
+    background: var(--surface2);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 9px 13px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .data-table tbody tr { border-bottom: 1px solid var(--border); }
+  .data-table tbody tr:last-child { border-bottom: none; }
+  .data-table td { padding: 9px 13px; vertical-align: top; line-height: 1.5; }
+  .data-table td:first-child {
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 13.5px;
+  }
+
+  /* PROCESS FLOW */
+  .process-flow {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: var(--sans);
+    font-size: 14px;
+  }
+  .flow-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .flow-step:last-child { border-bottom: none; }
+  .flow-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+    min-width: 24px;
+    padding-top: 2px;
+  }
+  .flow-text { color: var(--text); line-height: 1.55; }
+  .flow-text strong { font-weight: 600; }
+
+  /* DEF LIST */
+  .def-list { margin: 16px 0 24px; }
+  .def-item {
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 210px 1fr;
+    gap: 20px;
+    font-size: 15px;
+  }
+  .def-item:last-child { border-bottom: none; }
+  .def-term {
+    font-family: var(--sans);
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 14px;
+    padding-top: 1px;
+    line-height: 1.4;
+  }
+
+  /* GRID CARDS */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 16px 18px;
+  }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 10px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card ul { list-style: none; font-family: var(--sans); font-size: 13.5px; }
+  .card ul li {
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .card ul li:last-child { border-bottom: none; }
+  .card ul li strong { color: var(--text); }
+
+  /* BODY LIST */
+  ul.body-list {
+    list-style: none;
+    font-family: var(--sans);
+    font-size: 15px;
+    padding: 0;
+    margin: 12px 0 20px;
+  }
+  ul.body-list li {
+    padding: 5px 0 5px 18px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  ul.body-list li:last-child { border-bottom: none; }
+  ul.body-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--border2);
+    font-size: 12px;
+  }
+  ul.body-list li strong { color: var(--text); }
+
+  /* CHECKLIST */
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 18px 22px;
+    margin: 20px 0;
+    font-family: var(--sans);
+  }
+  .checklist h4 {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .check-item {
+    display: grid;
+    grid-template-columns: 24px 150px 1fr;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    align-items: baseline;
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-mark { color: var(--accent3); font-weight: 700; }
+  .check-name { font-weight: 600; color: var(--text); }
+  .check-desc { color: var(--muted); line-height: 1.5; }
+
+  /* CONN BADGE */
+  .conn-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-weight: 600;
+    margin-right: 4px;
+  }
+  .badge-wifi { background: #e3f2fd; color: #1565c0; border: 1px solid #90caf9; }
+  .badge-usb { background: #f3e5f5; color: #6a1b9a; border: 1px solid #ce93d8; }
+  .badge-eth { background: #e8f5e9; color: #1b5e20; border: 1px solid #a5d6a7; }
+
+  /* CODE */
+  code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: var(--accent);
+  }
+
+  .key-term { font-style: italic; font-weight: 500; color: var(--accent2); }
+
+  /* SUMMARY BOX */
+  .summary-box {
+    background: var(--text);
+    color: #f0ede6;
+    border-radius: 6px;
+    padding: 28px 32px;
+    margin: 40px 0;
+  }
+  .summary-box h3 {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 18px;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 32px;
+  }
+  .summary-item {
+    font-family: var(--sans);
+    font-size: 13.5px;
+    color: #c4bfb4;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .summary-item .s-sym {
+    color: #fff;
+    font-weight: 600;
+    min-width: 175px;
+    line-height: 1.4;
+  }
+
+  .ch-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--border2), transparent);
+    margin: 48px 0;
+  }
+
+  /* INDICATOR DOTS */
+  .malware-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .ind-high { background: var(--accent); }
+  .ind-med { background: var(--accent4); }
+  .ind-low { background: var(--accent3); }
+
+  @media (max-width: 680px) {
+    .page { padding: 0 20px 60px; }
+    .summary-grid, .card-grid { grid-template-columns: 1fr; }
+    .def-item { grid-template-columns: 1fr; gap: 4px; }
+    .check-item { grid-template-columns: 1fr; gap: 2px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV — update href values to match your actual file names -->
+<nav class="top-nav">
+  <div class="top-nav-left">
+    <a class="nav-home" href="../index.html">Study Guide</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current"><strong>3.7</strong> Deploy and Configure Multifunction Devices/Printers and Settings</span>
+  </div>
+  <div class="top-nav-right">
+    <!-- Point these to the adjacent section files, or remove if not applicable -->
+    <a class="nav-prev" href="./3_6-Power-Supply.html">3.6</a>
+    <a class="nav-next" href="./3_8-Printer_Maintenance.html">3.8</a>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- HEADER -->
+<div class="book-header">
+  <div class="book-eyebrow">
+    <span>3.7</span>
+    CompTIA A+ · Core 1 (220-1201) · Domain 3 — Hardware
+  </div>
+  <h1 class="book-title">Deploy and Configure Multifunction<br>Devices/Printers and Settings</h1>
+  <div class="book-subtitle">
+    <span>Objective 3.7</span>
+    <span>Domain weight: 25%</span>
+    <span>Setup · Drivers · Connectivity · Security · Scanning</span>
+  </div>
+</div>
+
+<!-- INTRO -->
+<h2 class="chapter"><span class="ch-num">OVERVIEW</span>Introduction</h2>
+
+<p>Objective 3.7 covers the full lifecycle of deploying a <span class="key-term">multifunction device (MFD)</span> — a single piece of hardware combining printing, scanning, copying, and often faxing into one unit — from the moment it arrives in a box to its ongoing secure, networked operation in a business environment. This objective is heavily scenario-driven: the exam wants to see that you understand the realistic, step-by-step process a technician follows, not just isolated trivia about printer parts.</p>
+
+<p>The objective naturally breaks into a deployment timeline: <strong>physical setup</strong> (unboxing and placement) → <strong>software readiness</strong> (drivers and firmware) → <strong>connectivity</strong> (how the device joins the network) → <strong>sharing</strong> (how multiple users access it) → <strong>configuration</strong> (print settings) → <strong>security</strong> (controlling who can use it and how) → <strong>scanning</strong> (the device's other major function). Following that same order will help the concepts stick together rather than floating as separate facts.</p>
+
+<!-- ═══ SECTION 1: UNBOXING AND SETUP LOCATION ═══ -->
+<h2 class="chapter"><span class="ch-num">STEP 01</span>Properly Unbox the Device and Consider Setup Location</h2>
+
+<p>Before any software configuration happens, a multifunction device needs to be physically unpacked and placed correctly. This sounds basic, but the exam treats it as a genuine first step worth testing, because mistakes here cause real, preventable problems.</p>
+
+<ul class="body-list">
+  <li><strong>Remove all shipping/transit materials</strong> — internal components (the print head/cartridge assembly, scanner glass) are frequently secured during shipping with tape, foam, or plastic locking tabs specifically to prevent damage in transit; failing to remove these before powering on can damage the device.</li>
+  <li><strong>Keep documentation and included software/cables</strong> — setup guides, included USB/power cables, and driver installation media (if provided) should be kept accessible during the rest of the setup process.</li>
+  <li><strong>Choose a stable, level surface</strong> — uneven placement can affect paper feed mechanisms and print/scan quality.</li>
+  <li><strong>Consider ventilation and clearance</strong> — adequate space around the device for paper trays to open, cartridges to be accessed, and heat (especially from laser printers) to dissipate.</li>
+  <li><strong>Consider proximity to network/power infrastructure</strong> — placement should account for available Ethernet drops or reliable wireless coverage, and proximity to an appropriate power outlet.</li>
+  <li><strong>Consider accessibility and traffic flow</strong> — a shared office device should be reasonably accessible to the users who need it, without obstructing walkways or being placed somewhere impractical for regular paper/toner replenishment.</li>
+</ul>
+
+<div class="callout callout-tip">
+  <p class="callout-title">Why This Step Is Tested</p>
+  <p>Scenario questions involving smudged, faded, or jammed prints on a brand-new device often trace back to skipped unboxing steps — a forgotten piece of shipping tape blocking a roller, or protective film left over a sensor. Treat "did the technician properly unbox the device" as a legitimate first troubleshooting question for a newly deployed printer.</p>
+</div>
+
+<!-- ═══ SECTION 2: DRIVERS ═══ -->
+<h2 class="chapter"><span class="ch-num">STEP 02</span>Use Appropriate Drivers for the Operating System</h2>
+
+<p>A printer/MFD requires a <span class="key-term">driver</span> — software that translates an operating system's print commands into instructions the specific device understands — and that driver must be compatible with both the specific device model and the operating system it's being installed on. Installing the wrong driver, or an OS-incompatible driver, is a frequent real-world source of printing failures.</p>
+
+<h3 class="section">PCL vs. PostScript</h3>
+
+<p>Beyond simply matching OS compatibility, drivers are also built around a specific <span class="key-term">page description language (PDL)</span> — the language the computer uses to describe a page's content to the printer.</p>
+
+<table class="data-table">
+  <thead><tr><th>Page Description Language</th><th>Developed By</th><th>Characteristics</th></tr></thead>
+  <tbody>
+    <tr><td>PCL (Printer Control Language)</td><td>Hewlett-Packard (HP)</td><td>Generally faster processing and broader compatibility across everyday business printing; the common default for typical office documents</td></tr>
+    <tr><td>PostScript</td><td>Adobe</td><td>A more sophisticated, fully programmable page description language with stronger, more precise handling of complex graphics, fonts, and color accuracy — historically favored in graphic design, publishing, and professional print environments</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>Match <strong>PCL</strong> to general business/office printing where speed and broad compatibility matter most, and <strong>PostScript</strong> to design, publishing, or professional print production environments where complex graphics and precise, consistent output fidelity matter most. Many business-class printers support both and can switch between them depending on the driver selected during installation.</p>
+</div>
+
+<!-- ═══ SECTION 3: FIRMWARE ═══ -->
+<h2 class="chapter"><span class="ch-num">STEP 03</span>Firmware</h2>
+
+<p>A multifunction device's <span class="key-term">firmware</span> is the embedded software running on the device itself, controlling its core operation independent of any connected computer — distinct from the driver, which lives on the client computer. Keeping firmware current is an important and often-overlooked maintenance task.</p>
+
+<ul class="body-list">
+  <li><strong>Security patches</strong> — like any networked device, an MFD's firmware can contain vulnerabilities that manufacturers patch over time; outdated firmware on a network-connected device represents a genuine attack surface.</li>
+  <li><strong>Bug fixes and feature improvements</strong> — firmware updates frequently resolve specific printing, scanning, or connectivity bugs reported after the device's initial release.</li>
+  <li><strong>New feature/compatibility support</strong> — firmware updates can add support for new scanning destinations, authentication methods, or compatibility with newer client operating systems.</li>
+</ul>
+
+<div class="callout callout-info">
+  <p class="callout-title">Driver vs. Firmware — Where Each One Lives</p>
+  <p>The <strong>driver</strong> is software installed on the client computer that translates OS print commands into a format the printer understands. <strong>Firmware</strong> is software embedded in the printer/MFD itself, controlling its internal operation regardless of which computer (or how many computers) connect to it. A driver update changes how a specific computer talks to the printer; a firmware update changes how the printer itself behaves.</p>
+</div>
+
+<!-- ═══ SECTION 4: DEVICE CONNECTIVITY ═══ -->
+<h2 class="chapter"><span class="ch-num">STEP 04</span>Device Connectivity</h2>
+
+<p>A multifunction device can connect to the systems that need to use it through several different methods, each with different tradeoffs around setup simplicity, sharing capability, and physical placement flexibility.</p>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term"><span class="conn-badge badge-usb">USB</span> USB</span>
+    <span>A direct, single-computer wired connection. Simple to set up with no network configuration required, but the device is only directly accessible to the one computer it's physically connected to — sharing it with other users requires the host computer to be on and configured to share it (see Section 5 below).</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term"><span class="conn-badge badge-eth">ETHERNET</span> Ethernet</span>
+    <span>A wired network connection, making the device directly accessible to any computer on the local network without depending on any single host computer being powered on. The standard choice for shared office printers/MFDs where reliable, consistent connectivity matters.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term"><span class="conn-badge badge-wifi">WIRELESS</span> Wireless</span>
+    <span>A Wi-Fi network connection, offering the same network-wide accessibility as Ethernet without requiring a physical cable run to the device's location — valuable for placement flexibility, but dependent on adequate wireless signal strength and subject to the same general wireless considerations covered in objective 2.5 (interference, channel congestion, AP placement).</span>
+  </div>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>USB is the only one of the three that creates a dependency on a single host computer — if that computer is off or disconnected, the printer becomes unreachable for any other user trying to print to it directly. Ethernet and wireless both make the device independently reachable on the network. A scenario describing a shared office printer that "stops working whenever a specific employee's computer is off" is describing a USB-connected printer being shared via that computer, which Section 5 covers in more depth.</p>
+</div>
+
+<!-- ═══ SECTION 5: PUBLIC/SHARED DEVICES ═══ -->
+<h2 class="chapter"><span class="ch-num">STEP 05</span>Public/Shared Devices</h2>
+
+<h3 class="section">Printer Share</h3>
+
+<p>A <span class="key-term">printer share</span> allows a printer connected directly to one computer (typically via USB) to be made accessible to other computers on the network, with that host computer's operating system acting as the intermediary, receiving print jobs from other network users and relaying them to the physically attached printer.</p>
+
+<h3 class="section">Print Server</h3>
+
+<p>A <span class="key-term">print server</span> (introduced conceptually in objective 2.3) is a dedicated device or service that manages print jobs and printer access for multiple users without relying on any single end-user's computer remaining powered on. This can be a standalone hardware print server appliance, a dedicated server running print server software/role, or — increasingly common — built directly into a network-connected MFD itself.</p>
+
+<div class="callout callout-tip">
+  <p class="callout-title">Printer Share vs. Print Server — The Dependency Difference</p>
+  <p>A <strong>printer share</strong> depends entirely on the host computer staying powered on and connected — turn that computer off, and the shared printer becomes unreachable to everyone else, exactly as flagged in the connectivity section above. A <strong>print server</strong> (dedicated hardware/software, or built into a network-connected MFD) removes that single point of failure, since it operates independently of any specific end-user machine. For any office relying on shared printing as a regular, business-critical function, a true print server setup is the more reliable, scalable solution.</p>
+</div>
+
+<!-- ═══ SECTION 6: CONFIGURATION SETTINGS ═══ -->
+<h2 class="chapter"><span class="ch-num">STEP 06</span>Configuration Settings</h2>
+
+<p>Once a multifunction device is connected and its driver installed, several common print settings control exactly how output is produced.</p>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Duplex</span>
+    <span>Controls whether the device prints on both sides of the paper (duplex/double-sided) or only one side (simplex). Duplex printing requires hardware support for automatically flipping the paper — not every printer model includes this capability — and is commonly enabled by default in business settings to reduce paper usage.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Orientation</span>
+    <span>Controls whether a page prints in portrait (taller than wide, the standard default for most documents) or landscape (wider than tall, commonly used for spreadsheets, wide tables, or presentation slides).</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Tray settings</span>
+    <span>Controls which paper tray a print job pulls from, relevant on devices with multiple trays holding different paper sizes, types (plain paper vs. letterhead vs. cardstock), or orientations. Mismatched tray selection is a common, easily-overlooked cause of a print job coming out on the wrong paper size or stock.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Quality</span>
+    <span>Controls the print resolution/fidelity tradeoff — higher quality settings produce sharper, more detailed output but print more slowly and consume more ink/toner; draft or lower-quality settings print faster and conserve consumables at the cost of visual fidelity, often acceptable for internal, disposable documents.</span>
+  </div>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>Expect straightforward symptom-matching: "A print job comes out on letterhead paper when plain paper was expected" → check <strong>tray settings</strong>. "A wide spreadsheet is being cut off on the printed page" → check <strong>orientation</strong> (likely needs landscape). "A user wants to reduce paper consumption for internal drafts" → enable <strong>duplex</strong> printing.</p>
+</div>
+
+<!-- ═══ SECTION 7: SECURITY ═══ -->
+<h2 class="chapter"><span class="ch-num">STEP 07</span>Security</h2>
+
+<p>Multifunction devices in business environments frequently handle sensitive printed and scanned material, making print/scan security a real and testable concern rather than an afterthought.</p>
+
+<div class="checklist">
+  <h4>MFD Security Features</h4>
+  <div class="check-item"><span class="check-mark">✓</span><span class="check-name">User authentication</span><span class="check-desc">Requires a user to verify their identity (PIN, username/password, or other credential) before the device will process a print, scan, or copy job — preventing anonymous or unauthorized use of a shared device.</span></div>
+  <div class="check-item"><span class="check-mark">✓</span><span class="check-name">Badging</span><span class="check-desc">Uses a physical access card/badge (often the same badge used for building/door access) tapped at the device to authenticate the user, a common and convenient authentication method in larger office environments.</span></div>
+  <div class="check-item"><span class="check-mark">✓</span><span class="check-name">Audit logs</span><span class="check-desc">Records details of who used the device, when, and what action was performed (printed, scanned, copied), supporting accountability, compliance requirements, and investigation of any misuse.</span></div>
+  <div class="check-item"><span class="check-mark">✓</span><span class="check-name">Secured prints</span><span class="check-desc">Holds a print job in a queue at the device rather than printing immediately, releasing it only once the authorized user authenticates directly at the printer (via PIN, badge, etc.) — preventing sensitive documents from sitting exposed in an output tray where anyone passing by could see or take them.</span></div>
+</div>
+
+<div class="callout callout-info">
+  <p class="callout-title">Why Secured Prints Matter in Practice</p>
+  <p>Without secured/"pull" printing, a sensitive document (HR records, financial statements, legal documents) sent to a shared printer sits physically exposed in the output tray until someone retrieves it — potentially seen or taken by anyone walking by in the meantime. Secured prints solve this by holding the job until the sender is physically present and authenticated at the device, which is precisely why this feature is common in healthcare, legal, financial, and HR-heavy office environments handling regularly sensitive printed material.</p>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>A scenario describing concern over sensitive documents being left unattended in a shared printer's output tray points directly to <strong>secured prints</strong> as the solution. A scenario asking how to track which specific employee printed a particular document points to <strong>audit logs</strong>. Don't confuse authentication methods (user authentication, badging — how a user proves who they are) with the protective feature itself (secured prints — what happens to the job until they do).</p>
+</div>
+
+<!-- ═══ SECTION 8: NETWORK SCAN SERVICES ═══ -->
+<h2 class="chapter"><span class="ch-num">STEP 08</span>Network Scan Services</h2>
+
+<p>Beyond printing, a multifunction device's scanning capability typically supports multiple destination methods for delivering a scanned document, configurable depending on organizational workflow needs.</p>
+
+<table class="data-table">
+  <thead><tr><th>Scan Destination</th><th>How It Works</th><th>Typical Use Case</th></tr></thead>
+  <tbody>
+    <tr><td>Email</td><td>The MFD sends the scanned document as an email attachment directly from the device, typically via SMTP (objective 2.1) to a configured mail server</td><td>Quickly getting a scanned document to oneself or another recipient without an intermediate step</td></tr>
+    <tr><td>SMB</td><td>The MFD saves the scanned document directly to a shared network folder using the SMB protocol (objective 2.1 and 2.3's fileshare role)</td><td>Centralized, organized storage of scanned documents into a shared department or project folder</td></tr>
+    <tr><td>Cloud services</td><td>The MFD uploads the scanned document directly to a configured cloud storage service (e.g., a cloud drive/storage platform)</td><td>Remote accessibility of scanned documents across devices/locations without relying on local network file shares</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-tip">
+  <p class="callout-title">Connecting Back to Earlier Objectives</p>
+  <p>Notice how this section draws directly on protocols and services from Domain 2: scan-to-email relies on the same <strong>SMTP</strong> concept from objective 2.1, and scan-to-folder relies on the same <strong>SMB</strong> file-sharing protocol used for ordinary network drives. The exam frequently rewards being able to connect a printer/MFD scenario back to the underlying networking concept it depends on, rather than treating each objective as fully isolated.</p>
+</div>
+
+<!-- ═══ SECTION 9: ADF / FLATBED SCANNER ═══ -->
+<h2 class="chapter"><span class="ch-num">STEP 09</span>Automatic Document Feeder (ADF) / Flatbed Scanner</h2>
+
+<p>Multifunction devices typically include one or both of two physical scanning mechanisms, suited to different types of source material.</p>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Automatic Document Feeder (ADF)</span>
+    <span>A mechanism that automatically pulls individual loose sheets of paper through the scanner one at a time from a stacked input tray, ideal for scanning multi-page documents efficiently without manually placing and re-placing each page. Not suitable for bound materials (books), fragile originals, or oddly-shaped/thick items, which risk jamming or damage in the automatic feed mechanism.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Flatbed scanner</span>
+    <span>A flat glass surface where a single page (or other flat item) is placed manually and scanned in a fixed position, well-suited for bound documents (books, magazines), fragile or irregularly shaped originals, photographs, or any material that an ADF could damage or fail to feed correctly. Slower for multi-page jobs since each page must be manually placed and the lid repositioned individually.</span>
+  </div>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>Match <strong>ADF</strong> to scenarios involving scanning many loose, individual pages efficiently (a multi-page contract, a stack of invoices), and <strong>flatbed</strong> to scenarios involving a single bound book, a fragile historical document, or an item that wouldn't survive or feed correctly through an automatic feeder. Many business-class MFDs include both, allowing the user to choose the appropriate method per job.</p>
+</div>
+
+<!-- MASTER REFERENCE -->
+<div class="ch-divider"></div>
+
+<div class="summary-box">
+  <h3>Master Reference — Multifunction Devices/Printers</h3>
+  <div class="summary-grid">
+    <div class="summary-item"><span class="s-sym">Unboxing</span><span>Remove shipping locks/tape; choose stable, ventilated location</span></div>
+    <div class="summary-item"><span class="s-sym">PCL</span><span>HP page description language; fast, broad business compatibility</span></div>
+    <div class="summary-item"><span class="s-sym">PostScript</span><span>Adobe PDL; precise graphics/fonts, design/publishing favorite</span></div>
+    <div class="summary-item"><span class="s-sym">Firmware</span><span>Lives on the device itself; patches, bug fixes, new features</span></div>
+    <div class="summary-item"><span class="s-sym">USB connectivity</span><span>Direct, single-host dependent connection</span></div>
+    <div class="summary-item"><span class="s-sym">Ethernet/wireless</span><span>Network-wide access, no single-host dependency</span></div>
+    <div class="summary-item"><span class="s-sym">Printer share</span><span>Host computer relays jobs; fails if host is off</span></div>
+    <div class="summary-item"><span class="s-sym">Print server</span><span>Independent of any single user's machine</span></div>
+    <div class="summary-item"><span class="s-sym">Duplex / orientation / tray / quality</span><span>Core print configuration settings</span></div>
+    <div class="summary-item"><span class="s-sym">Secured prints</span><span>Job held until user authenticates at the device</span></div>
+    <div class="summary-item"><span class="s-sym">Audit logs</span><span>Tracks who did what, and when</span></div>
+    <div class="summary-item"><span class="s-sym">Scan to email/SMB/cloud</span><span>Three common scan destination methods</span></div>
+    <div class="summary-item"><span class="s-sym">ADF</span><span>Auto-feeds loose pages; efficient for multi-page jobs</span></div>
+    <div class="summary-item"><span class="s-sym">Flatbed</span><span>Manual placement; for bound/fragile/irregular originals</span></div>
+  </div>
+</div>
+
+<!-- QUICK REFERENCE TOOLS -->
+<h2 class="chapter"><span class="ch-num">REFERENCE</span>3.7 Quick Reference</h2>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>Connectivity By Need</h4>
+    <ul>
+      <li><strong>Single user, simple setup</strong> → USB</li>
+      <li><strong>Shared, reliable, wired</strong> → Ethernet</li>
+      <li><strong>Shared, flexible placement</strong> → Wireless</li>
+      <li><strong>Avoid single point of failure</strong> → Print server, not printer share</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Security Feature By Goal</h4>
+    <ul>
+      <li><strong>Confirm identity at device</strong> → User authentication / badging</li>
+      <li><strong>Prevent exposed sensitive output</strong> → Secured prints</li>
+      <li><strong>Track usage/accountability</strong> → Audit logs</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Scan Destination By Workflow</h4>
+    <ul>
+      <li><strong>Quick personal/recipient delivery</strong> → Email</li>
+      <li><strong>Centralized department storage</strong> → SMB</li>
+      <li><strong>Remote/multi-location access</strong> → Cloud services</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Scanning Method By Material</h4>
+    <ul>
+      <li><strong>Multi-page loose documents</strong> → ADF</li>
+      <li><strong>Books, fragile, irregular items</strong> → Flatbed</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout callout-exam" style="margin-top: 28px;">
+  <p class="callout-title">Final Exam Reminders</p>
+  <p><strong>PCL</strong> = HP, fast, general business use. <strong>PostScript</strong> = Adobe, precise graphics, design/publishing.</p>
+  <p><strong>Driver</strong> = lives on the client computer. <strong>Firmware</strong> = lives on the device itself.</p>
+  <p><strong>USB</strong> = single-host dependent. <strong>Ethernet/wireless</strong> = independently network-reachable.</p>
+  <p><strong>Printer share</strong> = depends on a host computer staying on. <strong>Print server</strong> = removes that dependency.</p>
+  <p><strong>Secured prints</strong> = job waits at the device until the user authenticates — solves the "exposed in the output tray" problem.</p>
+  <p><strong>Audit logs</strong> = answer "who did what and when" questions; distinct from authentication itself.</p>
+  <p><strong>Scan-to-email</strong> relies on SMTP; <strong>scan-to-folder</strong> relies on SMB — both callbacks to Domain 2 protocols.</p>
+  <p><strong>ADF</strong> = multi-page loose sheets. <strong>Flatbed</strong> = bound, fragile, or irregular originals.</p>
+</div>
+
+</div>
+</body>
+</html>

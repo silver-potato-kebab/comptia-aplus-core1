@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CompTIA A+ 3.4 — Compare and Contrast Storage Devices</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --surface2: #f5f4f0;
+    --border: #e5e2d9;
+    --border2: #d4d0c4;
+    --text: #1a1a18;
+    --muted: #6b6860;
+    --accent: #c0392b;
+    --accent2: #2c3e6b;
+    --accent3: #1a6b3a;
+    --accent4: #b5590a;
+    --accent-light: #fdf2f1;
+    --accent2-light: #f0f2f8;
+    --accent3-light: #f0f8f3;
+    --accent4-light: #fdf5ed;
+    --serif: 'Crimson Pro', Georgia, serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── TOP NAV ── */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .top-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .nav-home {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+  .nav-home:hover { color: var(--accent2); }
+  .nav-home::before {
+    content: '←';
+    font-size: 12px;
+  }
+  .nav-sep {
+    font-size: 12px;
+    color: var(--border2);
+    flex-shrink: 0;
+  }
+  .nav-current {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nav-current strong {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    margin-right: 6px;
+  }
+  .top-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .nav-prev, .nav-next {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 4px 9px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    white-space: nowrap;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .nav-prev:hover, .nav-next:hover {
+    border-color: var(--border2);
+    color: var(--accent2);
+  }
+  .nav-prev::before { content: '← '; }
+  .nav-next::after  { content: ' →'; }
+
+  @media (max-width: 600px) {
+    .top-nav { padding: 0 16px; }
+    .nav-current { display: none; }
+    .nav-sep { display: none; }
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  .page { max-width: 860px; margin: 0 auto; padding: 0 40px 80px; }
+
+  /* HEADER */
+  .book-header {
+    border-bottom: 3px double var(--border2);
+    padding: 56px 0 32px;
+    margin-bottom: 48px;
+  }
+  .book-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .book-eyebrow span {
+    background: var(--accent);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-right: 10px;
+    font-size: 10px;
+  }
+  .book-title {
+    font-family: var(--serif);
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+  .book-subtitle {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .book-subtitle span { display: flex; align-items: center; gap: 6px; }
+  .book-subtitle span::before { content: '·'; color: var(--border2); }
+  .book-subtitle span:first-child::before { display: none; }
+
+  /* HEADINGS */
+  h2.chapter {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 600;
+    margin: 52px 0 6px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    letter-spacing: -0.01em;
+  }
+  h2.chapter .ch-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+    letter-spacing: 0.1em;
+    font-weight: 400;
+  }
+  h3.section {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    margin: 36px 0 12px;
+  }
+  h3.section::before { content: '§ '; color: var(--muted); font-weight: 300; }
+
+  p { margin-bottom: 16px; }
+
+  /* CALLOUTS */
+  .callout {
+    border-left: 3px solid;
+    padding: 14px 20px;
+    margin: 24px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 15.5px;
+  }
+  .callout p { margin-bottom: 6px; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout-title {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px !important;
+  }
+  .callout-exam { border-color: var(--accent); background: var(--accent-light); }
+  .callout-exam .callout-title { color: var(--accent); }
+  .callout-info { border-color: var(--accent2); background: var(--accent2-light); }
+  .callout-info .callout-title { color: var(--accent2); }
+  .callout-tip { border-color: var(--accent3); background: var(--accent3-light); }
+  .callout-tip .callout-title { color: var(--accent3); }
+  .callout-warn { border-color: var(--accent4); background: var(--accent4-light); }
+  .callout-warn .callout-title { color: var(--accent4); }
+
+  /* TABLES */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+    font-family: var(--sans);
+    margin: 16px 0 24px;
+  }
+  .data-table thead th {
+    background: var(--surface2);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 9px 13px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .data-table tbody tr { border-bottom: 1px solid var(--border); }
+  .data-table tbody tr:last-child { border-bottom: none; }
+  .data-table td { padding: 9px 13px; vertical-align: top; line-height: 1.5; }
+  .data-table td:first-child {
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 13.5px;
+  }
+
+  /* PROCESS FLOW */
+  .process-flow {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: var(--sans);
+    font-size: 14px;
+  }
+  .flow-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .flow-step:last-child { border-bottom: none; }
+  .flow-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+    min-width: 24px;
+    padding-top: 2px;
+  }
+  .flow-text { color: var(--text); line-height: 1.55; }
+  .flow-text strong { font-weight: 600; }
+
+  /* DEF LIST */
+  .def-list { margin: 16px 0 24px; }
+  .def-item {
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 210px 1fr;
+    gap: 20px;
+    font-size: 15px;
+  }
+  .def-item:last-child { border-bottom: none; }
+  .def-term {
+    font-family: var(--sans);
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 14px;
+    padding-top: 1px;
+    line-height: 1.4;
+  }
+
+  /* GRID CARDS */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 16px 18px;
+  }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 10px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card ul { list-style: none; font-family: var(--sans); font-size: 13.5px; }
+  .card ul li {
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .card ul li:last-child { border-bottom: none; }
+  .card ul li strong { color: var(--text); }
+
+  /* BODY LIST */
+  ul.body-list {
+    list-style: none;
+    font-family: var(--sans);
+    font-size: 15px;
+    padding: 0;
+    margin: 12px 0 20px;
+  }
+  ul.body-list li {
+    padding: 5px 0 5px 18px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  ul.body-list li:last-child { border-bottom: none; }
+  ul.body-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--border2);
+    font-size: 12px;
+  }
+  ul.body-list li strong { color: var(--text); }
+
+  /* SPEC DIAGRAM (range bars) */
+  .spec-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: var(--sans);
+  }
+  .spec-diagram h4 {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .spec-bar-wrap { margin-bottom: 10px; }
+  .spec-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .spec-label strong { color: var(--text); }
+  .spec-bar {
+    height: 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .spec-fill {
+    height: 100%;
+    border-radius: 2px;
+  }
+  .fill-blue { background: #2c3e6b; }
+  .fill-green { background: #4caf50; }
+  .fill-amber { background: #ffc107; }
+  .fill-orange { background: #ff9800; }
+  .fill-red { background: #f44336; }
+  .fill-purple { background: #8e44ad; }
+  .fill-gray { background: #9e9e9e; }
+
+  /* RAID DIAGRAM */
+  .raid-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 18px 22px;
+    margin: 16px 0;
+    font-family: var(--sans);
+  }
+  .raid-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+  }
+  .raid-card-head h4 {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .raid-card-head .raid-min {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--muted);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 3px;
+  }
+  .raid-blocks {
+    display: flex;
+    gap: 4px;
+    margin: 10px 0;
+  }
+  .raid-disk {
+    flex: 1;
+    height: 38px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    color: #fff;
+  }
+  .raid-data { background: #2c3e6b; }
+  .raid-mirror { background: #4caf50; }
+  .raid-parity { background: #ff9800; }
+  .raid-card p { font-size: 13.5px; color: var(--muted); margin-bottom: 6px; }
+  .raid-stats {
+    display: flex;
+    gap: 18px;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .raid-stats strong { color: var(--text); }
+
+  /* CODE */
+  code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: var(--accent);
+  }
+
+  .key-term { font-style: italic; font-weight: 500; color: var(--accent2); }
+
+  /* SUMMARY BOX */
+  .summary-box {
+    background: var(--text);
+    color: #f0ede6;
+    border-radius: 6px;
+    padding: 28px 32px;
+    margin: 40px 0;
+  }
+  .summary-box h3 {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 18px;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 32px;
+  }
+  .summary-item {
+    font-family: var(--sans);
+    font-size: 13.5px;
+    color: #c4bfb4;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .summary-item .s-sym {
+    color: #fff;
+    font-weight: 600;
+    min-width: 175px;
+    line-height: 1.4;
+  }
+
+  .ch-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--border2), transparent);
+    margin: 48px 0;
+  }
+
+  /* INDICATOR DOTS */
+  .malware-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .ind-high { background: var(--accent); }
+  .ind-med { background: var(--accent4); }
+  .ind-low { background: var(--accent3); }
+
+  @media (max-width: 680px) {
+    .page { padding: 0 20px 60px; }
+    .summary-grid, .card-grid { grid-template-columns: 1fr; }
+    .def-item { grid-template-columns: 1fr; gap: 4px; }
+    .raid-stats { flex-direction: column; gap: 4px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV — update href values to match your actual file names -->
+<nav class="top-nav">
+  <div class="top-nav-left">
+    <a class="nav-home" href="../index.html">Study Guide</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current"><strong>3.4</strong> Compare and Contrast Storage Devices</span>
+  </div>
+  <div class="top-nav-right">
+    <!-- Point these to the adjacent section files, or remove if not applicable -->
+    <a class="nav-prev" href="./3_3-RAM-Characteristics.html">3.3</a>
+    <a class="nav-next" href="./3_5-Motherboards-CPUs-AddOn-Cards.html">3.5</a>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- HEADER -->
+<div class="book-header">
+  <div class="book-eyebrow">
+    <span>3.4</span>
+    CompTIA A+ · Core 1 (220-1201) · Domain 3 — Hardware
+  </div>
+  <h1 class="book-title">Compare and Contrast<br>Storage Devices</h1>
+  <div class="book-subtitle">
+    <span>Objective 3.4</span>
+    <span>Domain weight: 25%</span>
+    <span>HDD · SSD · RAID · Removable · Optical</span>
+  </div>
+</div>
+
+<!-- INTRO -->
+<h2 class="chapter"><span class="ch-num">OVERVIEW</span>Introduction</h2>
+
+<p>Objective 3.4 covers the devices that store data persistently — surviving a power-off, unlike the RAM covered in objective 3.3. This is one of the broadest objectives in Domain 3, spanning traditional spinning hard drives, modern solid-state drives and their various interfaces and form factors, RAID configurations for combining drives into more resilient or higher-performing arrays, and removable/optical media.</p>
+
+<p>The throughline across this entire objective is a set of tradeoffs that repeat at every level: <strong>speed vs. cost</strong>, <strong>capacity vs. size</strong>, and <strong>performance vs. redundancy</strong>. Nearly every comparison question on this objective is really asking you to weigh one of these tradeoffs in a specific scenario.</p>
+
+<!-- ═══ PART 1: HARD DRIVES ═══ -->
+<h2 class="chapter"><span class="ch-num">PART 1</span>Hard Drives (HDD)</h2>
+
+<p>A <span class="key-term">hard disk drive (HDD)</span> stores data magnetically on spinning platters, read and written by a moving mechanical arm with a read/write head. HDDs remain relevant primarily because they offer the lowest cost per gigabyte of any common storage technology, making them well-suited for bulk storage of large amounts of data where raw speed isn't the top priority — backups, archival storage, media libraries, and budget-conscious bulk storage builds.</p>
+
+<h3 class="section">Spindle Speeds</h3>
+
+<p>An HDD's <span class="key-term">spindle speed</span>, measured in RPM (revolutions per minute), describes how fast the internal platters spin. Faster spindle speeds generally mean faster data access — the read/write head can reach the needed data sooner, and data passes under the head more quickly once located.</p>
+
+<table class="data-table">
+  <thead><tr><th>Spindle Speed</th><th>Typical Use Case</th></tr></thead>
+  <tbody>
+    <tr><td>5,400 RPM</td><td>Budget laptops, external/portable drives — prioritizes lower cost, lower power draw, and quieter operation over speed</td></tr>
+    <tr><td>7,200 RPM</td><td>Standard desktop drives — the most common balance of speed and cost for everyday use</td></tr>
+    <tr><td>10,000 RPM / 15,000 RPM</td><td>Enterprise/server drives where higher performance justifies the added cost, heat, and noise</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>Higher spindle speed = faster performance, but also more heat, more noise, more power draw, and (often) a higher price point. If a scenario emphasizes battery life or quiet operation (a laptop), expect the answer to favor a <strong>lower</strong> spindle speed or a switch to SSD entirely. If a scenario emphasizes raw performance for a server or workstation, a <strong>higher</strong> spindle speed (or again, SSD) is the better fit.</p>
+</div>
+
+<h3 class="section">HDD Form Factors</h3>
+
+<p>HDDs are manufactured in two standard physical sizes, named for the diameter of the platters inside:</p>
+
+<table class="data-table">
+  <thead><tr><th>Form Factor</th><th>Typical Use</th><th>Characteristics</th></tr></thead>
+  <tbody>
+    <tr><td>3.5-inch</td><td>Desktop computers, servers, external desktop storage enclosures</td><td>Larger; typically higher capacity and lower cost per GB; requires more power</td></tr>
+    <tr><td>2.5-inch</td><td>Laptops, portable external drives, some space-constrained desktops</td><td>Smaller and lighter; lower power draw; typically lower max capacity than 3.5-inch</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-tip">
+  <p class="callout-title">Matching Form Factor to Device</p>
+  <p>This pairs directly with the DIMM/SODIMM logic from objective 3.3: <strong>3.5-inch = desktop/server</strong> (more physical space available, less concern about power/weight), <strong>2.5-inch = laptop</strong> (limited space, battery-powered, weight matters). A 2.5-inch drive can be installed in a desktop with the right mounting bracket/adapter, but a 3.5-inch drive will not physically fit in a standard laptop drive bay.</p>
+</div>
+
+<!-- ═══ PART 2: SOLID-STATE DRIVES ═══ -->
+<h2 class="chapter"><span class="ch-num">PART 2</span>Solid-State Drives (SSD)</h2>
+
+<p>A <span class="key-term">solid-state drive (SSD)</span> stores data on flash memory chips with no moving parts at all, in contrast to an HDD's spinning platters and mechanical arm. This fundamental difference gives SSDs dramatically faster read/write speeds, near-instant data access (no time wasted waiting for a physical arm to move into position), silent operation, lower power consumption, and much better resistance to physical shock — at a meaningfully higher cost per gigabyte than HDDs.</p>
+
+<h3 class="section">Communications Interfaces</h3>
+
+<p>An SSD's <span class="key-term">interface</span> determines how it physically and electrically connects to the rest of the system, which has a direct and major impact on its maximum possible speed.</p>
+
+<div class="spec-diagram">
+  <h4>SSD Interfaces — Relative Maximum Throughput</h4>
+  <div class="spec-bar-wrap">
+    <div class="spec-label"><strong>SATA</strong><span>~600 MB/s ceiling (interface-limited)</span></div>
+    <div class="spec-bar"><div class="spec-fill fill-blue" style="width:15%"></div></div>
+  </div>
+  <div class="spec-bar-wrap">
+    <div class="spec-label"><strong>SAS</strong><span>~2,400 MB/s ceiling (12 Gbps SAS); enterprise-focused</span></div>
+    <div class="spec-bar"><div class="spec-fill fill-purple" style="width:35%"></div></div>
+  </div>
+  <div class="spec-bar-wrap">
+    <div class="spec-label"><strong>PCIe (general)</strong><span>Several GB/s; scales with PCIe generation/lanes</span></div>
+    <div class="spec-bar"><div class="spec-fill fill-amber" style="width:70%"></div></div>
+  </div>
+  <div class="spec-bar-wrap">
+    <div class="spec-label"><strong>NVMe (over PCIe)</strong><span>Highest consumer throughput; multiple GB/s, low latency</span></div>
+    <div class="spec-bar"><div class="spec-fill fill-red" style="width:100%"></div></div>
+  </div>
+</div>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">SATA</span>
+    <span>The older, widely compatible interface originally designed for HDDs. SATA SSDs are the slowest SSD option because the SATA interface itself imposes a hard speed ceiling (~600 MB/s) that the underlying flash memory could otherwise exceed — the interface, not the flash, is the bottleneck. Still widely used for cost-effective SSD upgrades in older systems.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">PCIe</span>
+    <span>Peripheral Component Interconnect Express — a high-speed expansion bus also used for graphics cards and other add-in cards. SSDs connecting via PCIe bypass the SATA bottleneck entirely, communicating much more directly with the system, which is what enables dramatically higher throughput.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">NVMe</span>
+    <span>Non-Volatile Memory Express — a communication protocol (not a physical connector itself) specifically designed for flash storage, running over a PCIe connection. NVMe was built from the ground up for flash memory's characteristics, unlike SATA/AHCI which was designed around the assumptions of mechanical hard drives. The result is the fastest consumer storage option widely available, with much lower latency than SATA-based SSDs.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">SAS</span>
+    <span>Serial Attached SCSI — an enterprise/server-oriented interface, the modern successor to older parallel SCSI. SAS drives (HDD or SSD) offer features valuable in enterprise environments such as dual-porting (redundant connections to the same drive) and are generally not found in consumer desktops/laptops.</span>
+  </div>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle — NVMe vs. PCIe</p>
+  <p>A subtle but testable distinction: <strong>PCIe</strong> is the physical/electrical bus, while <strong>NVMe</strong> is the protocol/language spoken over that bus, purpose-built for flash storage. You'll commonly see them referenced together ("NVMe PCIe SSD") precisely because NVMe drives use a PCIe connection — but PCIe itself is a more general-purpose bus used for many other types of expansion cards too, not just storage.</p>
+</div>
+
+<h3 class="section">SSD Form Factors</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">M.2</span>
+    <span>A small, gumstick-shaped form factor that mounts directly onto the motherboard via a dedicated slot, with no separate cables required. M.2 slots can carry either a SATA signal or a PCIe/NVMe signal depending on the motherboard and the specific M.2 key/slot used — meaning two M.2 drives that look physically similar may have very different performance depending on which protocol the slot and drive both support.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">mSATA</span>
+    <span>Mini-SATA — an older, smaller form factor that, despite the similar-sounding name, predates and is physically distinct from M.2. mSATA was common in older ultrabooks and small-form-factor devices before M.2 became the dominant standard; mSATA is exclusively a SATA-signaling form factor; it does not support NVMe.</span>
+  </div>
+</div>
+
+<div class="callout callout-warn">
+  <p class="callout-title">Common Pitfall — M.2 Slot ≠ Guaranteed NVMe Speed</p>
+  <p>Don't assume "M.2" automatically means "NVMe speed." M.2 is just a physical form factor/connector — it can carry either a SATA-based signal (capped at SATA speeds) or a PCIe/NVMe-based signal (much faster), and the motherboard's specific M.2 slot must support the protocol the drive uses. Always check both the drive's supported interface and the motherboard slot's supported interface before assuming compatibility or expected performance.</p>
+</div>
+
+<!-- ═══ PART 3: DRIVE CONFIGURATIONS (RAID) ═══ -->
+<h2 class="chapter"><span class="ch-num">PART 3</span>Drive Configurations — RAID</h2>
+
+<p><span class="key-term">RAID (Redundant Array of Independent Disks)</span> combines multiple physical drives into a single logical unit, used to improve performance, redundancy (fault tolerance), or both, depending on the specific RAID level chosen. The exam tests five RAID levels — each represents a different tradeoff between speed, usable capacity, and the ability to survive a drive failure without losing data.</p>
+
+<div class="raid-card">
+  <div class="raid-card-head"><h4>RAID 0 — Striping</h4><span class="raid-min">2 drives minimum</span></div>
+  <div class="raid-blocks">
+    <div class="raid-disk raid-data">DISK A</div>
+    <div class="raid-disk raid-data">DISK B</div>
+  </div>
+  <p>Splits ("stripes") data evenly across all drives in the array, with each drive holding a different piece of every file. This allows read/write operations to happen in parallel across multiple drives simultaneously, maximizing performance and total usable capacity (100% of all drives' space is usable).</p>
+  <div class="raid-stats"><span><strong>Fault tolerance:</strong> None</span><span><strong>Usable capacity:</strong> 100%</span><span><strong>Performance:</strong> Highest (read &amp; write)</span></div>
+  <p style="margin-top:8px;"><strong>The critical tradeoff:</strong> there is zero redundancy. If <em>any single drive</em> in a RAID 0 array fails, all data across the entire array is lost, because each file is split across every drive with no duplicate copy anywhere.</p>
+</div>
+
+<div class="raid-card">
+  <div class="raid-card-head"><h4>RAID 1 — Mirroring</h4><span class="raid-min">2 drives minimum</span></div>
+  <div class="raid-blocks">
+    <div class="raid-disk raid-mirror">MIRROR A</div>
+    <div class="raid-disk raid-mirror">MIRROR B</div>
+  </div>
+  <p>Writes an identical, complete copy of all data to two (or more) drives simultaneously. If one drive fails, the other contains a fully intact, immediately usable copy of all data, with no data loss.</p>
+  <div class="raid-stats"><span><strong>Fault tolerance:</strong> Survives 1 drive failure</span><span><strong>Usable capacity:</strong> 50% (of 2-drive array)</span><span><strong>Performance:</strong> Good read; write limited to single-drive speed</span></div>
+  <p style="margin-top:8px;"><strong>The tradeoff:</strong> usable capacity is cut in half, since every byte of data is duplicated rather than contributing to total storage.</p>
+</div>
+
+<div class="raid-card">
+  <div class="raid-card-head"><h4>RAID 5 — Striping with Distributed Parity</h4><span class="raid-min">3 drives minimum</span></div>
+  <div class="raid-blocks">
+    <div class="raid-disk raid-data">DATA</div>
+    <div class="raid-disk raid-data">DATA</div>
+    <div class="raid-disk raid-parity">PARITY</div>
+  </div>
+  <p>Stripes data across all drives like RAID 0, but also calculates and distributes <span class="key-term">parity data</span> across all the drives in the array (no single dedicated parity drive — parity is spread evenly across all members). If one drive fails, the missing data can be mathematically reconstructed from the remaining data and parity information.</p>
+  <div class="raid-stats"><span><strong>Fault tolerance:</strong> Survives 1 drive failure</span><span><strong>Usable capacity:</strong> (n−1)/n of total</span><span><strong>Performance:</strong> Good balance of speed and redundancy</span></div>
+  <p style="margin-top:8px;"><strong>The tradeoff:</strong> better capacity efficiency than RAID 1 (only one "drive's worth" of space is sacrificed to parity, regardless of array size), but write performance is slower than RAID 0 due to the overhead of calculating parity on every write.</p>
+</div>
+
+<div class="raid-card">
+  <div class="raid-card-head"><h4>RAID 6 — Striping with Double Distributed Parity</h4><span class="raid-min">4 drives minimum</span></div>
+  <div class="raid-blocks">
+    <div class="raid-disk raid-data">DATA</div>
+    <div class="raid-disk raid-data">DATA</div>
+    <div class="raid-disk raid-parity">PARITY</div>
+    <div class="raid-disk raid-parity">PARITY</div>
+  </div>
+  <p>Functions like RAID 5, but calculates and stores <strong>two independent sets</strong> of parity data instead of one. This allows the array to survive the simultaneous failure of <strong>any two</strong> drives without data loss — a meaningful improvement for larger arrays, where the odds of a second drive failing during the lengthy rebuild process after a first failure become a real concern.</p>
+  <div class="raid-stats"><span><strong>Fault tolerance:</strong> Survives 2 simultaneous drive failures</span><span><strong>Usable capacity:</strong> (n−2)/n of total</span><span><strong>Performance:</strong> Slower writes than RAID 5 (double parity overhead)</span></div>
+</div>
+
+<div class="raid-card">
+  <div class="raid-card-head"><h4>RAID 10 (1+0) — Mirrored Stripes</h4><span class="raid-min">4 drives minimum</span></div>
+  <div class="raid-blocks">
+    <div class="raid-disk raid-mirror">MIRROR</div>
+    <div class="raid-disk raid-mirror">MIRROR</div>
+    <div class="raid-disk raid-mirror">MIRROR</div>
+    <div class="raid-disk raid-mirror">MIRROR</div>
+  </div>
+  <p>A "nested" or hybrid RAID level: drives are first paired into RAID 1 mirrors, and then those mirrored pairs are striped together using RAID 0. The result combines RAID 1's redundancy with RAID 0's performance, making RAID 10 a favorite for environments needing both high speed and strong fault tolerance — most commonly database servers handling heavy, performance-sensitive transactional workloads.</p>
+  <div class="raid-stats"><span><strong>Fault tolerance:</strong> Survives 1 failure per mirrored pair</span><span><strong>Usable capacity:</strong> 50% of total</span><span><strong>Performance:</strong> Excellent (near RAID 0 speed)</span></div>
+  <p style="margin-top:8px;"><strong>The tradeoff:</strong> like RAID 1, you sacrifice half of total raw capacity to redundancy — RAID 10 buys its speed-plus-safety combination with the most drives and the most "wasted" capacity of any level covered here.</p>
+</div>
+
+<table class="data-table">
+  <thead><tr><th>RAID Level</th><th>Min. Drives</th><th>Fault Tolerance</th><th>Usable Capacity</th><th>Best For</th></tr></thead>
+  <tbody>
+    <tr><td>RAID 0</td><td>2</td><td>None</td><td>100%</td><td>Max speed/capacity; no critical data</td></tr>
+    <tr><td>RAID 1</td><td>2</td><td>1 drive</td><td>50%</td><td>Simple redundancy for critical small-scale data</td></tr>
+    <tr><td>RAID 5</td><td>3</td><td>1 drive</td><td>(n−1)/n</td><td>Balanced general-purpose server storage</td></tr>
+    <tr><td>RAID 6</td><td>4</td><td>2 drives</td><td>(n−2)/n</td><td>Larger arrays needing extra fault tolerance</td></tr>
+    <tr><td>RAID 10</td><td>4</td><td>1 per mirrored pair</td><td>50%</td><td>High-performance + redundancy (databases)</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>The single most commonly tested fact in this section: <strong>RAID 0 has no fault tolerance whatsoever</strong> — despite being a "RAID" level, it offers zero redundancy and is purely about speed/capacity. Also expect direct minimum-drive-count questions ("What is the minimum number of drives for RAID 5?" → 3) and scenario questions matching a stated need (maximum speed, simple mirroring, balanced enterprise storage, double fault tolerance, database performance) to the correct RAID level.</p>
+</div>
+
+<!-- ═══ PART 4: REMOVABLE STORAGE ═══ -->
+<h2 class="chapter"><span class="ch-num">PART 4</span>Removable Storage</h2>
+
+<h3 class="section">Flash Drives</h3>
+
+<p>A <span class="key-term">USB flash drive</span> (thumb drive) is a small, portable solid-state storage device that connects via USB, used for quick file transport between systems, basic backups, and bootable installation media for operating systems. Flash drives have no moving parts, are extremely portable, and have become commodity-priced for common capacities.</p>
+
+<h3 class="section">Memory Cards</h3>
+
+<p><span class="key-term">Memory cards</span> are small flash-storage cards primarily used in cameras, smartphones, tablets, drones, and other compact devices where a full-size drive or even a flash drive wouldn't fit or wouldn't be appropriate. Common formats include <strong>SD (Secure Digital)</strong> and its smaller variant <strong>microSD</strong>, widely used across consumer electronics. As a working technician, you may need to read these via a built-in card reader or an external USB card-reader adapter.</p>
+
+<!-- ═══ PART 5: OPTICAL DRIVES ═══ -->
+<h2 class="chapter"><span class="ch-num">PART 5</span>Optical Drives</h2>
+
+<p>An <span class="key-term">optical drive</span> reads (and, on writable models, writes) data using a laser to detect microscopic pits and lands on the reflective surface of a disc — CDs, DVDs, and Blu-ray discs. While largely superseded by flash-based storage and network/cloud-based software distribution in everyday consumer use, optical drives still appear in specific contexts: legacy software/media that only exists on disc, certain backup/archival workflows, and some business or institutional environments still standardized on physical media for distribution or compliance reasons.</p>
+
+<table class="data-table">
+  <thead><tr><th>Media</th><th>Typical Capacity</th><th>Note</th></tr></thead>
+  <tbody>
+    <tr><td>CD</td><td>~700 MB</td><td>Oldest, lowest capacity of the three</td></tr>
+    <tr><td>DVD</td><td>~4.7 GB (single layer)</td><td>Common for software/movie distribution historically</td></tr>
+    <tr><td>Blu-ray</td><td>~25 GB (single layer)</td><td>Highest capacity; uses a shorter-wavelength laser than DVD/CD</td></tr>
+  </tbody>
+</table>
+
+<!-- MASTER REFERENCE -->
+<div class="ch-divider"></div>
+
+<div class="summary-box">
+  <h3>Master Reference — Storage Devices</h3>
+  <div class="summary-grid">
+    <div class="summary-item"><span class="s-sym">HDD spindle speed</span><span>Higher RPM = faster but hotter/louder/pricier</span></div>
+    <div class="summary-item"><span class="s-sym">3.5-inch</span><span>Desktop/server HDD form factor</span></div>
+    <div class="summary-item"><span class="s-sym">2.5-inch</span><span>Laptop/portable HDD form factor</span></div>
+    <div class="summary-item"><span class="s-sym">SATA (SSD)</span><span>Slowest SSD interface; ~600MB/s ceiling</span></div>
+    <div class="summary-item"><span class="s-sym">NVMe over PCIe</span><span>Fastest consumer interface/protocol pairing</span></div>
+    <div class="summary-item"><span class="s-sym">SAS</span><span>Enterprise/server interface, HDD or SSD</span></div>
+    <div class="summary-item"><span class="s-sym">M.2</span><span>Motherboard-mounted; can be SATA or NVMe signaling</span></div>
+    <div class="summary-item"><span class="s-sym">mSATA</span><span>Older, smaller, SATA-only form factor</span></div>
+    <div class="summary-item"><span class="s-sym">RAID 0</span><span>Striping; max speed; zero fault tolerance</span></div>
+    <div class="summary-item"><span class="s-sym">RAID 1</span><span>Mirroring; 50% capacity; survives 1 failure</span></div>
+    <div class="summary-item"><span class="s-sym">RAID 5</span><span>Striping + parity; survives 1 failure; 3 drives min</span></div>
+    <div class="summary-item"><span class="s-sym">RAID 6</span><span>Double parity; survives 2 failures; 4 drives min</span></div>
+    <div class="summary-item"><span class="s-sym">RAID 10</span><span>Mirrored stripes; speed + redundancy; 4 drives min</span></div>
+    <div class="summary-item"><span class="s-sym">Flash/memory cards</span><span>Portable removable flash storage; SD/microSD common</span></div>
+  </div>
+</div>
+
+<!-- QUICK REFERENCE TOOLS -->
+<h2 class="chapter"><span class="ch-num">REFERENCE</span>Storage Quick Reference</h2>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>Form Factor By Device</h4>
+    <ul>
+      <li><strong>Desktop/server HDD</strong> → 3.5-inch</li>
+      <li><strong>Laptop/portable HDD</strong> → 2.5-inch</li>
+      <li><strong>Modern motherboard SSD slot</strong> → M.2</li>
+      <li><strong>Older ultrabook SSD</strong> → mSATA</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>SSD Interface Speed Ranking</h4>
+    <ul>
+      <li><strong>1. NVMe (PCIe)</strong> → Fastest</li>
+      <li><strong>2. PCIe (general)</strong> → Very fast</li>
+      <li><strong>3. SAS</strong> → Fast, enterprise-focused</li>
+      <li><strong>4. SATA</strong> → Slowest, interface-limited</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>RAID By Minimum Drives</h4>
+    <ul>
+      <li><strong>2 drives</strong> → RAID 0 or RAID 1</li>
+      <li><strong>3 drives</strong> → RAID 5</li>
+      <li><strong>4 drives</strong> → RAID 6 or RAID 10</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>RAID By Priority</h4>
+    <ul>
+      <li><strong>Pure speed, no redundancy needed</strong> → RAID 0</li>
+      <li><strong>Simple redundancy</strong> → RAID 1</li>
+      <li><strong>Balanced server storage</strong> → RAID 5</li>
+      <li><strong>Max fault tolerance</strong> → RAID 6</li>
+      <li><strong>Speed + redundancy (databases)</strong> → RAID 10</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout callout-exam" style="margin-top: 28px;">
+  <p class="callout-title">Final Exam Reminders</p>
+  <p><strong>HDD spindle speed</strong> = higher RPM is faster but hotter, louder, and more power-hungry. <strong>3.5" = desktop/server, 2.5" = laptop.</strong></p>
+  <p><strong>SATA SSD</strong> = bottlenecked by the SATA interface itself (~600MB/s), regardless of how fast the flash memory could otherwise be.</p>
+  <p><strong>NVMe</strong> = a protocol built for flash, running over <strong>PCIe</strong> (the physical bus) — the two terms are related but not synonyms.</p>
+  <p><strong>M.2</strong> = a form factor that can carry either SATA or PCIe/NVMe signaling — don't assume M.2 automatically means NVMe speed.</p>
+  <p><strong>RAID 0</strong> = striping, max speed, ZERO fault tolerance — the exam's favorite trap answer for "which RAID level provides redundancy."</p>
+  <p><strong>RAID 1</strong> = mirroring, 50% usable capacity, survives 1 drive failure.</p>
+  <p><strong>RAID 5</strong> = striping + single distributed parity, 3-drive minimum, survives 1 failure.</p>
+  <p><strong>RAID 6</strong> = striping + double distributed parity, 4-drive minimum, survives 2 simultaneous failures.</p>
+  <p><strong>RAID 10</strong> = mirrored stripes, 4-drive minimum, best speed+redundancy combo, but only 50% usable capacity.</p>
+</div>
+
+</div>
+</body>
+</html>

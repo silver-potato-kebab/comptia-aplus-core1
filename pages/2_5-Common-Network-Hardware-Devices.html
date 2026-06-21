@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CompTIA A+ 2.5 — Compare and Contrast Common Networking Hardware Devices</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --surface2: #f5f4f0;
+    --border: #e5e2d9;
+    --border2: #d4d0c4;
+    --text: #1a1a18;
+    --muted: #6b6860;
+    --accent: #c0392b;
+    --accent2: #2c3e6b;
+    --accent3: #1a6b3a;
+    --accent4: #b5590a;
+    --accent-light: #fdf2f1;
+    --accent2-light: #f0f2f8;
+    --accent3-light: #f0f8f3;
+    --accent4-light: #fdf5ed;
+    --serif: 'Crimson Pro', Georgia, serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── TOP NAV ── */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .top-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .nav-home {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+  .nav-home:hover { color: var(--accent2); }
+  .nav-home::before {
+    content: '←';
+    font-size: 12px;
+  }
+  .nav-sep {
+    font-size: 12px;
+    color: var(--border2);
+    flex-shrink: 0;
+  }
+  .nav-current {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nav-current strong {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    margin-right: 6px;
+  }
+  .top-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .nav-prev, .nav-next {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 4px 9px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    white-space: nowrap;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .nav-prev:hover, .nav-next:hover {
+    border-color: var(--border2);
+    color: var(--accent2);
+  }
+  .nav-prev::before { content: '← '; }
+  .nav-next::after  { content: ' →'; }
+
+  @media (max-width: 600px) {
+    .top-nav { padding: 0 16px; }
+    .nav-current { display: none; }
+    .nav-sep { display: none; }
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  .page { max-width: 860px; margin: 0 auto; padding: 0 40px 80px; }
+
+  /* HEADER */
+  .book-header {
+    border-bottom: 3px double var(--border2);
+    padding: 56px 0 32px;
+    margin-bottom: 48px;
+  }
+  .book-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .book-eyebrow span {
+    background: var(--accent);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-right: 10px;
+    font-size: 10px;
+  }
+  .book-title {
+    font-family: var(--serif);
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+  .book-subtitle {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .book-subtitle span { display: flex; align-items: center; gap: 6px; }
+  .book-subtitle span::before { content: '·'; color: var(--border2); }
+  .book-subtitle span:first-child::before { display: none; }
+
+  /* HEADINGS */
+  h2.chapter {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 600;
+    margin: 52px 0 6px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    letter-spacing: -0.01em;
+  }
+  h2.chapter .ch-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+    letter-spacing: 0.1em;
+    font-weight: 400;
+  }
+  h3.section {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    margin: 36px 0 12px;
+  }
+  h3.section::before { content: '§ '; color: var(--muted); font-weight: 300; }
+
+  p { margin-bottom: 16px; }
+
+  /* CALLOUTS */
+  .callout {
+    border-left: 3px solid;
+    padding: 14px 20px;
+    margin: 24px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 15.5px;
+  }
+  .callout p { margin-bottom: 6px; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout-title {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px !important;
+  }
+  .callout-exam { border-color: var(--accent); background: var(--accent-light); }
+  .callout-exam .callout-title { color: var(--accent); }
+  .callout-info { border-color: var(--accent2); background: var(--accent2-light); }
+  .callout-info .callout-title { color: var(--accent2); }
+  .callout-tip { border-color: var(--accent3); background: var(--accent3-light); }
+  .callout-tip .callout-title { color: var(--accent3); }
+  .callout-warn { border-color: var(--accent4); background: var(--accent4-light); }
+  .callout-warn .callout-title { color: var(--accent4); }
+
+  /* TABLES */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+    font-family: var(--sans);
+    margin: 16px 0 24px;
+  }
+  .data-table thead th {
+    background: var(--surface2);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 9px 13px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .data-table tbody tr { border-bottom: 1px solid var(--border); }
+  .data-table tbody tr:last-child { border-bottom: none; }
+  .data-table td { padding: 9px 13px; vertical-align: top; line-height: 1.5; }
+  .data-table td:first-child {
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 13.5px;
+  }
+
+  /* PROCESS FLOW */
+  .process-flow {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: var(--sans);
+    font-size: 14px;
+  }
+  .flow-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .flow-step:last-child { border-bottom: none; }
+  .flow-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+    min-width: 24px;
+    padding-top: 2px;
+  }
+  .flow-text { color: var(--text); line-height: 1.55; }
+  .flow-text strong { font-weight: 600; }
+
+  /* DEF LIST */
+  .def-list { margin: 16px 0 24px; }
+  .def-item {
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 210px 1fr;
+    gap: 20px;
+    font-size: 15px;
+  }
+  .def-item:last-child { border-bottom: none; }
+  .def-term {
+    font-family: var(--sans);
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 14px;
+    padding-top: 1px;
+    line-height: 1.4;
+  }
+
+  /* GRID CARDS */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 16px 18px;
+  }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 10px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card ul { list-style: none; font-family: var(--sans); font-size: 13.5px; }
+  .card ul li {
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .card ul li:last-child { border-bottom: none; }
+  .card ul li strong { color: var(--text); }
+
+  /* BODY LIST */
+  ul.body-list {
+    list-style: none;
+    font-family: var(--sans);
+    font-size: 15px;
+    padding: 0;
+    margin: 12px 0 20px;
+  }
+  ul.body-list li {
+    padding: 5px 0 5px 18px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  ul.body-list li:last-child { border-bottom: none; }
+  ul.body-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--border2);
+    font-size: 12px;
+  }
+  ul.body-list li strong { color: var(--text); }
+
+  /* PORT / SPEC DIAGRAM (adapted from battery-diagram pattern) */
+  .spec-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: var(--sans);
+  }
+  .spec-diagram h4 {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .spec-bar-wrap { margin-bottom: 10px; }
+  .spec-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .spec-label strong { color: var(--text); }
+  .spec-bar {
+    height: 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .spec-fill {
+    height: 100%;
+    border-radius: 2px;
+  }
+  .fill-blue { background: #2c3e6b; }
+  .fill-green { background: #4caf50; }
+  .fill-amber { background: #ffc107; }
+  .fill-orange { background: #ff9800; }
+  .fill-red { background: #f44336; }
+  .fill-purple { background: #8e44ad; }
+
+  /* CONN / SPEED BADGES */
+  .conn-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-weight: 600;
+    margin-right: 4px;
+  }
+  .badge-wifi { background: #e3f2fd; color: #1565c0; border: 1px solid #90caf9; }
+  .badge-cell { background: #f3e5f5; color: #6a1b9a; border: 1px solid #ce93d8; }
+  .badge-bt { background: #e8f5e9; color: #1b5e20; border: 1px solid #a5d6a7; }
+  .badge-nfc { background: #fff3e0; color: #e65100; border: 1px solid #ffcc80; }
+  .badge-poe { background: #fdf2f1; color: #c0392b; border: 1px solid #e8b4ae; }
+
+  /* CODE */
+  code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: var(--accent);
+  }
+
+  .key-term { font-style: italic; font-weight: 500; color: var(--accent2); }
+
+  /* SUMMARY BOX */
+  .summary-box {
+    background: var(--text);
+    color: #f0ede6;
+    border-radius: 6px;
+    padding: 28px 32px;
+    margin: 40px 0;
+  }
+  .summary-box h3 {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 18px;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 32px;
+  }
+  .summary-item {
+    font-family: var(--sans);
+    font-size: 13.5px;
+    color: #c4bfb4;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .summary-item .s-sym {
+    color: #fff;
+    font-weight: 600;
+    min-width: 175px;
+    line-height: 1.4;
+  }
+
+  .ch-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--border2), transparent);
+    margin: 48px 0;
+  }
+
+  /* INDICATOR DOTS */
+  .malware-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .ind-high { background: var(--accent); }
+  .ind-med { background: var(--accent4); }
+  .ind-low { background: var(--accent3); }
+
+  @media (max-width: 680px) {
+    .page { padding: 0 20px 60px; }
+    .summary-grid, .card-grid { grid-template-columns: 1fr; }
+    .def-item { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV — update href values to match your actual file names -->
+<nav class="top-nav">
+  <div class="top-nav-left">
+    <a class="nav-home" href="../index.html">Study Guide</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current"><strong>2.5</strong> Compare and Contrast Common Networking Hardware Devices</span>
+  </div>
+  <div class="top-nav-right">
+    <!-- Point these to the adjacent section files, or remove if not applicable -->
+    <a class="nav-prev" href="./2_4-Common-Network-Configuration.html">2.4</a>
+    <a class="nav-next" href="./2_6-Configure-SOHO-Networks.html">2.6</a>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- HEADER -->
+<div class="book-header">
+  <div class="book-eyebrow">
+    <span>2.5</span>
+    CompTIA A+ · Core 1 (220-1201) · Domain 2 — Networking
+  </div>
+  <h1 class="book-title">Compare and Contrast Common<br>Networking Hardware Devices</h1>
+  <div class="book-subtitle">
+    <span>Objective 2.5</span>
+    <span>Domain weight: 20%</span>
+    <span>10 device categories</span>
+  </div>
+</div>
+
+<!-- INTRO -->
+<h2 class="chapter"><span class="ch-num">OVERVIEW</span>Introduction</h2>
+
+<p>Every network — from a one-room home office to a multi-floor enterprise — is built from a small set of physical building blocks. Objective 2.5 asks you to identify these devices, explain what layer of the network they operate at, and articulate why you would choose one variant over another (a managed switch instead of an unmanaged one, a router instead of a switch, a cable modem instead of DSL). The exam will show you a scenario or a photo of a port panel and expect you to name the correct device and justify the choice.</p>
+
+<p>This objective sits at the intersection of two ideas you'll see repeated throughout networking: <span class="key-term">connectivity</span> (getting a signal from one point to another, physically or wirelessly) and <span class="key-term">intelligence</span> (deciding where that signal should go). Some devices in this list do almost nothing but connect — a patch panel is just an organized set of physical connections. Others, like a router or a managed switch, make active decisions about traffic. Keeping that distinction in mind will help you reason through almost any question this objective throws at you.</p>
+
+<div class="callout callout-info">
+  <p class="callout-title">A Note on the OSI Model</p>
+  <p>You don't need to memorize the seven-layer OSI model in depth for this objective, but knowing roughly where a device "lives" helps you compare devices correctly. A <strong>switch</strong> operates primarily at <strong>Layer 2 (Data Link)</strong>, forwarding traffic based on MAC addresses. A <strong>router</strong> operates at <strong>Layer 3 (Network)</strong>, forwarding traffic based on IP addresses. A <strong>hub</strong> (legacy, rarely tested directly but useful for contrast) operates at <strong>Layer 1 (Physical)</strong> and has no intelligence at all — it just repeats electrical signals to every port.</p>
+</div>
+
+<!-- ═══ SECTION 1: ROUTERS ═══ -->
+<h2 class="chapter"><span class="ch-num">DEVICE 01</span>Routers</h2>
+
+<p>A <span class="key-term">router</span> is a Layer 3 device that connects two or more separate networks and forwards data packets between them based on IP address information. In the most common home/SOHO scenario, a router connects your internal local area network (LAN) to an external network — typically the internet, via your ISP. The router examines the destination IP address of each packet and decides the best path to send it along.</p>
+
+<h3 class="section">What a Router Actually Does</h3>
+
+<p>At its core, a router performs three jobs. First, it <strong>routes</strong> — it maintains a routing table of known networks and forwards packets toward their destination network, hopping from router to router until the packet arrives. Second, in a SOHO (small office/home office) context, it almost always performs <strong>Network Address Translation (NAT)</strong>, which allows many internal devices, each with a private IP address, to share a single public IP address when communicating with the internet. Third, it typically runs <strong>DHCP (Dynamic Host Configuration Protocol)</strong>, automatically assigning IP addresses to devices on the internal network.</p>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>The exam frequently tests the distinction between a router and a switch by asking what each device uses to make forwarding decisions. <strong>Router = IP address (Layer 3). Switch = MAC address (Layer 2).</strong> If a question describes a device connecting "two different networks" or "the LAN to the internet," the answer is a router. If it describes connecting "multiple devices within the same network," the answer is a switch.</p>
+</div>
+
+<h3 class="section">SOHO Router vs. Enterprise Router</h3>
+
+<table class="data-table">
+  <thead><tr><th>Characteristic</th><th>SOHO Router</th><th>Enterprise Router</th></tr></thead>
+  <tbody>
+    <tr><td>Typical role</td><td>All-in-one device: router + switch + AP + firewall</td><td>Dedicated routing function only</td></tr>
+    <tr><td>Throughput</td><td>Sufficient for a handful of users</td><td>High-throughput, hardware-accelerated forwarding</td></tr>
+    <tr><td>Configuration</td><td>Simple web GUI, mostly defaults</td><td>CLI-driven, complex routing protocols (OSPF, BGP)</td></tr>
+    <tr><td>Redundancy</td><td>Single point of failure</td><td>Often deployed in redundant pairs</td></tr>
+    <tr><td>Example</td><td>Typical home Wi-Fi router/gateway</td><td>Cisco ISR/ASR series router in a data center</td></tr>
+  </tbody>
+</table>
+
+<p>A consumer "Wi-Fi router" purchased for a home is technically several devices in one box: a router, an unmanaged switch (the LAN ports on the back), a wireless access point, and usually a basic firewall. Understanding that these are logically distinct functions — even when physically combined — is essential, because the exam may ask you about each function separately.</p>
+
+<!-- ═══ SECTION 2: SWITCHES ═══ -->
+<h2 class="chapter"><span class="ch-num">DEVICE 02</span>Switches</h2>
+
+<p>A <span class="key-term">switch</span> is a Layer 2 device that connects multiple devices within the same local network and forwards traffic intelligently based on the destination's <strong>MAC address</strong>. Unlike a legacy hub — which simply repeats every incoming signal out every other port — a switch builds and maintains a MAC address table, learning which device is connected to which port, and forwards each frame only to the port where the destination device actually lives.</p>
+
+<p>This intelligent forwarding has a major practical benefit: it eliminates unnecessary network traffic and collisions. Each port on a switch is effectively its own collision domain, which is why switches replaced hubs almost entirely once they became affordable.</p>
+
+<h3 class="section">Managed Switches</h3>
+
+<p>A <span class="key-term">managed switch</span> provides an interface — typically a web GUI, CLI, or both — that allows an administrator to configure, monitor, and control the switch's behavior. Managed switches are the standard choice in business and enterprise environments where network segmentation, monitoring, and security are priorities.</p>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">VLAN support</span>
+    <span>Managed switches can create Virtual LANs, logically segmenting one physical switch into multiple isolated broadcast domains — for example, separating "Sales" traffic from "Guest Wi-Fi" traffic on the same physical hardware.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Port mirroring (SPAN)</span>
+    <span>Copies traffic from one or more ports to a monitoring port, allowing a packet analyzer or IDS to inspect traffic without disrupting normal flow.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Link aggregation (LACP)</span>
+    <span>Combines multiple physical ports into a single logical link for increased bandwidth and redundancy between switches or to a server.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Quality of Service (QoS)</span>
+    <span>Prioritizes certain types of traffic (e.g., VoIP, video conferencing) over less time-sensitive traffic (e.g., file downloads).</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Spanning Tree Protocol (STP)</span>
+    <span>Prevents network loops when multiple redundant paths exist between switches, which would otherwise cause broadcast storms.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Remote management</span>
+    <span>Administrators can configure and monitor the switch over the network (SSH, HTTPS, SNMP) rather than needing physical access.</span>
+  </div>
+</div>
+
+<h3 class="section">Unmanaged Switches</h3>
+
+<p>An <span class="key-term">unmanaged switch</span> is a plug-and-play device with no configuration interface at all. It performs basic Layer 2 switching — learning MAC addresses and forwarding frames — automatically, with zero administrative overhead. There is no way to create VLANs, set port priorities, or monitor traffic; you plug a cable in and it simply works.</p>
+
+<table class="data-table">
+  <thead><tr><th>Factor</th><th>Managed Switch</th><th>Unmanaged Switch</th></tr></thead>
+  <tbody>
+    <tr><td>Configuration</td><td>Full GUI/CLI access; VLANs, QoS, STP, port security, SNMP</td><td>None — no configuration interface exists</td></tr>
+    <tr><td>Cost</td><td>Significantly more expensive per port</td><td>Inexpensive</td></tr>
+    <tr><td>Use case</td><td>Business networks, segmentation, monitoring, security needs</td><td>Home networks, small networks, simply adding extra ports</td></tr>
+    <tr><td>Security</td><td>Port security, 802.1X, ACLs possible</td><td>No security features</td></tr>
+    <tr><td>Troubleshooting</td><td>Detailed logs, SNMP alerts, traffic statistics</td><td>None — only link lights as a diagnostic</td></tr>
+    <tr><td>Redundancy/loop protection</td><td>STP prevents broadcast storms from looped cables</td><td>None — a looped cable can take down the network</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-warn">
+  <p class="callout-title">Common Pitfall</p>
+  <p>Plugging both ends of a single cable into two ports on an <strong>unmanaged</strong> switch (or between two unmanaged switches) creates a physical loop with no protection mechanism, resulting in a <strong>broadcast storm</strong> that can saturate and crash the entire local network. A managed switch running STP would detect and block the redundant path automatically.</p>
+</div>
+
+<!-- ═══ SECTION 3: ACCESS POINTS ═══ -->
+<h2 class="chapter"><span class="ch-num">DEVICE 03</span>Access Points</h2>
+
+<p>A wireless <span class="key-term">access point (AP)</span> extends a wired network by broadcasting a Wi-Fi signal, allowing wireless clients (laptops, phones, tablets, IoT devices) to join the network without a physical cable. An AP is typically connected to a switch via Ethernet and bridges traffic between the wired and wireless segments.</p>
+
+<h3 class="section">Standalone vs. Controller-Based (Managed) APs</h3>
+
+<table class="data-table">
+  <thead><tr><th>Type</th><th>Description</th><th>Best fit</th></tr></thead>
+  <tbody>
+    <tr><td>Standalone AP</td><td>Configured individually through its own web interface; operates independently</td><td>Home or single-AP small office</td></tr>
+    <tr><td>Controller-based AP</td><td>Centrally managed by a wireless LAN controller (WLC), often cloud-based; settings, firmware, and roaming policy pushed from one console</td><td>Enterprise deployments with many APs (campuses, multi-floor offices)</td></tr>
+  </tbody>
+</table>
+
+<p>In a controller-based deployment, dozens or hundreds of "thin" APs can be managed from a single pane of glass, including seamless roaming — a client moving from one room to another hands off between APs without dropping its connection, using the same SSID and credentials throughout the building.</p>
+
+<h3 class="section">Key AP Concepts for the Exam</h3>
+
+<ul class="body-list">
+  <li><strong>SSID (Service Set Identifier)</strong> — the broadcast name of the wireless network that clients see and connect to.</li>
+  <li><strong>Coverage vs. capacity</strong> — a single AP has a limited range and a limited number of clients it can serve well; larger spaces need multiple APs.</li>
+  <li><strong>Channel and frequency</strong> — APs operate on the 2.4 GHz, 5 GHz, or 6 GHz bands; overlapping channels between nearby APs cause interference.</li>
+  <li><strong>Power over Ethernet</strong> — most enterprise APs are PoE-powered, eliminating the need for a separate electrical outlet at the mounting location (see Device 06 below).</li>
+  <li><strong>AP placement</strong> — ceiling-mounted, centrally located, and away from interference sources (microwaves, cordless phones, thick concrete/metal) for best coverage.</li>
+</ul>
+
+<div class="callout callout-tip">
+  <p class="callout-title">Router vs. Access Point — The Distinction That Trips People Up</p>
+  <p>A home "wireless router" performs the AP function internally, which is why people often use the terms interchangeably. But on the exam, a <strong>router</strong> and an <strong>access point</strong> are distinct device categories: a router connects networks and routes by IP; an access point simply bridges wireless clients onto an existing wired network. A dedicated AP, by itself, does not perform routing, DHCP, or NAT.</p>
+</div>
+
+<!-- ═══ SECTION 4: PATCH PANEL ═══ -->
+<h2 class="chapter"><span class="ch-num">DEVICE 04</span>Patch Panel</h2>
+
+<p>A <span class="key-term">patch panel</span> is a passive hardware unit, typically mounted in a server rack or wall-mounted enclosure, containing a row of female ports on the front and permanently-terminated wiring on the back. Structured cabling runs from wall jacks throughout a building back to the patch panel in the network/server closet. Short "patch cables" then connect the patch panel ports to switch ports, allowing any wall jack to be logically connected to any switch port simply by moving a patch cable.</p>
+
+<div class="callout callout-info">
+  <p class="callout-title">Patch Panels Are Purely Physical</p>
+  <p>A patch panel has <strong>no electronics, no intelligence, and no power requirement</strong>. It does not switch, route, or amplify anything — it is purely an organized termination point for structured cabling. Don't confuse it with a switch; the patch panel is between the wall jacks and the switch, not a replacement for one.</p>
+</div>
+
+<h3 class="section">Why Patch Panels Are Used</h3>
+
+<ul class="body-list">
+  <li><strong>Cable management</strong> — keeps the permanent building wiring undisturbed while allowing flexible, frequently-changed connections at the patch-cable layer.</li>
+  <li><strong>Labeling and documentation</strong> — each port typically corresponds to a labeled wall jack, making moves, adds, and changes (MACs) straightforward.</li>
+  <li><strong>Protects the permanent cable run</strong> — the long horizontal cabling embedded in walls/ceilings is terminated once and rarely touched again; only short patch cables are swapped.</li>
+  <li><strong>Termination standards</strong> — patch panels are terminated using <strong>T568A or T568B</strong> wiring standards with a punch-down tool, and should follow the same standard end-to-end for proper pinout.</li>
+</ul>
+
+<p>A typical small-business wiring closet layout: wall jack → structured cable (in-wall) → patch panel port → short patch cable → switch port → uplink to router/firewall. The patch panel sits at the boundary between "building infrastructure" cabling and "active equipment" cabling.</p>
+
+<!-- ═══ SECTION 5: FIREWALL ═══ -->
+<h2 class="chapter"><span class="ch-num">DEVICE 05</span>Firewall</h2>
+
+<p>A <span class="key-term">firewall</span> is a security device (hardware, software, or both) that monitors and controls incoming and outgoing network traffic based on a defined set of security rules. Its core job is to act as a barrier between a trusted internal network and an untrusted external network (typically the internet), permitting or denying traffic according to rules.</p>
+
+<h3 class="section">Hardware vs. Software Firewalls</h3>
+
+<table class="data-table">
+  <thead><tr><th>Type</th><th>Description</th><th>Typical placement</th></tr></thead>
+  <tbody>
+    <tr><td>Hardware (network-based) firewall</td><td>Dedicated appliance sitting at the network perimeter, inspecting all traffic passing between the LAN and WAN</td><td>Edge of the network, between router/modem and internal switches</td></tr>
+    <tr><td>Software (host-based) firewall</td><td>Runs on an individual endpoint (e.g., Windows Defender Firewall), filtering traffic to and from that specific device only</td><td>Installed on each computer/server</td></tr>
+  </tbody>
+</table>
+
+<p>Most consumer routers include a basic built-in firewall, typically just NAT plus a simple stateful packet filter. Dedicated business/enterprise firewall appliances offer much more: deep packet inspection, intrusion prevention/detection (IPS/IDS), VPN termination, content filtering, and application-aware rules — often marketed as a <span class="key-term">Unified Threat Management (UTM)</span> or <span class="key-term">Next-Generation Firewall (NGFW)</span> device.</p>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>For Core 1, you mainly need to recognize the firewall as a perimeter security device that filters traffic by rule (allow/deny based on IP, port, protocol). Deeper firewall configuration (ACLs, port forwarding rules, zones) is expanded on in other objectives — here, focus on what the device <em>is</em> and where it sits in the network topology: between the internal trusted network and the external untrusted network.</p>
+</div>
+
+<!-- ═══ SECTION 6: POWER OVER ETHERNET (POE) ═══ -->
+<h2 class="chapter"><span class="ch-num">DEVICE 06</span>Power over Ethernet (PoE)</h2>
+
+<p><span class="key-term">Power over Ethernet (PoE)</span> is a technology that delivers electrical power to a network device over the same Ethernet cable that carries data, eliminating the need for a separate power cable and electrical outlet at the device's location. It's commonly used for devices mounted in places where running power wiring is impractical — ceiling-mounted access points, security cameras, VoIP phones, and door access controllers.</p>
+
+<h3 class="section">PoE Injectors</h3>
+
+<p>A <span class="key-term">PoE injector</span> is a small standalone device that "injects" power onto an Ethernet cable between a non-PoE switch and a PoE-capable end device. It sits inline: switch → (standard Ethernet, no power) → injector → (Ethernet + power) → device. Injectors are the practical solution when you have an existing non-PoE switch and only need to power one or two devices, without replacing the entire switch.</p>
+
+<h3 class="section">PoE Switch</h3>
+
+<p>A <span class="key-term">PoE switch</span> has PoE capability built directly into some or all of its ports, supplying power to connected devices automatically without any additional hardware. This is the preferred solution when deploying many PoE devices (e.g., an office full of VoIP phones, or a building full of wireless APs and cameras) since it avoids needing a separate injector for every single device.</p>
+
+<div class="callout callout-tip">
+  <p class="callout-title">Injector vs. Switch — Choosing Between Them</p>
+  <p>Use a <strong>PoE injector</strong> when you have only a handful of PoE devices and an existing non-PoE switch you don't want to replace. Use a <strong>PoE switch</strong> when deploying PoE at scale — it's cleaner, more reliable, and avoids a tangle of individual injectors, but requires replacing or supplementing existing switching infrastructure.</p>
+</div>
+
+<h3 class="section">PoE Standards</h3>
+
+<p>PoE is standardized under IEEE 802.3, with successive versions increasing the maximum power delivered per port. Knowing the relative order (more than the exact wattage) is the most exam-useful takeaway.</p>
+
+<div class="spec-diagram">
+  <h4>PoE Standards — Relative Power Budget Per Port</h4>
+  <div class="spec-bar-wrap">
+    <div class="spec-label"><strong>802.3af (PoE)</strong><span>~15.4W at source / ~13W at device</span></div>
+    <div class="spec-bar"><div class="spec-fill fill-blue" style="width:25%"></div></div>
+  </div>
+  <div class="spec-bar-wrap">
+    <div class="spec-label"><strong>802.3at (PoE+)</strong><span>~30W at source / ~25.5W at device</span></div>
+    <div class="spec-bar"><div class="spec-fill fill-green" style="width:50%"></div></div>
+  </div>
+  <div class="spec-bar-wrap">
+    <div class="spec-label"><strong>802.3bt Type 3 (PoE++/4PPoE)</strong><span>~60W at source / ~51W at device</span></div>
+    <div class="spec-bar"><div class="spec-fill fill-amber" style="width:75%"></div></div>
+  </div>
+  <div class="spec-bar-wrap">
+    <div class="spec-label"><strong>802.3bt Type 4 (PoE++/4PPoE)</strong><span>~100W at source / ~71W at device</span></div>
+    <div class="spec-bar"><div class="spec-fill fill-red" style="width:100%"></div></div>
+  </div>
+</div>
+
+<table class="data-table">
+  <thead><tr><th>Standard</th><th>Common name</th><th>Typical use case</th></tr></thead>
+  <tbody>
+    <tr><td>802.3af</td><td>PoE</td><td>VoIP phones, basic wireless APs, low-power cameras</td></tr>
+    <tr><td>802.3at</td><td>PoE+</td><td>PTZ (pan-tilt-zoom) cameras, higher-power wireless APs (Wi-Fi 5/6)</td></tr>
+    <tr><td>802.3bt</td><td>PoE++ / 4PPoE</td><td>Video conferencing systems, high-power APs (Wi-Fi 6E), laptops, small displays</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>The exact wattage figures are far less important than understanding the <strong>relationship</strong>: af → at → bt represents increasing power delivery, used for increasingly power-hungry devices. If a question describes a device that "needs more power than the current PoE switch can provide," the answer is to upgrade to a higher PoE standard (af → at → bt), not to add a separate power supply (which would defeat the purpose of PoE).</p>
+</div>
+
+<!-- ═══ SECTION 7: CABLE MODEM ═══ -->
+<h2 class="chapter"><span class="ch-num">DEVICE 07</span>Cable Modem</h2>
+
+<p>A <span class="key-term">cable modem</span> is a device that provides internet access over the same coaxial cable infrastructure used for cable television. It converts (modulates/demodulates — hence "modem") between the digital data used by your home network and the signal format used on the cable provider's hybrid fiber-coax (HFC) network.</p>
+
+<ul class="body-list">
+  <li><strong>Connection type</strong> — connects to a coaxial wall outlet (the same kind used for cable TV) via an RG-6 coax cable.</li>
+  <li><strong>Standard</strong> — most cable modems use the <strong>DOCSIS (Data Over Cable Service Interface Specification)</strong> standard; DOCSIS 3.1 is common for current high-speed plans.</li>
+  <li><strong>Shared bandwidth</strong> — cable internet bandwidth is typically shared among subscribers in the same neighborhood segment, meaning speeds can dip during peak usage hours.</li>
+  <li><strong>Combo devices</strong> — many ISPs provide a single device that is both a cable modem and a router/Wi-Fi AP combined; conceptually they remain two separate logical functions.</li>
+</ul>
+
+<p>The cable modem itself only translates the cable signal to Ethernet — it does not perform routing, NAT, or DHCP on its own (unless combined with a router in a single unit). A standalone cable modem is connected to a separate router to provide those functions.</p>
+
+<!-- ═══ SECTION 8: DSL ═══ -->
+<h2 class="chapter"><span class="ch-num">DEVICE 08</span>Digital Subscriber Line (DSL)</h2>
+
+<p><span class="key-term">DSL (Digital Subscriber Line)</span> delivers internet access over standard copper telephone lines — the same wiring traditionally used for landline phone service. A DSL modem connects to the phone line and converts the signal for use by your network. Because DSL and traditional voice telephone signals occupy different frequency ranges on the same copper pair, both can technically run simultaneously, though a <span class="key-term">DSL filter</span> is needed at each telephone jack to prevent the data signal from causing audible interference on voice calls.</p>
+
+<table class="data-table">
+  <thead><tr><th>Factor</th><th>DSL</th><th>Cable</th></tr></thead>
+  <tbody>
+    <tr><td>Medium</td><td>Existing copper telephone line</td><td>Existing coaxial cable line</td></tr>
+    <tr><td>Bandwidth sharing</td><td>Dedicated line per subscriber back to the provider's central office</td><td>Shared among neighborhood subscribers on the same segment</td></tr>
+    <tr><td>Speed factor</td><td>Speed degrades with distance from the provider's central office</td><td>Speed relatively consistent regardless of distance, but affected by neighborhood congestion</td></tr>
+    <tr><td>Symmetry</td><td>Often asymmetric (ADSL: faster download than upload)</td><td>Typically asymmetric as well, though less pronounced on modern DOCSIS</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-info">
+  <p class="callout-title">DSL Variants You May See Referenced</p>
+  <p><strong>ADSL (Asymmetric DSL)</strong> — much faster downstream than upstream; the most common residential variant. <strong>SDSL (Symmetric DSL)</strong> — equal upload/download speed, more common in small business contexts. <strong>VDSL (Very-high-bitrate DSL)</strong> — higher speeds than ADSL but only over shorter distances from the central office.</p>
+</div>
+
+<!-- ═══ SECTION 9: ONT ═══ -->
+<h2 class="chapter"><span class="ch-num">DEVICE 09</span>Optical Network Terminal (ONT)</h2>
+
+<p>An <span class="key-term">Optical Network Terminal (ONT)</span> — sometimes called an Optical Network Unit (ONU) — is the device that terminates a fiber-optic internet connection at the customer's premises, converting the optical (light-based) signal carried over fiber into an electrical Ethernet signal that home/business networking equipment can use. It is the fiber equivalent of a cable modem or DSL modem.</p>
+
+<ul class="body-list">
+  <li><strong>Fiber in, Ethernet out</strong> — the ONT is the conversion point: fiber optic cable connects to the ONT, and a standard Ethernet cable runs from the ONT to a router or switch.</li>
+  <li><strong>Often wall-mounted</strong> — typically a small box mounted near where fiber enters the building, sometimes with a battery backup unit (since it requires power, and traditional phone-line backup power doesn't apply to fiber).</li>
+  <li><strong>No data conversion limitations of copper</strong> — fiber doesn't suffer from the same distance-based speed degradation or electromagnetic interference that copper-based DSL does, enabling much higher sustained speeds over longer distances.</li>
+  <li><strong>GPON</strong> — many residential fiber deployments use Gigabit Passive Optical Network (GPON) architecture, where a single fiber strand from the provider is split to serve multiple customers, each with their own ONT.</li>
+</ul>
+
+<div class="callout callout-tip">
+  <p class="callout-title">Modem, ONT — Same Concept, Different Medium</p>
+  <p>Conceptually, a cable modem, a DSL modem, and an ONT all do the same job: they sit at the boundary between the ISP's physical medium (coax, copper phone line, or fiber) and your internal Ethernet network, translating the provider's signal into something your router/switch can use. The exam differentiates them by <strong>which physical medium</strong> each one terminates.</p>
+</div>
+
+<!-- ═══ SECTION 10: NIC ═══ -->
+<h2 class="chapter"><span class="ch-num">DEVICE 10</span>Network Interface Card (NIC)</h2>
+
+<p>A <span class="key-term">Network Interface Card (NIC)</span> is the hardware component that allows a computer or other device to connect to a network, either through a wired Ethernet port or a wireless radio. Every device that communicates on a network — a desktop, laptop, server, printer, or smart TV — has at least one NIC, whether built into the motherboard, added as an expansion card, or attached externally via USB.</p>
+
+<h3 class="section">Types of NICs</h3>
+
+<table class="data-table">
+  <thead><tr><th>Type</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td>Onboard (integrated) NIC</td><td>Built directly into the motherboard; standard on virtually all modern desktops and laptops</td></tr>
+    <tr><td>Expansion card NIC</td><td>A PCIe card added to a desktop/server for additional or faster wired ports, or to add capability not present onboard</td></tr>
+    <tr><td>USB NIC</td><td>External adapter plugged into a USB port; common on thin laptops lacking a built-in Ethernet jack</td></tr>
+    <tr><td>Wireless NIC</td><td>Provides Wi-Fi connectivity via an internal wireless card or external USB Wi-Fi adapter</td></tr>
+    <tr><td>Server/multi-port NIC</td><td>High-throughput cards with multiple ports, often supporting link aggregation/teaming for redundancy and bandwidth</td></tr>
+  </tbody>
+</table>
+
+<h3 class="section">Physical Media Access Control (MAC) Address</h3>
+
+<p>Every NIC is assigned a unique <span class="key-term">MAC (Media Access Control) address</span> at the time of manufacture, burned into the hardware (sometimes called the <span class="key-term">physical address</span> or <span class="key-term">burned-in address (BIA)</span>). This is the Layer 2 identifier that switches use to forward frames to the correct device on a local network — it is distinct from the IP address, which operates at Layer 3 and can change depending on the network the device joins.</p>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Format</span>
+    <span>48 bits, displayed as six pairs of hexadecimal digits separated by colons or hyphens, e.g., <code>00:1A:2B:3C:4D:5E</code>.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">OUI (first 24 bits)</span>
+    <span>The Organizationally Unique Identifier identifies the manufacturer of the NIC (e.g., a specific block assigned to Apple, Intel, Cisco, etc.).</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Device identifier (last 24 bits)</span>
+    <span>Unique to that specific NIC, assigned by the manufacturer, making the full 48-bit address globally unique.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Scope</span>
+    <span>A MAC address is only meaningful on the local network segment (it is not routed across the internet) — routers strip and rewrite Layer 2 addressing at each hop, while the IP address remains constant end-to-end.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">MAC vs. IP</span>
+    <span>MAC = Layer 2, physical, burned-in, used within a local segment. IP = Layer 3, logical, configurable/leased, used for end-to-end routing across networks.</span>
+  </div>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>Expect a question along the lines of: "Which address does a switch use to forward a frame to the correct device?" → <strong>MAC address</strong>. Also expect MAC addresses to come up in the context of <strong>MAC filtering</strong> (allowing/denying specific devices on a wireless network or switch port) and <strong>DHCP reservations</strong> (assigning a consistent IP address to a device based on its unique MAC address).</p>
+</div>
+
+<!-- MASTER REFERENCE -->
+<div class="ch-divider"></div>
+
+<div class="summary-box">
+  <h3>Master Reference — All 10 Device Categories</h3>
+  <div class="summary-grid">
+    <div class="summary-item"><span class="s-sym">Router</span><span>Layer 3; connects networks; routes by IP; usually does NAT + DHCP</span></div>
+    <div class="summary-item"><span class="s-sym">Switch (managed)</span><span>Layer 2; VLANs, QoS, STP, port mirroring, remote management</span></div>
+    <div class="summary-item"><span class="s-sym">Switch (unmanaged)</span><span>Layer 2; plug-and-play; zero config; no loop protection</span></div>
+    <div class="summary-item"><span class="s-sym">Access point</span><span>Bridges wireless clients to the wired network; not a router</span></div>
+    <div class="summary-item"><span class="s-sym">Patch panel</span><span>Passive; organizes structured cabling; no electronics</span></div>
+    <div class="summary-item"><span class="s-sym">Firewall</span><span>Filters traffic by rule at the network perimeter</span></div>
+    <div class="summary-item"><span class="s-sym">PoE injector</span><span>Adds power to one device's Ethernet run; for small deployments</span></div>
+    <div class="summary-item"><span class="s-sym">PoE switch</span><span>Built-in power delivery on multiple ports; for scale</span></div>
+    <div class="summary-item"><span class="s-sym">PoE standards</span><span>802.3af → at → bt = increasing power budget per port</span></div>
+    <div class="summary-item"><span class="s-sym">Cable modem</span><span>Coax (DOCSIS); shared bandwidth in neighborhood segment</span></div>
+    <div class="summary-item"><span class="s-sym">DSL</span><span>Copper phone line; speed drops with distance from CO</span></div>
+    <div class="summary-item"><span class="s-sym">ONT</span><span>Terminates fiber; converts optical signal to Ethernet</span></div>
+    <div class="summary-item"><span class="s-sym">NIC</span><span>Connects a device to the network; wired, wireless, onboard, or USB</span></div>
+    <div class="summary-item"><span class="s-sym">MAC address</span><span>48-bit, burned-in, Layer 2; OUI + device ID; local-segment only</span></div>
+  </div>
+</div>
+
+<!-- QUICK REFERENCE TOOLS -->
+<h2 class="chapter"><span class="ch-num">REFERENCE</span>Comparison Quick Reference</h2>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>"Which Layer?" Cheat Sheet</h4>
+    <ul>
+      <li><strong>Layer 1 (Physical)</strong> → Patch panel, cabling, hub (legacy)</li>
+      <li><strong>Layer 2 (Data Link)</strong> → Switch, NIC/MAC address, AP (bridging)</li>
+      <li><strong>Layer 3 (Network)</strong> → Router, firewall (routing/filtering by IP)</li>
+      <li><strong>Modem/ONT</strong> → Physical-layer media conversion (coax/copper/fiber ↔ Ethernet)</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>"Which Medium?" Cheat Sheet</h4>
+    <ul>
+      <li><strong>Cable modem</strong> → Coaxial cable (DOCSIS)</li>
+      <li><strong>DSL modem</strong> → Copper telephone line</li>
+      <li><strong>ONT</strong> → Fiber optic cable</li>
+      <li><strong>PoE</strong> → Power + data over a single Ethernet cable</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Managed Switch Features</h4>
+    <ul>
+      <li><strong>VLANs</strong> → Logical network segmentation</li>
+      <li><strong>STP</strong> → Loop prevention / broadcast storm protection</li>
+      <li><strong>Port mirroring</strong> → Traffic copied for monitoring/analysis</li>
+      <li><strong>LACP</strong> → Multiple ports bonded as one logical link</li>
+      <li><strong>QoS</strong> → Prioritize latency-sensitive traffic</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>PoE Standard Progression</h4>
+    <ul>
+      <li><strong>802.3af (PoE)</strong> → ~15.4W — phones, basic APs</li>
+      <li><strong>802.3at (PoE+)</strong> → ~30W — PTZ cameras, stronger APs</li>
+      <li><strong>802.3bt (PoE++)</strong> → ~60–100W — displays, laptops, Wi-Fi 6E APs</li>
+      <li>Use an <strong>injector</strong> for one-off devices; a <strong>PoE switch</strong> at scale</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout callout-exam" style="margin-top: 28px;">
+  <p class="callout-title">Final Exam Reminders</p>
+  <p><strong>Switch vs. router</strong> = MAC address (Layer 2) vs. IP address (Layer 3).</p>
+  <p><strong>Managed vs. unmanaged switch</strong> = configuration capability (VLANs, STP, QoS) vs. zero-config plug-and-play.</p>
+  <p><strong>Patch panel</strong> = purely passive cable termination point — never confuse it with a switch.</p>
+  <p><strong>Firewall</strong> = perimeter device that filters traffic by rule, sitting between trusted and untrusted networks.</p>
+  <p><strong>PoE injector</strong> = power for one device added to a non-PoE switch. <strong>PoE switch</strong> = built-in power across many ports.</p>
+  <p><strong>PoE standards</strong> = af → at → bt is increasing power capacity, in that order.</p>
+  <p><strong>Cable modem</strong> = coax/DOCSIS, shared neighborhood bandwidth. <strong>DSL</strong> = copper phone line, distance-sensitive. <strong>ONT</strong> = fiber termination.</p>
+  <p><strong>NIC</strong> = the hardware connecting any device to a network, wired or wireless.</p>
+  <p><strong>MAC address</strong> = 48-bit, burned into the NIC, used for Layer 2 forwarding within a local segment only.</p>
+</div>
+
+</div>
+</body>
+</html>

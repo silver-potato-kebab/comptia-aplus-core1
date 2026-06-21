@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CompTIA A+ 5.3 — Troubleshoot Video, Projector, and Display Issues</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --surface2: #f5f4f0;
+    --border: #e5e2d9;
+    --border2: #d4d0c4;
+    --text: #1a1a18;
+    --muted: #6b6860;
+    --accent: #c0392b;
+    --accent2: #2c3e6b;
+    --accent3: #1a6b3a;
+    --accent4: #b5590a;
+    --accent-light: #fdf2f1;
+    --accent2-light: #f0f2f8;
+    --accent3-light: #f0f8f3;
+    --accent4-light: #fdf5ed;
+    --serif: 'Crimson Pro', Georgia, serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── TOP NAV ── */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .top-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .nav-home {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+  .nav-home:hover { color: var(--accent2); }
+  .nav-home::before {
+    content: '←';
+    font-size: 12px;
+  }
+  .nav-sep {
+    font-size: 12px;
+    color: var(--border2);
+    flex-shrink: 0;
+  }
+  .nav-current {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nav-current strong {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    margin-right: 6px;
+  }
+  .top-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .nav-prev, .nav-next {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 4px 9px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    white-space: nowrap;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .nav-prev:hover, .nav-next:hover {
+    border-color: var(--border2);
+    color: var(--accent2);
+  }
+  .nav-prev::before { content: '← '; }
+  .nav-next::after  { content: ' →'; }
+
+  @media (max-width: 600px) {
+    .top-nav { padding: 0 16px; }
+    .nav-current { display: none; }
+    .nav-sep { display: none; }
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  .page { max-width: 860px; margin: 0 auto; padding: 0 40px 80px; }
+
+  /* HEADER */
+  .book-header {
+    border-bottom: 3px double var(--border2);
+    padding: 56px 0 32px;
+    margin-bottom: 48px;
+  }
+  .book-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .book-eyebrow span {
+    background: var(--accent);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-right: 10px;
+    font-size: 10px;
+  }
+  .book-title {
+    font-family: var(--serif);
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+  .book-subtitle {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .book-subtitle span { display: flex; align-items: center; gap: 6px; }
+  .book-subtitle span::before { content: '·'; color: var(--border2); }
+  .book-subtitle span:first-child::before { display: none; }
+
+  /* HEADINGS */
+  h2.chapter {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 600;
+    margin: 52px 0 6px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    letter-spacing: -0.01em;
+  }
+  h2.chapter .ch-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+    letter-spacing: 0.1em;
+    font-weight: 400;
+  }
+  h3.section {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    margin: 36px 0 12px;
+  }
+  h3.section::before { content: '§ '; color: var(--muted); font-weight: 300; }
+
+  p { margin-bottom: 16px; }
+
+  /* CALLOUTS */
+  .callout {
+    border-left: 3px solid;
+    padding: 14px 20px;
+    margin: 24px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 15.5px;
+  }
+  .callout p { margin-bottom: 6px; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout-title {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px !important;
+  }
+  .callout-exam { border-color: var(--accent); background: var(--accent-light); }
+  .callout-exam .callout-title { color: var(--accent); }
+  .callout-info { border-color: var(--accent2); background: var(--accent2-light); }
+  .callout-info .callout-title { color: var(--accent2); }
+  .callout-tip { border-color: var(--accent3); background: var(--accent3-light); }
+  .callout-tip .callout-title { color: var(--accent3); }
+  .callout-warn { border-color: var(--accent4); background: var(--accent4-light); }
+  .callout-warn .callout-title { color: var(--accent4); }
+
+  /* TABLES */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+    font-family: var(--sans);
+    margin: 16px 0 24px;
+  }
+  .data-table thead th {
+    background: var(--surface2);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 9px 13px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .data-table tbody tr { border-bottom: 1px solid var(--border); }
+  .data-table tbody tr:last-child { border-bottom: none; }
+  .data-table td { padding: 9px 13px; vertical-align: top; line-height: 1.5; }
+  .data-table td:first-child {
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 13.5px;
+  }
+
+  /* PROCESS FLOW */
+  .process-flow {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: var(--sans);
+    font-size: 14px;
+  }
+  .flow-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .flow-step:last-child { border-bottom: none; }
+  .flow-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+    min-width: 24px;
+    padding-top: 2px;
+  }
+  .flow-text { color: var(--text); line-height: 1.55; }
+  .flow-text strong { font-weight: 600; }
+
+  /* DEF LIST */
+  .def-list { margin: 16px 0 24px; }
+  .def-item {
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 210px 1fr;
+    gap: 20px;
+    font-size: 15px;
+  }
+  .def-item:last-child { border-bottom: none; }
+  .def-term {
+    font-family: var(--sans);
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 14px;
+    padding-top: 1px;
+    line-height: 1.4;
+  }
+
+  /* GRID CARDS */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 16px 18px;
+  }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 10px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card ul { list-style: none; font-family: var(--sans); font-size: 13.5px; }
+  .card ul li {
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .card ul li:last-child { border-bottom: none; }
+  .card ul li strong { color: var(--text); }
+
+  /* BODY LIST */
+  ul.body-list {
+    list-style: none;
+    font-family: var(--sans);
+    font-size: 15px;
+    padding: 0;
+    margin: 12px 0 20px;
+  }
+  ul.body-list li {
+    padding: 5px 0 5px 18px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  ul.body-list li:last-child { border-bottom: none; }
+  ul.body-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--border2);
+    font-size: 12px;
+  }
+  ul.body-list li strong { color: var(--text); }
+
+  /* DISPLAY TECH VISUAL */
+  .display-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+  .display-panel-header {
+    background: var(--text);
+    color: rgba(255,255,255,0.85);
+    padding: 10px 18px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .display-panel-body { padding: 16px 18px; }
+
+  /* CONNECTOR COMPARISON */
+  .connector-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--sans);
+    font-size: 13.5px;
+  }
+  .connector-row:last-child { border-bottom: none; }
+  .conn-name {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    min-width: 110px;
+  }
+  .conn-detail { color: var(--muted); line-height: 1.4; }
+  .conn-detail strong { color: var(--text); }
+
+  /* CODE */
+  code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: var(--accent);
+  }
+
+  /* KEY TERM */
+  .key-term { font-style: italic; font-weight: 500; color: var(--accent2); }
+
+  /* SUMMARY BOX */
+  .summary-box {
+    background: var(--text);
+    color: #f0ede6;
+    border-radius: 6px;
+    padding: 28px 32px;
+    margin: 40px 0;
+  }
+  .summary-box h3 {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 18px;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 32px;
+  }
+  .summary-item {
+    font-family: var(--sans);
+    font-size: 13.5px;
+    color: #c4bfb4;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .summary-item .s-sym {
+    color: #fff;
+    font-weight: 600;
+    min-width: 175px;
+    line-height: 1.4;
+  }
+
+  .ch-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--border2), transparent);
+    margin: 48px 0;
+  }
+
+  /* PIXEL DIAGRAM */
+  .pixel-grid {
+    display: inline-grid;
+    grid-template-columns: repeat(8, 22px);
+    gap: 2px;
+    margin: 12px 0 20px;
+  }
+  .px {
+    width: 22px;
+    height: 22px;
+    border-radius: 2px;
+    background: #c8e6c9;
+    border: 1px solid #81c784;
+  }
+  .px.dead { background: #212121; border-color: #424242; }
+  .px.stuck-r { background: #f44336; border-color: #c62828; }
+  .px.stuck-g { background: #4caf50; border-color: #2e7d32; }
+  .px.stuck-b { background: #2196f3; border-color: #0d47a1; }
+  .px.hot { background: #fff9c4; border-color: #f9a825; }
+
+  .pixel-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 2px;
+    border: 1px solid rgba(0,0,0,0.1);
+  }
+
+  @media (max-width: 680px) {
+    .page { padding: 0 20px 60px; }
+    .summary-grid, .card-grid { grid-template-columns: 1fr; }
+    .def-item { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV — update href values to match your actual file names -->
+<nav class="top-nav">
+  <div class="top-nav-left">
+    <a class="nav-home" href="../index.html">Study Guide</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current"><strong>5.3</strong> Troubleshooting Video, Projector, and Display Issues</span>
+  </div>
+  <div class="top-nav-right">
+    <!-- Point these to the adjacent section files, or remove if not applicable -->
+    <a class="nav-prev" href="./5_2-Troubleshoot-Drive-RAID.html">5.2</a>
+    <a class="nav-next" href="./5_4-Troubleshoot-Mobile-Device.html">5.4</a>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- HEADER -->
+<div class="book-header">
+  <div class="book-eyebrow">
+    <span>5.3</span>
+    CompTIA A+ · Core 1 (220-1201) · Domain 5 — Hardware & Network Troubleshooting
+  </div>
+  <h1 class="book-title">Troubleshooting Video, Projector,<br>and Display Issues</h1>
+  <div class="book-subtitle">
+    <span>Objective 5.3</span>
+    <span>Domain weight: 28%</span>
+    <span>13 testable symptoms</span>
+  </div>
+</div>
+
+<!-- INTRO -->
+<h2 class="chapter"><span class="ch-num">OVERVIEW</span>Introduction</h2>
+
+<p>Display problems are among the most common and visible issues an IT support technician encounters. A user who cannot see their screen is completely blocked from working — making display troubleshooting a high-priority, high-frequency skill. The challenge is that display symptoms span a wide range of causes: the issue might originate from the GPU, the cable, the display device itself, the operating system display settings, or even the content being displayed.</p>
+
+<p>Objective 5.3 covers thirteen distinct display symptoms across monitors, projectors, and the video subsystem. This section provides a thorough grounding in display technology fundamentals, then covers each symptom in depth — including its root cause, diagnostic approach, and resolution.</p>
+
+<div class="callout callout-info">
+  <p class="callout-title">Scope of This Objective</p>
+  <p>This objective applies to all display output devices: flat-panel monitors (LCD, OLED), projectors (lamp-based and laser), and laptop displays. Each technology has unique failure modes. Where symptoms differ by technology, those differences are explicitly noted.</p>
+</div>
+
+<!-- DISPLAY TECH FOUNDATION -->
+<h2 class="chapter"><span class="ch-num">FOUNDATION</span>Display Technologies</h2>
+
+<p>A working knowledge of how different display types function is essential for understanding why they fail in the specific ways they do. The exam tests displays in the context of their symptoms — and those symptoms make more sense with the underlying technology in mind.</p>
+
+<h3 class="section">LCD Panel Types</h3>
+
+<p><span class="key-term">Liquid Crystal Display (LCD)</span> panels use a backlight (LED or CCFL) to illuminate liquid crystals that modulate light to produce an image. The LCD panel itself does not emit light — it filters and blocks the backlight. This distinction matters for diagnosing dim images and backlight failures.</p>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">TN (Twisted Nematic)</span>
+    <span>Oldest LCD technology. Fast response time (good for gaming). Poor viewing angles — image degrades when viewed from the side or above. Narrow color gamut. Prone to color shift when pressed. Cheapest panel type.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">IPS (In-Plane Switching)</span>
+    <span>Better color accuracy and wide viewing angles. Slower response time than TN. More expensive. Standard for professional color work. Slightly susceptible to IPS glow — a bright glow in corners when displaying dark content.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">VA (Vertical Alignment)</span>
+    <span>Best contrast ratio of the three LCD types. Deep blacks. Better colors than TN but slightly narrower viewing angles than IPS. Some ghosting at fast motion. Good balance for general use.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">OLED (Organic Light-Emitting Diode)</span>
+    <span>Each pixel emits its own light — no backlight. Perfect blacks (pixel simply turns off). Infinite contrast ratio. Susceptible to burn-in, particularly with static UI elements. Found in high-end monitors, most modern smartphones, and high-end laptops.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Mini-LED</span>
+    <span>LED-backlit LCD with thousands of small LEDs providing local dimming zones. Better contrast than standard LCD. Not OLED but approaches OLED-like contrast in high-end implementations. Less burn-in risk than OLED.</span>
+  </div>
+</div>
+
+<h3 class="section">Projector Technologies</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">DLP (Digital Light Processing)</span>
+    <span>Uses a chip covered in millions of microscopic mirrors. Fast, high contrast. Compact. Uses a lamp (bulb) that requires periodic replacement — typically every 2,000–5,000 hours. Most common in business projectors. Susceptible to "rainbow effect" — brief color fringing some users see during fast movement.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">LCD Projector</span>
+    <span>Uses three LCD panels (one per color channel: red, green, blue). Good color accuracy. Filters can accumulate dust, causing color artifacts. Lamp-based — requires replacement.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Laser Projector</span>
+    <span>Uses laser diodes instead of a traditional lamp. No bulb to replace. Extremely long lifespan (20,000+ hours). Instant on/off. Higher upfront cost. Not susceptible to burnt-out bulb symptoms.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Lamp Hours</span>
+    <span>Traditional projector lamps have a finite lifespan measured in hours. As the lamp ages, it produces less light (dimming) and eventually fails (burnt-out bulb). Most projectors display a lamp hours counter in their settings menu, and alert the user when replacement is approaching.</span>
+  </div>
+</div>
+
+<h3 class="section">Video Connectors Reference</h3>
+
+<div class="display-panel">
+  <div class="display-panel-header">Video Connector Quick Reference</div>
+  <div class="display-panel-body">
+    <div class="connector-row">
+      <span class="conn-name">VGA (DB-15)</span>
+      <span class="conn-detail"><strong>Analog only.</strong> Blue 15-pin D-sub connector. Legacy — no longer on modern GPUs. Maximum resolution limited. Susceptible to interference and signal degradation over long cable runs. No audio.</span>
+    </div>
+    <div class="connector-row">
+      <span class="conn-name">DVI</span>
+      <span class="conn-detail"><strong>Digital (and analog in DVI-I).</strong> DVI-D = digital only. DVI-I = digital + analog. DVI-A = analog only. No audio. Common on older monitors and GPUs. Max resolution typically 1920×1200.</span>
+    </div>
+    <div class="connector-row">
+      <span class="conn-name">HDMI</span>
+      <span class="conn-detail"><strong>Digital audio + video.</strong> Most common consumer connector. Carries audio and video on one cable. Multiple versions: 1.4 (4K@30Hz), 2.0 (4K@60Hz), 2.1 (4K@144Hz, 8K). Hot-pluggable.</span>
+    </div>
+    <div class="connector-row">
+      <span class="conn-name">DisplayPort</span>
+      <span class="conn-detail"><strong>Digital audio + video.</strong> Higher bandwidth than HDMI at same version. Supports daisy-chaining multiple monitors (MST). Locking connector reduces accidental disconnection. Preferred for high-refresh-rate gaming monitors.</span>
+    </div>
+    <div class="connector-row">
+      <span class="conn-name">USB-C / Thunderbolt</span>
+      <span class="conn-detail"><strong>Digital audio + video + data + power.</strong> Not all USB-C ports carry video — requires DisplayPort Alt Mode or Thunderbolt. One cable solution for laptops. Thunderbolt 3/4 = 40Gbps, supports 4K@60Hz and beyond.</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ SYMPTOM 1: INCORRECT INPUT SOURCE ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 01</span>Incorrect Input Source</h2>
+
+<p>An <span class="key-term">incorrect input source</span> is one of the simplest and most frequently misdiagnosed display problems. The display or projector is functioning correctly, but it is set to receive signal from a different input port than the one the computer is connected to. The result is a blank screen, a "No Signal" message, or the display of a different device's output.</p>
+
+<h3 class="section">Why This Happens</h3>
+
+<p>Modern monitors and projectors have multiple input ports — HDMI, DisplayPort, VGA, USB-C — and maintain a setting for which input is active. If the device was previously connected to a different source (a gaming console, another computer, a Blu-ray player), the input selector may be pointing to the wrong port. Some displays auto-detect active inputs; others do not.</p>
+
+<p>In projector environments, this is especially common in meeting rooms and classrooms where multiple devices are regularly connected and disconnected. A presenter connects a laptop via HDMI but the projector is still set to the VGA input last used by another person.</p>
+
+<h3 class="section">Resolution</h3>
+
+<div class="process-flow">
+  <div class="flow-title">Resolving Incorrect Input Source</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Identify which port the computer is physically connected to.</strong> Trace the cable from the GPU/laptop output to the specific port on the display.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Use the display's input selector.</strong> Press the Input, Source, or Menu button on the monitor or projector (or use the remote control). Navigate to the correct input — HDMI 1, HDMI 2, DisplayPort, VGA, etc.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>For projectors, use the remote.</strong> Most projectors have a dedicated Source button on the remote that cycles through available inputs.</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Check for auto-input detection settings.</strong> Many monitors have an Auto Input Detection or Auto Source Detect setting in the OSD menu — enabling this makes the display automatically switch to any active input.</div></div>
+  <div class="flow-step"><span class="flow-num">05</span><div class="flow-text"><strong>For laptops with external displays:</strong> confirm the laptop is sending signal to the external output. Use Windows key + P to cycle display modes (PC screen only, Duplicate, Extend, Second screen only).</div></div>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus</p>
+  <p>When the exam presents a scenario where a projector or monitor shows "No Signal" or a blank screen and the computer appears to be on and running normally, <strong>incorrect input source is always the first thing to check</strong> — before assuming cable or hardware failure. It is the most common, simplest explanation.</p>
+</div>
+
+
+<!-- ═══ SYMPTOM 2: PHYSICAL CABLING ISSUES ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 02</span>Physical Cabling Issues</h2>
+
+<p>Display cables are a frequent source of problems. They are connected and disconnected regularly, routed around desks and through cable management, and subjected to physical stress. A faulty or improperly connected cable can produce a range of symptoms — from a completely blank screen to intermittent signal loss to image quality degradation.</p>
+
+<h3 class="section">Cable Failure Modes by Connector Type</h3>
+
+<table class="data-table">
+  <thead><tr><th>Connector</th><th>Common Failure Mode</th><th>Resulting Symptom</th></tr></thead>
+  <tbody>
+    <tr><td>VGA</td><td>Bent or missing pins; loose connector</td><td>Missing color channels (red, green, or blue entirely absent); fuzzy image; no signal</td></tr>
+    <tr><td>DVI</td><td>Bent pins; loose connection</td><td>Flickering; missing colors; no signal. DVI-D vs DVI-I mismatch causes no signal.</td></tr>
+    <tr><td>HDMI</td><td>Connector not fully seated; damaged cable; incompatible version</td><td>Intermittent signal loss; flickering; no audio; resolution limited by cable version</td></tr>
+    <tr><td>DisplayPort</td><td>Latch not engaged; damaged cable</td><td>Intermittent disconnects; flickering; "No DisplayPort Cable" message</td></tr>
+    <tr><td>USB-C</td><td>Port or cable doesn't support video (not all do)</td><td>No video signal despite physical connection</td></tr>
+  </tbody>
+</table>
+
+<h3 class="section">Diagnosing Cable Problems</h3>
+
+<div class="process-flow">
+  <div class="flow-title">Cable Troubleshooting Steps</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Reseat both ends of the cable.</strong> Disconnect and firmly reconnect both the GPU/laptop end and the monitor end. For VGA and DVI, hand-tighten the retaining screws. For DisplayPort, ensure the latch clicks.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Inspect the cable and connectors visually.</strong> Look for bent pins (VGA/DVI), damaged connector housing, kinks or sharp bends in the cable, and fraying near the connector ends.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Substitute a known-good cable.</strong> This is the definitive test. If the problem resolves with a different cable of the same type, the original cable is faulty.</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Check cable length.</strong> VGA signals degrade over long runs (&gt;15 feet) without signal boosters. Even HDMI and DisplayPort have practical length limits — HDMI is rated to 50 feet passive, DisplayPort to about 10 feet passive at high resolutions.</div></div>
+  <div class="flow-step"><span class="flow-num">05</span><div class="flow-text"><strong>Try a different connection type.</strong> If VGA is causing issues, switch to HDMI or DisplayPort if both the GPU and monitor support it. Digital connections (HDMI, DP) are more reliable and higher quality than analog (VGA).</div></div>
+</div>
+
+<div class="callout callout-tip">
+  <p class="callout-title">VGA Pin Tip</p>
+  <p>A VGA cable missing one of the three color-signal pins produces a distinct symptom: the image appears in only two colors, with one primary color (red, green, or blue) entirely absent. A missing red pin produces a cyan image (green + blue). A missing green pin produces a magenta image (red + blue). This is a reliable indicator of a damaged VGA cable or connector.</p>
+</div>
+
+
+<!-- ═══ SYMPTOM 3: BURNT-OUT BULB ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 03</span>Burnt-Out Bulb</h2>
+
+<p>A <span class="key-term">burnt-out bulb</span> is a projector-specific symptom. Traditional projector lamps (mercury vapor, metal halide, or UHP lamps) are consumable components with a finite lifespan — typically 2,000 to 5,000 hours of use. When the lamp fails, the projector produces no image because there is no light source to project.</p>
+
+<h3 class="section">Lamp Failure Characteristics</h3>
+
+<p>Lamp failure is rarely sudden. The typical progression is:</p>
+
+<ul class="body-list">
+  <li><strong>Gradual dimming</strong> over months as the lamp ages — brightness decreases steadily</li>
+  <li><strong>Color shift</strong> — aging lamps may produce a yellowish or pinkish tint before failure</li>
+  <li><strong>Lamp warning indicator</strong> — most projectors display a lamp warning LED or on-screen message when lamp hours approach the rated end-of-life</li>
+  <li><strong>Intermittent shutdowns</strong> — a near-end-of-life lamp may cause the projector to shut down unexpectedly as the lamp flickers and the projector's protection circuit cuts power</li>
+  <li><strong>Complete failure</strong> — the projector powers on (fans spin, LEDs illuminate) but projects no image</li>
+</ul>
+
+<div class="callout callout-info">
+  <p class="callout-title">Distinguishing Lamp Failure from Other "No Image" Causes</p>
+  <p>When a projector powers on but shows no image: if the <strong>lamp LED is solid red or orange</strong>, the lamp has failed. If the lamp LED is off or green, check input source first. A projector with a failed lamp will typically display a lamp error message in its status LEDs or on-screen (if it can briefly produce an image before the lamp fully fails).</p>
+</div>
+
+<h3 class="section">Lamp Replacement</h3>
+
+<div class="process-flow">
+  <div class="flow-title">Projector Lamp Replacement Procedure</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Power off and allow to cool completely.</strong> Projector lamps operate at very high temperatures. Allow at least 30–60 minutes after shutdown before opening the lamp compartment. The lamp housing can cause serious burns if touched while hot.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Unplug the projector.</strong> Always work with the power cable disconnected.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Locate the lamp compartment.</strong> Typically accessed via a panel on the side or bottom of the projector, secured with one or two screws.</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Use the correct OEM replacement lamp.</strong> Use the manufacturer's specified lamp model or a certified replacement. Third-party lamps may have shorter lifespans or fit issues. Handle the new lamp by its housing — do not touch the glass envelope with bare hands (oil from skin can cause hot spots that shorten lamp life).</div></div>
+  <div class="flow-step"><span class="flow-num">05</span><div class="flow-text"><strong>Reset the lamp hour counter.</strong> After replacement, reset the lamp counter in the projector's menu. This ensures the projector accurately tracks the new lamp's lifespan and triggers warnings at the correct time.</div></div>
+</div>
+
+
+<!-- ═══ SYMPTOM 4: FUZZY IMAGE ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 04</span>Fuzzy Image</h2>
+
+<p>A <span class="key-term">fuzzy</span> or blurry image lacks crisp detail — text is hard to read, edges are soft, and the overall image looks out of focus. The causes differ significantly depending on whether the display is a flat-panel monitor or a projector.</p>
+
+<h3 class="section">Fuzzy Image on a Monitor</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Wrong resolution</span>
+    <span>The most common cause. LCD monitors have a fixed <strong>native resolution</strong> — the exact pixel count the panel was designed for. When the OS sends a lower resolution than native, the monitor must scale the image to fill the screen, which produces a soft, blurry appearance. Solution: set the display resolution to the monitor's native resolution in Windows Display Settings.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Analog signal (VGA)</span>
+    <span>VGA is an analog signal — it is subject to interference and signal degradation. Even at the correct resolution, a VGA connection may produce a slightly softer image than a digital connection (HDMI/DisplayPort) carrying the same resolution. Switching to a digital connection typically sharpens the image immediately.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Damaged cable</span>
+    <span>A degraded VGA cable or a damaged HDMI cable can introduce signal noise, producing a slightly fuzzy or grainy image around high-contrast edges.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">GPU driver issue</span>
+    <span>Incorrect or corrupt display drivers can cause the GPU to output at incorrect settings. Reinstalling display drivers resolves this.</span>
+  </div>
+</div>
+
+<h3 class="section">Fuzzy Image on a Projector</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Focus adjustment needed</span>
+    <span>Projectors have a manual or motorized focus ring. If the projector has been moved, bumped, or the projection distance has changed, refocusing is required. Rotate the focus ring until text on screen appears sharp.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Throw distance</span>
+    <span>Each projector has a rated throw distance range — the distance between the lens and the screen at which it can produce a sharp, properly sized image. If the projector is too close or too far from the screen, sharpness may be compromised regardless of focus adjustment.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Keystoning</span>
+    <span>When the projector is not perpendicular to the screen (angled up, down, or sideways), the image becomes trapezoidal and may appear soft on the edges. Keystone correction (digital or optical) compensates for this, but extreme angles degrade image quality.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Dirty lens</span>
+    <span>Dust, fingerprints, or smudges on the projector lens produce overall image softness. Clean the lens with a lens cloth and appropriate lens cleaning solution — never use paper towels or clothing.</span>
+  </div>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus — Monitor Fuzziness</p>
+  <p>On the exam, a fuzzy monitor image almost always means the <strong>resolution is not set to the monitor's native resolution</strong>. This is the first and most likely answer. The fix is: right-click Desktop → Display Settings → Resolution → set to the recommended (native) value.</p>
+</div>
+
+
+<!-- ═══ SYMPTOM 5: DISPLAY BURN-IN ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 05</span>Display Burn-In</h2>
+
+<p><span class="key-term">Burn-in</span> is a permanent or semi-permanent image artifact where a ghost of a previously displayed static image remains visible on the screen even when displaying different content. It appears as a faint, washed-out overlay of the old image.</p>
+
+<h3 class="section">Technology Susceptibility</h3>
+
+<table class="data-table">
+  <thead><tr><th>Technology</th><th>Burn-In Risk</th><th>Mechanism</th></tr></thead>
+  <tbody>
+    <tr><td>OLED</td><td>High</td><td>Organic compounds that emit light degrade with use. Pixels displaying bright static content degrade faster than others, creating permanent luminance differences.</td></tr>
+    <tr><td>Plasma (legacy)</td><td>High</td><td>Same mechanism as OLED — phosphor degradation from sustained static display.</td></tr>
+    <tr><td>LCD (IPS/TN/VA)</td><td>Low (image persistence only)</td><td>LCD panels can develop temporary image persistence — a ghost image that fades after displaying varied content. True permanent burn-in is rare on LCD.</td></tr>
+    <tr><td>Projector (DLP/LCD)</td><td>Low</td><td>Projectors rarely develop burn-in under normal use. Sustained static images over extreme durations can affect DLP mirrors or LCD panels.</td></tr>
+  </tbody>
+</table>
+
+<h3 class="section">Common Burn-In Scenarios</h3>
+
+<p>Burn-in most commonly affects displays used in commercial or kiosk environments where a static image is displayed continuously: digital menu boards at restaurants showing the same layout for years, ATM screens with static UI frames, workstation monitors with a persistent taskbar and status bar at the same position, and televisions used as computer monitors with a persistent Windows taskbar.</p>
+
+<h3 class="section">Prevention and Remediation</h3>
+
+<ul class="body-list">
+  <li><strong>Use a screensaver</strong> — prevents static image persistence by displaying moving content during inactivity</li>
+  <li><strong>Enable auto power-off</strong> — turns off the display after a period of inactivity</li>
+  <li><strong>Reduce brightness</strong> — lower brightness reduces the rate of OLED degradation</li>
+  <li><strong>Enable pixel shift</strong> — many OLED displays have a pixel shift feature that subtly moves the image by a few pixels, distributing wear more evenly</li>
+  <li><strong>Avoid static content</strong> — on OLED displays, avoid leaving static high-brightness logos or UI elements in the same position for extended periods</li>
+  <li><strong>Run a pixel refresh cycle</strong> — some OLED monitors and TVs have a built-in pixel refresher that attempts to even out organic compound degradation</li>
+  <li><strong>For mild image persistence on LCD</strong> — display a white screen for several minutes, which often clears temporary persistence</li>
+</ul>
+
+<div class="callout callout-warn">
+  <p class="callout-title">Permanent vs. Temporary</p>
+  <p>True burn-in on OLED is <strong>permanent</strong> — the organic compounds have physically degraded and cannot be repaired. Image persistence on LCD is <strong>temporary</strong> and usually resolves within minutes to hours of displaying varied content. The exam may not distinguish the terms precisely, but understand that OLED is the primary burn-in concern.</p>
+</div>
+
+
+<!-- ═══ SYMPTOM 6: DEAD PIXELS ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 06</span>Dead Pixels</h2>
+
+<p>A <span class="key-term">pixel</span> is the smallest addressable unit on a display. Each pixel contains three subpixels — red, green, and blue — that combine in varying intensities to produce any color. When a pixel or subpixel fails, it exhibits one of several distinct defect types.</p>
+
+<h3 class="section">Types of Pixel Defects</h3>
+
+<div style="margin: 20px 0;">
+  <div class="pixel-grid">
+    <div class="px"></div><div class="px"></div><div class="px"></div><div class="px dead"></div><div class="px"></div><div class="px"></div><div class="px"></div><div class="px"></div>
+    <div class="px"></div><div class="px stuck-r"></div><div class="px"></div><div class="px"></div><div class="px"></div><div class="px hot"></div><div class="px"></div><div class="px"></div>
+    <div class="px"></div><div class="px"></div><div class="px"></div><div class="px"></div><div class="px stuck-b"></div><div class="px"></div><div class="px"></div><div class="px"></div>
+    <div class="px"></div><div class="px"></div><div class="px stuck-g"></div><div class="px"></div><div class="px"></div><div class="px"></div><div class="px dead"></div><div class="px"></div>
+  </div>
+  <div class="pixel-legend">
+    <div class="legend-item"><div class="legend-swatch" style="background:#212121;border-color:#424242"></div>Dead pixel (black)</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#f44336"></div>Stuck red</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#4caf50"></div>Stuck green</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#2196f3"></div>Stuck blue</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#fff9c4;border-color:#f9a825"></div>Hot pixel (white)</div>
+  </div>
+</div>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Dead pixel</span>
+    <span>A pixel that is always black regardless of what the screen displays. The transistor controlling that pixel has failed — it receives no power and all three subpixels remain off. Appears as a small black dot. Most noticeable on bright or white content.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Stuck pixel</span>
+    <span>A pixel that is always illuminated in one color — red, green, blue, or white (all subpixels stuck on). The transistor is stuck in an "on" position. Unlike a dead pixel, a stuck pixel is lit and most noticeable on dark content.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Hot pixel</span>
+    <span>A pixel that is always white (all three subpixels stuck on at full brightness). A type of stuck pixel. Very noticeable on any content.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Subpixel defect</span>
+    <span>A defect in only one of the three subpixels within a pixel. Appears as an off-color dot — a pixel that is always slightly tinted or never achieves pure white.</span>
+  </div>
+</div>
+
+<h3 class="section">Remediation and Warranty</h3>
+
+<p>Dead and stuck pixels are hardware defects. Software-based pixel fixers (programs that rapidly cycle colors across the screen) may unstick some stuck pixels by exercising the transistor, but they cannot repair a truly dead pixel. If the fix does not work, the options are limited: live with the defect, or replace the display.</p>
+
+<p>Most display manufacturers have a <span class="key-term">dead pixel policy</span> — a threshold of how many pixel defects must be present before the display qualifies for warranty replacement. A single dead pixel may or may not qualify depending on the manufacturer and display tier. Review the manufacturer's ISO 13406-2 compliance documentation for the specific threshold.</p>
+
+
+<!-- ═══ SYMPTOM 7: FLASHING SCREEN ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 07</span>Flashing Screen</h2>
+
+<p>A screen that flashes, flickers, or rapidly alternates between normal display and blackness is both disruptive and potentially damaging to users sensitive to visual stimulation. The cause may be in the cable, the GPU, the display driver, the display hardware, or the refresh rate settings.</p>
+
+<h3 class="section">Causes of Screen Flickering</h3>
+
+<table class="data-table">
+  <thead><tr><th>Cause</th><th>Pattern</th><th>Resolution</th></tr></thead>
+  <tbody>
+    <tr><td>Loose cable connection</td><td>Flickering correlates with movement of cable or desk; may be intermittent</td><td>Reseat cable at both ends; replace cable if damaged</td></tr>
+    <tr><td>Incorrect refresh rate</td><td>Consistent flickering at a specific frequency; may cause headaches</td><td>Set refresh rate to monitor's native rate in Display Settings → Advanced Display</td></tr>
+    <tr><td>Outdated/corrupt GPU driver</td><td>Flickering began after driver update or Windows update</td><td>Roll back driver or reinstall latest from GPU manufacturer's site</td></tr>
+    <tr><td>Failing backlight (LCD)</td><td>Flickering may worsen as display warms up; may correlate with brightness setting</td><td>Replace the backlight or the display</td></tr>
+    <tr><td>GPU hardware failure</td><td>Persistent flickering across all cables and monitors tried</td><td>Replace GPU; test with integrated graphics first</td></tr>
+    <tr><td>Variable refresh rate (VRR) conflict</td><td>Flickering only in specific applications</td><td>Disable FreeSync/G-Sync in display OSD and GPU driver settings</td></tr>
+    <tr><td>Power supply issue</td><td>Flickering correlates with system load (GPU and CPU both active)</td><td>Check PSU wattage; test with known-good PSU</td></tr>
+  </tbody>
+</table>
+
+<div class="process-flow">
+  <div class="flow-title">Flickering Diagnostic Sequence</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Test with a different cable.</strong> The most common cause of flickering is a cable issue. Swap with a known-good cable of the same type.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Test with a different monitor.</strong> If flickering continues with a different monitor, the problem is in the computer (GPU, driver, PSU). If it stops, the original monitor is faulty.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Check refresh rate.</strong> Right-click Desktop → Display Settings → Advanced Display Settings → Refresh Rate. Set to the monitor's rated native refresh rate.</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Update or roll back GPU driver.</strong> Use Device Manager → Display Adapters → right-click GPU → Update Driver (or Roll Back Driver if flickering started after a recent update).</div></div>
+  <div class="flow-step"><span class="flow-num">05</span><div class="flow-text"><strong>Test in Safe Mode.</strong> If the flickering is absent in Safe Mode (which uses basic display drivers), the cause is driver or software related. If it persists in Safe Mode, the cause is hardware.</div></div>
+</div>
+
+
+<!-- ═══ SYMPTOM 8: INCORRECT COLOR DISPLAY ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 08</span>Incorrect Color Display</h2>
+
+<p>Color that appears wrong — too warm, too cool, oversaturated, washed out, or shifted toward one hue — has several possible causes spanning hardware, software, and calibration.</p>
+
+<h3 class="section">Causes of Color Problems</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Damaged VGA cable</span>
+    <span>A VGA cable with a bent or missing pin for one of the three color channels (red, green, blue) will cause that entire color channel to be absent. The image takes on a strong color cast toward the remaining two channels. This is one of the most recognizable color symptoms — distinctly cyan, magenta, or yellow cast.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Incorrect color profile</span>
+    <span>Windows applies color profiles (ICC profiles) to each monitor to calibrate color output. If an incorrect profile is applied — particularly if a profile for a different monitor is loaded — colors may appear significantly off. Check in Color Management (search "color management" in Windows).</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Display OSD color settings</span>
+    <span>The monitor's On-Screen Display (OSD) menu includes color temperature settings (Warm, Cool, Custom), color modes (sRGB, Adobe RGB, Game Mode), and individual RGB gain controls. If these were accidentally changed, colors will appear incorrect. Resetting the OSD to factory defaults often resolves this.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">GPU color settings</span>
+    <span>NVIDIA Control Panel and AMD Radeon Software both include digital vibrance, hue, and saturation controls. If these are set incorrectly, all output from that GPU will have incorrect colors.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Night Light / color filter active</span>
+    <span>Windows Night Light reduces blue light by shifting the display warmer. If unexpectedly enabled, the display appears orange or yellow. Check Windows Settings → System → Display → Night Light.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Failing display hardware</span>
+    <span>A failing LCD panel, particularly aging CCFL backlights, can produce a yellowish or pinkish tint as the backlight degrades. OLED panels with uneven organic compound degradation may show color inconsistencies across the screen.</span>
+  </div>
+</div>
+
+<div class="callout callout-tip">
+  <p class="callout-title">Quick Color Check</p>
+  <p>Display a pure red, green, and blue full-screen image to isolate which channel is affected. Free online tools exist for this. If pure red appears correct but pure green appears too dim, the green channel has an issue — whether from cable, driver, or hardware.</p>
+</div>
+
+
+<!-- ═══ SYMPTOM 9: AUDIO ISSUES ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 09</span>Audio Issues</h2>
+
+<p>Audio issues in the context of display troubleshooting specifically refer to problems where audio is expected to travel through the display connection — most commonly via HDMI or DisplayPort, which carry both video and audio on a single cable. When audio does not come out of a monitor's built-in speakers or a TV connected via HDMI, the cause is often a display-related configuration issue rather than a general audio problem.</p>
+
+<h3 class="section">Why HDMI/DisplayPort Audio Fails</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Wrong audio output device</span>
+    <span>Windows maintains a list of audio output devices. When an HDMI or DisplayPort device is connected, Windows may not automatically switch to it as the default output. The audio plays through the computer's built-in speakers or headphone jack instead of the display's speakers. Fix: right-click the speaker icon in taskbar → Open Sound Settings → Output → select the HDMI/DisplayPort device.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">VGA or DVI connection</span>
+    <span>VGA and DVI do not carry audio. Audio must travel via a separate cable (3.5mm audio to the monitor's audio input, or via USB). If a user connects via VGA expecting audio from the monitor's speakers, they will get no audio through that connection.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Display audio disabled in device</span>
+    <span>Some monitors and TVs have audio output disabled by default. Check the monitor's OSD menu for audio settings and volume level.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">HDMI version mismatch</span>
+    <span>In rare cases, HDMI version incompatibilities between the GPU and the display can cause audio to not transmit correctly even while video works fine.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">GPU driver audio component</span>
+    <span>HDMI and DisplayPort audio on a dedicated GPU is managed by a separate audio driver component (e.g., NVIDIA HD Audio, AMD HDMI Audio). If this driver is corrupt or not installed, no audio will pass through the display connection even though video works. Reinstalling the GPU driver typically reinstalls this component.</span>
+  </div>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus</p>
+  <p>Audio issues related to displays almost always trace back to the <strong>wrong audio output device selected in Windows</strong>, or using a <strong>VGA/DVI connection which carries no audio</strong>. Know that HDMI and DisplayPort carry audio; VGA and DVI do not.</p>
+</div>
+
+
+<!-- ═══ SYMPTOM 10: DIM IMAGE ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 10</span>Dim Image</h2>
+
+<p>A dim image — one that is visible but lacks brightness — has different causes depending on whether the display is a flat panel monitor, a laptop display, or a projector.</p>
+
+<h3 class="section">Dim Image on a Monitor or Laptop</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Brightness setting (software)</span>
+    <span>The most common and simplest cause. The brightness has been turned down in the OS or via the monitor's OSD. On laptops, the function key brightness controls (Fn + brightness key) are frequently accidentally pressed. Check Windows Display Settings → Brightness, and the monitor's OSD brightness setting.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Adaptive brightness</span>
+    <span>Windows and laptop firmware include ambient light sensors that automatically adjust brightness based on room lighting. If the sensor is covered or malfunctioning, it may constantly lower brightness. Disable adaptive brightness in Windows Settings → System → Display → Change brightness automatically.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Failing backlight inverter (older LCD)</span>
+    <span>Older LCD monitors use CCFL (Cold Cathode Fluorescent Lamp) backlights powered by an inverter board. When the inverter fails, the backlight output drops significantly or fails entirely. The image is extremely dim — only visible if you shine a flashlight directly at the screen. This is a hardware failure requiring inverter or backlight replacement.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Failing LED backlight</span>
+    <span>Modern LCD monitors use LED backlights. Individual LEDs can fail over time, causing uneven or overall reduced brightness. This is a hardware failure requiring display replacement in most cases.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Power-saving mode</span>
+    <span>Some monitors have power-saving modes that reduce backlight intensity when no input signal is detected or after a period of inactivity. A slightly dim image that brightens when the mouse is moved confirms this.</span>
+  </div>
+</div>
+
+<div class="callout callout-info">
+  <p class="callout-title">The Flashlight Test</p>
+  <p>If a laptop or monitor appears to have no image at all, shine a flashlight at an angle across the screen surface in a dim room. If you can faintly see the desktop or a login screen, the backlight has failed but the display panel itself is working. This confirms a backlight/inverter failure rather than a GPU or signal issue.</p>
+</div>
+
+<h3 class="section">Dim Image on a Projector</h3>
+
+<ul class="body-list">
+  <li><strong>Aging lamp</strong> — the most common cause; lamp brightness decreases linearly over its lifespan. Check lamp hours in projector menu.</li>
+  <li><strong>Dirty air filter</strong> — clogged filters reduce airflow, causing the projector to reduce lamp intensity to prevent overheating. Clean or replace filters.</li>
+  <li><strong>Eco mode / power-saving mode active</strong> — many projectors have an Eco mode that reduces lamp brightness to extend lamp life. Disable in projector settings for full brightness.</li>
+  <li><strong>Ambient light</strong> — projectors are dramatically affected by room lighting. A bright room washes out the projected image. Dim the room lighting.</li>
+  <li><strong>Projection surface</strong> — projecting onto a dark or non-reflective wall surface loses significant brightness compared to a proper projection screen.</li>
+</ul>
+
+
+<!-- ═══ SYMPTOM 11: INTERMITTENT PROJECTOR SHUTDOWN ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 11</span>Intermittent Projector Shutdown</h2>
+
+<p><span class="key-term">Intermittent projector shutdown</span> refers to a projector that unexpectedly powers off during use — not by user command, but by an automatic protection mechanism or hardware failure. Understanding why projectors shut down automatically is key to resolving this symptom.</p>
+
+<h3 class="section">Causes of Unexpected Shutdown</h3>
+
+<table class="data-table">
+  <thead><tr><th>Cause</th><th>Indicator</th><th>Resolution</th></tr></thead>
+  <tbody>
+    <tr><td>Overheating</td><td>Projector feels hot; fans running at high speed before shutdown; temperature LED flashes</td><td>Clean air filters and air vents; ensure adequate ventilation around projector; check that intake vents are not obstructed</td></tr>
+    <tr><td>Clogged air filter</td><td>Overheating symptom even in cool room; filter visibly dirty</td><td>Clean or replace the air filter; most projectors have user-accessible filters. Reset filter timer in projector menu.</td></tr>
+    <tr><td>Failing lamp</td><td>Shutdown preceded by flickering; lamp LED illuminates after shutdown; lamp hours near rated end-of-life</td><td>Replace the lamp; reset lamp hour counter</td></tr>
+    <tr><td>Power fluctuation</td><td>Shutdown correlates with other electrical events; power strip or extension cord</td><td>Connect projector to UPS or dedicated circuit; replace power strip</td></tr>
+    <tr><td>Lamp age</td><td>Lamp hours exceed rated life; projector powers on but shuts down after 5–10 minutes</td><td>Replace lamp even if not fully burnt out — aged lamps can cause protection shutdowns</td></tr>
+    <tr><td>Internal fan failure</td><td>Overheating with clean filters; one of the cooling fans has failed</td><td>Professional service required; fan replacement</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-tip">
+  <p class="callout-title">Cleaning Projector Filters</p>
+  <p>Projector air filters should be cleaned or replaced per the manufacturer's schedule — typically every 300–500 hours of operation. In dusty environments (construction sites, workshops, older buildings), clean more frequently. A clogged filter is the single most common cause of projector overheating and the most preventable. Always clean filters when servicing a projector that has been running in any dust-generating environment.</p>
+</div>
+
+
+<!-- ═══ SYMPTOM 12: SIZING ISSUES ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 12</span>Sizing Issues</h2>
+
+<p><span class="key-term">Sizing issues</span> occur when the displayed image does not correctly fill the screen — content may appear too large (overscanned, with edges cut off), too small (underscanned, with black borders around the image), or incorrectly proportioned (stretched or squished).</p>
+
+<h3 class="section">Overscan and Underscan</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Overscan</span>
+    <span>The image extends beyond the visible screen area — edges of the desktop or application are cut off. Originally a design feature of CRT televisions (which over-scanned to hide noise at the picture edges), overscan is now a misconfiguration problem when using TVs as PC monitors. The TV is applying its built-in overscan processing to the digital signal from the computer.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Underscan</span>
+    <span>The image does not fill the screen — there are black bars around all four edges. The computer is outputting a smaller effective resolution than the display's native resolution, or the display's scaling is set below 100%.</span>
+  </div>
+</div>
+
+<h3 class="section">Causes and Fixes</h3>
+
+<table class="data-table">
+  <thead><tr><th>Symptom</th><th>Cause</th><th>Fix</th></tr></thead>
+  <tbody>
+    <tr><td>Edges cut off on TV used as monitor</td><td>TV overscan processing active</td><td>In TV settings: find "Picture Size," "Aspect Ratio," or "Screen Fit" → set to "Just Scan," "1:1," or "Screen Fit" (varies by brand). Or adjust in NVIDIA/AMD control panel → Adjust Desktop Size and Position → disable overscan.</td></tr>
+    <tr><td>Black bars on all sides</td><td>Resolution lower than native; display scaling below 100%</td><td>Set resolution to native in Windows Display Settings; check display scaling percentage</td></tr>
+    <tr><td>Image stretched horizontally</td><td>Wrong aspect ratio; 4:3 content on 16:9 display stretched</td><td>Set display to correct aspect ratio in OSD; set resolution to native; check GPU scaling settings</td></tr>
+    <tr><td>Image squished vertically</td><td>Wrong resolution; incorrect aspect ratio setting in display OSD</td><td>Set to native resolution; reset display OSD aspect ratio to Auto</td></tr>
+    <tr><td>Projector image too large/small</td><td>Projector positioned too close or too far from screen</td><td>Physically reposition projector per throw distance spec; use optical zoom if available</td></tr>
+    <tr><td>Projector image trapezoidal</td><td>Projector not level or not perpendicular to screen (keystone)</td><td>Level the projector physically; use keystone correction in projector settings</td></tr>
+  </tbody>
+</table>
+
+
+<!-- ═══ SYMPTOM 13: DISTORTED IMAGE ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 13</span>Distorted Image</h2>
+
+<p>A <span class="key-term">distorted image</span> is one where the visual content appears geometrically wrong — stretched, warped, compressed, or otherwise deformed beyond simple sizing issues. Unlike a fuzzy image (overall softness) or a sizing issue (uniform scaling), distortion affects the geometry of the image in ways that make content look physically wrong.</p>
+
+<h3 class="section">Types of Distortion</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Keystone distortion (projector)</span>
+    <span>The projected image is wider at the top than the bottom (or vice versa), forming a trapezoid instead of a rectangle. Caused by the projector being aimed upward or downward at an angle relative to the screen. Correct by physically leveling the projector and using the keystone adjustment controls in the projector's settings.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Incorrect aspect ratio</span>
+    <span>Content designed for 16:9 displayed in 4:3 appears stretched horizontally. Content designed for 4:3 displayed in 16:9 appears squished. Caused by mismatched resolution settings, display OSD aspect ratio settings, or source material not matching the display's native aspect ratio.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">GPU artifact distortion</span>
+    <span>Graphic corruption artifacts — random colored blocks, tearing, visual noise — represent GPU hardware failure or driver instability rather than display hardware issues. If the same distortion appears on a different monitor connected to the same GPU, the GPU is the source.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Failing display panel</span>
+    <span>Physical damage to the LCD panel — from impact, pressure, or liquid — can cause areas of distortion, color bleed, or pressure marks. A cracked LCD panel typically shows a "spiderweb" fracture pattern with black ink-like spreading from the impact point.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Magnetic interference (legacy CRT)</span>
+    <span>CRT monitors are sensitive to magnetic fields. Nearby speakers, motors, or other electromagnets can cause color and geometry distortion. CRTs have a degauss function to reset the display's magnetic state. LCD and OLED displays are not affected by magnetic interference.</span>
+  </div>
+</div>
+
+<div class="process-flow">
+  <div class="flow-title">Isolating Distortion Source — Monitor vs. GPU</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Connect a different monitor to the same GPU.</strong> If distortion appears on the new monitor too, the GPU or its driver is the source. If the new monitor is clean, the original display is faulty.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Connect the original monitor to a different GPU or computer.</strong> If distortion follows the monitor to the new system, the monitor has a hardware fault. If it disappears, the original GPU is at fault.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Boot to BIOS screen.</strong> If distortion is present in the BIOS setup screen (before any OS or driver loads), the issue is hardware — either cable, GPU hardware, or monitor. Clean BIOS = driver/software issue.</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>For projector keystone:</strong> enter projector settings → Keystone or Geometry Correction → adjust to make the image rectangular. Many modern projectors have automatic keystone correction.</div></div>
+</div>
+
+
+<!-- MASTER REFERENCE -->
+<div class="ch-divider"></div>
+
+<div class="summary-box">
+  <h3>Master Reference — All 13 Symptoms</h3>
+  <div class="summary-grid">
+    <div class="summary-item"><span class="s-sym">Incorrect input source</span><span>Use monitor/projector Input button to select correct port; Win+P on laptop</span></div>
+    <div class="summary-item"><span class="s-sym">Physical cabling issues</span><span>Reseat, inspect, substitute cable; bent VGA pin = missing color channel</span></div>
+    <div class="summary-item"><span class="s-sym">Burnt-out bulb</span><span>Projector only; check lamp LED and hours; replace lamp; reset counter</span></div>
+    <div class="summary-item"><span class="s-sym">Fuzzy image</span><span>Monitor: set to native resolution. Projector: adjust focus and clean lens.</span></div>
+    <div class="summary-item"><span class="s-sym">Display burn-in</span><span>OLED: permanent. LCD: temporary persistence. Use screensaver/auto-off to prevent.</span></div>
+    <div class="summary-item"><span class="s-sym">Dead pixels</span><span>Dead = always black. Stuck = always one color. Hardware defect; check warranty policy.</span></div>
+    <div class="summary-item"><span class="s-sym">Flashing screen</span><span>Check cable → refresh rate → driver; Safe Mode test isolates hardware vs. software</span></div>
+    <div class="summary-item"><span class="s-sym">Incorrect color display</span><span>Check VGA cable pins, color profile, OSD settings, GPU settings, Night Light</span></div>
+    <div class="summary-item"><span class="s-sym">Audio issues</span><span>Set HDMI/DP device as default audio output; VGA/DVI carry no audio</span></div>
+    <div class="summary-item"><span class="s-sym">Dim image</span><span>Monitor: brightness setting or failing backlight. Projector: aging lamp or clogged filter.</span></div>
+    <div class="summary-item"><span class="s-sym">Intermittent projector shutdown</span><span>Overheating from clogged filter or aging lamp — clean filters, check lamp hours</span></div>
+    <div class="summary-item"><span class="s-sym">Sizing issues</span><span>Overscan on TV: enable "Just Scan." Underscan: set native resolution. Projector: reposition.</span></div>
+    <div class="summary-item"><span class="s-sym">Distorted image</span><span>Projector: keystone correction. Monitor: swap displays to isolate GPU vs. panel.</span></div>
+  </div>
+</div>
+
+<!-- TOOLS REFERENCE -->
+<h2 class="chapter"><span class="ch-num">REFERENCE</span>Diagnostic Tools and Settings</h2>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>Windows Settings Paths</h4>
+    <ul>
+      <li><strong>Display Settings</strong> → right-click desktop; resolution, refresh rate, scaling</li>
+      <li><strong>Advanced Display Settings</strong> → refresh rate, color depth</li>
+      <li><strong>Color Management</strong> → search in Start; ICC profiles per display</li>
+      <li><strong>Sound Settings</strong> → right-click speaker icon; default audio output device</li>
+      <li><strong>Night Light</strong> → Settings → System → Display; disable if color appears warm</li>
+      <li><code>Win + P</code> → display mode (Duplicate/Extend/Second screen only)</li>
+      <li><strong>Device Manager</strong> → Display Adapters; update/roll back GPU driver</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Diagnostic Techniques</h4>
+    <ul>
+      <li><strong>Flashlight test</strong> — diagnoses backlight failure on dim/blank LCD</li>
+      <li><strong>Safe Mode boot</strong> — isolates driver vs. hardware flickering</li>
+      <li><strong>BIOS screen check</strong> — distortion in BIOS = hardware; clean BIOS = software</li>
+      <li><strong>Swap monitor</strong> — isolates GPU vs. display as distortion/color source</li>
+      <li><strong>Substitute cable</strong> — definitive test for cable-related symptoms</li>
+      <li><strong>Full-color test screens</strong> — isolate missing color channels</li>
+      <li><strong>Projector OSD menu</strong> — lamp hours, filter timer, keystone, input source</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout callout-exam" style="margin-top: 28px;">
+  <p class="callout-title">Final Exam Reminders</p>
+  <p><strong>No signal / blank screen</strong> → check input source selection first, then cable, then GPU.</p>
+  <p><strong>Fuzzy monitor</strong> → set to native resolution. This is almost always the answer.</p>
+  <p><strong>Burnt-out bulb</strong> → projector-only. Lamp LED red. Replace lamp, reset counter.</p>
+  <p><strong>Burn-in</strong> → OLED is most susceptible. Prevention: screensaver, auto power-off.</p>
+  <p><strong>VGA pin bent/missing</strong> → missing color channel (cyan = no red; magenta = no green; yellow = no blue).</p>
+  <p><strong>No audio via HDMI</strong> → set HDMI device as default audio output in Windows Sound Settings.</p>
+  <p><strong>VGA / DVI carry no audio</strong> — audio requires a separate cable or HDMI/DisplayPort.</p>
+  <p><strong>Dim LCD</strong> → check brightness setting first. Dim with faint image visible = backlight failure.</p>
+  <p><strong>Projector shuts down randomly</strong> → overheating. Clean air filters first.</p>
+  <p><strong>Overscan on TV</strong> → enable "Just Scan" or "Screen Fit" in TV picture settings.</p>
+  <p><strong>Keystone distortion</strong> → projector not perpendicular to screen. Use keystone correction.</p>
+</div>
+
+</div>
+</body>
+</html>

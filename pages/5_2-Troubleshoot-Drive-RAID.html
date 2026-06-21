@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CompTIA A+ 5.2 — Troubleshoot Drive and RAID Issues</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --surface2: #f5f4f0;
+    --border: #e5e2d9;
+    --border2: #d4d0c4;
+    --text: #1a1a18;
+    --muted: #6b6860;
+    --accent: #c0392b;
+    --accent2: #2c3e6b;
+    --accent3: #1a6b3a;
+    --accent4: #b5590a;
+    --accent-light: #fdf2f1;
+    --accent2-light: #f0f2f8;
+    --accent3-light: #f0f8f3;
+    --accent4-light: #fdf5ed;
+    --serif: 'Crimson Pro', Georgia, serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── TOP NAV ── */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .top-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .nav-home {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+  .nav-home:hover { color: var(--accent2); }
+  .nav-home::before {
+    content: '←';
+    font-size: 12px;
+  }
+  .nav-sep {
+    font-size: 12px;
+    color: var(--border2);
+    flex-shrink: 0;
+  }
+  .nav-current {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nav-current strong {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    margin-right: 6px;
+  }
+  .top-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .nav-prev, .nav-next {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 4px 9px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    white-space: nowrap;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .nav-prev:hover, .nav-next:hover {
+    border-color: var(--border2);
+    color: var(--accent2);
+  }
+  .nav-prev::before { content: '← '; }
+  .nav-next::after  { content: ' →'; }
+
+  @media (max-width: 600px) {
+    .top-nav { padding: 0 16px; }
+    .nav-current { display: none; }
+    .nav-sep { display: none; }
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  .page { max-width: 860px; margin: 0 auto; padding: 0 40px 80px; }
+
+  /* HEADER */
+  .book-header {
+    border-bottom: 3px double var(--border2);
+    padding: 56px 0 32px;
+    margin-bottom: 48px;
+  }
+  .book-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .book-eyebrow span {
+    background: var(--accent);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-right: 10px;
+    font-size: 10px;
+  }
+  .book-title {
+    font-family: var(--serif);
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+  .book-subtitle {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .book-subtitle span { display: flex; align-items: center; gap: 6px; }
+  .book-subtitle span::before { content: '·'; color: var(--border2); }
+  .book-subtitle span:first-child::before { display: none; }
+
+  /* HEADINGS */
+  h2.chapter {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 600;
+    margin: 52px 0 6px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    letter-spacing: -0.01em;
+  }
+  h2.chapter .ch-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+    letter-spacing: 0.1em;
+    font-weight: 400;
+  }
+  h3.section {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    margin: 36px 0 12px;
+    letter-spacing: -0.005em;
+  }
+  h3.section::before { content: '§ '; color: var(--muted); font-weight: 300; }
+  h4.subsection {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin: 24px 0 10px;
+  }
+
+  p { margin-bottom: 16px; }
+
+  /* CALLOUTS */
+  .callout {
+    border-left: 3px solid;
+    padding: 14px 20px;
+    margin: 24px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 15.5px;
+  }
+  .callout p { margin-bottom: 6px; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout-title {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px !important;
+  }
+  .callout-exam { border-color: var(--accent); background: var(--accent-light); }
+  .callout-exam .callout-title { color: var(--accent); }
+  .callout-info { border-color: var(--accent2); background: var(--accent2-light); }
+  .callout-info .callout-title { color: var(--accent2); }
+  .callout-tip { border-color: var(--accent3); background: var(--accent3-light); }
+  .callout-tip .callout-title { color: var(--accent3); }
+  .callout-warn { border-color: var(--accent4); background: var(--accent4-light); }
+  .callout-warn .callout-title { color: var(--accent4); }
+
+  /* TABLES */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+    font-family: var(--sans);
+    margin: 16px 0 24px;
+  }
+  .data-table thead th {
+    background: var(--surface2);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 9px 13px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .data-table tbody tr { border-bottom: 1px solid var(--border); }
+  .data-table tbody tr:last-child { border-bottom: none; }
+  .data-table td { padding: 9px 13px; vertical-align: top; line-height: 1.5; }
+  .data-table td:first-child {
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 13.5px;
+    white-space: nowrap;
+  }
+  .data-table tbody tr:hover { background: rgba(0,0,0,0.01); }
+
+  /* PROCESS FLOW */
+  .process-flow {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: var(--sans);
+    font-size: 14px;
+  }
+  .flow-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .flow-step:last-child { border-bottom: none; }
+  .flow-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+    min-width: 24px;
+    padding-top: 2px;
+  }
+  .flow-text { color: var(--text); line-height: 1.55; }
+  .flow-text strong { font-weight: 600; }
+
+  /* DEF LIST */
+  .def-list { margin: 16px 0 24px; }
+  .def-item {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 20px;
+    font-size: 15px;
+  }
+  .def-item:last-child { border-bottom: none; }
+  .def-term {
+    font-family: var(--sans);
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 14px;
+    padding-top: 1px;
+  }
+
+  /* RAID VISUAL */
+  .raid-visual {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+  }
+  .raid-visual h4 {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .raid-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-family: var(--sans);
+    font-size: 13.5px;
+  }
+  .raid-label {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    min-width: 70px;
+  }
+  .disk-block {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 36px;
+    border: 1px solid var(--border2);
+    border-radius: 3px;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text);
+    background: var(--surface2);
+  }
+  .disk-block.stripe { background: #e8f0fe; border-color: #4a6fa5; color: #2c3e6b; }
+  .disk-block.mirror { background: #e8f4ec; border-color: #2a7a42; color: #1a5c30; }
+  .disk-block.parity { background: #fff3e0; border-color: #c07820; color: #7a4a10; }
+  .disk-block.dead  { background: #fde8e8; border-color: var(--accent); color: var(--accent); text-decoration: line-through; }
+  .raid-note { font-size: 13px; color: var(--muted); margin-left: 6px; }
+  .disk-arrow { color: var(--border2); font-size: 16px; }
+
+  /* SMART TABLE */
+  .smart-table td:first-child { color: var(--accent4); font-family: var(--mono); font-size: 12px; }
+
+  /* GRID CARDS */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 16px 18px;
+  }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 10px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card ul { list-style: none; font-family: var(--sans); font-size: 13.5px; }
+  .card ul li {
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .card ul li:last-child { border-bottom: none; }
+  .card ul li strong { color: var(--text); }
+
+  /* CODE */
+  code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: var(--accent);
+  }
+  .cmd-block {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 5px;
+    padding: 16px 20px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: #79c0ff;
+    margin: 16px 0;
+    overflow-x: auto;
+    line-height: 1.7;
+  }
+  .cmd-block .cmt { color: #6e7681; }
+  .cmd-block .ok { color: #56d364; }
+  .cmd-block .err { color: #f85149; }
+  .cmd-block .hl { color: #e3b341; }
+
+  /* KEY TERM */
+  .key-term { font-style: italic; font-weight: 500; color: var(--accent2); }
+
+  /* SUMMARY BOX */
+  .summary-box {
+    background: var(--text);
+    color: #f0ede6;
+    border-radius: 6px;
+    padding: 28px 32px;
+    margin: 40px 0;
+  }
+  .summary-box h3 {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 18px;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 32px;
+  }
+  .summary-item {
+    font-family: var(--sans);
+    font-size: 13.5px;
+    color: #c4bfb4;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .summary-item .s-sym {
+    color: #fff;
+    font-weight: 600;
+    min-width: 175px;
+    line-height: 1.4;
+  }
+
+  .ch-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--border2), transparent);
+    margin: 48px 0;
+  }
+
+  ul.body-list {
+    list-style: none;
+    font-family: var(--sans);
+    font-size: 15px;
+    padding: 0;
+    margin: 12px 0 20px;
+  }
+  ul.body-list li {
+    padding: 5px 0 5px 18px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  ul.body-list li:last-child { border-bottom: none; }
+  ul.body-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--border2);
+    font-size: 12px;
+  }
+  ul.body-list li strong { color: var(--text); }
+
+  @media (max-width: 680px) {
+    .page { padding: 0 20px 60px; }
+    .summary-grid, .card-grid { grid-template-columns: 1fr; }
+    .def-item { grid-template-columns: 1fr; gap: 4px; }
+    .raid-row { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV — update href values to match your actual file names -->
+<nav class="top-nav">
+  <div class="top-nav-left">
+    <a class="nav-home" href="../index.html">Study Guide</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current"><strong>5.2</strong> Troubleshooting Drive and RAID Issues</span>
+  </div>
+  <div class="top-nav-right">
+    <!-- Point these to the adjacent section files, or remove if not applicable -->
+    <a class="nav-prev" href="./5_1-Troubleshoot-MOBO-RAM-CPU-PSU.html">5.1</a>
+    <a class="nav-next" href="./5_3-Troubleshoot-Video-Projector-Display.html">5.3</a>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- HEADER -->
+<div class="book-header">
+  <div class="book-eyebrow">
+    <span>5.2</span>
+    CompTIA A+ · Core 1 (220-1201) · Domain 5 — Hardware & Network Troubleshooting
+  </div>
+  <h1 class="book-title">Troubleshooting Drive<br>and RAID Issues</h1>
+  <div class="book-subtitle">
+    <span>Objective 5.2</span>
+    <span>Domain weight: 28%</span>
+    <span>13 testable symptoms</span>
+  </div>
+</div>
+
+<!-- INTRO -->
+<h2 class="chapter"><span class="ch-num">OVERVIEW</span>Introduction to Storage Troubleshooting</h2>
+
+<p>Storage drives — hard disk drives (HDDs), solid-state drives (SSDs), and NVMe drives — are among the most failure-prone components in a computer. Unlike CPU or RAM failures which can sometimes be resolved by reseating or replacing a module, a drive failure often means permanent, unrecoverable data loss. This makes storage troubleshooting one of the highest-stakes disciplines in IT support.</p>
+
+<p>Objective 5.2 requires you to recognize thirteen distinct symptoms of drive and RAID failure, understand their causes, know how to diagnose them, and understand the appropriate response — including when to prioritize data recovery over repair. This section covers all thirteen symptoms in depth, along with the foundational knowledge of RAID levels needed to interpret RAID-specific symptoms.</p>
+
+<div class="callout callout-warn">
+  <p class="callout-title">Data First — Always</p>
+  <p>The cardinal rule of storage troubleshooting: <strong>back up or recover data before performing any repair actions.</strong> Running tools like <code>chkdsk</code> on a physically failing drive, or attempting a rebuild on a degraded RAID without a backup, can accelerate data loss. Identify the scope of the problem first. Recover data second. Repair third.</p>
+</div>
+
+<!-- STORAGE FUNDAMENTALS -->
+<h2 class="chapter"><span class="ch-num">FOUNDATION</span>Storage Technologies Overview</h2>
+
+<p>Before diagnosing symptoms, understanding the fundamental differences between storage technologies is essential — because many symptoms are technology-specific.</p>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">HDD (Hard Disk Drive)</span>
+    <span>Mechanical device with spinning platters and a moving read/write head on an actuator arm. Data is read magnetically. Susceptible to physical shock, vibration, and mechanical wear. Produces audible noise during normal operation. Fails mechanically (head crash, motor failure) or magnetically (bad sectors).</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">SATA SSD</span>
+    <span>No moving parts. Stores data in NAND flash memory cells. Silent, faster than HDD, more shock-resistant. Fails electronically — the controller chip, NAND cells, or onboard cache can fail. Does not produce warning sounds. Often fails suddenly without the gradual degradation pattern of HDDs.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">NVMe SSD (M.2 / PCIe)</span>
+    <span>Same NAND flash technology as SATA SSD but connected via PCIe lanes directly to the CPU, bypassing the SATA controller. Dramatically faster than SATA SSD. Failure modes are similar to SATA SSD: electronic/controller failure, NAND wear, or heat-related failure (NVMe drives can overheat in systems without proper airflow).</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">RAID Array</span>
+    <span>Multiple physical drives combined by a RAID controller (hardware or software) to appear as one logical volume. Provides redundancy, performance, or both depending on RAID level. A RAID is not a backup — it protects against drive failure, not accidental deletion, ransomware, or controller failure.</span>
+  </div>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus — HDD vs SSD Symptoms</p>
+  <p>Many symptoms in this objective (grinding, clicking, audible alarms) are <strong>HDD-specific</strong>. SSDs do not produce mechanical sounds. When the exam describes audible symptoms from a drive, the drive in question is always an HDD. Silent failures (missing drive, S.M.A.R.T. errors, data corruption) can occur with either technology.</p>
+</div>
+
+<!-- RAID FOUNDATION -->
+<h2 class="chapter"><span class="ch-num">FOUNDATION</span>RAID Levels — Deep Reference</h2>
+
+<p>Several symptoms in this objective (RAID failure, array missing, audible alarms) require a solid understanding of how each RAID level works, how many drive failures it can survive, and what happens when it fails. This section provides a complete reference.</p>
+
+<h3 class="section">RAID Levels Compared</h3>
+
+<table class="data-table">
+  <thead><tr><th>Level</th><th>Min Drives</th><th>Fault Tolerance</th><th>Usable Capacity</th><th>Performance</th><th>How it works</th></tr></thead>
+  <tbody>
+    <tr><td>RAID 0</td><td>2</td><td>None — 0 drive failures</td><td>100% of all drives</td><td>Fastest reads/writes</td><td>Striping only. Data split across all drives. Zero redundancy. One drive fails = all data lost.</td></tr>
+    <tr><td>RAID 1</td><td>2</td><td>1 drive failure</td><td>50% (size of one drive)</td><td>Read improved; writes same</td><td>Full mirror. Every write goes to both drives simultaneously. Either drive can serve reads.</td></tr>
+    <tr><td>RAID 5</td><td>3</td><td>1 drive failure</td><td>N-1 drives</td><td>Good read; write penalty</td><td>Striping with distributed parity. Parity rotates across all drives. One failed drive can be rebuilt from parity + remaining data.</td></tr>
+    <tr><td>RAID 6</td><td>4</td><td>2 drive failures</td><td>N-2 drives</td><td>Good read; larger write penalty</td><td>Striping with dual distributed parity. Two separate parity sets. Can survive any two simultaneous drive failures.</td></tr>
+    <tr><td>RAID 10</td><td>4</td><td>1 per mirrored pair</td><td>50%</td><td>Best overall</td><td>Stripe of mirrors (RAID 1+0). Data striped across mirrored pairs. Very high fault tolerance if failures are in different pairs.</td></tr>
+  </tbody>
+</table>
+
+<h3 class="section">RAID Visualized</h3>
+
+<div class="raid-visual">
+  <h4>Data Layout by RAID Level</h4>
+
+  <div class="raid-row">
+    <span class="raid-label">RAID 0</span>
+    <div class="disk-block stripe">A1</div>
+    <div class="disk-block stripe">A2</div>
+    <div class="disk-block stripe">A3</div>
+    <div class="disk-block stripe">A4</div>
+    <span class="raid-note">← Striped. Fast. Zero fault tolerance.</span>
+  </div>
+
+  <div class="raid-row">
+    <span class="raid-label">RAID 1</span>
+    <div class="disk-block mirror">DATA</div>
+    <div class="disk-block mirror">DATA</div>
+    <span class="raid-note">← Exact mirror. Either drive can fail.</span>
+  </div>
+
+  <div class="raid-row">
+    <span class="raid-label">RAID 5</span>
+    <div class="disk-block stripe">A1</div>
+    <div class="disk-block stripe">A2</div>
+    <div class="disk-block parity">P1</div>
+    <div class="disk-block stripe">A3</div>
+    <div class="disk-block parity">P2</div>
+    <div class="disk-block stripe">A4</div>
+    <span class="raid-note">← Parity rotates. 1 drive can fail.</span>
+  </div>
+
+  <div class="raid-row">
+    <span class="raid-label">RAID 6</span>
+    <div class="disk-block stripe">A1</div>
+    <div class="disk-block parity">P1</div>
+    <div class="disk-block parity">Q1</div>
+    <div class="disk-block stripe">A2</div>
+    <span class="raid-note">← Dual parity. 2 drives can fail.</span>
+  </div>
+
+  <div class="raid-row">
+    <span class="raid-label">RAID 10</span>
+    <div class="disk-block mirror">A1</div>
+    <div class="disk-block mirror">A1</div>
+    <span class="disk-arrow">+</span>
+    <div class="disk-block mirror">A2</div>
+    <div class="disk-block mirror">A2</div>
+    <span class="raid-note">← Mirrored pairs, then striped.</span>
+  </div>
+
+  <div class="raid-row" style="margin-top: 12px;">
+    <span class="raid-label">FAILED</span>
+    <div class="disk-block stripe">A1</div>
+    <div class="disk-block dead">DEAD</div>
+    <div class="disk-block parity">P1</div>
+    <span class="raid-note">← RAID 5 degraded — still running, but vulnerable.</span>
+  </div>
+</div>
+
+<h3 class="section">RAID States</h3>
+
+<p>A RAID array can exist in several states. Understanding these states is essential for interpreting RAID-related symptoms on the exam.</p>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Optimal / Normal</span>
+    <span>All drives present and healthy. The array is operating at full performance and full redundancy.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Degraded</span>
+    <span>One (or in RAID 6, two) drives have failed. The array is still functional and accessible, but redundancy is reduced or gone. Performance is degraded. A second failure at this point (in RAID 5) would cause total data loss. This state requires immediate attention.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Rebuilding</span>
+    <span>A replacement drive has been inserted and the controller is regenerating the missing data from parity or mirror data. The array is accessible but performance is severely degraded during rebuilding. Rebuilds can take hours to days depending on drive size.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Failed / Offline</span>
+    <span>Too many drives have failed for the RAID level to tolerate. The array is offline and data is inaccessible without recovery tools. For RAID 5, this means 2+ drive failures; for RAID 0, any single failure.</span>
+  </div>
+</div>
+
+<div class="callout callout-warn">
+  <p class="callout-title">Critical Concept — RAID Is Not a Backup</p>
+  <p>RAID protects against <em>drive hardware failure only</em>. It does not protect against: accidental file deletion (deleted from one mirror = deleted from both), ransomware encryption (encrypts all drives in the array simultaneously), controller failure (if the RAID controller fails, all drives may be unreadable by a different controller), fire/flood/theft (all drives physically co-located), or software corruption. A proper backup strategy follows the <strong>3-2-1 rule</strong>: 3 copies, on 2 different media types, with 1 offsite or offline.</p>
+</div>
+
+
+<!-- ═══ SYMPTOM 1: LED INDICATORS ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 01</span>LED Status Indicators</h2>
+
+<p><span class="key-term">LED status indicators</span> on drives, RAID controllers, and server hardware provide a real-time visual representation of drive health. Understanding what each color and pattern means is essential for quickly assessing a situation without using software tools — particularly in server environments where drives are hot-swappable.</p>
+
+<h3 class="section">Common LED Patterns</h3>
+
+<table class="data-table">
+  <thead><tr><th>LED Color / Pattern</th><th>Meaning</th><th>Action Required</th></tr></thead>
+  <tbody>
+    <tr><td>Solid green</td><td>Drive healthy and operational</td><td>None — normal</td></tr>
+    <tr><td>Blinking green</td><td>Drive activity (reads/writes occurring)</td><td>None — normal activity</td></tr>
+    <tr><td>Solid amber / yellow</td><td>Drive has failed or is in a fault state</td><td>Replace the drive immediately</td></tr>
+    <tr><td>Blinking amber</td><td>Drive is predictively failing (S.M.A.R.T. warning) or array is rebuilding</td><td>Back up data; prepare replacement</td></tr>
+    <tr><td>Blinking green + amber (alternating)</td><td>RAID rebuild in progress on this drive</td><td>Do not remove the drive; wait for rebuild</td></tr>
+    <tr><td>No LED / dark</td><td>Drive not detected, not seated, or no power</td><td>Reseat drive; check power and data cables</td></tr>
+    <tr><td>Red</td><td>Drive failed (some systems use red instead of amber)</td><td>Replace the drive</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-info">
+  <p class="callout-title">Context Note</p>
+  <p>LED behavior is not fully standardized across manufacturers. Dell, HP, and Lenovo server hardware all use slightly different color schemes. The exam tests the general concept — amber/yellow = fault/warning, green = healthy — rather than any specific vendor's implementation. Always consult the system documentation for precise meanings.</p>
+</div>
+
+<h3 class="section">Drive Activity vs. Drive Health LEDs</h3>
+
+<p>Many drives and systems have two separate LEDs: one for <strong>activity</strong> (read/write operations — expected to blink frequently) and one for <strong>health status</strong>. A common mistake is mistaking a solid health LED for a drive that is "on" but not being used. Distinguish between them: sustained lack of any activity LED during a period when the drive should be active (like during a system boot or large file copy) can indicate a problem.</p>
+
+
+<!-- ═══ SYMPTOM 2: GRINDING NOISES ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 02</span>Grinding Noises</h2>
+
+<p>A grinding noise from a computer's storage system is one of the most urgent symptoms a technician can encounter. Unlike the normal operational sounds of an HDD (quiet spinning, occasional soft seek sounds), grinding indicates mechanical destruction occurring inside the drive in real time.</p>
+
+<h3 class="section">What Causes Grinding</h3>
+
+<p>Inside an HDD, the read/write heads float nanometers above the spinning platters on a cushion of air — they never physically touch during normal operation. This is called the <span class="key-term">head gap</span>. When the head crashes — meaning it physically contacts the platter surface — the result is catastrophic. The head scrapes the magnetic coating off the platter, destroying both the head and the data.</p>
+
+<p>A <span class="key-term">head crash</span> produces a distinctive grinding or scraping sound. Other causes of grinding include:</p>
+
+<ul class="body-list">
+  <li><strong>Failed spindle motor bearing</strong> — the motor that spins the platter develops a worn bearing, causing metal-on-metal grinding as it rotates</li>
+  <li><strong>Debris inside the drive</strong> — contamination from a dropped drive or failed head coating enters the air gap</li>
+  <li><strong>Actuator arm failure</strong> — the arm that positions the read/write head becomes stuck or damaged</li>
+</ul>
+
+<div class="callout callout-warn">
+  <p class="callout-title">Immediate Response Protocol</p>
+  <p><strong>Power off the system immediately.</strong> Every additional second the drive spins causes more physical damage and more data loss. Do not attempt to run diagnostics on a grinding drive. Do not attempt <code>chkdsk</code>. Contact a data recovery specialist if the data is critical — physical recovery requires a cleanroom environment and is expensive. If the drive is already backed up, simply replace it.</p>
+</div>
+
+<p>It bears repeating that <strong>SSDs and NVMe drives cannot grind</strong> — they have no moving parts. A grinding sound is unambiguously an HDD symptom. If a system appears to make a grinding sound but contains only SSDs, investigate fans and other mechanical components.</p>
+
+
+<!-- ═══ SYMPTOM 3: CLICKING SOUNDS ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 03</span>Clicking Sounds</h2>
+
+<p>Clicking sounds from an HDD are a well-known warning sign and should be treated with the same urgency as grinding. The most infamous pattern — a repeated clicking with brief pauses — is colloquially known as the <span class="key-term">click of death</span>.</p>
+
+<h3 class="section">Causes of HDD Clicking</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Click of death</span>
+    <span>The read/write head attempts to park (return to the landing zone), fails to read the servo positioning data, and resets repeatedly. Each reset cycle produces a click. This is a sign that the head assembly or the positioning servo data on the drive is damaged. Data recovery is often still possible at this stage if acted upon quickly.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Actuator seeking</span>
+    <span>Normal HDDs produce soft clicking sounds as the actuator arm moves the head between tracks during heavy read/write activity. This is normal. The click of death is distinguished by its regularity — it repeats at consistent intervals (typically 2–5 seconds) even when no data access is occurring.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">PCB failure</span>
+    <span>A failed circuit board on the bottom of the drive can prevent it from properly initializing, causing the head to repeatedly attempt and fail to seek — producing clicking.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Insufficient power</span>
+    <span>Underpowered HDDs (insufficient +12V from the PSU) may click as they attempt to spin up but fail to reach full rotational speed. This can occur when a PSU is overloaded or failing.</span>
+  </div>
+</div>
+
+<div class="process-flow">
+  <div class="flow-title">Response — Clicking HDD</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Stop using the drive immediately.</strong> Any read/write activity on a clicking drive risks accelerating physical damage.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Attempt a data backup if the drive is still accessible.</strong> Use imaging tools like <code>ddrescue</code> (Linux) or <strong>Recuva</strong> to copy data off the drive. Work quickly.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Check power connections.</strong> If clicking began after adding new drives or a hardware change, verify the PSU can supply adequate power. Try a different SATA power connector.</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Do not freeze the drive.</strong> The "freeze the drive" trick is a myth — it can cause condensation inside the drive and cause more damage. Do not attempt this.</div></div>
+  <div class="flow-step"><span class="flow-num">05</span><div class="flow-text"><strong>If data is critical and drive is inaccessible, engage a professional data recovery service.</strong> Services like Ontrack or DriveSavers have cleanroom facilities for physical recovery.</div></div>
+</div>
+
+
+<!-- ═══ SYMPTOM 4: BOOTABLE DEVICE NOT FOUND ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 04</span>Bootable Device Not Found</h2>
+
+<p>When a system powers on and the firmware cannot locate a valid bootable device, it displays an error message before handing off to the OS. Common messages include: <em>"No boot device found"</em>, <em>"Boot device not found"</em>, <em>"Reboot and select proper boot device"</em>, <em>"NTLDR is missing"</em>, or <em>"Operating system not found."</em></p>
+
+<p>This symptom has a wide range of causes — from a simple misconfigured boot order to a completely failed drive — and must be diagnosed methodically.</p>
+
+<h3 class="section">Cause Hierarchy — Most to Least Likely</h3>
+
+<table class="data-table">
+  <thead><tr><th>Cause</th><th>Why It Happens</th><th>How to Verify</th></tr></thead>
+  <tbody>
+    <tr><td>Wrong boot device in BIOS</td><td>Boot order set to USB or optical drive first; empty drive is selected</td><td>Enter BIOS/UEFI; verify boot order lists the OS drive first</td></tr>
+    <tr><td>Drive not detected by BIOS</td><td>Loose cable, failed drive, or failed SATA port</td><td>Check BIOS storage screen — is the drive listed?</td></tr>
+    <tr><td>Corrupt bootloader</td><td>Windows boot files (BCD/MBR) are damaged; drive is healthy but unbootable</td><td>Drive visible in BIOS; boot into WinRE and run Startup Repair or <code>bootrec</code></td></tr>
+    <tr><td>MBR/GPT corruption</td><td>Master Boot Record or GUID Partition Table is damaged</td><td>Boot from USB; use <code>diskpart</code> to inspect partition table</td></tr>
+    <tr><td>Drive hardware failure</td><td>Drive has failed and cannot be read at all</td><td>Drive absent from BIOS; no activity LED; listen for sounds</td></tr>
+    <tr><td>Secure Boot conflict</td><td>Non-signed bootloader blocked by UEFI Secure Boot</td><td>Disable Secure Boot in UEFI temporarily and test</td></tr>
+    <tr><td>SATA mode mismatch</td><td>Drive configured as AHCI in BIOS but OS installed in IDE mode (or vice versa)</td><td>BIOS SATA controller mode setting</td></tr>
+  </tbody>
+</table>
+
+<h3 class="section">Windows Boot Repair Tools</h3>
+
+<div class="cmd-block">
+<span class="cmt"># Boot from Windows installation USB → Repair your computer → Command Prompt</span>
+
+<span class="hl">bootrec /fixmbr</span>      <span class="cmt"># Rewrites the Master Boot Record</span>
+<span class="hl">bootrec /fixboot</span>     <span class="cmt"># Rewrites the boot sector of the active partition</span>
+<span class="hl">bootrec /rebuildbcd</span>  <span class="cmt"># Scans all drives and rebuilds the Boot Configuration Data</span>
+<span class="hl">bootrec /scanos</span>      <span class="cmt"># Scans for Windows installations not in the BCD</span>
+
+<span class="cmt"># If the above fail, try Startup Repair from WinRE (automated)</span>
+<span class="cmt"># Or use diskpart to inspect partition table:</span>
+<span class="hl">diskpart</span>
+<span class="ok">DISKPART&gt;</span> list disk
+<span class="ok">DISKPART&gt;</span> select disk 0
+<span class="ok">DISKPART&gt;</span> list partition
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus</p>
+  <p>The exam frequently presents "bootable device not found" as the result of either a misconfigured BIOS boot order (most common, simplest fix) or a corrupt bootloader. The first step is always to <strong>check the BIOS boot order</strong>. If the boot order is correct and the drive is visible in BIOS, the next step is <strong>Startup Repair from Windows Recovery Environment (WinRE)</strong>.</p>
+</div>
+
+
+<!-- ═══ SYMPTOM 5: DATA LOSS / CORRUPTION ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 05</span>Data Loss / Corruption</h2>
+
+<p>Data loss refers to files that disappear entirely. Data corruption refers to files that are present but contain incorrect, unreadable, or garbled content. Both symptoms can originate from the same underlying causes — the difference is simply whether the file system still has a reference to the data (corruption) or has lost it entirely (loss).</p>
+
+<h3 class="section">Causes of Data Loss and Corruption</h3>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>Physical / Hardware Causes</h4>
+    <ul>
+      <li><strong>Bad sectors (HDD)</strong> — physical areas of the platter that can no longer reliably store data</li>
+      <li><strong>NAND cell wear (SSD)</strong> — flash cells that have exceeded their write endurance</li>
+      <li><strong>Sudden power loss</strong> — write operations interrupted mid-way leave files in partial state</li>
+      <li><strong>Head crash</strong> — physical destruction of platter surface and data</li>
+      <li><strong>Controller failure</strong> — SSD/NVMe controller fails, making data inaccessible</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Logical / Software Causes</h4>
+    <ul>
+      <li><strong>File system corruption</strong> — MFT (NTFS Master File Table) or FAT damaged</li>
+      <li><strong>Improper ejection</strong> — removing a USB drive mid-write corrupts the file system</li>
+      <li><strong>Malware / ransomware</strong> — deliberately corrupts or encrypts files</li>
+      <li><strong>Accidental deletion</strong> — user error; recoverable with tools if not overwritten</li>
+      <li><strong>Partition table corruption</strong> — entire partitions become inaccessible</li>
+    </ul>
+  </div>
+</div>
+
+<h3 class="section">Diagnosing and Recovering Data</h3>
+
+<div class="process-flow">
+  <div class="flow-title">Data Loss / Corruption Response</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Stop writing to the drive.</strong> Every new write operation overwrites sectors that may contain recoverable deleted data. If data recovery is needed, do not install software, save files, or even boot from the affected drive.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Run CHKDSK for logical errors.</strong> <code>chkdsk C: /f /r</code> — the <code>/f</code> flag fixes file system errors; <code>/r</code> locates bad sectors and attempts to recover readable data. Only use on a drive that is not making physical failure sounds.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Check S.M.A.R.T. data.</strong> Use CrystalDiskInfo to read the drive's health. Reallocated sectors, pending sectors, or uncorrectable errors indicate physical damage.</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Run SFC for OS file corruption.</strong> <code>sfc /scannow</code> checks and repairs corrupted Windows system files — distinct from drive-level corruption.</div></div>
+  <div class="flow-step"><span class="flow-num">05</span><div class="flow-text"><strong>Use data recovery software for deleted files.</strong> Tools like <strong>Recuva</strong> (Windows) or <strong>PhotoRec</strong> (cross-platform) can recover recently deleted files if the sectors have not been overwritten.</div></div>
+  <div class="flow-step"><span class="flow-num">06</span><div class="flow-text"><strong>Restore from backup.</strong> If the data cannot be recovered and a backup exists, restore from the most recent clean backup. Document what was lost between the last backup and the failure event.</div></div>
+</div>
+
+
+<!-- ═══ SYMPTOM 6: RAID FAILURE ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 06</span>RAID Failure</h2>
+
+<p>RAID failure occurs when enough drives in an array have failed to exceed the array's fault tolerance. The result depends on the RAID level and the number of failed drives. A <span class="key-term">RAID failure</span> can mean the array is degraded (still running, but at risk) or completely offline (data inaccessible).</p>
+
+<h3 class="section">Failure Thresholds by RAID Level</h3>
+
+<table class="data-table">
+  <thead><tr><th>RAID Level</th><th>Degraded at</th><th>Failed (data inaccessible) at</th><th>Behavior during degraded state</th></tr></thead>
+  <tbody>
+    <tr><td>RAID 0</td><td>N/A — no redundancy</td><td>Any 1 drive failure</td><td>Immediately offline; all data lost</td></tr>
+    <tr><td>RAID 1</td><td>1 drive failure</td><td>Both drives fail</td><td>Runs on surviving drive; can rebuild to new drive</td></tr>
+    <tr><td>RAID 5</td><td>1 drive failure</td><td>2+ drive failures</td><td>Continues running; second failure = total data loss</td></tr>
+    <tr><td>RAID 6</td><td>1–2 drive failures</td><td>3+ drive failures</td><td>Continues running through two failures; second failure still degraded</td></tr>
+    <tr><td>RAID 10</td><td>1 drive per pair</td><td>Both drives in same pair fail</td><td>Continues if failures are in different pairs; fails if both drives in one pair fail</td></tr>
+  </tbody>
+</table>
+
+<h3 class="section">RAID Rebuild Process</h3>
+
+<p>When a failed drive in a redundant RAID is replaced, the controller initiates a <span class="key-term">rebuild</span> — the process of regenerating the missing data from the remaining drives' parity or mirror data onto the new drive. This process is critical to understand for the exam.</p>
+
+<ul class="body-list">
+  <li><strong>The array is accessible during rebuild</strong> but performance is severely degraded — all drives are under heavy read load</li>
+  <li><strong>Rebuild time scales with drive size</strong> — a 4TB RAID 5 rebuild can take 24+ hours</li>
+  <li><strong>RAID 5 is vulnerable during rebuild</strong> — if a second drive fails during the rebuild of the first, all data is lost. This is called a <span class="key-term">double-fault scenario</span> and is a well-known risk, especially in large-capacity arrays</li>
+  <li><strong>Do not interrupt a rebuild</strong> — removing a drive during rebuild can corrupt the array</li>
+  <li><strong>Back up before rebuilding</strong> whenever possible — if a rebuild fails, the array can be left in an unrecoverable state</li>
+</ul>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus</p>
+  <p>The exam will test whether you understand what happens when specific drives in specific RAID levels fail. Key facts: <strong>RAID 0 has no fault tolerance</strong> — any single failure destroys all data. <strong>RAID 5 needs exactly 3+ drives and can only tolerate 1 failure.</strong> A second failure during rebuild is a common scenario question. <strong>RAID 10 can tolerate multiple failures</strong> as long as they are not both from the same mirrored pair.</p>
+</div>
+
+
+<!-- ═══ SYMPTOM 7: S.M.A.R.T. FAILURE ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 07</span>S.M.A.R.T. Failure</h2>
+
+<p><span class="key-term">S.M.A.R.T.</span> (Self-Monitoring, Analysis, and Reporting Technology) is a monitoring system built into most modern HDDs, SSDs, and NVMe drives. The drive's firmware continuously monitors dozens of internal health parameters and stores their values. These values can be read by the OS or diagnostic tools to predict and detect drive failures before they become catastrophic.</p>
+
+<h3 class="section">How S.M.A.R.T. Works</h3>
+
+<p>Each S.M.A.R.T. attribute has a current value, a worst-ever value, a threshold, and a raw value. When the current value falls below the threshold for a critical attribute, the drive reports a S.M.A.R.T. failure — a prediction that the drive is likely to fail soon. The system BIOS may display a warning at boot: <em>"S.M.A.R.T. Failure Predicted on Hard Disk. Immediately back up your data and replace the hard disk drive."</em></p>
+
+<h3 class="section">Critical S.M.A.R.T. Attributes</h3>
+
+<table class="data-table smart-table">
+  <thead><tr><th>Attribute ID</th><th>Name</th><th>What It Measures</th><th>Significance</th></tr></thead>
+  <tbody>
+    <tr><td>0x05 (5)</td><td>Reallocated Sectors Count</td><td>Number of bad sectors that have been remapped to spare sectors</td><td>Critical — any non-zero value indicates physical platter damage; rising count = imminent failure</td></tr>
+    <tr><td>0xC5 (197)</td><td>Current Pending Sectors</td><td>Sectors flagged as unstable, waiting to be remapped</td><td>Critical — these sectors cannot be reliably read right now; data loss may occur on next read</td></tr>
+    <tr><td>0xC6 (198)</td><td>Uncorrectable Sector Count</td><td>Sectors that could not be read after multiple attempts</td><td>Critical — data in these sectors is already lost; drive replacement urgent</td></tr>
+    <tr><td>0x01 (1)</td><td>Read Error Rate</td><td>Frequency of errors when reading data from the platter</td><td>Important — rising rate indicates head or platter degradation</td></tr>
+    <tr><td>0xC2 (194)</td><td>Temperature</td><td>Current drive operating temperature in Celsius</td><td>Above 55°C consistently = thermal stress reducing drive lifespan</td></tr>
+    <tr><td>0x09 (9)</td><td>Power-On Hours</td><td>Total hours the drive has been powered on</td><td>Context — drives beyond 40,000–50,000 hours are aging; factor in with other attributes</td></tr>
+    <tr><td>0xF1 (241)</td><td>Total LBAs Written (SSD)</td><td>Total data written to the SSD over its lifetime</td><td>SSD-specific — compare to manufacturer's endurance rating (TBW)</td></tr>
+  </tbody>
+</table>
+
+<h3 class="section">Reading S.M.A.R.T. Data</h3>
+
+<div class="cmd-block">
+<span class="cmt"># Windows — CrystalDiskInfo (GUI tool, most user-friendly)</span>
+<span class="cmt"># Shows color-coded health: Good (blue), Caution (yellow), Bad (red)</span>
+
+<span class="cmt"># Windows Command Line</span>
+<span class="hl">wmic diskdrive get status</span>
+<span class="cmt"># Returns: OK, Pred Fail, Error, Unknown</span>
+
+<span class="cmt"># Linux</span>
+<span class="hl">sudo smartctl -a /dev/sda</span>          <span class="cmt"># Full S.M.A.R.T. report</span>
+<span class="hl">sudo smartctl -H /dev/sda</span>          <span class="cmt"># Health status only</span>
+
+<span class="cmt"># Example healthy output</span>
+<span class="ok">SMART overall-health self-assessment test result: PASSED</span>
+
+<span class="cmt"># Example failing output</span>
+<span class="err">SMART overall-health self-assessment test result: FAILED!</span>
+<span class="err">Drive failure expected in less than 24 hours. SAVE ALL DATA.</span>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus</p>
+  <p>A S.M.A.R.T. failure message at POST is a <strong>prediction</strong>, not a current failure — the drive is still working but is forecasted to fail. The correct response is: <strong>immediately back up all data, then replace the drive.</strong> Do not ignore the warning. Do not simply run CHKDSK. Back up data first, then replace the drive.</p>
+</div>
+
+
+<!-- ═══ SYMPTOM 8: EXTENDED READ/WRITE TIMES ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 08</span>Extended Read/Write Times</h2>
+
+<p>When read or write operations that previously completed quickly begin taking significantly longer, the drive is experiencing one of several conditions — all of which warrant investigation. <span class="key-term">Extended read/write times</span> are one of the earliest and most actionable warning signs of impending drive failure.</p>
+
+<h3 class="section">Causes by Drive Type</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">HDD — bad sectors</span>
+    <span>When the drive encounters a bad sector, the firmware makes multiple read attempts before marking the sector as unreadable. Each retry cycle adds seconds to the read time. A file that crosses multiple bad sectors can take minutes to read instead of milliseconds. This causes "application hang" symptoms where a program appears frozen while waiting for the drive.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">HDD — fragmentation</span>
+    <span>Severe file system fragmentation forces the read/write head to physically seek across many different areas of the platter to read one logical file, increasing access time. Less common as a cause of suddenly extended times (fragmentation develops gradually), but relevant for HDDs that have never been defragmented.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">SSD — NAND wear</span>
+    <span>As SSD NAND cells reach the end of their write endurance, error correction overhead increases. The controller performs more ECC (error-correcting code) operations per read, slowing throughput. Sustained writes may also slow as the drive runs out of free cells and must perform garbage collection.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">NVMe — thermal throttling</span>
+    <span>NVMe drives in systems without adequate airflow (particularly thin laptops) can overheat and thermally throttle, dropping from 3,000+ MB/s to under 500 MB/s. This manifests as sudden dramatic slowdowns during sustained writes.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">RAID rebuild overhead</span>
+    <span>During a RAID rebuild, all drives in the array are under heavy read load simultaneously. Applications that access the array during a rebuild will experience significantly extended read/write times.</span>
+  </div>
+</div>
+
+<div class="process-flow">
+  <div class="flow-title">Diagnosing Extended Read/Write Times</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Run a S.M.A.R.T. check.</strong> Elevated reallocated or pending sectors confirm bad sectors as the cause of slow reads on an HDD.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Run CHKDSK.</strong> <code>chkdsk C: /r</code> identifies and attempts to recover bad sectors. Note: this will be slow if many bad sectors exist — that slowness itself is diagnostic.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Run a drive benchmark.</strong> Tools like CrystalDiskMark compare current sequential and random read/write speeds against the drive's rated specification. A drive operating at 10% of its rated speed is clearly degraded.</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Check drive temperature.</strong> For NVMe drives specifically, check temperature under sustained load. Consistent temperatures above 70°C indicate thermal throttling.</div></div>
+  <div class="flow-step"><span class="flow-num">05</span><div class="flow-text"><strong>Check RAID status.</strong> If the storage is on a RAID, verify the array is not in a degraded or rebuilding state — both conditions cause dramatically extended access times.</div></div>
+</div>
+
+
+<!-- ═══ SYMPTOM 9: LOW IOPS ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 09</span>Low Performance IOPS</h2>
+
+<p><span class="key-term">IOPS</span> (Input/Output Operations Per Second) measures how many individual read or write operations a storage device can perform per second. It is the most important performance metric for workloads involving many small, random accesses — such as databases, virtual machines, and operating system boot drives.</p>
+
+<h3 class="section">Typical IOPS by Drive Type</h3>
+
+<table class="data-table">
+  <thead><tr><th>Drive Type</th><th>Sequential Read</th><th>Typical IOPS (4K Random)</th><th>Notes</th></tr></thead>
+  <tbody>
+    <tr><td>HDD (7200 RPM)</td><td>~150 MB/s</td><td>~100–200 IOPS</td><td>Mechanical seek time is the bottleneck for random access</td></tr>
+    <tr><td>SATA SSD</td><td>~550 MB/s</td><td>~50,000–100,000 IOPS</td><td>Flash memory eliminates seek time; dramatically faster for random I/O</td></tr>
+    <tr><td>NVMe SSD (Gen 3)</td><td>~3,500 MB/s</td><td>~300,000–500,000 IOPS</td><td>PCIe interface removes SATA controller bottleneck</td></tr>
+    <tr><td>NVMe SSD (Gen 4)</td><td>~7,000 MB/s</td><td>~800,000–1,000,000 IOPS</td><td>Current consumer flagship performance tier</td></tr>
+  </tbody>
+</table>
+
+<h3 class="section">Causes of Low IOPS</h3>
+
+<p>An HDD performing at 50 IOPS instead of its rated 150 IOPS may indicate mechanical degradation — bad sectors causing retries, or head positioning issues. An SSD at 10,000 IOPS instead of 90,000 IOPS suggests severe NAND wear, a failing controller, or thermal throttling.</p>
+
+<p>In RAID configurations, low IOPS can indicate a degraded array (operating without parity protection requires extra read operations for RAID 5/6 reconstruction), or a drive in the array that is underperforming and dragging down the entire array's throughput.</p>
+
+<div class="callout callout-info">
+  <p class="callout-title">Practical Note</p>
+  <p>IOPS is typically measured with tools like <strong>CrystalDiskMark</strong> (Windows) or <strong>fio</strong> (Linux). On the exam, you will not be asked to calculate IOPS — you will be expected to understand that low IOPS is a symptom of drive degradation, and that HDDs have dramatically lower IOPS than SSDs due to mechanical seek time.</p>
+</div>
+
+
+<!-- ═══ SYMPTOM 10: MISSING DRIVES IN OS ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 10</span>Missing Drives in OS</h2>
+
+<p>A drive that was previously accessible in the operating system has disappeared — it no longer shows up in File Explorer, Disk Management, or Device Manager. The drive may still be physically connected and even visible in BIOS. This symptom requires a structured diagnostic approach because the failure point can be anywhere from a loose cable to a failed file system to a completely dead drive.</p>
+
+<h3 class="section">Diagnostic Decision Tree</h3>
+
+<table class="data-table">
+  <thead><tr><th>Question</th><th>Yes</th><th>No</th></tr></thead>
+  <tbody>
+    <tr><td>Is the drive visible in BIOS/UEFI?</td><td>Drive hardware is alive — problem is logical or driver</td><td>Drive is completely failed, or cable/power issue</td></tr>
+    <tr><td>Is the drive visible in Disk Management?</td><td>Likely unformatted, wrong partition, or no drive letter assigned</td><td>Driver issue or OS-level detection failure</td></tr>
+    <tr><td>Does it show as "Unallocated" in Disk Management?</td><td>Partition table deleted/corrupt — use recovery software</td><td>Check for offline status; right-click → Online</td></tr>
+    <tr><td>Is the drive marked "Offline" in Disk Management?</td><td>Right-click → Online; may require administrator permission</td><td>Check for missing drive letter — assign one</td></tr>
+    <tr><td>Does S.M.A.R.T. show errors?</td><td>Physical drive failure — replace and restore from backup</td><td>Logical issue — attempt file system repair</td></tr>
+  </tbody>
+</table>
+
+<div class="process-flow">
+  <div class="flow-title">Resolving Missing Drive in OS</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Check BIOS first.</strong> Enter BIOS/UEFI and look at the storage device list. If the drive appears here, the hardware is communicating and the problem is in the OS layer.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Open Disk Management (diskmgmt.msc).</strong> Drives that are present but not assigned a letter, or marked as offline, will appear here but not in File Explorer. Right-click the drive → Online, then assign a drive letter.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Check Device Manager for errors.</strong> A yellow exclamation mark on a storage controller or disk indicates a driver problem. Update or reinstall the driver.</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Check physical connections.</strong> If the drive is absent from BIOS, reseat the SATA/power cable, try a different SATA port and cable, and try a different power connector from the PSU.</div></div>
+  <div class="flow-step"><span class="flow-num">05</span><div class="flow-text"><strong>Test the drive in another system.</strong> Connect the drive externally via USB-to-SATA adapter or in another machine to determine if the drive itself is faulty or the original system's port/controller is the problem.</div></div>
+</div>
+
+
+<!-- ═══ SYMPTOM 11: ARRAY MISSING ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 11</span>Array Missing</h2>
+
+<p>An <span class="key-term">array missing</span> condition occurs when the RAID controller cannot locate or reconstruct the RAID array. The individual physical drives may be present, but the logical RAID volume they form is not visible to the operating system. This is a more severe condition than a single missing drive because it affects all data on the entire array.</p>
+
+<h3 class="section">Causes of a Missing Array</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Controller failure</span>
+    <span>The RAID controller (hardware or software) that manages the array has failed or been replaced. Even if the drives are intact, a different controller model may not be able to read the array's metadata configuration. Hardware RAID configurations are particularly susceptible — the array metadata is stored on the controller, not the drives.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Multiple drive failures</span>
+    <span>The array has lost more drives than its fault tolerance allows. RAID 5 with 2 failed drives, or RAID 0 with any failed drive, will present as an array missing condition because the data cannot be reconstructed.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Array configuration deleted</span>
+    <span>Someone accidentally deleted the RAID configuration through the RAID management utility or BIOS. The drives still contain the data stripes but the controller no longer knows how to assemble them. This is a logical, not physical, failure — data may be recoverable.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Drive inserted out of order</span>
+    <span>In some RAID configurations, replacing drives in the wrong slots or booting with drives in a different order than expected can cause the controller to fail to recognize the array.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Corrupted RAID metadata</span>
+    <span>The metadata sectors on each drive that describe the RAID configuration (stripe size, drive order, RAID level) have been corrupted. RAID recovery software can sometimes reconstruct this.</span>
+  </div>
+</div>
+
+<div class="callout callout-warn">
+  <p class="callout-title">Do Not Initialize</p>
+  <p>When Windows Disk Management detects disks from a missing array, it may prompt you to <strong>"Initialize Disk."</strong> <strong>Do not do this.</strong> Initializing the disk will write a new partition table, overwriting the RAID metadata and potentially making data recovery impossible. Click Cancel and use RAID recovery software instead.</p>
+</div>
+
+<h3 class="section">Recovery Path for Missing Array</h3>
+
+<div class="process-flow">
+  <div class="flow-title">Missing Array — Response Sequence</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Do not write to any drive in the array.</strong> Treat all drives as read-only until recovery is complete or confirmed impossible.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Verify all drives are physically present and responding.</strong> Check BIOS/RAID BIOS utility to confirm each drive is detected. Re-seat any drives not showing up.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Check the RAID controller utility.</strong> Access the RAID management interface (during POST, or via OS utility) to see the array status. It may show the array as "offline" rather than truly missing — bringing it online may be simple.</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Attempt array import.</strong> Many RAID controllers allow importing a foreign configuration — if drives were moved from another controller of the same type, the array metadata can often be imported.</div></div>
+  <div class="flow-step"><span class="flow-num">05</span><div class="flow-text"><strong>Use RAID recovery software.</strong> Tools like <strong>R-Studio</strong> or <strong>UFS Explorer</strong> can scan drives, detect RAID parameters, and reconstruct the virtual array for data extraction without modifying the original drives.</div></div>
+</div>
+
+
+<!-- ═══ SYMPTOM 12: AUDIBLE ALARMS ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 12</span>Audible Alarms</h2>
+
+<p><span class="key-term">Audible alarms</span> in the context of drive and RAID issues refer to electronic beeping sounds generated by RAID controllers, server management hardware, or UPS (Uninterruptible Power Supply) units — not the mechanical sounds from HDD heads described in Symptoms 02 and 03. These are intentional alert sounds produced by system management electronics to notify an administrator of a fault condition.</p>
+
+<h3 class="section">Sources and Meanings</h3>
+
+<table class="data-table">
+  <thead><tr><th>Source</th><th>Alarm Pattern</th><th>Meaning</th></tr></thead>
+  <tbody>
+    <tr><td>RAID controller</td><td>Continuous or repeating beep</td><td>Drive failure detected in array; array may be degraded or failed</td></tr>
+    <tr><td>Server IPMI / BMC</td><td>Intermittent beeping + LED</td><td>Hardware fault detected; check management console for specific error code</td></tr>
+    <tr><td>NAS device</td><td>Beeping + front panel indicator</td><td>Drive failure, RAID degraded, or network connectivity loss</td></tr>
+    <tr><td>UPS (APC, Eaton)</td><td>Continuous beep</td><td>Running on battery power (power outage); battery low</td></tr>
+    <tr><td>UPS</td><td>4 beeps repeating</td><td>Battery near end of life — replace battery</td></tr>
+    <tr><td>Storage enclosure</td><td>Alarm + amber LED</td><td>Drive slot has a failed drive; hot-swap replacement required</td></tr>
+  </tbody>
+</table>
+
+<h3 class="section">Response to RAID Audible Alarms</h3>
+
+<p>In a server or NAS environment, the alarm is designed to be heard and acted upon immediately. The typical response sequence is:</p>
+
+<div class="process-flow">
+  <div class="flow-title">Audible Alarm Response — RAID Context</div>
+  <div class="flow-step"><span class="flow-num">01</span><div class="flow-text"><strong>Identify the source.</strong> Is the alarm from the server itself, a separate UPS, or a NAS enclosure? Each requires a different response.</div></div>
+  <div class="flow-step"><span class="flow-num">02</span><div class="flow-text"><strong>Check LED indicators.</strong> The amber/red LED on the failing drive bay will identify which specific drive has failed. Do not guess — verify by LED before pulling any drive.</div></div>
+  <div class="flow-step"><span class="flow-num">03</span><div class="flow-text"><strong>Access the RAID management console.</strong> The RAID controller's management software (e.g., HP SSA, Dell OMSA, LSI MegaRAID Storage Manager) shows the array status, which drive failed, and the current rebuild status.</div></div>
+  <div class="flow-step"><span class="flow-num">04</span><div class="flow-text"><strong>Silence the alarm if needed.</strong> Most RAID utilities allow silencing the audible alarm while leaving the visual alert active. This is appropriate in environments where the alarm is disruptive but the fault is already being addressed.</div></div>
+  <div class="flow-step"><span class="flow-num">05</span><div class="flow-text"><strong>Replace the failed drive.</strong> If the array supports hot-swap, replace the failed drive while the system is running. Insert the replacement drive; the controller will automatically begin rebuilding.</div></div>
+  <div class="flow-step"><span class="flow-num">06</span><div class="flow-text"><strong>Monitor the rebuild.</strong> Watch the rebuild progress. Do not power off the system during rebuild unless absolutely necessary. Verify the array returns to optimal status after rebuild completes.</div></div>
+</div>
+
+
+<!-- ═══ SYMPTOM 13: LED (revisited with RAID context) ═══ -->
+<h2 class="chapter"><span class="ch-num">SYMPTOM 13</span>S.M.A.R.T. in RAID Environments</h2>
+
+<p>One subtle but important topic is how S.M.A.R.T. interacts with RAID. S.M.A.R.T. is a per-drive metric — it monitors each individual physical drive's health independently. RAID controllers vary in how they expose or suppress this data.</p>
+
+<ul class="body-list">
+  <li><strong>Hardware RAID controllers</strong> often abstract the physical drives away from the OS. The OS sees only the logical RAID volume, not the individual drives. S.M.A.R.T. data from individual drives may only be accessible through the RAID controller's management software — not through standard OS tools like CrystalDiskInfo.</li>
+  <li><strong>Software RAID</strong> (Windows Storage Spaces, Linux mdadm) leaves the individual drives visible to the OS, so S.M.A.R.T. data is accessible normally.</li>
+  <li><strong>Proactive monitoring matters</strong> — in a RAID 5 array, one drive may be accumulating S.M.A.R.T. errors silently while the array still appears healthy. If that drive fails and a second drive fails during the subsequent rebuild, all data is lost. Regular S.M.A.R.T. monitoring on individual RAID drives is critical preventive maintenance.</li>
+</ul>
+
+
+<!-- MASTER REFERENCE -->
+<div class="ch-divider"></div>
+
+<div class="summary-box">
+  <h3>Master Reference — All 13 Symptoms</h3>
+  <div class="summary-grid">
+    <div class="summary-item"><span class="s-sym">LED status indicators</span><span>Amber/yellow = fault; green = healthy; blinking = activity or rebuild</span></div>
+    <div class="summary-item"><span class="s-sym">Grinding noises</span><span>HDD head crash or motor bearing failure — power off immediately</span></div>
+    <div class="summary-item"><span class="s-sym">Clicking sounds</span><span>HDD click of death — head positioning failure; back up now</span></div>
+    <div class="summary-item"><span class="s-sym">Bootable device not found</span><span>Check BIOS boot order first; then bootloader; then drive hardware</span></div>
+    <div class="summary-item"><span class="s-sym">Data loss / corruption</span><span>Bad sectors, sudden power loss, file system error, or malware</span></div>
+    <div class="summary-item"><span class="s-sym">RAID failure</span><span>Exceeded fault tolerance — degrade vs. failed; check RAID level</span></div>
+    <div class="summary-item"><span class="s-sym">S.M.A.R.T. failure</span><span>Predictive warning — back up immediately, then replace drive</span></div>
+    <div class="summary-item"><span class="s-sym">Extended read/write times</span><span>Bad sectors (HDD), NAND wear (SSD), or NVMe thermal throttling</span></div>
+    <div class="summary-item"><span class="s-sym">Low IOPS</span><span>Drive degradation; HDDs far lower than SSDs by design</span></div>
+    <div class="summary-item"><span class="s-sym">Missing drives in OS</span><span>Check BIOS → Disk Management → cables → test in another system</span></div>
+    <div class="summary-item"><span class="s-sym">Array missing</span><span>Controller failure, config deleted, or too many drives failed</span></div>
+    <div class="summary-item"><span class="s-sym">Audible alarms</span><span>Electronic alert from RAID controller or NAS — check LED, access mgmt console</span></div>
+  </div>
+</div>
+
+<!-- TOOLS REFERENCE -->
+<h2 class="chapter"><span class="ch-num">REFERENCE</span>Diagnostic Tools for Drive Troubleshooting</h2>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>Windows Tools</h4>
+    <ul>
+      <li><strong>CrystalDiskInfo</strong> — S.M.A.R.T. health reader; color-coded status</li>
+      <li><strong>CrystalDiskMark</strong> — drive speed benchmark; measures IOPS</li>
+      <li><strong>Disk Management (diskmgmt.msc)</strong> — partition and volume management</li>
+      <li><code>chkdsk /f /r</code> — file system repair and bad sector scan</li>
+      <li><code>diskpart</code> — partition table inspection and repair</li>
+      <li><code>bootrec /rebuildbcd</code> — boot record repair</li>
+      <li><strong>Recuva</strong> — deleted file recovery</li>
+      <li><strong>Windows Memory Diagnostic</strong> — rules out RAM as cause</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Bootable / External Tools</h4>
+    <ul>
+      <li><strong>GParted Live</strong> — partition editor; works on non-booting systems</li>
+      <li><strong>TestDisk</strong> — partition table and boot sector recovery</li>
+      <li><strong>PhotoRec</strong> — file carving recovery (works even without partition table)</li>
+      <li><strong>ddrescue</strong> (Linux) — forensic imaging of failing drives</li>
+      <li><strong>WinRE / Windows Recovery</strong> — Startup Repair, bootrec access</li>
+      <li><strong>Manufacturer tools</strong> — SeaTools (Seagate), Western Digital Diagnostics, Samsung Magician</li>
+      <li><strong>R-Studio / UFS Explorer</strong> — RAID recovery and advanced data recovery</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout callout-exam" style="margin-top: 28px;">
+  <p class="callout-title">Final Exam Reminders</p>
+  <p><strong>Grinding or clicking</strong> = HDD mechanical failure. Power off. Back up. Replace.</p>
+  <p><strong>S.M.A.R.T. failure at POST</strong> = prediction, not current failure. Back up immediately, then replace drive.</p>
+  <p><strong>Bootable device not found</strong> = check BIOS boot order first. Then bootloader. Then cables.</p>
+  <p><strong>RAID 0</strong> = any single failure = all data lost. Zero redundancy.</p>
+  <p><strong>RAID 5 degraded</strong> = still running but one more failure = total loss. Replace failed drive urgently.</p>
+  <p><strong>Array missing prompt to initialize</strong> = do NOT initialize. Use recovery software.</p>
+  <p><strong>Audible alarm from RAID</strong> = check LED on drive bay, access RAID management console, hot-swap failed drive.</p>
+  <p><strong>RAID is not a backup</strong> = it protects against hardware failure only, not deletion, ransomware, or controller failure.</p>
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CompTIA A+ 2.4 — Explain Common Network Configuration Concepts</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --surface2: #f5f4f0;
+    --border: #e5e2d9;
+    --border2: #d4d0c4;
+    --text: #1a1a18;
+    --muted: #6b6860;
+    --accent: #c0392b;
+    --accent2: #2c3e6b;
+    --accent3: #1a6b3a;
+    --accent4: #b5590a;
+    --accent-light: #fdf2f1;
+    --accent2-light: #f0f2f8;
+    --accent3-light: #f0f8f3;
+    --accent4-light: #fdf5ed;
+    --serif: 'Crimson Pro', Georgia, serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── TOP NAV ── */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .top-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .nav-home {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+  .nav-home:hover { color: var(--accent2); }
+  .nav-home::before {
+    content: '←';
+    font-size: 12px;
+  }
+  .nav-sep {
+    font-size: 12px;
+    color: var(--border2);
+    flex-shrink: 0;
+  }
+  .nav-current {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nav-current strong {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    margin-right: 6px;
+  }
+  .top-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .nav-prev, .nav-next {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 4px 9px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    white-space: nowrap;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .nav-prev:hover, .nav-next:hover {
+    border-color: var(--border2);
+    color: var(--accent2);
+  }
+  .nav-prev::before { content: '← '; }
+  .nav-next::after  { content: ' →'; }
+
+  @media (max-width: 600px) {
+    .top-nav { padding: 0 16px; }
+    .nav-current { display: none; }
+    .nav-sep { display: none; }
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  .page { max-width: 860px; margin: 0 auto; padding: 0 40px 80px; }
+
+  /* HEADER */
+  .book-header {
+    border-bottom: 3px double var(--border2);
+    padding: 56px 0 32px;
+    margin-bottom: 48px;
+  }
+  .book-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .book-eyebrow span {
+    background: var(--accent);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-right: 10px;
+    font-size: 10px;
+  }
+  .book-title {
+    font-family: var(--serif);
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+  .book-subtitle {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .book-subtitle span { display: flex; align-items: center; gap: 6px; }
+  .book-subtitle span::before { content: '·'; color: var(--border2); }
+  .book-subtitle span:first-child::before { display: none; }
+
+  /* HEADINGS */
+  h2.chapter {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 600;
+    margin: 52px 0 6px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    letter-spacing: -0.01em;
+  }
+  h2.chapter .ch-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+    letter-spacing: 0.1em;
+    font-weight: 400;
+  }
+  h3.section {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    margin: 36px 0 12px;
+  }
+  h3.section::before { content: '§ '; color: var(--muted); font-weight: 300; }
+
+  p { margin-bottom: 16px; }
+
+  /* CALLOUTS */
+  .callout {
+    border-left: 3px solid;
+    padding: 14px 20px;
+    margin: 24px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 15.5px;
+  }
+  .callout p { margin-bottom: 6px; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout-title {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px !important;
+  }
+  .callout-exam  { border-color: var(--accent);  background: var(--accent-light);  }
+  .callout-exam  .callout-title { color: var(--accent);  }
+  .callout-info  { border-color: var(--accent2); background: var(--accent2-light); }
+  .callout-info  .callout-title { color: var(--accent2); }
+  .callout-tip   { border-color: var(--accent3); background: var(--accent3-light); }
+  .callout-tip   .callout-title { color: var(--accent3); }
+  .callout-warn  { border-color: var(--accent4); background: var(--accent4-light); }
+  .callout-warn  .callout-title { color: var(--accent4); }
+
+  /* TABLES */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+    font-family: var(--sans);
+    margin: 16px 0 24px;
+  }
+  .data-table thead th {
+    background: var(--surface2);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 9px 13px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .data-table tbody tr { border-bottom: 1px solid var(--border); }
+  .data-table tbody tr:last-child { border-bottom: none; }
+  .data-table td { padding: 9px 13px; vertical-align: top; line-height: 1.5; }
+  .data-table td:first-child {
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 13.5px;
+  }
+
+  /* PROCESS FLOW */
+  .process-flow {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: var(--sans);
+    font-size: 14px;
+  }
+  .flow-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .flow-step:last-child { border-bottom: none; }
+  .flow-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+    min-width: 24px;
+    padding-top: 2px;
+  }
+  .flow-text { color: var(--text); line-height: 1.55; }
+  .flow-text strong { font-weight: 600; }
+
+  /* DEF LIST */
+  .def-list { margin: 16px 0 24px; }
+  .def-item {
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 210px 1fr;
+    gap: 20px;
+    font-size: 15px;
+  }
+  .def-item:last-child { border-bottom: none; }
+  .def-term {
+    font-family: var(--sans);
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 14px;
+    padding-top: 1px;
+    line-height: 1.4;
+  }
+
+  /* GRID CARDS */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 16px 18px;
+  }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 10px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card ul { list-style: none; font-family: var(--sans); font-size: 13.5px; }
+  .card ul li {
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .card ul li:last-child { border-bottom: none; }
+  .card ul li strong { color: var(--text); }
+
+  /* BODY LIST */
+  ul.body-list {
+    list-style: none;
+    font-family: var(--sans);
+    font-size: 15px;
+    padding: 0;
+    margin: 12px 0 20px;
+  }
+  ul.body-list li {
+    padding: 5px 0 5px 18px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  ul.body-list li:last-child { border-bottom: none; }
+  ul.body-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--border2);
+    font-size: 12px;
+  }
+  ul.body-list li strong { color: var(--text); }
+
+  /* ARCH DIAGRAM */
+  .arch-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+  .arch-diagram-header {
+    background: var(--text);
+    color: rgba(255,255,255,0.85);
+    padding: 10px 18px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .arch-body { padding: 20px 24px; }
+  .arch-layer {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 10px 14px;
+    margin-bottom: 6px;
+    font-family: var(--sans);
+    font-size: 13.5px;
+    font-weight: 600;
+    text-align: center;
+    position: relative;
+  }
+  .arch-layer .layer-label {
+    font-size: 10px;
+    font-family: var(--mono);
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 2px;
+  }
+  .layer-hw  { background: #f0f2f8; color: var(--accent2); border-color: #b0bce8; }
+  .layer-hv  { background: #fdf2f1; color: var(--accent);  border-color: #e8b0b0; }
+  .layer-os  { background: #f0f8f3; color: var(--accent3); border-color: #b0d8bc; }
+  .layer-app { background: var(--surface2); color: var(--muted); border-color: var(--border2); }
+  .layer-vm  { background: #fff3e0; color: var(--accent4); border-color: #e8c880; }
+  .arch-arrow { text-align: center; color: var(--border2); font-size: 14px; line-height: 1.2; margin: 2px 0; }
+
+  /* COMPARE GRID */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 20px 0;
+  }
+  .compare-col { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+  .compare-head {
+    padding: 10px 14px;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 700;
+    text-align: center;
+  }
+  .compare-head.ch-a { background: #e3f2fd; color: #1565c0; }
+  .compare-head.ch-b { background: #fdf2f1; color: #b71c1c; }
+  .compare-head.ch-c { background: #e8f5e9; color: #1b5e20; }
+  .compare-head.ch-d { background: #fff3e0; color: #e65100; }
+  .compare-body { padding: 12px 14px; }
+  .compare-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+  .compare-row:last-child { border-bottom: none; }
+  .compare-row .cr-icon { font-size: 11px; min-width: 14px; margin-top: 2px; }
+  .compare-row strong { color: var(--text); }
+
+  /* BENEFIT ROW */
+  .benefit-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--sans);
+    font-size: 14px;
+  }
+  .benefit-row:last-child { border-bottom: none; }
+  .benefit-icon { font-size: 18px; min-width: 28px; text-align: center; padding-top: 1px; }
+  .benefit-body { line-height: 1.5; }
+  .benefit-body strong { color: var(--text); display: block; font-size: 14.5px; margin-bottom: 2px; }
+  .benefit-body span { color: var(--muted); }
+
+  /* CODE / MONO */
+  code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: var(--accent);
+  }
+  .code-block {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--text);
+    color: #c8f5c8;
+    padding: 14px 18px;
+    border-radius: 5px;
+    margin: 14px 0 20px;
+    line-height: 1.7;
+    overflow-x: auto;
+  }
+  .code-block .cm { color: rgba(255,255,255,0.35); }
+  .code-block .ck { color: #7ec8e3; }
+  .code-block .cv { color: #ffd580; }
+  .code-block .ct { color: #ff9580; }
+
+  .key-term { font-style: italic; font-weight: 500; color: var(--accent2); }
+
+  /* SUMMARY */
+  .summary-box {
+    background: var(--text);
+    color: #f0ede6;
+    border-radius: 6px;
+    padding: 28px 32px;
+    margin: 40px 0;
+  }
+  .summary-box h3 {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 18px;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 32px;
+  }
+  .summary-item {
+    font-family: var(--sans);
+    font-size: 13.5px;
+    color: #c4bfb4;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .summary-item .s-sym {
+    color: #fff;
+    font-weight: 600;
+    min-width: 160px;
+    line-height: 1.4;
+  }
+
+  .ch-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--border2), transparent);
+    margin: 48px 0;
+  }
+
+  /* DNS RECORD VISUAL */
+  .record-row {
+    display: grid;
+    grid-template-columns: 90px 90px 1fr 160px;
+    gap: 8px;
+    align-items: start;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 12.5px;
+  }
+  .record-row:last-child { border-bottom: none; }
+  .record-row .rr-name { color: var(--accent2); font-weight: 600; }
+  .record-row .rr-type { color: var(--accent); font-weight: 600; }
+  .record-row .rr-val  { color: var(--accent3); word-break: break-all; }
+  .record-row .rr-note { color: var(--muted); font-family: var(--sans); font-size: 11.5px; line-height: 1.4; }
+  .record-head {
+    display: grid;
+    grid-template-columns: 90px 90px 1fr 160px;
+    gap: 8px;
+    padding: 6px 0 6px;
+    border-bottom: 2px solid var(--border2);
+    font-family: var(--sans);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 2px;
+  }
+
+  /* DHCP TIMELINE */
+  .dora-row {
+    display: flex;
+    gap: 0;
+    margin: 20px 0;
+    font-family: var(--sans);
+    font-size: 13px;
+  }
+  .dora-step {
+    flex: 1;
+    padding: 14px 10px;
+    text-align: center;
+    position: relative;
+  }
+  .dora-step::after {
+    content: '→';
+    position: absolute;
+    right: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--border2);
+    font-size: 16px;
+    z-index: 2;
+  }
+  .dora-step:last-child::after { display: none; }
+  .dora-letter {
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .dora-label { font-weight: 700; display: block; margin-bottom: 3px; color: var(--text); }
+  .dora-sub { color: var(--muted); font-size: 11px; line-height: 1.35; }
+  .ds-d { background: #e3f2fd; border-radius: 6px 0 0 6px; }
+  .ds-d .dora-letter { color: #1565c0; }
+  .ds-o { background: #f3e5f5; }
+  .ds-o .dora-letter { color: #6a1b9a; }
+  .ds-r { background: #e8f5e9; }
+  .ds-r .dora-letter { color: #1b5e20; }
+  .ds-a { background: #fff3e0; border-radius: 0 6px 6px 0; }
+  .ds-a .dora-letter { color: #e65100; }
+
+  /* VLAN DIAGRAM */
+  .vlan-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin: 20px 0;
+  }
+  .vlan-card {
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .vlan-head {
+    padding: 9px 12px;
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 700;
+    text-align: center;
+  }
+  .vh-10 { background: #e3f2fd; color: #1565c0; }
+  .vh-20 { background: #f3e5f5; color: #6a1b9a; }
+  .vh-30 { background: #e8f5e9; color: #1b5e20; }
+  .vh-40 { background: #fff3e0; color: #e65100; }
+  .vlan-body { padding: 10px 12px; }
+  .vlan-device {
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .vlan-device:last-child { border-bottom: none; }
+  .vlan-device strong { color: var(--text); }
+
+  /* VPN TYPES */
+  .vpn-row {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 16px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--sans);
+    font-size: 14px;
+    align-items: start;
+  }
+  .vpn-row:last-child { border-bottom: none; }
+  .vpn-label {
+    font-weight: 700;
+    color: var(--accent2);
+    font-size: 13px;
+    line-height: 1.4;
+    padding-top: 2px;
+  }
+  .vpn-desc { color: var(--muted); line-height: 1.5; }
+  .vpn-desc strong { color: var(--text); }
+
+  @media (max-width: 680px) {
+    .page { padding: 0 20px 60px; }
+    .summary-grid, .card-grid, .compare-grid, .vlan-grid { grid-template-columns: 1fr; }
+    .def-item { grid-template-columns: 1fr; gap: 4px; }
+    .record-row, .record-head { grid-template-columns: 70px 60px 1fr; }
+    .record-row .rr-note, .record-head span:last-child { display: none; }
+    .dora-row { flex-direction: column; gap: 4px; }
+    .dora-step { border-radius: 6px !important; }
+    .dora-step::after { content: '↓'; right: auto; left: 50%; top: auto; bottom: -14px; transform: translateX(-50%); }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV — update href values to match your actual file names -->
+<nav class="top-nav">
+  <div class="top-nav-left">
+    <a class="nav-home" href="../index.html">Study Guide</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current"><strong>2.4</strong> Explain Common Network Configuration Concepts</span>
+  </div>
+  <div class="top-nav-right">
+    <!-- Point these to the adjacent section files, or remove if not applicable -->
+    <a class="nav-prev" href="./2_3-Networked-Hosts-Services.html">2.3</a>
+    <a class="nav-next" href="./2_5-Common-Network-Hardware-Devices.html">2.5</a>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- HEADER -->
+<div class="book-header">
+  <div class="book-eyebrow">
+    <span>2.4</span>
+    CompTIA A+ · Core 1 (220-1201) · Domain 2 — Networking
+  </div>
+  <h1 class="book-title">Explain Common Network<br>Configuration Concepts</h1>
+  <div class="book-subtitle">
+    <span>Objective 2.4</span>
+    <span>Domain weight: 20%</span>
+    <span>DNS · DHCP · VLAN · VPN</span>
+  </div>
+</div>
+
+
+<!-- OVERVIEW -->
+<h2 class="chapter"><span class="ch-num">OVERVIEW</span>Introduction to Network Configuration</h2>
+
+<p>Every functional network depends on a small set of foundational services that operate silently behind the scenes. When you type a website address into a browser, a chain of automated systems translates that name to a numeric address, assigns your device a valid network configuration, routes your packets through the correct network segment, and — when needed — encrypts your traffic across an untrusted link. These services are DNS, DHCP, VLANs, and VPNs.</p>
+
+<p>For the A+ technician, these concepts appear constantly in the field. A device that "can't connect to the internet" is almost always a DNS, DHCP, or default gateway problem. A user who needs to access corporate resources from home requires a VPN. Segmenting a company's employee traffic from guest Wi-Fi requires VLANs. Understanding how each service works — not just what acronym it stands for — is the difference between guessing and diagnosing.</p>
+
+<div class="callout callout-info">
+  <p class="callout-title">Core Concept</p>
+  <p>The four technologies in this objective work as a layered system: <strong>DHCP</strong> automatically assigns IP addresses, subnet masks, default gateways, and DNS server addresses to devices when they join the network. <strong>DNS</strong> translates human-readable hostnames into IP addresses so devices can actually reach each other. <strong>VLANs</strong> logically segment a single physical network into isolated broadcast domains. <strong>VPNs</strong> create encrypted tunnels across untrusted networks so remote devices can participate in a private network securely.</p>
+</div>
+
+
+<!-- ═══ DNS ═══ -->
+<h2 class="chapter"><span class="ch-num">SECTION 1</span>DNS — Domain Name System</h2>
+
+<p>The <span class="key-term">Domain Name System (DNS)</span> is the internet's distributed phonebook. Every device on a network is identified by a numeric IP address — but humans cannot reasonably memorize millions of IP addresses. DNS solves this by maintaining a globally distributed, hierarchical database that maps human-readable <span class="key-term">hostnames</span> (like <code>www.example.com</code>) to their corresponding IP addresses.</p>
+
+<p>DNS is a critical dependency for nearly all network activity. When DNS fails, users perceive it as "the internet is down" — even though the underlying network connectivity is intact. Diagnosing DNS failures (using tools like <code>nslookup</code> and <code>ping</code>) is a fundamental A+ skill. A device that can <code>ping 8.8.8.8</code> but cannot reach <code>www.google.com</code> has a DNS problem, not a connectivity problem.</p>
+
+<h3 class="section">How DNS Resolution Works</h3>
+
+<div class="process-flow">
+  <div class="flow-title">DNS Resolution — Step-by-Step (Iterative Query)</div>
+  <div class="flow-step">
+    <div class="flow-num">01</div>
+    <div class="flow-text"><strong>Client checks local cache.</strong> Before querying any server, the client OS checks its DNS cache (<code>ipconfig /displaydns</code> on Windows) for a recently resolved record. If a valid cached record exists, it is returned immediately — no network query needed.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">02</div>
+    <div class="flow-text"><strong>Client queries its configured DNS resolver.</strong> If the cache misses, the client sends a recursive query to the DNS server configured by DHCP (or manually set). This is typically the ISP's DNS server, a corporate DNS server, or a public resolver like Google (8.8.8.8) or Cloudflare (1.1.1.1).</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">03</div>
+    <div class="flow-text"><strong>Resolver queries Root servers.</strong> The recursive resolver, if it doesn't have the answer cached, contacts one of the 13 root server clusters. Root servers don't know the final answer — they direct the resolver to the correct <strong>Top-Level Domain (TLD)</strong> server (e.g., the <code>.com</code> TLD server for <code>example.com</code>).</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">04</div>
+    <div class="flow-text"><strong>Resolver queries the TLD server.</strong> The TLD server (<code>.com</code>, <code>.org</code>, <code>.net</code>, etc.) knows which <strong>authoritative name server</strong> is responsible for the specific domain (<code>example.com</code>) and directs the resolver there.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">05</div>
+    <div class="flow-text"><strong>Resolver queries the authoritative name server.</strong> The authoritative name server is the definitive source of truth for the domain's DNS records. It returns the actual requested record (e.g., the A record mapping <code>www.example.com</code> to <code>93.184.216.34</code>).</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">06</div>
+    <div class="flow-text"><strong>Resolver returns answer to client and caches it.</strong> The resolver sends the final answer back to the client and stores it in cache for the duration of the record's <strong>TTL (Time to Live)</strong> — typically minutes to hours — so future queries for the same name can be answered from cache without repeating the full lookup chain.</div>
+  </div>
+</div>
+
+<h3 class="section">DNS Record Types</h3>
+
+<p>A DNS zone is composed of individual <span class="key-term">resource records (RRs)</span>. Each record type stores a different kind of information about a domain. The A+ exam requires familiarity with the five most common record types: A, AAAA, CNAME, MX, and TXT.</p>
+
+<div class="arch-diagram">
+  <div class="arch-diagram-header">DNS Zone File — Example Records for example.com</div>
+  <div class="arch-body">
+    <div class="record-head">
+      <span>Name</span><span>Type</span><span>Value / Data</span><span>Purpose</span>
+    </div>
+    <div class="record-row">
+      <span class="rr-name">example.com.</span>
+      <span class="rr-type">A</span>
+      <span class="rr-val">93.184.216.34</span>
+      <span class="rr-note">Maps domain to IPv4 address</span>
+    </div>
+    <div class="record-row">
+      <span class="rr-name">www</span>
+      <span class="rr-type">A</span>
+      <span class="rr-val">93.184.216.34</span>
+      <span class="rr-note">www subdomain → IPv4</span>
+    </div>
+    <div class="record-row">
+      <span class="rr-name">example.com.</span>
+      <span class="rr-type">AAAA</span>
+      <span class="rr-val">2606:2800:21f:cb07:6820:80da:af6b:8b2c</span>
+      <span class="rr-note">Maps domain to IPv6 address</span>
+    </div>
+    <div class="record-row">
+      <span class="rr-name">shop</span>
+      <span class="rr-type">CNAME</span>
+      <span class="rr-val">storefront.shopify.com.</span>
+      <span class="rr-note">Alias → canonical hostname</span>
+    </div>
+    <div class="record-row">
+      <span class="rr-name">example.com.</span>
+      <span class="rr-type">MX</span>
+      <span class="rr-val">10 mail.example.com.</span>
+      <span class="rr-note">Mail server; priority 10</span>
+    </div>
+    <div class="record-row">
+      <span class="rr-name">example.com.</span>
+      <span class="rr-type">TXT</span>
+      <span class="rr-val">v=spf1 include:_spf.google.com ~all</span>
+      <span class="rr-note">SPF record for email auth</span>
+    </div>
+    <div class="record-row">
+      <span class="rr-name">_dmarc</span>
+      <span class="rr-type">TXT</span>
+      <span class="rr-val">v=DMARC1; p=quarantine; rua=mailto:dmarc@example.com</span>
+      <span class="rr-note">DMARC policy record</span>
+    </div>
+  </div>
+</div>
+
+<h3 class="section">A Record — IPv4 Address Mapping</h3>
+
+<p>The <span class="key-term">A record</span> (Address record) is the most fundamental DNS record type. It maps a hostname to a 32-bit <strong>IPv4 address</strong>. When your browser resolves <code>www.google.com</code>, it is ultimately retrieving an A record that contains a numeric IPv4 address like <code>142.250.80.36</code>.</p>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Format</span>
+    <span><code>hostname → IPv4 address (e.g., 93.184.216.34)</code>. A single hostname can have multiple A records (for load balancing — clients cycle through them), and a single IP can be pointed to by multiple A records (multiple domains hosted on one server).</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">TTL (Time to Live)</span>
+    <span>Every A record includes a TTL value in seconds. DNS resolvers cache the record for this duration before re-querying. A low TTL (e.g., 300 seconds) allows rapid DNS changes but increases query load. A high TTL (e.g., 86400 = 24 hours) reduces queries but slows propagation of changes.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Round-Robin DNS</span>
+    <span>A common technique for basic load distribution: the same hostname has multiple A records with different IPs. Each DNS query returns the records in a rotating order, distributing client connections across multiple servers — a simple alternative to dedicated load balancers for lower-traffic scenarios.</span>
+  </div>
+</div>
+
+<h3 class="section">AAAA Record — IPv6 Address Mapping</h3>
+
+<p>The <span class="key-term">AAAA record</span> (pronounced "quad-A") is the IPv6 equivalent of the A record. It maps a hostname to a 128-bit <strong>IPv6 address</strong>. The name "AAAA" reflects that an IPv6 address is four times the size of an IPv4 address (128 bits vs. 32 bits).</p>
+
+<p>Modern dual-stack networks publish both A and AAAA records for the same hostname. When a client that supports IPv6 queries DNS, it typically requests both record types simultaneously. If an AAAA record is available, the operating system will prefer the IPv6 address for the connection (per RFC 6724 address selection rules). If AAAA is unavailable, it falls back to the A record and uses IPv4.</p>
+
+<div class="callout callout-info">
+  <p class="callout-title">A vs. AAAA — The Key Difference</p>
+  <p><strong>A record</strong> → 32-bit IPv4 address (e.g., <code>192.168.1.1</code>). <strong>AAAA record</strong> → 128-bit IPv6 address (e.g., <code>2001:db8::1</code>). Both serve the same purpose — hostname-to-IP mapping — but for different protocol versions. On the A+ exam, if a question involves IPv6 name resolution, the answer involves AAAA records.</p>
+</div>
+
+<h3 class="section">CNAME Record — Canonical Name (Alias)</h3>
+
+<p>A <span class="key-term">CNAME record</span> (Canonical Name record) creates an <strong>alias</strong> — it maps one hostname to another hostname rather than directly to an IP address. The alias is resolved by following the chain: the CNAME points to the canonical name, which is then resolved to an IP via its own A or AAAA record.</p>
+
+<p><strong>Example:</strong> A company hosts its online store on Shopify's platform. Shopify assigns them a canonical address of <code>storefront-12345.myshopify.com</code>. The company creates a CNAME record mapping <code>shop.example.com</code> → <code>storefront-12345.myshopify.com</code>. Customers can visit <code>shop.example.com</code> and DNS transparently resolves it through Shopify's infrastructure without the company managing Shopify's IP addresses directly.</p>
+
+<div class="callout callout-warn">
+  <p class="callout-title">CNAME Restrictions</p>
+  <p>A CNAME cannot exist for the <strong>zone apex</strong> (the root domain itself, e.g., <code>example.com</code> with no subdomain). A CNAME at the apex would conflict with required SOA and NS records. A CNAME also <strong>cannot point to an MX or NS record</strong> — only to another hostname. Using a CNAME where an A record is required is a common configuration error that causes complete name resolution failure for the aliased resource.</p>
+</div>
+
+<h3 class="section">MX Record — Mail Exchanger</h3>
+
+<p>The <span class="key-term">MX record</span> (Mail Exchanger record) specifies which mail server(s) are responsible for accepting inbound email for a domain. When someone sends email to <code>user@example.com</code>, the sending mail server queries DNS for the MX records of <code>example.com</code> to determine where to deliver the message.</p>
+
+<p>MX records include a <strong>priority value</strong> (a lower number = higher priority). If a domain has multiple MX records, sending servers try the highest-priority (lowest-numbered) server first, falling back to lower-priority servers if the primary is unavailable. This provides built-in mail delivery redundancy.</p>
+
+<div class="arch-body" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:16px 20px;margin:16px 0;">
+  <div style="font-family:var(--mono);font-size:12.5px;line-height:1.8;">
+    <div style="color:var(--muted);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;font-family:var(--sans);">MX Records — Priority Example</div>
+    <div><span style="color:var(--accent2);">example.com.</span>&nbsp;&nbsp;<span style="color:var(--accent);">MX</span>&nbsp;&nbsp;<span style="color:#1a6b3a;">10</span>&nbsp;&nbsp;<span style="color:#b5590a;">mail1.example.com.</span>&nbsp;&nbsp;<span style="color:var(--muted);">← Primary (tried first)</span></div>
+    <div><span style="color:var(--accent2);">example.com.</span>&nbsp;&nbsp;<span style="color:var(--accent);">MX</span>&nbsp;&nbsp;<span style="color:#1a6b3a;">20</span>&nbsp;&nbsp;<span style="color:#b5590a;">mail2.example.com.</span>&nbsp;&nbsp;<span style="color:var(--muted);">← Secondary fallback</span></div>
+    <div><span style="color:var(--accent2);">example.com.</span>&nbsp;&nbsp;<span style="color:var(--accent);">MX</span>&nbsp;&nbsp;<span style="color:#1a6b3a;">30</span>&nbsp;&nbsp;<span style="color:#b5590a;">mail3.example.com.</span>&nbsp;&nbsp;<span style="color:var(--muted);">← Tertiary fallback</span></div>
+  </div>
+</div>
+
+<ul class="body-list">
+  <li><strong>MX records must point to A/AAAA records:</strong> The MX target must be a hostname, not a CNAME or IP address directly — the hostname is then resolved via its A/AAAA record</li>
+  <li><strong>No MX record = email undeliverable:</strong> If a domain has no MX record, mail servers cannot determine where to deliver messages and will bounce email with a delivery failure error</li>
+  <li><strong>Cloud email providers:</strong> Google Workspace, Microsoft 365, and similar services require customers to update their domain's MX records to point to the provider's mail servers</li>
+</ul>
+
+<h3 class="section">TXT Record — Text Data</h3>
+
+<p>The <span class="key-term">TXT record</span> stores arbitrary human-readable or machine-readable text data associated with a domain. Originally intended for annotations, TXT records have become the de facto standard for domain verification and email authentication because they are easy to create and are globally queryable by any mail server or service.</p>
+
+<p>Common uses of TXT records include domain ownership verification (proving to Google or Microsoft that you control a domain), email authentication policies (SPF, DKIM, DMARC — covered in the next subsection), and service configuration metadata.</p>
+
+
+<!-- ═══ SPAM MANAGEMENT ═══ -->
+<h2 class="chapter"><span class="ch-num">SECTION 2</span>Spam Management — DKIM, SPF, and DMARC</h2>
+
+<p>Email was designed in the 1970s with no sender authentication whatsoever. Anyone can configure a mail server to send email claiming to be from <code>@anybank.com</code> or <code>@yourcompany.com</code> — a practice called <span class="key-term">email spoofing</span> that enables phishing, business email compromise, and spam campaigns. Three complementary DNS-based standards were developed to address this: SPF, DKIM, and DMARC. Together, they form the modern email authentication framework used by virtually every major organization.</p>
+
+<div class="callout callout-info">
+  <p class="callout-title">The Problem These Standards Solve</p>
+  <p>The SMTP protocol that delivers email has no built-in mechanism to verify that a sender is who they claim to be. A spoofed email claiming to be from <code>ceo@company.com</code> is indistinguishable at the protocol level from a legitimate email sent by the actual CEO — unless the receiving server checks SPF, DKIM, and DMARC records in DNS. These three standards allow receiving mail servers to cryptographically verify sender authenticity and take policy-defined action on failures.</p>
+</div>
+
+<h3 class="section">SPF — Sender Policy Framework</h3>
+
+<p><span class="key-term">SPF (Sender Policy Framework)</span> is a DNS TXT record that lists which IP addresses and mail servers are authorized to send email on behalf of a domain. When a receiving mail server gets a message claiming to be from <code>user@example.com</code>, it queries DNS for the SPF record of <code>example.com</code> and checks whether the sending server's IP address is on the authorized list.</p>
+
+<div class="code-block">
+<span class="cm">; SPF TXT record for example.com</span>
+<span class="ck">example.com.  IN  TXT</span>  <span class="cv">"v=spf1 ip4:203.0.113.0/24 include:_spf.google.com -all"</span>
+<span class="cm">
+; Breaking it down:
+;   v=spf1              = SPF version 1
+;   ip4:203.0.113.0/24  = authorize this IPv4 range to send mail
+;   include:_spf.google = authorize all Google Workspace servers
+;   -all                = FAIL (reject) all other senders ("hard fail")</span>
+</div>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">v=spf1</span>
+    <span>Required prefix declaring this is an SPF version 1 record. Every SPF TXT record must begin with this tag.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">ip4 / ip6 mechanism</span>
+    <span>Explicitly authorizes an IPv4 or IPv6 address or CIDR range. Example: <code>ip4:203.0.113.10</code> authorizes a single IP; <code>ip4:203.0.113.0/24</code> authorizes a /24 subnet.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">include: mechanism</span>
+    <span>Includes the SPF record of another domain. Used when using a third-party email provider: <code>include:_spf.google.com</code> imports Google's full list of authorized sending IPs for Google Workspace.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">-all qualifier</span>
+    <span><strong>Hard fail</strong> — instructs receiving servers to reject mail from any IP not authorized by the preceding mechanisms. This is the most restrictive and recommended for production domains. <code>~all</code> (soft fail) marks unauthorized senders as suspicious but doesn't reject. <code>?all</code> (neutral) takes no action.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">SPF Limitation</span>
+    <span>SPF only validates the <strong>envelope sender</strong> (the technical <code>MAIL FROM:</code> address used during SMTP), not the <code>From:</code> header that users see in their email client. Sophisticated phishing attacks can pass SPF while still displaying a spoofed From address. This is why DKIM and DMARC are needed in addition to SPF.</span>
+  </div>
+</div>
+
+<h3 class="section">DKIM — DomainKeys Identified Mail</h3>
+
+<p><span class="key-term">DKIM (DomainKeys Identified Mail)</span> uses <strong>public-key cryptography</strong> to digitally sign outgoing emails. The sending mail server adds a <code>DKIM-Signature</code> header to each outgoing message, containing a cryptographic signature of selected message headers and the message body. The corresponding public key is published in a DNS TXT record. Receiving servers retrieve the public key and use it to verify that the signature is valid — proving the message was sent by a server holding the private key and that the signed portions have not been modified in transit.</p>
+
+<div class="code-block">
+<span class="cm">; DKIM public key published as DNS TXT record
+; Selector "mail" + _domainkey + domain = full record name</span>
+<span class="ck">mail._domainkey.example.com.  IN  TXT</span>
+  <span class="cv">"v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQ..."</span>
+<span class="cm">
+; v=DKIM1   = DKIM version
+; k=rsa     = key type (RSA)
+; p=...     = the actual Base64-encoded RSA public key</span>
+</div>
+
+<div class="callout callout-tip">
+  <p class="callout-title">How DKIM Signing Works</p>
+  <p><strong>Sending side:</strong> The outgoing mail server uses its <em>private key</em> to generate a cryptographic hash of selected message headers (From, Subject, Date) and body content. This hash is encoded and attached to the message as the DKIM-Signature header. <strong>Receiving side:</strong> The receiving server reads the DKIM-Signature header, fetches the domain's public key from DNS, and attempts to verify the signature. If the signature verifies successfully, the message is authentic and unmodified. If verification fails, the message may have been tampered with or was not sent by an authorized server.</p>
+</div>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Selector</span>
+    <span>A DKIM selector is a label that allows a domain to publish multiple DKIM keys simultaneously — useful when using multiple email providers or rotating keys. The selector appears in the DKIM-Signature header (<code>s=mail</code>) and in the DNS record name (<code>mail._domainkey.example.com</code>).</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">What DKIM proves</span>
+    <span>DKIM proves two things: (1) the email was sent by a server holding the private key associated with the domain's published public key, and (2) the signed portions of the message have not been altered since signing. This survives email forwarding — unlike SPF, which breaks when a message is forwarded through another server.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">DKIM Limitation</span>
+    <span>DKIM by itself doesn't tell a receiving server what to do when verification fails — it only provides the mechanism to check. DKIM also doesn't prevent header spoofing of the visible <code>From:</code> address if the attacker controls a domain that has valid DKIM configured. DMARC ties DKIM and SPF together and adds the policy enforcement layer.</span>
+  </div>
+</div>
+
+<h3 class="section">DMARC — Domain-based Message Authentication, Reporting, and Conformance</h3>
+
+<p><span class="key-term">DMARC (Domain-based Message Authentication, Reporting, and Conformance)</span> is the policy layer that ties SPF and DKIM together. A DMARC TXT record published by a domain tells receiving mail servers two things: (1) how to handle messages that fail SPF and/or DKIM alignment, and (2) where to send reports about authentication results. DMARC closes the gap that SPF and DKIM leave individually — it enforces that the visible <code>From:</code> address is aligned with an authenticated domain.</p>
+
+<div class="code-block">
+<span class="cm">; DMARC policy record — always at _dmarc.yourdomain</span>
+<span class="ck">_dmarc.example.com.  IN  TXT</span>
+  <span class="cv">"v=DMARC1; p=quarantine; pct=100; rua=mailto:dmarc-reports@example.com; ruf=mailto:forensic@example.com; adkim=s; aspf=s"</span>
+<span class="cm">
+; v=DMARC1      = DMARC version (required)
+; p=quarantine  = policy: none | quarantine | reject
+; pct=100       = apply policy to 100% of failing messages
+; rua=          = aggregate report destination (daily XML digest)
+; ruf=          = forensic report destination (per-failure copy)
+; adkim=s       = DKIM alignment: strict (s) or relaxed (r)
+; aspf=s        = SPF alignment: strict or relaxed</span>
+</div>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">p=none</span>
+    <span><strong>Monitor mode.</strong> No action taken on failing messages — they are delivered normally. Reports are still sent so domain owners can see who is sending email on their behalf before tightening policy. The recommended starting point for deploying DMARC on an existing domain.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">p=quarantine</span>
+    <span><strong>Quarantine mode.</strong> Messages that fail DMARC are placed in the recipient's spam/junk folder rather than the inbox. Allows recipients to still access potentially legitimate messages that were misconfigured, while filtering out clearly fraudulent email.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">p=reject</span>
+    <span><strong>Reject mode.</strong> The receiving mail server outright refuses to accept messages that fail DMARC alignment. The most secure policy — spoofed emails from the protected domain are never delivered. Recommended for domains that have fully deployed SPF and DKIM.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Alignment</span>
+    <span>DMARC requires that the domain in either the SPF <code>MAIL FROM</code> or DKIM signature <strong>aligns</strong> (matches) with the <code>From:</code> header domain that users see. This is the key feature that prevents sophisticated spoofing — even an attacker with a valid SPF record for a different domain cannot pass DMARC alignment for <code>example.com</code>.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Aggregate Reports (rua)</span>
+    <span>Receiving servers send daily XML reports to the rua address summarizing all mail processed for the domain — how many messages passed/failed SPF and DKIM, what IP addresses sent them, and what policy was applied. These reports are essential for discovering unauthorized senders before moving to <code>p=reject</code>.</span>
+  </div>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus — SPF, DKIM, DMARC</p>
+  <p><strong>SPF</strong> = TXT record listing authorized sending IPs; validated against the SMTP envelope sender. <strong>DKIM</strong> = cryptographic signature on outgoing email; public key published as TXT record; survives forwarding. <strong>DMARC</strong> = policy TXT record at <code>_dmarc.domain</code>; ties SPF and DKIM together; defines what to do with failures (none / quarantine / reject); sends aggregate reports. All three are DNS TXT records. DMARC is the "enforcement" layer — SPF and DKIM are the mechanisms it evaluates.</p>
+</div>
+
+<table class="data-table">
+  <thead><tr><th>Standard</th><th>DNS Record</th><th>What It Checks</th><th>What It Proves</th><th>Limitation</th></tr></thead>
+  <tbody>
+    <tr><td>SPF</td><td>TXT at domain root</td><td>Sending server IP vs. authorized list</td><td>Mail came from an authorized server</td><td>Breaks on forwarding; only checks envelope, not From: header</td></tr>
+    <tr><td>DKIM</td><td>TXT at selector._domainkey.domain</td><td>Cryptographic signature in email header</td><td>Message was signed by a key holder and wasn't modified</td><td>No policy enforcement; doesn't reject failures on its own</td></tr>
+    <tr><td>DMARC</td><td>TXT at _dmarc.domain</td><td>SPF + DKIM alignment with From: header</td><td>Policy-enforced alignment; reports unauthorized senders</td><td>Requires SPF and DKIM to be correctly configured first</td></tr>
+  </tbody>
+</table>
+
+
+<!-- ═══ DHCP ═══ -->
+<h2 class="chapter"><span class="ch-num">SECTION 3</span>DHCP — Dynamic Host Configuration Protocol</h2>
+
+<p>The <span class="key-term">Dynamic Host Configuration Protocol (DHCP)</span> automates network configuration for client devices. Without DHCP, every device joining a network would require manual configuration of its IP address, subnet mask, default gateway, and DNS server addresses. DHCP eliminates this administrative burden by automatically assigning these parameters to devices when they connect — a process that takes milliseconds and requires no user interaction.</p>
+
+<p>DHCP operates on a client-server model. A <span class="key-term">DHCP server</span> maintains a pool of available IP addresses and configuration parameters. A <span class="key-term">DHCP client</span> (any device that needs an IP address) broadcasts a request when it connects to the network. The server selects an available address, assigns it to the client for a defined period (called a <span class="key-term">lease</span>), and delivers it along with all other network parameters.</p>
+
+<h3 class="section">The DORA Process — How DHCP Works</h3>
+
+<p>DHCP address assignment follows a four-step handshake known by the acronym <span class="key-term">DORA</span>: Discover, Offer, Request, Acknowledge. This process completes automatically in milliseconds each time a DHCP client connects to a network.</p>
+
+<div class="dora-row">
+  <div class="dora-step ds-d">
+    <span class="dora-letter">D</span>
+    <span class="dora-label">Discover</span>
+    <span class="dora-sub">Client broadcasts to 255.255.255.255 (all networks). "I need an IP address — is there a DHCP server out there?"</span>
+  </div>
+  <div class="dora-step ds-o">
+    <span class="dora-letter">O</span>
+    <span class="dora-label">Offer</span>
+    <span class="dora-sub">Server responds with an available IP address, lease duration, subnet mask, gateway, and DNS servers — "I offer you this configuration."</span>
+  </div>
+  <div class="dora-step ds-r">
+    <span class="dora-letter">R</span>
+    <span class="dora-label">Request</span>
+    <span class="dora-sub">Client broadcasts acceptance of the offer. "I am requesting the IP and configuration you offered." (Broadcast so other servers know which offer was accepted.)</span>
+  </div>
+  <div class="dora-step ds-a">
+    <span class="dora-letter">A</span>
+    <span class="dora-label">Acknowledge</span>
+    <span class="dora-sub">Server confirms the lease, records the assignment, and the client configures its network interface. Lease timer starts.</span>
+  </div>
+</div>
+
+<div class="callout callout-info">
+  <p class="callout-title">Why the Discover is a Broadcast</p>
+  <p>When a client first connects, it has no IP address — therefore it cannot address a unicast packet to a specific server. DHCP Discover messages are sent from source <code>0.0.0.0</code> to destination <code>255.255.255.255</code> (limited broadcast). All devices on the local network segment receive the broadcast. Only DHCP servers respond with Offers. If the DHCP server is on a different subnet, a <strong>DHCP relay agent</strong> (often configured on the router) forwards the broadcast as a unicast to the remote server.</p>
+</div>
+
+<h3 class="section">DHCP Leases</h3>
+
+<p>A <span class="key-term">DHCP lease</span> is the period of time for which a client is authorized to use an assigned IP address. The DHCP server sets the lease duration; typical values range from 1 hour (for high-turnover environments like hotel Wi-Fi) to 8 days (for stable corporate networks).</p>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Lease Renewal (50%)</span>
+    <span>When 50% of the lease time has elapsed, the client attempts to unicast a <strong>DHCP Request</strong> directly to the server that issued the lease, asking to renew. If the server responds with an Acknowledge, the lease is reset to full duration. This is a T1 renewal attempt.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Lease Renewal (87.5%)</span>
+    <span>If the T1 renewal at 50% fails (server unreachable), the client tries again at 87.5% of lease time — this time broadcasting to find any available DHCP server (in case the original server is down). This is the T2 rebinding attempt.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Lease Expiration</span>
+    <span>If neither renewal attempt succeeds and the lease expires, the client must immediately stop using the IP address, release its network configuration, and restart the DORA process from the beginning. The client loses network connectivity until a new lease is acquired.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">APIPA Fallback</span>
+    <span>If no DHCP server responds to the Discover, Windows clients self-assign an <strong>APIPA (Automatic Private IP Addressing)</strong> address in the range <code>169.254.0.0/16</code>. An APIPA address means DHCP has failed — the device can communicate only with other APIPA-addressed devices on the same segment, not with the internet or other network resources. APIPA addresses are the primary symptom of DHCP failure to recognize on the A+ exam.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">ipconfig /release</span>
+    <span>Windows command that immediately releases the current DHCP lease, sending a DHCP Release message to the server and clearing the IP configuration from the interface. Used in troubleshooting to force a fresh DHCP exchange.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">ipconfig /renew</span>
+    <span>Windows command that initiates a new DHCP lease request after release, or attempts renewal of an existing lease. Combining <code>/release</code> followed by <code>/renew</code> forces a full DORA cycle and is the standard first step for DHCP troubleshooting.</span>
+  </div>
+</div>
+
+<h3 class="section">DHCP Scope</h3>
+
+<p>A <span class="key-term">DHCP scope</span> is the full range of IP addresses that a DHCP server is configured to assign for a given subnet. The scope defines the boundaries of address assignment — the server will only issue addresses within the scope to clients.</p>
+
+<div class="arch-diagram">
+  <div class="arch-diagram-header">DHCP Scope — Example Configuration (192.168.10.0/24)</div>
+  <div class="arch-body">
+    <div class="def-list" style="margin:0;">
+      <div class="def-item">
+        <span class="def-term">Scope Range</span>
+        <span><code>192.168.10.1 – 192.168.10.254</code> — the full subnet range eligible for DHCP assignment (excluding network address .0 and broadcast .255)</span>
+      </div>
+      <div class="def-item">
+        <span class="def-term">Subnet Mask</span>
+        <span><code>255.255.255.0</code> — defines the network boundary for all assigned addresses; delivered to every client with its lease</span>
+      </div>
+      <div class="def-item">
+        <span class="def-term">Default Gateway</span>
+        <span><code>192.168.10.1</code> — the router interface address delivered to clients; required for internet and inter-subnet routing</span>
+      </div>
+      <div class="def-item">
+        <span class="def-term">DNS Servers</span>
+        <span><code>8.8.8.8, 8.8.4.4</code> — DNS resolver addresses delivered to clients; can be corporate DNS servers or public resolvers</span>
+      </div>
+      <div class="def-item">
+        <span class="def-term">Lease Duration</span>
+        <span>8 days (691,200 seconds) — how long each assigned address is reserved for the client; T1 renewal at 4 days, T2 rebind at 7 days</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3 class="section">DHCP Exclusions</h3>
+
+<p>A <span class="key-term">DHCP exclusion</span> is a specific address or range of addresses within the scope that the DHCP server will never assign dynamically. Exclusions are used to protect static IP addresses that have been manually configured on devices within the same subnet range — preventing the DHCP server from accidentally assigning those addresses to a different device and causing an <span class="key-term">IP address conflict</span>.</p>
+
+<p>Common devices requiring static IPs (and therefore DHCP exclusions) include routers, switches, servers, printers, access points, and network-attached storage devices. Best practice is to either use exclusions at the bottom of the scope range for static devices or to place all static devices in an entirely separate range outside the DHCP scope.</p>
+
+<div class="callout callout-warn">
+  <p class="callout-title">IP Address Conflict — What Happens</p>
+  <p>An IP address conflict occurs when two devices on the same network have the same IP address. Both devices will experience intermittent connectivity failures — whichever device's ARP reply arrives second is rejected. Windows detects conflicts and disables the NIC with an error. This is the consequence of not using exclusions for statically-configured devices. Always exclude all static IP addresses from DHCP scopes.</p>
+</div>
+
+<h3 class="section">DHCP Reservations</h3>
+
+<p>A <span class="key-term">DHCP reservation</span> is a permanent lease assignment that always gives the same IP address to a specific device, identified by its <strong>MAC address</strong>. The DHCP server sees the device's MAC address in its DHCP Discover, matches it to a reservation record, and always offers that device the reserved IP address.</p>
+
+<p>Reservations are the best of both worlds: the device's IP address is stable and predictable (like a static IP), but the address is still managed and distributed by DHCP (no manual interface configuration on the device). This makes reservations ideal for printers, servers, network cameras, and other devices that need a consistent IP but benefit from centralized DHCP management.</p>
+
+<div class="compare-grid">
+  <div class="compare-col">
+    <div class="compare-head ch-a">DHCP Reservation</div>
+    <div class="compare-body">
+      <div class="compare-row"><span class="cr-icon">✅</span><div><strong>Consistent IP</strong> — same address every time, tied to MAC address in DHCP server</div></div>
+      <div class="compare-row"><span class="cr-icon">✅</span><div><strong>Centrally managed</strong> — IP configuration lives in the DHCP server; easy to update</div></div>
+      <div class="compare-row"><span class="cr-icon">✅</span><div><strong>No device config needed</strong> — device still uses "Obtain automatically" in OS</div></div>
+      <div class="compare-row"><span class="cr-icon">⚠️</span><div><strong>Requires MAC address</strong> — must know the device's MAC to create the reservation</div></div>
+      <div class="compare-row"><span class="cr-icon">⚠️</span><div><strong>DHCP dependent</strong> — if DHCP server is down, device gets no IP until resolved</div></div>
+    </div>
+  </div>
+  <div class="compare-col">
+    <div class="compare-head ch-b">Static IP (Manual)</div>
+    <div class="compare-body">
+      <div class="compare-row"><span class="cr-icon">✅</span><div><strong>Consistent IP</strong> — same address every time; no DHCP dependency</div></div>
+      <div class="compare-row"><span class="cr-icon">✅</span><div><strong>DHCP independent</strong> — device retains IP even if DHCP server fails</div></div>
+      <div class="compare-row"><span class="cr-icon">⚠️</span><div><strong>Manual configuration</strong> — must configure IP, mask, gateway, DNS on device itself</div></div>
+      <div class="compare-row"><span class="cr-icon">⚠️</span><div><strong>Must exclude from DHCP</strong> — or risk address conflicts with dynamically assigned clients</div></div>
+      <div class="compare-row"><span class="cr-icon">⚠️</span><div><strong>Decentralized management</strong> — tracking is done outside the DHCP server; easy to lose track</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus — DHCP</p>
+  <p><strong>DORA</strong> = Discover, Offer, Request, Acknowledge — memorize this sequence. <strong>APIPA</strong> (169.254.x.x) = DHCP failure symptom. <strong>Scope</strong> = the full IP range a server manages. <strong>Exclusion</strong> = address(es) within the scope that will never be dynamically assigned (for static devices). <strong>Reservation</strong> = always assigns the same IP to a specific MAC address. <code>ipconfig /release</code> + <code>ipconfig /renew</code> = DHCP troubleshooting commands. A question about a device always needing the same IP → reservation, not static (on the A+ exam, reservation is the preferred enterprise answer).</p>
+</div>
+
+<table class="data-table">
+  <thead><tr><th>DHCP Concept</th><th>Definition</th><th>Exam Tip</th></tr></thead>
+  <tbody>
+    <tr><td>Scope</td><td>Pool of addresses DHCP server manages and assigns for a subnet</td><td>A scope must exist before DHCP can assign any addresses on that subnet</td></tr>
+    <tr><td>Exclusion</td><td>Address range inside the scope the server will never assign dynamically</td><td>Use for devices with manually-configured static IPs within the scope range</td></tr>
+    <tr><td>Reservation</td><td>Always assigns a specific IP to a device identified by MAC address</td><td>Device still uses "DHCP" mode; IP is consistent without static config on device</td></tr>
+    <tr><td>Lease</td><td>Duration an assigned IP is valid; renewed at 50% and 87.5% elapsed time</td><td>Expired lease = no IP; APIPA appears when DHCP is unreachable</td></tr>
+    <tr><td>APIPA</td><td>169.254.0.0/16 self-assigned address when DHCP fails</td><td>169.254.x.x address on a device = DHCP server not found/not responding</td></tr>
+  </tbody>
+</table>
+
+
+<!-- ═══ VLAN ═══ -->
+<h2 class="chapter"><span class="ch-num">SECTION 4</span>VLAN — Virtual Local Area Network</h2>
+
+<p>A <span class="key-term">VLAN (Virtual Local Area Network)</span> is a logical network segmentation technique that divides a single physical network infrastructure into multiple isolated virtual networks. Devices on different VLANs cannot communicate with each other at Layer 2 — they behave as though they are on entirely separate physical networks, even though they may share the same switches, cables, and access points.</p>
+
+<p>VLANs are configured on managed switches and operate at <strong>Layer 2 (Data Link Layer)</strong> of the OSI model. The switch tags each Ethernet frame with a <span class="key-term">VLAN ID (VID)</span> — a 12-bit field in the IEEE 802.1Q tag header — allowing the switch to enforce separation between VLAN members. Inter-VLAN routing requires a Layer 3 device (router or Layer 3 switch) and is deliberate and policy-controlled.</p>
+
+<h3 class="section">Why VLANs Matter</h3>
+
+<div class="arch-body" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:20px 24px;margin:20px 0;">
+  <div class="benefit-row">
+    <div class="benefit-icon">🔒</div>
+    <div class="benefit-body">
+      <strong>Security and isolation</strong>
+      <span>Separating sensitive systems (finance, HR, executive) from general employee traffic and guest Wi-Fi prevents lateral movement by attackers. Even if a guest device is compromised, it cannot reach internal servers on a different VLAN without passing through a firewall and router — attack surface is dramatically reduced.</span>
+    </div>
+  </div>
+  <div class="benefit-row">
+    <div class="benefit-icon">📡</div>
+    <div class="benefit-body">
+      <strong>Broadcast domain reduction</strong>
+      <span>Every device in a VLAN shares a broadcast domain. Broadcasts (ARP, DHCP Discover) reach only devices in the same VLAN — not the entire physical network. In a flat network of 500 devices, every ARP broadcast reaches all 500 devices. With VLANs splitting that into five groups of 100, broadcasts reach only 100 devices, significantly reducing unnecessary traffic and improving performance.</span>
+    </div>
+  </div>
+  <div class="benefit-row">
+    <div class="benefit-icon">🏗️</div>
+    <div class="benefit-body">
+      <strong>Simplified administration</strong>
+      <span>VLANs allow logical grouping of users by function (Sales VLAN, Engineering VLAN, Servers VLAN) regardless of physical location. Moving an employee to a different department requires changing their VLAN assignment in the switch — no physical recabling needed. QoS (Quality of Service) policies can prioritize VoIP VLAN traffic with a single switch configuration change.</span>
+    </div>
+  </div>
+  <div class="benefit-row">
+    <div class="benefit-icon">💰</div>
+    <div class="benefit-body">
+      <strong>Cost efficiency</strong>
+      <span>VLANs enable multiple logically separate networks over shared physical infrastructure — fewer switches, fewer cables, fewer network closets. A single managed switch can host VLANs for every department in a building. A single uplink cable carries all VLAN traffic between floors using 802.1Q trunking, replacing what would otherwise require a separate physical cable per VLAN.</span>
+    </div>
+  </div>
+</div>
+
+<h3 class="section">Access Ports vs. Trunk Ports</h3>
+
+<div class="compare-grid">
+  <div class="compare-col">
+    <div class="compare-head ch-a">Access Port</div>
+    <div class="compare-body">
+      <div class="compare-row"><span class="cr-icon">🖥️</span><div><strong>One VLAN only</strong> — carries traffic for a single VLAN; untagged frames to end devices</div></div>
+      <div class="compare-row"><span class="cr-icon">🔌</span><div><strong>Connects end devices</strong> — computers, phones, printers, cameras</div></div>
+      <div class="compare-row"><span class="cr-icon">🏷️</span><div><strong>No 802.1Q tag visible to device</strong> — switch strips tag before sending to end device</div></div>
+      <div class="compare-row"><span class="cr-icon">⚙️</span><div>Configured with <code>switchport mode access</code> + <code>switchport access vlan [ID]</code></div></div>
+    </div>
+  </div>
+  <div class="compare-col">
+    <div class="compare-head ch-c">Trunk Port</div>
+    <div class="compare-body">
+      <div class="compare-row"><span class="cr-icon">🌐</span><div><strong>Multiple VLANs</strong> — carries tagged traffic for many VLANs simultaneously on one link</div></div>
+      <div class="compare-row"><span class="cr-icon">🔌</span><div><strong>Connects switches, routers, APs</strong> — infrastructure-to-infrastructure links</div></div>
+      <div class="compare-row"><span class="cr-icon">🏷️</span><div><strong>802.1Q tags preserved</strong> — each frame carries its VLAN ID tag so receiving device knows which VLAN</div></div>
+      <div class="compare-row"><span class="cr-icon">⚙️</span><div>Configured with <code>switchport mode trunk</code> + <code>switchport trunk allowed vlan [list]</code></div></div>
+    </div>
+  </div>
+</div>
+
+<h3 class="section">VLAN Example — Office Segmentation</h3>
+
+<p>The following diagram shows a typical small-business VLAN deployment. All devices connect to the same physical switch but are logically separated into four VLANs. A router (or Layer 3 switch) handles inter-VLAN routing and enforces firewall rules between segments.</p>
+
+<div class="vlan-grid" style="grid-template-columns:1fr 1fr 1fr 1fr;">
+  <div class="vlan-card">
+    <div class="vlan-head vh-10">VLAN 10 — Staff<br><span style="font-size:10px;font-weight:400;">192.168.10.0/24</span></div>
+    <div class="vlan-body">
+      <div class="vlan-device">💻 <span><strong>Workstations</strong></span></div>
+      <div class="vlan-device">🖨️ <span><strong>Staff Printers</strong></span></div>
+      <div class="vlan-device">📞 <span><strong>IP Phones</strong></span></div>
+    </div>
+  </div>
+  <div class="vlan-card">
+    <div class="vlan-head vh-20">VLAN 20 — Servers<br><span style="font-size:10px;font-weight:400;">192.168.20.0/24</span></div>
+    <div class="vlan-body">
+      <div class="vlan-device">🖥️ <span><strong>File Server</strong></span></div>
+      <div class="vlan-device">🗄️ <span><strong>Database Server</strong></span></div>
+      <div class="vlan-device">🔐 <span><strong>Active Directory</strong></span></div>
+    </div>
+  </div>
+  <div class="vlan-card">
+    <div class="vlan-head vh-30">VLAN 30 — Guest<br><span style="font-size:10px;font-weight:400;">192.168.30.0/24</span></div>
+    <div class="vlan-body">
+      <div class="vlan-device">📱 <span><strong>Guest Phones</strong></span></div>
+      <div class="vlan-device">💻 <span><strong>Visitor Laptops</strong></span></div>
+      <div class="vlan-device">☁️ <span>Internet only</span></div>
+    </div>
+  </div>
+  <div class="vlan-card">
+    <div class="vlan-head vh-40">VLAN 40 — Cameras<br><span style="font-size:10px;font-weight:400;">192.168.40.0/24</span></div>
+    <div class="vlan-body">
+      <div class="vlan-device">📷 <span><strong>IP Cameras</strong></span></div>
+      <div class="vlan-device">🎥 <span><strong>DVR/NVR</strong></span></div>
+      <div class="vlan-device">🔒 <span>Isolated from staff</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="callout callout-tip">
+  <p class="callout-title">Native VLAN</p>
+  <p>On a trunk port, the <strong>native VLAN</strong> is the VLAN whose traffic is sent <em>untagged</em>. When a frame arrives on a trunk port with no 802.1Q tag, the switch assigns it to the native VLAN. By default this is VLAN 1 on Cisco equipment. Mismatched native VLANs on trunk ports can cause subtle connectivity issues and are a security concern (VLAN hopping attacks exploit native VLAN mismatches). Best practice: change the native VLAN from VLAN 1 to an unused VLAN and use a dedicated management VLAN.</p>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus — VLANs</p>
+  <p>VLANs operate at <strong>Layer 2</strong> and create separate <strong>broadcast domains</strong>. The IEEE standard for VLAN tagging is <strong>802.1Q</strong>. <strong>Access ports</strong> carry one VLAN for end devices; <strong>trunk ports</strong> carry multiple VLANs between switches. Inter-VLAN routing requires a <strong>Layer 3 device</strong> (router or L3 switch). A question about isolating guest Wi-Fi from corporate traffic → VLANs. A question about reducing broadcast traffic on a large flat network → VLANs.</p>
+</div>
+
+
+<!-- ═══ VPN ═══ -->
+<h2 class="chapter"><span class="ch-num">SECTION 5</span>VPN — Virtual Private Network</h2>
+
+<p>A <span class="key-term">VPN (Virtual Private Network)</span> creates a secure, encrypted communications tunnel over an untrusted public network — typically the internet. The VPN allows a remote device to communicate as if it were physically connected to the private network, with all traffic encrypted and unreadable to anyone intercepting it on the path between the client and the VPN server.</p>
+
+<p>From the user's perspective, a VPN makes their device appear to be "inside" the corporate network, on the home network, or in a different geographic location. From the network's perspective, the VPN creates a logical point-to-point connection between two endpoints that routes all traffic through an encrypted tunnel, regardless of the physical path the packets take across the internet.</p>
+
+<div class="callout callout-info">
+  <p class="callout-title">Why VPNs Are Essential</p>
+  <p>Public networks — hotel Wi-Fi, airport networks, coffee shop hotspots — are untrusted environments where attackers can potentially intercept unencrypted traffic. A VPN encrypts all traffic leaving the device before it enters the public network, so even if an attacker captures every packet, they see only encrypted ciphertext. VPNs also allow remote workers to access internal corporate resources (file servers, printers, internal web applications) that are not exposed to the public internet.</p>
+</div>
+
+<h3 class="section">How a VPN Tunnel Works</h3>
+
+<div class="process-flow">
+  <div class="flow-title">VPN Connection — Step-by-Step</div>
+  <div class="flow-step">
+    <div class="flow-num">01</div>
+    <div class="flow-text"><strong>Client initiates connection.</strong> The VPN client software (or built-in OS VPN client) connects to the <strong>VPN concentrator / server</strong> at the corporate network edge. The connection is made over the public internet using the VPN server's public IP address.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">02</div>
+    <div class="flow-text"><strong>Authentication.</strong> The client authenticates to the VPN server using credentials: username/password, digital certificate, multi-factor authentication token, or a pre-shared key. This verifies the client's identity before the tunnel is established.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">03</div>
+    <div class="flow-text"><strong>Tunnel establishment and key exchange.</strong> The client and server negotiate encryption parameters and exchange cryptographic keys (using protocols like IKE for IPsec or TLS for SSL VPNs). This establishes the encrypted tunnel.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">04</div>
+    <div class="flow-text"><strong>IP assignment.</strong> The VPN server assigns the client a private IP address from the corporate address space (often via an internal DHCP scope). The client now has two IPs — its public internet address and its VPN tunnel address.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">05</div>
+    <div class="flow-text"><strong>Encapsulation and encryption.</strong> All outbound packets from the client are <strong>encapsulated</strong> inside the VPN tunnel protocol (encrypted) and sent to the VPN server. The VPN server decrypts them and forwards them to their internal destination. Return traffic is encrypted by the server and sent back through the tunnel.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">06</div>
+    <div class="flow-text"><strong>Client appears as internal device.</strong> From the perspective of internal servers, the VPN client is just another device on the corporate network — its VPN-assigned IP is on the corporate subnet. Access controls, shared drives, and internal applications work as if the user were on-site.</div>
+  </div>
+</div>
+
+<h3 class="section">VPN Types</h3>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Remote Access VPN</span>
+    <span>Connects an individual client device to a remote private network over the internet. This is the most common VPN type for remote workers — a technician or employee installs VPN client software, authenticates, and gains access to internal company resources from home or while traveling. The VPN concentrator at the company's edge terminates the client connections. Also called <strong>client-to-site VPN</strong>.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Site-to-Site VPN</span>
+    <span>Connects two entire networks (typically two office locations or a branch office to a headquarters) through a permanent encrypted tunnel. Two VPN gateways (routers or firewalls) handle the encryption/decryption; end-user devices on either side are unaware the VPN exists — they see the remote network as if it were a local subnet. More scalable than remote access for fixed locations.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Split Tunneling</span>
+    <span>A VPN configuration where only traffic destined for the corporate network goes through the encrypted VPN tunnel, while internet-bound traffic goes directly out the user's local connection. <strong>Split tunneling ON:</strong> better performance, less load on corporate bandwidth. <strong>Split tunneling OFF (full tunnel):</strong> all traffic goes through corporate — better security and content filtering control, but higher bandwidth consumption at the VPN concentrator.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Always-On VPN</span>
+    <span>Automatically establishes the VPN tunnel whenever the device connects to a non-corporate network, without requiring user action. The device is always protected and always has access to corporate resources. Used in enterprise managed devices to ensure consistent security policy enforcement regardless of user location.</span>
+  </div>
+</div>
+
+<h3 class="section">VPN Protocols</h3>
+
+<div class="vpn-row" style="display:grid;grid-template-columns:140px 1fr;gap:16px;padding:10px 0;border-bottom:1px solid var(--border);font-family:var(--sans);font-size:14px;align-items:start;">
+  <span style="font-weight:700;color:var(--accent2);font-size:13px;">IPsec</span>
+  <span style="color:var(--muted);line-height:1.5;"><strong style="color:var(--text);">Internet Protocol Security.</strong> A suite of protocols operating at Layer 3 (Network Layer). Encrypts and authenticates IP packets directly. Supports two modes: <strong>Transport mode</strong> (encrypts payload only; used for host-to-host) and <strong>Tunnel mode</strong> (encrypts entire original IP packet inside a new packet; used for VPN gateways). Used by most enterprise VPN solutions. Requires UDP ports 500 (IKE) and 4500 (NAT-T).</span>
+</div>
+<div class="vpn-row" style="display:grid;grid-template-columns:140px 1fr;gap:16px;padding:10px 0;border-bottom:1px solid var(--border);font-family:var(--sans);font-size:14px;align-items:start;">
+  <span style="font-weight:700;color:var(--accent2);font-size:13px;">SSL/TLS VPN</span>
+  <span style="color:var(--muted);line-height:1.5;"><strong style="color:var(--text);">Operates at Layer 4–7.</strong> Uses standard TLS (the same encryption behind HTTPS) to create the VPN tunnel. The major advantage: works through firewalls and NAT on <strong>TCP port 443</strong> (HTTPS), which is almost never blocked. No special client software needed for clientless deployments (browser-based). OpenVPN is a common open-source SSL VPN. Used heavily for remote access VPNs because of universal firewall traversal.</span>
+</div>
+<div class="vpn-row" style="display:grid;grid-template-columns:140px 1fr;gap:16px;padding:10px 0;border-bottom:1px solid var(--border);font-family:var(--sans);font-size:14px;align-items:start;">
+  <span style="font-weight:700;color:var(--accent2);font-size:13px;">L2TP/IPsec</span>
+  <span style="color:var(--muted);line-height:1.5;"><strong style="color:var(--text);">Layer 2 Tunneling Protocol over IPsec.</strong> L2TP creates the tunnel structure; IPsec provides the encryption (L2TP itself has no encryption). Common in Windows built-in VPN client configurations. Uses UDP port 1701 for L2TP and IPsec ports for the security layer. Being largely replaced by IKEv2/IPsec and WireGuard in modern deployments.</span>
+</div>
+<div class="vpn-row" style="display:grid;grid-template-columns:140px 1fr;gap:16px;padding:10px 0;border-bottom:1px solid var(--border);font-family:var(--sans);font-size:14px;align-items:start;">
+  <span style="font-weight:700;color:var(--accent2);font-size:13px;">WireGuard</span>
+  <span style="color:var(--muted);line-height:1.5;"><strong style="color:var(--text);">Modern, lightweight VPN protocol.</strong> Significantly simpler codebase than IPsec (~4,000 lines vs. ~400,000), making it easier to audit for security vulnerabilities. Uses state-of-the-art cryptography (ChaCha20, Curve25519). Faster connection establishment and better performance than IPsec in many scenarios. Increasingly adopted by consumer VPN services and enterprise solutions.</span>
+</div>
+<div style="display:grid;grid-template-columns:140px 1fr;gap:16px;padding:10px 0;font-family:var(--sans);font-size:14px;align-items:start;">
+  <span style="font-weight:700;color:var(--accent2);font-size:13px;">PPTP</span>
+  <span style="color:var(--muted);line-height:1.5;"><strong style="color:var(--text);">Point-to-Point Tunneling Protocol.</strong> An older Microsoft-developed VPN protocol. <strong>Considered insecure and deprecated.</strong> Uses MS-CHAPv2 for authentication which has known cryptographic weaknesses. Should never be used for production VPNs. Appears on the A+ exam in the context of knowing it is <em>not</em> recommended — prefer IPsec, SSL/TLS, or WireGuard instead.</span>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Focus — VPN</p>
+  <p>A VPN creates an <strong>encrypted tunnel</strong> over an untrusted public network. <strong>Remote access VPN</strong> = one user to one site (client-to-site). <strong>Site-to-site VPN</strong> = two networks connected permanently. <strong>Split tunneling</strong> = corporate traffic goes through VPN; internet traffic goes direct. <strong>IPsec</strong> operates at Layer 3; <strong>SSL VPN</strong> uses port 443 (TLS/HTTPS). <strong>PPTP is insecure</strong> — the A+ exam treats it as deprecated. VPN concentrator = the enterprise device that terminates VPN connections at the network edge.</p>
+</div>
+
+<table class="data-table">
+  <thead><tr><th>Protocol</th><th>Layer</th><th>Port(s)</th><th>Encryption</th><th>Status</th></tr></thead>
+  <tbody>
+    <tr><td>PPTP</td><td>Layer 2</td><td>TCP 1723</td><td>Weak (MS-CHAPv2)</td><td>⛔ Deprecated / insecure</td></tr>
+    <tr><td>L2TP/IPsec</td><td>Layer 2 + 3</td><td>UDP 1701, 500, 4500</td><td>IPsec (AES)</td><td>✅ Acceptable; being replaced</td></tr>
+    <tr><td>IPsec (IKEv2)</td><td>Layer 3</td><td>UDP 500, 4500</td><td>AES (configurable)</td><td>✅ Standard enterprise choice</td></tr>
+    <tr><td>SSL/TLS (OpenVPN)</td><td>Layer 4–7</td><td>TCP/UDP 443 or 1194</td><td>TLS (AES)</td><td>✅ Best firewall traversal</td></tr>
+    <tr><td>WireGuard</td><td>Layer 3</td><td>UDP 51820</td><td>ChaCha20 / AES</td><td>✅ Modern; fast; simple</td></tr>
+  </tbody>
+</table>
+
+
+<!-- MASTER REFERENCE -->
+<div class="ch-divider"></div>
+
+<div class="summary-box">
+  <h3>Master Reference — Objective 2.4 Key Concepts</h3>
+  <div class="summary-grid">
+    <div class="summary-item"><span class="s-sym">DNS — A record</span><span>Maps hostname → IPv4 address; most common record type</span></div>
+    <div class="summary-item"><span class="s-sym">DNS — AAAA record</span><span>Maps hostname → IPv6 address; "quad-A"; 128-bit address</span></div>
+    <div class="summary-item"><span class="s-sym">DNS — CNAME</span><span>Alias → canonical hostname; cannot be at zone apex; no IP directly</span></div>
+    <div class="summary-item"><span class="s-sym">DNS — MX record</span><span>Specifies mail servers for domain; lower priority number = higher priority</span></div>
+    <div class="summary-item"><span class="s-sym">DNS — TXT record</span><span>Arbitrary text; used for SPF, DKIM, DMARC, domain verification</span></div>
+    <div class="summary-item"><span class="s-sym">DNS — TTL</span><span>Time to Live; how long resolvers cache a record before re-querying</span></div>
+    <div class="summary-item"><span class="s-sym">SPF</span><span>TXT record listing authorized sending IPs; -all = reject unauthorized</span></div>
+    <div class="summary-item"><span class="s-sym">DKIM</span><span>Cryptographic signature on email; public key in TXT record; survives forwarding</span></div>
+    <div class="summary-item"><span class="s-sym">DMARC</span><span>Policy layer at _dmarc.domain; p=none/quarantine/reject; aggregate reports</span></div>
+    <div class="summary-item"><span class="s-sym">DHCP DORA</span><span>Discover → Offer → Request → Acknowledge; automatic IP assignment</span></div>
+    <div class="summary-item"><span class="s-sym">DHCP Scope</span><span>Full range of IP addresses DHCP server manages for a subnet</span></div>
+    <div class="summary-item"><span class="s-sym">DHCP Exclusion</span><span>Addresses inside the scope that will never be dynamically assigned</span></div>
+    <div class="summary-item"><span class="s-sym">DHCP Reservation</span><span>Always assigns same IP to a device by MAC address; device uses DHCP mode</span></div>
+    <div class="summary-item"><span class="s-sym">DHCP Lease</span><span>Duration IP is valid; renews at 50% (T1) and 87.5% (T2) of lease time</span></div>
+    <div class="summary-item"><span class="s-sym">APIPA</span><span>169.254.x.x = DHCP failure; self-assigned; no internet connectivity</span></div>
+    <div class="summary-item"><span class="s-sym">VLAN</span><span>Layer 2 logical segmentation; separate broadcast domains; 802.1Q tagging</span></div>
+    <div class="summary-item"><span class="s-sym">VLAN — Access Port</span><span>One VLAN per port; for end devices; frames untagged to device</span></div>
+    <div class="summary-item"><span class="s-sym">VLAN — Trunk Port</span><span>Multiple VLANs on one link; 802.1Q tags preserved; connects switches/routers</span></div>
+    <div class="summary-item"><span class="s-sym">VPN — Remote Access</span><span>Client-to-site; individual user to corporate network; VPN client software</span></div>
+    <div class="summary-item"><span class="s-sym">VPN — Site-to-Site</span><span>Two networks connected via permanent tunnel; transparent to end users</span></div>
+    <div class="summary-item"><span class="s-sym">Split Tunneling</span><span>Only corporate traffic through VPN; internet traffic goes direct; performance tradeoff</span></div>
+    <div class="summary-item"><span class="s-sym">IPsec</span><span>Layer 3; UDP 500/4500; AES encryption; enterprise standard; Tunnel + Transport modes</span></div>
+    <div class="summary-item"><span class="s-sym">SSL VPN</span><span>Layer 4–7; TCP 443; traverses firewalls easily; OpenVPN; browser-based option</span></div>
+    <div class="summary-item"><span class="s-sym">PPTP</span><span>Deprecated; insecure; do not use; MS-CHAPv2 weakness</span></div>
+  </div>
+</div>
+
+<!-- QUICK REFERENCE -->
+<h2 class="chapter"><span class="ch-num">REFERENCE</span>Quick Reference Cards</h2>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>DNS Record Types</h4>
+    <ul>
+      <li><strong>A</strong> — hostname → IPv4 (32-bit)</li>
+      <li><strong>AAAA</strong> — hostname → IPv6 (128-bit)</li>
+      <li><strong>CNAME</strong> — alias → canonical hostname</li>
+      <li><strong>MX</strong> — mail servers; lower # = higher priority</li>
+      <li><strong>TXT</strong> — text data; SPF / DKIM / DMARC / verification</li>
+      <li><strong>PTR</strong> — reverse DNS; IP → hostname (not on exam list but common)</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Email Authentication Stack</h4>
+    <ul>
+      <li><strong>SPF</strong> — authorized sending IPs in TXT at domain root</li>
+      <li><strong>DKIM</strong> — crypto signature; public key in TXT at selector._domainkey</li>
+      <li><strong>DMARC</strong> — policy enforcement; TXT at _dmarc.domain</li>
+      <li><strong>p=none</strong> — monitor only; no enforcement</li>
+      <li><strong>p=quarantine</strong> — failing mail → spam folder</li>
+      <li><strong>p=reject</strong> — failing mail → refused entirely</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>DHCP Key Values</h4>
+    <ul>
+      <li><strong>DORA</strong> — Discover, Offer, Request, Acknowledge</li>
+      <li><strong>Scope</strong> — address pool for a subnet</li>
+      <li><strong>Exclusion</strong> — never assigned; protects static IPs</li>
+      <li><strong>Reservation</strong> — consistent IP tied to MAC address</li>
+      <li><strong>APIPA range</strong> — 169.254.0.0/16 (DHCP failure)</li>
+      <li><strong>T1 renewal</strong> — at 50% lease elapsed (unicast to server)</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>VPN Protocols — At a Glance</h4>
+    <ul>
+      <li><strong>IPsec / IKEv2</strong> — Layer 3; UDP 500 &amp; 4500; enterprise</li>
+      <li><strong>SSL/TLS (OpenVPN)</strong> — Layer 4–7; TCP 443; best traversal</li>
+      <li><strong>L2TP/IPsec</strong> — Layer 2+3; UDP 1701; Windows built-in</li>
+      <li><strong>WireGuard</strong> — modern; fast; UDP 51820</li>
+      <li><strong>PPTP</strong> — ⛔ insecure; deprecated; avoid</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout callout-exam" style="margin-top:28px;">
+  <p class="callout-title">Final Exam Reminders</p>
+  <p><strong>A record</strong> = IPv4; <strong>AAAA record</strong> = IPv6; <strong>CNAME</strong> = alias to another hostname (never an IP directly); <strong>MX</strong> = mail server (lower priority number = tried first).</p>
+  <p><strong>SPF, DKIM, DMARC</strong> are all DNS TXT records used for email authentication. SPF = authorized IPs. DKIM = cryptographic signature. DMARC = policy enforcement (none / quarantine / reject) + reporting.</p>
+  <p><strong>DHCP DORA</strong> = Discover (broadcast) → Offer → Request (broadcast) → Acknowledge. The client discovers and requests via broadcast because it has no IP address yet.</p>
+  <p><strong>APIPA = 169.254.x.x</strong> — always means DHCP failed. Follow up with <code>ipconfig /release</code> then <code>ipconfig /renew</code>.</p>
+  <p><strong>Exclusion</strong> = never assign this address to anyone. <strong>Reservation</strong> = always assign this address to this specific MAC address.</p>
+  <p><strong>VLANs</strong> work at Layer 2, use 802.1Q tagging, reduce broadcast domains, and require Layer 3 routing (router or L3 switch) for inter-VLAN communication. Access port = one VLAN. Trunk port = many VLANs.</p>
+  <p><strong>VPN</strong> = encrypted tunnel over untrusted network. Remote access = user to site. Site-to-site = network to network. Split tunneling = only corporate traffic in VPN. PPTP = insecure and deprecated.</p>
+  <p><strong>SSL VPN advantage</strong>: runs on TCP 443 (HTTPS) and traverses virtually all firewalls without special configuration — ideal when corporate VPN must work from restrictive networks.</p>
+</div>
+
+</div>
+</body>
+</html>

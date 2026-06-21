@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CompTIA A+ 1.1 — Monitor Mobile Device Hardware and Replacement Techniques</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --surface2: #f5f4f0;
+    --border: #e5e2d9;
+    --border2: #d4d0c4;
+    --text: #1a1a18;
+    --muted: #6b6860;
+    --accent: #c0392b;
+    --accent2: #2c3e6b;
+    --accent3: #1a6b3a;
+    --accent4: #b5590a;
+    --accent-light: #fdf2f1;
+    --accent2-light: #f0f2f8;
+    --accent3-light: #f0f8f3;
+    --accent4-light: #fdf5ed;
+    --serif: 'Crimson Pro', Georgia, serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── TOP NAV ── */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .top-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .nav-home {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+  .nav-home:hover { color: var(--accent2); }
+  .nav-home::before {
+    content: '←';
+    font-size: 12px;
+  }
+  .nav-sep {
+    font-size: 12px;
+    color: var(--border2);
+    flex-shrink: 0;
+  }
+  .nav-current {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nav-current strong {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    margin-right: 6px;
+  }
+  .top-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .nav-prev, .nav-next {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 4px 9px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    white-space: nowrap;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .nav-prev:hover, .nav-next:hover {
+    border-color: var(--border2);
+    color: var(--accent2);
+  }
+  .nav-prev::before { content: '← '; }
+  .nav-next::after  { content: ' →'; }
+
+  .nav-start {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--accent2);
+  padding: 4px 9px;
+  border: 1px solid var(--accent2);
+  border-radius: 3px;
+  opacity: 0.8;
+}
+
+  @media (max-width: 600px) {
+    .top-nav { padding: 0 16px; }
+    .nav-current { display: none; }
+    .nav-sep { display: none; }
+  }  
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  .page { max-width: 860px; margin: 0 auto; padding: 0 40px 80px; }
+
+  /* HEADER */
+  .book-header {
+    border-bottom: 3px double var(--border2);
+    padding: 56px 0 32px;
+    margin-bottom: 48px;
+  }
+  .book-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .book-eyebrow span {
+    background: var(--accent);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-right: 10px;
+    font-size: 10px;
+  }
+  .book-title {
+    font-family: var(--serif);
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+  .book-subtitle {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .book-subtitle span { display: flex; align-items: center; gap: 6px; }
+  .book-subtitle span::before { content: '·'; color: var(--border2); }
+  .book-subtitle span:first-child::before { display: none; }
+
+  /* HEADINGS */
+  h2.chapter {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 600;
+    margin: 52px 0 6px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    letter-spacing: -0.01em;
+  }
+  h2.chapter .ch-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+    letter-spacing: 0.1em;
+    font-weight: 400;
+  }
+  h3.section {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    margin: 36px 0 12px;
+  }
+  h3.section::before { content: '§ '; color: var(--muted); font-weight: 300; }
+
+  p { margin-bottom: 16px; }
+
+  /* CALLOUTS */
+  .callout {
+    border-left: 3px solid;
+    padding: 14px 20px;
+    margin: 24px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 15.5px;
+  }
+  .callout p { margin-bottom: 6px; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout-title {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px !important;
+  }
+  .callout-exam { border-color: var(--accent); background: var(--accent-light); }
+  .callout-exam .callout-title { color: var(--accent); }
+  .callout-info { border-color: var(--accent2); background: var(--accent2-light); }
+  .callout-info .callout-title { color: var(--accent2); }
+  .callout-tip { border-color: var(--accent3); background: var(--accent3-light); }
+  .callout-tip .callout-title { color: var(--accent3); }
+  .callout-warn { border-color: var(--accent4); background: var(--accent4-light); }
+  .callout-warn .callout-title { color: var(--accent4); }
+
+  /* TABLES */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+    font-family: var(--sans);
+    margin: 16px 0 24px;
+  }
+  .data-table thead th {
+    background: var(--surface2);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 9px 13px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .data-table tbody tr { border-bottom: 1px solid var(--border); }
+  .data-table tbody tr:last-child { border-bottom: none; }
+  .data-table td { padding: 9px 13px; vertical-align: top; line-height: 1.5; }
+  .data-table td:first-child {
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 13.5px;
+  }
+
+  /* PROCESS FLOW */
+  .process-flow {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: var(--sans);
+    font-size: 14px;
+  }
+  .flow-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .flow-step:last-child { border-bottom: none; }
+  .flow-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+    min-width: 24px;
+    padding-top: 2px;
+  }
+  .flow-text { color: var(--text); line-height: 1.55; }
+  .flow-text strong { font-weight: 600; }
+
+  /* DEF LIST */
+  .def-list { margin: 16px 0 24px; }
+  .def-item {
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 210px 1fr;
+    gap: 20px;
+    font-size: 15px;
+  }
+  .def-item:last-child { border-bottom: none; }
+  .def-term {
+    font-family: var(--sans);
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 14px;
+    padding-top: 1px;
+    line-height: 1.4;
+  }
+
+  /* GRID CARDS */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 16px 18px;
+  }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 10px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card ul { list-style: none; font-family: var(--sans); font-size: 13.5px; }
+  .card ul li {
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .card ul li:last-child { border-bottom: none; }
+  .card ul li strong { color: var(--text); }
+
+  /* BODY LIST */
+  ul.body-list {
+    list-style: none;
+    font-family: var(--sans);
+    font-size: 15px;
+    padding: 0;
+    margin: 12px 0 20px;
+  }
+  ul.body-list li {
+    padding: 5px 0 5px 18px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  ul.body-list li:last-child { border-bottom: none; }
+  ul.body-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--border2);
+    font-size: 12px;
+  }
+  ul.body-list li strong { color: var(--text); }
+
+  /* COMPONENT CARD */
+  .component-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 18px 22px;
+    margin: 16px 0;
+    font-family: var(--sans);
+  }
+  .component-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .component-card-head h4 {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .difficulty-badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding: 3px 9px;
+    border-radius: 3px;
+    text-transform: uppercase;
+  }
+  .diff-easy { background: #f0f8f3; color: #1a6b3a; border: 1px solid #a8d4b8; }
+  .diff-mod { background: #fdf5ed; color: #b5590a; border: 1px solid #e8c79a; }
+  .diff-hard { background: #fdf2f1; color: #c0392b; border: 1px solid #e8b4ae; }
+  .component-card p { font-size: 13.5px; color: var(--muted); margin-bottom: 8px; line-height: 1.6; }
+  .component-card p:last-child { margin-bottom: 0; }
+
+  /* CODE */
+  code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: var(--accent);
+  }
+
+  .key-term { font-style: italic; font-weight: 500; color: var(--accent2); }
+
+  /* SUMMARY BOX */
+  .summary-box {
+    background: var(--text);
+    color: #f0ede6;
+    border-radius: 6px;
+    padding: 28px 32px;
+    margin: 40px 0;
+  }
+  .summary-box h3 {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 18px;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 32px;
+  }
+  .summary-item {
+    font-family: var(--sans);
+    font-size: 13.5px;
+    color: #c4bfb4;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .summary-item .s-sym {
+    color: #fff;
+    font-weight: 600;
+    min-width: 175px;
+    line-height: 1.4;
+  }
+
+  .ch-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--border2), transparent);
+    margin: 48px 0;
+  }
+
+  /* INDICATOR DOTS */
+  .malware-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .ind-high { background: var(--accent); }
+  .ind-med { background: var(--accent4); }
+  .ind-low { background: var(--accent3); }
+
+  @media (max-width: 680px) {
+    .page { padding: 0 20px 60px; }
+    .summary-grid, .card-grid { grid-template-columns: 1fr; }
+    .def-item { grid-template-columns: 1fr; gap: 4px; }
+    .component-card-head { flex-direction: column; align-items: flex-start; gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV — update href values to match your actual file names -->
+<nav class="top-nav">
+  <div class="top-nav-left">
+    <a class="nav-home" href="../index.html">Study Guide</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current"><strong>1.1</strong> Monitor Mobile Device Hardware and Replacement Techniques</span>
+  </div>
+  <div class="top-nav-right">
+    <!-- Point these to the adjacent section files, or remove if not applicable -->
+    <span class="nav-start">Start of Core 1</span>
+    <a class="nav-next" href="./1_2-Mobile-Accessories-Connectivity.html">1.2</a>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- HEADER -->
+<div class="book-header">
+  <div class="book-eyebrow">
+    <span>1.1</span>
+    CompTIA A+ · Core 1 (220-1201) · Domain 1 — Mobile Devices
+  </div>
+  <h1 class="book-title">Monitor Mobile Device Hardware<br>and Replacement Techniques</h1>
+  <div class="book-subtitle">
+    <span>Objective 1.1</span>
+    <span>Domain weight: 13%</span>
+    <span>9 components</span>
+  </div>
+</div>
+
+<!-- INTRO -->
+<h2 class="chapter"><span class="ch-num">OVERVIEW</span>Introduction</h2>
+
+<p>Objective 1.1 covers the internal and external hardware components found in laptops and other mobile devices, and — critically — the realistic considerations a technician faces when monitoring, diagnosing, or replacing each one. Mobile device hardware differs from desktop hardware (Domain 3) in one fundamental way: <strong>space is scarce</strong>. Every component is miniaturized, tightly integrated, and often far less accessible or modular than its desktop equivalent, which directly shapes how each component is monitored, sourced, and replaced.</p>
+
+<p>This objective is best understood through a recurring lens: for each component, ask <em>"How accessible is this for replacement, and what's different about doing this on a laptop compared to a desktop?"</em> Some components (batteries, RAM on some models, storage) are still reasonably serviceable. Others (soldered RAM, integrated wireless antennas) increasingly are not, and the exam wants you to recognize that distinction.</p>
+
+<div class="callout callout-info">
+  <p class="callout-title">A Recurring Theme: Soldered vs. Socketed Components</p>
+  <p>On many modern laptops — especially thin/ultraportable models — components that would be easily replaceable on a desktop (RAM, sometimes even storage) are instead <strong>soldered directly to the motherboard</strong> to save space and thickness. A soldered component generally cannot be swapped by a typical technician with standard tools; replacement may require board-level repair skills, specialized equipment, or simply replacing the entire motherboard/system. Always check whether a given laptop's specific component is socketed (replaceable) or soldered (not practically replaceable) before promising a repair.</p>
+</div>
+
+<!-- ═══ COMPONENT 1: BATTERY ═══ -->
+<h2 class="chapter"><span class="ch-num">COMPONENT 01</span>Battery</h2>
+
+<div class="component-card">
+  <div class="component-card-head"><h4>Laptop/Mobile Battery</h4><span class="difficulty-badge diff-easy">USUALLY SERVICEABLE</span></div>
+  <p>Most laptops use a <span class="key-term">lithium-ion (Li-ion)</span> or <span class="key-term">lithium-polymer (Li-Po)</span> battery, which degrades gradually over its lifespan through normal charge/discharge cycles. Monitoring battery health typically involves built-in OS battery reports or manufacturer diagnostic utilities that track metrics like current maximum capacity versus the battery's original rated/design capacity.</p>
+  <p><strong>Symptoms of a failing battery</strong> include significantly reduced runtime compared to when the device was new, the device shutting down unexpectedly even while the OS reports remaining charge, visible swelling or physical deformation of the battery (a serious safety concern requiring immediate attention), or the device only functioning while plugged directly into AC power.</p>
+  <p><strong>Replacement considerations:</strong> some laptops use a user-accessible battery secured by a simple latch or a few external screws, while many modern thin/ultraportable laptops use an internal battery secured with adhesive and requiring disassembly of the chassis to access — significantly increasing replacement difficulty and risk of damaging surrounding components (especially the often-fragile ribbon cables nearby) during removal.</p>
+</div>
+
+<div class="callout callout-warn">
+  <p class="callout-title">Common Pitfall — Swollen Batteries</p>
+  <p>A swollen lithium battery is a genuine safety hazard, not just a performance issue — the swelling indicates internal gas buildup from battery degradation, and a swollen battery should be handled carefully, never punctured or bent, and replaced promptly. A swollen battery can also physically push against and damage the trackpad, keyboard, or chassis of a laptop if left unaddressed.</p>
+</div>
+
+<!-- ═══ COMPONENT 2: KEYBOARD/KEYS ═══ -->
+<h2 class="chapter"><span class="ch-num">COMPONENT 02</span>Keyboard/Keys</h2>
+
+<div class="component-card">
+  <div class="component-card-head"><h4>Laptop Keyboard</h4><span class="difficulty-badge diff-mod">VARIES BY MODEL</span></div>
+  <p>A laptop keyboard can fail entirely (often due to a damaged ribbon cable connecting it to the motherboard, or a failed keyboard controller), or fail partially with individual unresponsive or sticking keys (frequently caused by debris, spilled liquid, or a physically damaged key mechanism/switch).</p>
+  <p><strong>Individual key replacement:</strong> on many laptop keyboards, individual keycaps can be carefully removed and replaced if the underlying scissor-switch mechanism beneath them is intact and undamaged — a relatively accessible repair. If the switch mechanism itself is damaged, however, individual key repair is often not possible, and the entire keyboard assembly typically must be replaced instead.</p>
+  <p><strong>Full keyboard replacement:</strong> on many laptops, the keyboard is part of (or sits beneath) the top case/palm rest assembly, meaning a full keyboard replacement may involve significant disassembly — removing the laptop's bottom panel, battery, and various internal cables to access and replace the keyboard assembly, rather than a simple drop-in part swap.</p>
+</div>
+
+<div class="callout callout-tip">
+  <p class="callout-title">External Keyboard as a Stopgap</p>
+  <p>While awaiting a proper internal keyboard repair or replacement, a USB or Bluetooth external keyboard is a practical, low-cost stopgap that restores full typing functionality immediately — a relevant troubleshooting suggestion in a support scenario, even though it isn't a permanent fix for the underlying hardware issue.</p>
+</div>
+
+<!-- ═══ COMPONENT 3: RAM ═══ -->
+<h2 class="chapter"><span class="ch-num">COMPONENT 03</span>RAM (Random-Access Memory)</h2>
+
+<div class="component-card">
+  <div class="component-card-head"><h4>Mobile RAM</h4><span class="difficulty-badge diff-hard">INCREASINGLY SOLDERED</span></div>
+  <p>As covered in objective 3.3, laptop RAM traditionally uses the <strong>SODIMM</strong> form factor, installed in user-accessible slots typically reached by removing a bottom panel. On these models, RAM is straightforward to inspect, test, and replace/upgrade using the same general compatibility rules (matching DDR generation, speed) covered in objective 3.3.</p>
+  <p><strong>The growing complication:</strong> many modern thin/ultraportable laptops solder RAM directly onto the motherboard to save internal space and thickness, eliminating SODIMM slots entirely. On these models, RAM capacity is fixed permanently at the point of manufacture/purchase — there is no practical field-replacement or upgrade path for a typical technician, and a RAM-related hardware failure on a soldered system generally requires full motherboard replacement.</p>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>Before promising a customer a RAM upgrade or RAM-related repair on a laptop, the first practical step is determining whether that specific model uses replaceable SODIMM slots or soldered RAM — this is frequently the deciding factor in a scenario question about whether a described repair/upgrade is actually possible as requested, or whether the realistic answer is "this isn't upgradable, only a full system replacement would increase RAM capacity."</p>
+</div>
+
+<!-- ═══ COMPONENT 4: HDD/SSD ═══ -->
+<h2 class="chapter"><span class="ch-num">COMPONENT 04</span>HDD/SSD</h2>
+
+<div class="component-card">
+  <div class="component-card-head"><h4>Mobile Storage</h4><span class="difficulty-badge diff-mod">VARIES BY MODEL</span></div>
+  <p>Laptop storage follows the same fundamental HDD/SSD distinction covered in objective 3.4, using the smaller <strong>2.5-inch</strong> HDD form factor or compact SSD form factors (<strong>M.2</strong>, occasionally older <strong>mSATA</strong>) suited to a laptop's limited internal space.</p>
+  <p><strong>Accessibility varies significantly by model:</strong> many laptops provide a dedicated, easily accessible storage bay (sometimes behind its own small access panel, separate from the main bottom cover) allowing a quick drive swap or upgrade. Other models — again, especially thinner/ultraportable designs — solder storage directly to the motherboard, similar to the RAM situation above, eliminating any practical field-replacement option.</p>
+  <p><strong>Before replacing failed storage,</strong> data recovery and backup considerations apply just as they would for any storage device — a technician should generally attempt to back up accessible data before replacing a failing drive, and should discuss data recovery options with the customer if the drive has already failed completely.</p>
+</div>
+
+<!-- ═══ COMPONENT 5: WIRELESS CARDS ═══ -->
+<h2 class="chapter"><span class="ch-num">COMPONENT 05</span>Wireless Cards</h2>
+
+<div class="component-card">
+  <div class="component-card-head"><h4>Wi-Fi/Bluetooth Card</h4><span class="difficulty-badge diff-mod">USUALLY A SMALL M.2 CARD</span></div>
+  <p>A laptop's wireless networking capability (Wi-Fi, and often combined Bluetooth) is typically provided by a small card — commonly a compact M.2-format card distinct from the larger M.2 SSDs covered in objective 3.4 — installed in a dedicated mini slot on the motherboard, with thin coaxial antenna cables running from the card to antennas embedded elsewhere in the laptop's chassis (see Component 7, below).</p>
+  <p><strong>Symptoms of a failing wireless card</strong> include the device being completely unable to detect any wireless networks, intermittent disconnections, or significantly degraded wireless performance compared to other devices in the same location — though weak signal symptoms should also prompt checking antenna cable connections before assuming the card itself has failed.</p>
+  <p><strong>Replacement</strong> generally involves accessing the card through the bottom panel, carefully disconnecting the small antenna cable connectors (which are delicate and easily damaged if handled roughly), removing the single retaining screw, and swapping in a compatible replacement card.</p>
+</div>
+
+<!-- ═══ COMPONENT 6: PHYSICAL PRIVACY AND SECURITY COMPONENTS ═══ -->
+<h2 class="chapter"><span class="ch-num">COMPONENT 06</span>Physical Privacy and Security Components</h2>
+
+<h3 class="section">Biometrics</h3>
+
+<p>Many laptops include built-in <span class="key-term">biometric</span> authentication hardware — most commonly a <strong>fingerprint reader</strong> embedded in the palm rest, power button, or trackpad area, and increasingly an <strong>infrared (IR) camera</strong> supporting facial recognition login (such as Windows Hello). These components connect to the motherboard via small internal cables/connectors and, when they fail, typically require accessing and replacing the specific small module rather than any larger assembly.</p>
+
+<h3 class="section">Near-Field Scanner Features</h3>
+
+<p>Some business-class and higher-end laptops include a <span class="key-term">Near-Field Communication (NFC)</span> reader/scanner, supporting short-range wireless interactions such as tapping a badge for authentication, pairing with NFC-enabled peripherals, or contactless data exchange with another NFC-capable device. Like other internal modules, an NFC component is typically a small board connected via a ribbon or small wire harness to the motherboard.</p>
+
+<div class="callout callout-info">
+  <p class="callout-title">Why This Category Exists in the Objective</p>
+  <p>Biometric and NFC components are grouped together here because they share a common practical theme: they're typically small, specialized internal modules — not general-purpose components — and a technician troubleshooting one should expect to identify and replace that specific small part (the fingerprint sensor module, the NFC reader board) rather than a larger, more generic assembly. Failure of one of these components rarely affects the rest of the system's basic functionality, but does eliminate that specific authentication or interaction method until repaired.</p>
+</div>
+
+<!-- ═══ COMPONENT 7: WI-FI ANTENNA ═══ -->
+<h2 class="chapter"><span class="ch-num">COMPONENT 07</span>Wi-Fi Antenna Connector/Placement</h2>
+
+<div class="component-card">
+  <div class="component-card-head"><h4>Wi-Fi Antenna</h4><span class="difficulty-badge diff-hard">EMBEDDED IN CHASSIS</span></div>
+  <p>A laptop's Wi-Fi antennas are typically thin wire elements embedded within the laptop's <strong>display bezel/lid</strong> — deliberately placed there because that location is generally the highest point of the laptop and furthest from dense, signal-blocking internal metal components (motherboard, chassis frame, heat sink/cooling assembly), giving the antenna the clearest possible path for radio signal.</p>
+  <p>Thin coaxial cables run from each antenna, down through the laptop's hinge area, to small connectors on the wireless card discussed in Component 5. These hinge-routed cables are a known point of physical wear over the laptop's lifetime, since they flex every time the lid is opened and closed.</p>
+</div>
+
+<div class="callout callout-warn">
+  <p class="callout-title">Common Pitfall — Antenna Cable Damage at the Hinge</p>
+  <p>Repeated opening and closing of a laptop lid over years of use can gradually stress, fray, or eventually break the thin antenna cables routed through the hinge — a real-world and exam-relevant cause of degraded or intermittent Wi-Fi performance that has nothing to do with the wireless card itself, the router, or the network. A scenario describing wireless performance that's noticeably worse on one specific laptop than on other devices in the same location, especially if it correlates with the lid being opened/closed, should raise suspicion of damaged antenna cabling rather than purely a wireless card or network problem.</p>
+</div>
+
+<!-- ═══ COMPONENT 8: CAMERA/WEBCAM ═══ -->
+<h2 class="chapter"><span class="ch-num">COMPONENT 08</span>Camera/Webcam</h2>
+
+<div class="component-card">
+  <div class="component-card-head"><h4>Integrated Camera</h4><span class="difficulty-badge diff-mod">SMALL MODULE, LID-MOUNTED</span></div>
+  <p>A laptop's built-in webcam is typically a small module embedded in the top bezel of the display, connected via a thin ribbon cable that runs down through the display assembly and hinge to the motherboard — following a similar physical routing path to the Wi-Fi antenna cables discussed above, and subject to the same general hinge-flex wear concerns over time.</p>
+  <p>Camera failure can stem from a damaged ribbon cable connection (similar root cause to antenna cable issues), a failed camera module itself, or — very commonly in practice — a <strong>software/driver or privacy-setting issue</strong> rather than a hardware fault at all (camera access disabled in OS privacy settings, a disabled device in Device Manager, or an application lacking camera permission). Always rule out software-level causes before assuming hardware failure and proceeding to physical disassembly.</p>
+</div>
+
+<!-- ═══ COMPONENT 9: MICROPHONE ═══ -->
+<h2 class="chapter"><span class="ch-num">COMPONENT 09</span>Microphone</h2>
+
+<div class="component-card">
+  <div class="component-card-head"><h4>Integrated Microphone</h4><span class="difficulty-badge diff-mod">OFTEN PAIRED WITH CAMERA OR BEZEL</span></div>
+  <p>A laptop's built-in microphone is commonly integrated into the same module as the webcam (sharing the top display bezel location), or sometimes placed separately along the keyboard deck or side edge of the chassis, depending on the specific model's design.</p>
+  <p>As with the camera, microphone problems should be triaged with software-level causes in mind first — muted system audio settings, a disabled or incorrectly selected input device, or an application lacking microphone permission are all common, non-hardware explanations for "the microphone doesn't work" — before assuming a hardware fault requiring disassembly and module replacement.</p>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle — Camera and Microphone Together</p>
+  <p>For both camera and microphone scenarios, the exam rewards a <strong>methodical troubleshooting order</strong>: confirm the issue isn't a simple software/permissions/settings problem before concluding hardware replacement is necessary. This mirrors the broader CompTIA troubleshooting philosophy of ruling out the simplest, least invasive explanations first — a theme that recurs heavily in the dedicated troubleshooting objectives elsewhere in the exam.</p>
+</div>
+
+<!-- MASTER REFERENCE -->
+<div class="ch-divider"></div>
+
+<div class="summary-box">
+  <h3>Master Reference — Mobile Device Hardware Components</h3>
+  <div class="summary-grid">
+    <div class="summary-item"><span class="s-sym">Battery</span><span>Li-ion/Li-Po; swelling is a safety hazard, not just wear</span></div>
+    <div class="summary-item"><span class="s-sym">Keyboard/keys</span><span>Individual keys sometimes fixable; full swap often needs disassembly</span></div>
+    <div class="summary-item"><span class="s-sym">RAM</span><span>SODIMM (replaceable) vs. soldered (fixed, not upgradable)</span></div>
+    <div class="summary-item"><span class="s-sym">HDD/SSD</span><span>2.5"/M.2/mSATA; accessibility varies widely by model</span></div>
+    <div class="summary-item"><span class="s-sym">Wireless cards</span><span>Small M.2-format card; delicate antenna connectors</span></div>
+    <div class="summary-item"><span class="s-sym">Biometrics</span><span>Fingerprint reader, IR camera; small dedicated modules</span></div>
+    <div class="summary-item"><span class="s-sym">NFC scanner</span><span>Short-range wireless interaction; small board/module</span></div>
+    <div class="summary-item"><span class="s-sym">Wi-Fi antenna</span><span>Embedded in display bezel/lid; cable wears at the hinge</span></div>
+    <div class="summary-item"><span class="s-sym">Camera/webcam</span><span>Lid-mounted; check software/permissions before hardware</span></div>
+    <div class="summary-item"><span class="s-sym">Microphone</span><span>Often paired with camera; check software causes first</span></div>
+  </div>
+</div>
+
+<!-- QUICK REFERENCE TOOLS -->
+<h2 class="chapter"><span class="ch-num">REFERENCE</span>1.1 Quick Reference</h2>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>Components Often Soldered (Not Field-Replaceable)</h4>
+    <ul>
+      <li><strong>RAM</strong> → On many thin/ultraportable models</li>
+      <li><strong>Storage</strong> → On some thin/ultraportable models</li>
+      <li><strong>Always verify</strong> → per specific model before promising a repair</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Hinge-Routed Cables — Common Wear Point</h4>
+    <ul>
+      <li><strong>Wi-Fi antenna cables</strong> → Bezel to wireless card</li>
+      <li><strong>Camera/mic ribbon cable</strong> → Bezel to motherboard</li>
+      <li><strong>Symptom</strong> → Gradual or intermittent failure from repeated lid flexing</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Check Software Before Hardware</h4>
+    <ul>
+      <li><strong>Camera "not working"</strong> → Privacy settings, Device Manager, app permissions</li>
+      <li><strong>Microphone "not working"</strong> → Muted/disabled input, wrong default device, app permissions</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Safety-Relevant Symptoms</h4>
+    <ul>
+      <li><strong>Swollen battery</strong> → Stop use, handle carefully, replace promptly</li>
+      <li><strong>Never puncture or bend</strong> a swollen lithium battery</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout callout-exam" style="margin-top: 28px;">
+  <p class="callout-title">Final Exam Reminders</p>
+  <p><strong>Soldered vs. socketed</strong> = the central theme of this objective; many modern laptops solder RAM and/or storage, eliminating field upgrades.</p>
+  <p><strong>Battery swelling</strong> = a genuine safety hazard, not just a performance symptom — handle with care, replace promptly.</p>
+  <p><strong>Wi-Fi antennas</strong> = embedded in the display bezel/lid for best signal path; cables routed through the hinge are a known wear point.</p>
+  <p><strong>Camera and microphone</strong> = rule out software/permissions causes before assuming hardware failure; both often physically paired in the display bezel.</p>
+  <p><strong>Wireless card</strong> = small M.2-format card with delicate antenna cable connectors; weak signal isn't always a card failure — check the antenna connections first.</p>
+  <p><strong>Biometrics/NFC</strong> = small dedicated internal modules; failure typically isolated to that specific feature, not the whole system.</p>
+</div>
+
+</div>
+</body>
+</html>

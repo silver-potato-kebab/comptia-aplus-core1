@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CompTIA A+ 1.2 — Accessories and Connectivity Options for Mobile Devices</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --surface2: #f5f4f0;
+    --border: #e5e2d9;
+    --border2: #d4d0c4;
+    --text: #1a1a18;
+    --muted: #6b6860;
+    --accent: #c0392b;
+    --accent2: #2c3e6b;
+    --accent3: #1a6b3a;
+    --accent4: #b5590a;
+    --accent-light: #fdf2f1;
+    --accent2-light: #f0f2f8;
+    --accent3-light: #f0f8f3;
+    --accent4-light: #fdf5ed;
+    --serif: 'Crimson Pro', Georgia, serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── TOP NAV ── */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .top-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .nav-home {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+  .nav-home:hover { color: var(--accent2); }
+  .nav-home::before {
+    content: '←';
+    font-size: 12px;
+  }
+  .nav-sep {
+    font-size: 12px;
+    color: var(--border2);
+    flex-shrink: 0;
+  }
+  .nav-current {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nav-current strong {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    margin-right: 6px;
+  }
+  .top-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .nav-prev, .nav-next {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 4px 9px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    white-space: nowrap;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .nav-prev:hover, .nav-next:hover {
+    border-color: var(--border2);
+    color: var(--accent2);
+  }
+  .nav-prev::before { content: '← '; }
+  .nav-next::after  { content: ' →'; }
+
+  @media (max-width: 600px) {
+    .top-nav { padding: 0 16px; }
+    .nav-current { display: none; }
+    .nav-sep { display: none; }
+  }    
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  .page { max-width: 860px; margin: 0 auto; padding: 0 40px 80px; }
+
+  /* HEADER */
+  .book-header {
+    border-bottom: 3px double var(--border2);
+    padding: 56px 0 32px;
+    margin-bottom: 48px;
+  }
+  .book-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .book-eyebrow span {
+    background: var(--accent);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-right: 10px;
+    font-size: 10px;
+  }
+  .book-title {
+    font-family: var(--serif);
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+  .book-subtitle {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .book-subtitle span { display: flex; align-items: center; gap: 6px; }
+  .book-subtitle span::before { content: '·'; color: var(--border2); }
+  .book-subtitle span:first-child::before { display: none; }
+
+  /* HEADINGS */
+  h2.chapter {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 600;
+    margin: 52px 0 6px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    letter-spacing: -0.01em;
+  }
+  h2.chapter .ch-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+    letter-spacing: 0.1em;
+    font-weight: 400;
+  }
+  h3.section {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    margin: 36px 0 12px;
+  }
+  h3.section::before { content: '§ '; color: var(--muted); font-weight: 300; }
+
+  p { margin-bottom: 16px; }
+
+  /* CALLOUTS */
+  .callout {
+    border-left: 3px solid;
+    padding: 14px 20px;
+    margin: 24px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 15.5px;
+  }
+  .callout p { margin-bottom: 6px; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout-title {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px !important;
+  }
+  .callout-exam { border-color: var(--accent); background: var(--accent-light); }
+  .callout-exam .callout-title { color: var(--accent); }
+  .callout-info { border-color: var(--accent2); background: var(--accent2-light); }
+  .callout-info .callout-title { color: var(--accent2); }
+  .callout-tip { border-color: var(--accent3); background: var(--accent3-light); }
+  .callout-tip .callout-title { color: var(--accent3); }
+  .callout-warn { border-color: var(--accent4); background: var(--accent4-light); }
+  .callout-warn .callout-title { color: var(--accent4); }
+
+  /* TABLES */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+    font-family: var(--sans);
+    margin: 16px 0 24px;
+  }
+  .data-table thead th {
+    background: var(--surface2);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 9px 13px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .data-table tbody tr { border-bottom: 1px solid var(--border); }
+  .data-table tbody tr:last-child { border-bottom: none; }
+  .data-table td { padding: 9px 13px; vertical-align: top; line-height: 1.5; }
+  .data-table td:first-child {
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 13.5px;
+  }
+
+  /* PROCESS FLOW */
+  .process-flow {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: var(--sans);
+    font-size: 14px;
+  }
+  .flow-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .flow-step:last-child { border-bottom: none; }
+  .flow-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+    min-width: 24px;
+    padding-top: 2px;
+  }
+  .flow-text { color: var(--text); line-height: 1.55; }
+  .flow-text strong { font-weight: 600; }
+
+  /* DEF LIST */
+  .def-list { margin: 16px 0 24px; }
+  .def-item {
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 210px 1fr;
+    gap: 20px;
+    font-size: 15px;
+  }
+  .def-item:last-child { border-bottom: none; }
+  .def-term {
+    font-family: var(--sans);
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 14px;
+    padding-top: 1px;
+    line-height: 1.4;
+  }
+
+  /* GRID CARDS */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 16px 18px;
+  }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 10px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card ul { list-style: none; font-family: var(--sans); font-size: 13.5px; }
+  .card ul li {
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .card ul li:last-child { border-bottom: none; }
+  .card ul li strong { color: var(--text); }
+
+  /* BODY LIST */
+  ul.body-list {
+    list-style: none;
+    font-family: var(--sans);
+    font-size: 15px;
+    padding: 0;
+    margin: 12px 0 20px;
+  }
+  ul.body-list li {
+    padding: 5px 0 5px 18px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  ul.body-list li:last-child { border-bottom: none; }
+  ul.body-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--border2);
+    font-size: 12px;
+  }
+  ul.body-list li strong { color: var(--text); }
+
+  /* SPEC DIAGRAM (range bars) */
+  .spec-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: var(--sans);
+  }
+  .spec-diagram h4 {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .spec-bar-wrap { margin-bottom: 10px; }
+  .spec-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .spec-label strong { color: var(--text); }
+  .spec-bar {
+    height: 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .spec-fill {
+    height: 100%;
+    border-radius: 2px;
+  }
+  .fill-blue { background: #2c3e6b; }
+  .fill-green { background: #4caf50; }
+  .fill-amber { background: #ffc107; }
+  .fill-orange { background: #ff9800; }
+  .fill-red { background: #f44336; }
+  .fill-purple { background: #8e44ad; }
+  .fill-gray { background: #9e9e9e; }
+
+  /* CONN BADGE */
+  .conn-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-weight: 600;
+    margin-right: 4px;
+  }
+  .badge-wifi { background: #e3f2fd; color: #1565c0; border: 1px solid #90caf9; }
+  .badge-cell { background: #f3e5f5; color: #6a1b9a; border: 1px solid #ce93d8; }
+  .badge-bt { background: #e8f5e9; color: #1b5e20; border: 1px solid #a5d6a7; }
+  .badge-nfc { background: #fff3e0; color: #e65100; border: 1px solid #ffcc80; }
+  .badge-usb { background: #f0f2f8; color: #2c3e6b; border: 1px solid #b9c2dc; }
+
+  /* CONNECTOR CARD */
+  .connector-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin: 14px 0;
+    font-family: var(--sans);
+  }
+  .connector-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .connector-card-head h4 {
+    font-family: var(--serif);
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .connector-card p {
+    font-size: 13.5px;
+    color: var(--muted);
+    margin-bottom: 0;
+    line-height: 1.55;
+  }
+
+  /* CODE */
+  code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: var(--accent);
+  }
+
+  .key-term { font-style: italic; font-weight: 500; color: var(--accent2); }
+
+  /* SUMMARY BOX */
+  .summary-box {
+    background: var(--text);
+    color: #f0ede6;
+    border-radius: 6px;
+    padding: 28px 32px;
+    margin: 40px 0;
+  }
+  .summary-box h3 {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 18px;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 32px;
+  }
+  .summary-item {
+    font-family: var(--sans);
+    font-size: 13.5px;
+    color: #c4bfb4;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .summary-item .s-sym {
+    color: #fff;
+    font-weight: 600;
+    min-width: 175px;
+    line-height: 1.4;
+  }
+
+  .ch-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--border2), transparent);
+    margin: 48px 0;
+  }
+
+  /* INDICATOR DOTS */
+  .malware-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .ind-high { background: var(--accent); }
+  .ind-med { background: var(--accent4); }
+  .ind-low { background: var(--accent3); }
+
+  @media (max-width: 680px) {
+    .page { padding: 0 20px 60px; }
+    .summary-grid, .card-grid { grid-template-columns: 1fr; }
+    .def-item { grid-template-columns: 1fr; gap: 4px; }
+    .connector-card-head { flex-direction: column; align-items: flex-start; gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV — update href values to match your actual file names -->
+<nav class="top-nav">
+  <div class="top-nav-left">
+    <a class="nav-home" href="../index.html">Study Guide</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current"><strong>1.2</strong> Compare and contrast accessories and connectivity options for mobile devices.</span>
+  </div>
+  <div class="top-nav-right">
+    <!-- Point these to the adjacent section files, or remove if not applicable -->
+    <a class="nav-prev" href="./1_1-Mobile-Device-Hardware.html">1.1</a>
+    <a class="nav-next" href="./1_3-Mobile-Network-Connectivity-App-Support.html">1.3</a>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- HEADER -->
+<div class="book-header">
+  <div class="book-eyebrow">
+    <span>1.2</span>
+    CompTIA A+ · Core 1 (220-1201) · Domain 1 — Mobile Devices
+  </div>
+  <h1 class="book-title">Compare and contrast accessories and connectivity options for mobile devices.</h1>
+  <div class="book-subtitle">
+    <span>Objective 1.2</span>
+    <span>Domain weight: 13%</span>
+    <span>5 connection methods · 4 accessories · docking/replicator/input</span>
+  </div>
+</div>
+
+<!-- INTRO -->
+<h2 class="chapter"><span class="ch-num">OVERVIEW</span>Introduction</h2>
+
+<p>Objective 1.2 covers how mobile devices — laptops, tablets, and smartphones — physically and wirelessly connect to the outside world, and the accessories commonly attached to extend their functionality. The objective splits cleanly into two halves: <strong>connection methods</strong> (the actual physical/wireless interfaces a device uses to communicate with peripherals or networks) and <strong>accessories and docking hardware</strong> (the things that plug into those connections to extend what the device can do).</p>
+
+<p>A useful way to organize connection methods in your head: some are <strong>wired</strong> (USB family, Lightning), some are <strong>short-range wireless</strong> (NFC, Bluetooth), and some are about <strong>sharing a device's existing internet connection</strong> with other devices (tethering/hotspot). Each has a distinct role, and the exam likes testing whether you know which one fits a given scenario rather than just defining each in isolation.</p>
+
+<!-- ═══ PART 1: CONNECTION METHODS ═══ -->
+<h2 class="chapter"><span class="ch-num">PART 1</span>Connection Methods</h2>
+
+<h3 class="section">USB / USB-C / microUSB / miniUSB</h3>
+
+<p><span class="key-term">USB (Universal Serial Bus)</span> is the dominant wired standard for connecting peripherals and charging mobile devices. The objective specifically calls out several USB connector shapes, which is the most exam-relevant distinction here — USB describes both a <em>data/power standard</em> and a family of different physical connector shapes that have evolved over time.</p>
+
+<div class="connector-card">
+  <div class="connector-card-head"><h4>USB-C</h4></div>
+  <p>The modern, reversible (no "right side up") connector found on the vast majority of current laptops, tablets, and Android phones — and the connector Apple has also adopted for recent iPhone models. USB-C supports significantly higher power delivery than older USB connectors, enabling laptop charging through the same port used for data and peripherals, and supports much higher data transfer speeds, especially when paired with USB protocols like USB 3.x or Thunderbolt over the same physical connector.</p>
+</div>
+
+<div class="connector-card">
+  <div class="connector-card-head"><h4>microUSB</h4></div>
+  <p>A smaller, non-reversible connector that was the dominant standard on Android phones and many other portable devices before USB-C took over. Still found on many older or budget devices, peripherals, and accessories.</p>
+</div>
+
+<div class="connector-card">
+  <div class="connector-card-head"><h4>miniUSB</h4></div>
+  <p>An older, larger connector than microUSB, common on early-2000s-era cameras, MP3 players, and similar portable electronics before microUSB became the more common standard. Largely legacy at this point, rarely found on current-generation devices.</p>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>Recognize the rough chronological/size progression: <strong>miniUSB (older, larger) → microUSB (smaller, widely adopted on phones) → USB-C (current standard, reversible, higher power/data capability)</strong>. A scenario describing a modern laptop or current-generation phone almost always implies USB-C; a scenario describing an older Android device or older peripheral may point to microUSB.</p>
+</div>
+
+<h3 class="section">Lightning</h3>
+
+<p><span class="key-term">Lightning</span> is Apple's proprietary connector, historically used across iPhones, iPads, and various Apple accessories before Apple's transition to USB-C on newer iPhone models. Like USB-C, Lightning is reversible, but it is a proprietary Apple standard rather than an open industry standard — meaning Lightning cables and accessories are generally only usable with Apple devices that still implement that connector.</p>
+
+<div class="callout callout-info">
+  <p class="callout-title">A Transitional Standard</p>
+  <p>Because Apple has moved its more recent iPhone models to USB-C (largely driven by regulatory requirements in some regions standardizing on USB-C for portable devices), Lightning is best understood as a connector you'll still encounter on a substantial installed base of existing/older Apple devices, even as new devices increasingly ship with USB-C instead. Recognize both as legitimate, currently-relevant connector types for Apple mobile devices depending on the specific device's age/generation.</p>
+</div>
+
+<h3 class="section">NFC — Near-Field Communication</h3>
+
+<p><span class="key-term">NFC</span> is an extremely short-range wireless technology (typically requiring devices to be within a few centimeters of each other) used for quick, simple data exchange or authentication — contactless payment systems (tap-to-pay), pairing with NFC-enabled accessories, sharing small amounts of data between two phones with a tap, or badge-based authentication (as referenced in objective 1.1 and objective 3.7's MFD security section).</p>
+
+<h3 class="section">Bluetooth</h3>
+
+<p><span class="key-term">Bluetooth</span> is a short-range wireless standard (typically effective up to roughly 30 feet/10 meters, though this varies by device and Bluetooth version) used for connecting peripherals and accessories without a physical cable — wireless headsets, speakers, keyboards, mice, and many of the accessories discussed in Part 2 below commonly connect via Bluetooth.</p>
+
+<table class="data-table">
+  <thead><tr><th>Factor</th><th>NFC</th><th>Bluetooth</th></tr></thead>
+  <tbody>
+    <tr><td>Effective range</td><td>A few centimeters (near-contact)</td><td>Roughly up to 30 feet (varies by version/device)</td></tr>
+    <tr><td>Typical use</td><td>Tap-to-pay, quick pairing, badge authentication</td><td>Ongoing peripheral connections (headsets, speakers, keyboards)</td></tr>
+    <tr><td>Connection persistence</td><td>Momentary interaction, not a sustained connection</td><td>Sustained, ongoing paired connection</td></tr>
+    <tr><td>Power use</td><td>Very low</td><td>Low, but higher than NFC due to sustained connection</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>The core distinction the exam wants: <strong>NFC</strong> is for brief, near-contact interactions (tap and done), while <strong>Bluetooth</strong> is for ongoing, sustained connections to a peripheral over a meaningfully larger range. A scenario describing "tap your phone to pay" or "tap to pair instantly" points to NFC; a scenario describing a wireless headset staying connected across a room points to Bluetooth.</p>
+</div>
+
+<h3 class="section">Tethering/Hotspot</h3>
+
+<p><span class="key-term">Tethering</span> (also called creating a <span class="key-term">mobile hotspot</span>) allows a mobile device with its own cellular data connection — typically a smartphone — to share that internet connection with other nearby devices, effectively turning the phone into a temporary Wi-Fi (or sometimes USB/Bluetooth-connected) access point for a laptop or tablet that otherwise has no internet access of its own.</p>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Wi-Fi hotspot</span>
+    <span>The phone broadcasts its own short-range Wi-Fi network, which other devices join just like any other wireless network, routing their traffic through the phone's cellular connection. The most common and convenient tethering method, supporting multiple connected devices simultaneously.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">USB tethering</span>
+    <span>A single device connects via a physical USB cable directly to the phone, using the phone's cellular connection as if it were a wired internet connection — generally more stable/reliable than Wi-Fi tethering and doesn't drain phone battery via wireless radio use, but limited to one connected device and requires a physical cable.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Bluetooth tethering</span>
+    <span>Similar concept to Wi-Fi tethering but using a Bluetooth connection instead — generally lower power draw than Wi-Fi tethering, but with more limited throughput, typically suited to lighter-bandwidth tasks rather than heavy data use.</span>
+  </div>
+</div>
+
+<div class="callout callout-tip">
+  <p class="callout-title">Why This Matters in a Support Scenario</p>
+  <p>Tethering/hotspot is a classic practical answer for "a laptop has no internet access and there's no available Wi-Fi network or Ethernet connection nearby, but a cellular-connected smartphone is available." This comes up frequently in field service, remote work, and travel scenarios, and the exam tests whether you recognize tethering as the appropriate, simple solution in that specific situation.</p>
+</div>
+
+<!-- ═══ PART 2: ACCESSORIES ═══ -->
+<h2 class="chapter"><span class="ch-num">PART 2</span>Accessories</h2>
+
+<h3 class="section">Stylus</h3>
+
+<p>A <span class="key-term">stylus</span> is a pen-like input device used with touchscreen-enabled devices for more precise input than a finger allows — handwriting, drawing/sketching, or precise selection on smaller UI elements. Styluses range from simple passive designs (functioning essentially like a finger with a finer point) to advanced active styluses with pressure sensitivity, tilt detection, and even small onboard batteries that pair with the device (commonly via Bluetooth) for additional features like programmable buttons.</p>
+
+<h3 class="section">Headsets</h3>
+
+<p>A <span class="key-term">headset</span> combines audio output (speakers/earphones) with an integrated microphone, commonly used for calls, video conferencing, and voice-driven applications. Headsets connect via the wired connection methods discussed in Part 1 (USB, USB-C, the traditional 3.5mm audio jack) or wirelessly via Bluetooth.</p>
+
+<h3 class="section">Speakers</h3>
+
+<p><span class="key-term">External speakers</span> provide audio output beyond a mobile device's built-in speakers, commonly used for improved sound quality or volume in settings like presentations, media playback, or general listening. Like headsets, external speakers can connect via wired methods or Bluetooth.</p>
+
+<h3 class="section">Webcam</h3>
+
+<p>An <span class="key-term">external webcam</span> serves the same fundamental purpose as the built-in camera discussed in objective 1.1, but as an add-on accessory — commonly used to upgrade video quality beyond a device's built-in camera, or to add camera capability to a desktop or older device lacking one entirely. External webcams typically connect via USB.</p>
+
+<div class="callout callout-info">
+  <p class="callout-title">Wired vs. Wireless Accessory Connection — A Shared Pattern</p>
+  <p>Notice that headsets, speakers, and (to a lesser extent) styluses all share the same basic connectivity pattern: a wired option (USB/USB-C, sometimes a 3.5mm jack) offering simplicity and no battery/pairing concerns, versus a wireless option (Bluetooth) offering convenience and freedom of movement at the cost of needing its own power source and an initial pairing step. This same wired-vs-wireless tradeoff recurs across nearly every accessory category in this objective.</p>
+</div>
+
+<!-- ═══ PART 3: DOCKING STATION & PORT REPLICATOR ═══ -->
+<h2 class="chapter"><span class="ch-num">PART 3</span>Docking Station and Port Replicator</h2>
+
+<h3 class="section">Docking Station</h3>
+
+<p>A <span class="key-term">docking station</span> is a single device a laptop connects to (often via one cable, such as USB-C/Thunderbolt, or a proprietary connector on some business laptops) that provides access to a full range of expanded functionality at once — typically including multiple additional USB ports, video outputs for external monitors, wired Ethernet, audio jacks, and often charging power for the laptop itself. The goal is to let a laptop instantly become a full desktop-like workstation by connecting just one cable/connector to the dock, rather than plugging in many individual peripherals separately each time.</p>
+
+<h3 class="section">Port Replicator</h3>
+
+<p>A <span class="key-term">port replicator</span> serves a conceptually similar purpose — extending a laptop's available ports — but is generally understood as a simpler device, primarily focused on duplicating/extending the laptop's existing physical ports (additional USB ports, video output, sometimes Ethernet) without necessarily adding the more advanced functionality (such as significant additional processing for multiple high-resolution displays, or substantial laptop charging power) that a full-featured docking station might provide.</p>
+
+<div class="callout callout-tip">
+  <p class="callout-title">Docking Station vs. Port Replicator — A Matter of Degree</p>
+  <p>In practice, the line between these two categories has blurred significantly, and the terms are sometimes used interchangeably in casual conversation and even in product marketing. For exam purposes, think of a <strong>docking station</strong> as the more full-featured, often higher-power, "turn your laptop into a desktop" solution, and a <strong>port replicator</strong> as a comparatively simpler, more basic port-extension accessory — a difference of degree and feature richness rather than a sharp categorical divide.</p>
+</div>
+
+<!-- ═══ PART 4: TRACKPAD/DRAWING PAD/TRACK POINTS ═══ -->
+<h2 class="chapter"><span class="ch-num">PART 4</span>Trackpad/Drawing Pad/Track Points</h2>
+
+<p>This final category covers built-in and accessory pointing-input devices commonly found on or used with laptops.</p>
+
+<div class="def-list">
+  <div class="def-item">
+    <span class="def-term">Trackpad</span>
+    <span>The flat, touch-sensitive pointing surface built into most laptops below the keyboard, used to move the cursor and perform clicks/gestures (scrolling, multi-finger gestures) via finger contact — the standard built-in mouse replacement on virtually all modern laptops.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Drawing pad (graphics tablet)</span>
+    <span>An external accessory providing a larger, more precise touch/pen-sensitive surface specifically optimized for digital drawing, illustration, or design work, typically used together with a stylus (Part 2, above) for much finer control than a standard trackpad or mouse provides — common among graphic designers, illustrators, and other creative professionals.</span>
+  </div>
+  <div class="def-item">
+    <span class="def-term">Track points (pointing stick)</span>
+    <span>A small, pressure-sensitive joystick-like nub embedded directly in the keyboard (classically positioned between the G, H, and B keys on many business laptops), allowing cursor movement without lifting the hands from the keyboard's home row at all. Less common industry-wide than trackpads, but a longstanding, recognizable feature on certain business-class laptop lines that prioritize keyboard-centric workflows.</span>
+  </div>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>Match each input method to its defining trait: <strong>trackpad</strong> = standard built-in laptop pointing surface; <strong>drawing pad</strong> = external accessory optimized for precise stylus-driven creative work; <strong>track point</strong> = small embedded joystick-style nub allowing cursor control without leaving the keyboard's home row. A scenario describing a graphic designer needing more precise pen input points to a drawing pad (paired with a stylus); a scenario describing a business laptop's distinctive keyboard-centered cursor control points to a track point.</p>
+</div>
+
+<!-- MASTER REFERENCE -->
+<div class="ch-divider"></div>
+
+<div class="summary-box">
+  <h3>Master Reference — Accessories and Connectivity</h3>
+  <div class="summary-grid">
+    <div class="summary-item"><span class="s-sym">USB-C</span><span>Current standard; reversible; high power/data</span></div>
+    <div class="summary-item"><span class="s-sym">microUSB / miniUSB</span><span>Older, smaller-to-larger non-reversible connectors</span></div>
+    <div class="summary-item"><span class="s-sym">Lightning</span><span>Apple proprietary; legacy on many existing iPhones/iPads</span></div>
+    <div class="summary-item"><span class="s-sym">NFC</span><span>Near-contact, momentary interaction (tap-to-pay/pair)</span></div>
+    <div class="summary-item"><span class="s-sym">Bluetooth</span><span>Short-range, sustained wireless peripheral connection</span></div>
+    <div class="summary-item"><span class="s-sym">Tethering/hotspot</span><span>Sharing a phone's cellular data with other devices</span></div>
+    <div class="summary-item"><span class="s-sym">Stylus</span><span>Precise pen-style touchscreen input</span></div>
+    <div class="summary-item"><span class="s-sym">Headsets/speakers</span><span>Wired or Bluetooth audio accessories</span></div>
+    <div class="summary-item"><span class="s-sym">Webcam (external)</span><span>USB add-on camera; upgrades or adds video capability</span></div>
+    <div class="summary-item"><span class="s-sym">Docking station</span><span>Full-featured, one-cable "instant desktop" expansion</span></div>
+    <div class="summary-item"><span class="s-sym">Port replicator</span><span>Simpler port-extension accessory</span></div>
+    <div class="summary-item"><span class="s-sym">Trackpad</span><span>Standard built-in laptop pointing surface</span></div>
+    <div class="summary-item"><span class="s-sym">Drawing pad</span><span>External, stylus-driven precision input for creative work</span></div>
+    <div class="summary-item"><span class="s-sym">Track point</span><span>Embedded joystick nub; keyboard home-row cursor control</span></div>
+  </div>
+</div>
+
+<!-- QUICK REFERENCE TOOLS -->
+<h2 class="chapter"><span class="ch-num">REFERENCE</span>1.2 Quick Reference</h2>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>Connector By Era/Device</h4>
+    <ul>
+      <li><strong>Current laptops/Android/new iPhones</strong> → USB-C</li>
+      <li><strong>Older Android/portable devices</strong> → microUSB</li>
+      <li><strong>Legacy early-2000s electronics</strong> → miniUSB</li>
+      <li><strong>Older/existing iPhones/iPads</strong> → Lightning</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>NFC vs. Bluetooth By Scenario</h4>
+    <ul>
+      <li><strong>Tap to pay</strong> → NFC</li>
+      <li><strong>Quick one-time pairing tap</strong> → NFC</li>
+      <li><strong>Wireless headset across a room</strong> → Bluetooth</li>
+      <li><strong>Ongoing peripheral connection</strong> → Bluetooth</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Tethering Method By Priority</h4>
+    <ul>
+      <li><strong>Most stable, single device</strong> → USB tethering</li>
+      <li><strong>Multiple devices at once</strong> → Wi-Fi hotspot</li>
+      <li><strong>Lowest power draw</strong> → Bluetooth tethering</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Expansion Hardware By Need</h4>
+    <ul>
+      <li><strong>Full desktop-like setup, one cable</strong> → Docking station</li>
+      <li><strong>Basic port extension</strong> → Port replicator</li>
+      <li><strong>Precision creative input</strong> → Drawing pad + stylus</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout callout-exam" style="margin-top: 28px;">
+  <p class="callout-title">Final Exam Reminders</p>
+  <p><strong>USB-C</strong> = current standard, reversible, high power/data. <strong>microUSB/miniUSB</strong> = older, non-reversible, found on legacy devices.</p>
+  <p><strong>Lightning</strong> = Apple-proprietary; still relevant for existing devices even as new iPhones move to USB-C.</p>
+  <p><strong>NFC</strong> = near-contact, momentary (tap-to-pay/pair). <strong>Bluetooth</strong> = short-range, sustained peripheral connections.</p>
+  <p><strong>Tethering/hotspot</strong> = sharing a phone's cellular connection; Wi-Fi (multi-device), USB (most stable, single device), or Bluetooth (lowest power).</p>
+  <p><strong>Docking station</strong> = full-featured, "instant desktop" via one connection. <strong>Port replicator</strong> = simpler port extension — a difference of degree, not a hard categorical line.</p>
+  <p><strong>Trackpad</strong> = standard built-in. <strong>Drawing pad</strong> = external, stylus-driven precision tool. <strong>Track point</strong> = embedded keyboard joystick nub, no hands leaving home row.</p>
+</div>
+
+</div>
+</body>
+</html>

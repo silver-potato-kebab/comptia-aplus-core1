@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CompTIA A+ 2.7 — Internet Connection Types, Network Types, and Characteristics</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --surface2: #f5f4f0;
+    --border: #e5e2d9;
+    --border2: #d4d0c4;
+    --text: #1a1a18;
+    --muted: #6b6860;
+    --accent: #c0392b;
+    --accent2: #2c3e6b;
+    --accent3: #1a6b3a;
+    --accent4: #b5590a;
+    --accent-light: #fdf2f1;
+    --accent2-light: #f0f2f8;
+    --accent3-light: #f0f8f3;
+    --accent4-light: #fdf5ed;
+    --serif: 'Crimson Pro', Georgia, serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── TOP NAV ── */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .top-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .nav-home {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+  .nav-home:hover { color: var(--accent2); }
+  .nav-home::before {
+    content: '←';
+    font-size: 12px;
+  }
+  .nav-sep {
+    font-size: 12px;
+    color: var(--border2);
+    flex-shrink: 0;
+  }
+  .nav-current {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nav-current strong {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    margin-right: 6px;
+  }
+  .top-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .nav-prev, .nav-next {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 4px 9px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    white-space: nowrap;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .nav-prev:hover, .nav-next:hover {
+    border-color: var(--border2);
+    color: var(--accent2);
+  }
+  .nav-prev::before { content: '← '; }
+  .nav-next::after  { content: ' →'; }
+
+  @media (max-width: 600px) {
+    .top-nav { padding: 0 16px; }
+    .nav-current { display: none; }
+    .nav-sep { display: none; }
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  .page { max-width: 860px; margin: 0 auto; padding: 0 40px 80px; }
+
+  /* HEADER */
+  .book-header {
+    border-bottom: 3px double var(--border2);
+    padding: 56px 0 32px;
+    margin-bottom: 48px;
+  }
+  .book-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .book-eyebrow span {
+    background: var(--accent);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-right: 10px;
+    font-size: 10px;
+  }
+  .book-title {
+    font-family: var(--serif);
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+  .book-subtitle {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .book-subtitle span { display: flex; align-items: center; gap: 6px; }
+  .book-subtitle span::before { content: '·'; color: var(--border2); }
+  .book-subtitle span:first-child::before { display: none; }
+
+  /* HEADINGS */
+  h2.chapter {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 600;
+    margin: 52px 0 6px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    letter-spacing: -0.01em;
+  }
+  h2.chapter .ch-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+    letter-spacing: 0.1em;
+    font-weight: 400;
+  }
+  h3.section {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    margin: 36px 0 12px;
+  }
+  h3.section::before { content: '§ '; color: var(--muted); font-weight: 300; }
+
+  p { margin-bottom: 16px; }
+
+  /* CALLOUTS */
+  .callout {
+    border-left: 3px solid;
+    padding: 14px 20px;
+    margin: 24px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 15.5px;
+  }
+  .callout p { margin-bottom: 6px; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout-title {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px !important;
+  }
+  .callout-exam { border-color: var(--accent); background: var(--accent-light); }
+  .callout-exam .callout-title { color: var(--accent); }
+  .callout-info { border-color: var(--accent2); background: var(--accent2-light); }
+  .callout-info .callout-title { color: var(--accent2); }
+  .callout-tip { border-color: var(--accent3); background: var(--accent3-light); }
+  .callout-tip .callout-title { color: var(--accent3); }
+  .callout-warn { border-color: var(--accent4); background: var(--accent4-light); }
+  .callout-warn .callout-title { color: var(--accent4); }
+
+  /* TABLES */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+    font-family: var(--sans);
+    margin: 16px 0 24px;
+  }
+  .data-table thead th {
+    background: var(--surface2);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 9px 13px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .data-table tbody tr { border-bottom: 1px solid var(--border); }
+  .data-table tbody tr:last-child { border-bottom: none; }
+  .data-table td { padding: 9px 13px; vertical-align: top; line-height: 1.5; }
+  .data-table td:first-child {
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 13.5px;
+  }
+
+  /* PROCESS FLOW */
+  .process-flow {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: var(--sans);
+    font-size: 14px;
+  }
+  .flow-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .flow-step:last-child { border-bottom: none; }
+  .flow-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+    min-width: 24px;
+    padding-top: 2px;
+  }
+  .flow-text { color: var(--text); line-height: 1.55; }
+  .flow-text strong { font-weight: 600; }
+
+  /* DEF LIST */
+  .def-list { margin: 16px 0 24px; }
+  .def-item {
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 210px 1fr;
+    gap: 20px;
+    font-size: 15px;
+  }
+  .def-item:last-child { border-bottom: none; }
+  .def-term {
+    font-family: var(--sans);
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 14px;
+    padding-top: 1px;
+    line-height: 1.4;
+  }
+
+  /* GRID CARDS */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 16px 18px;
+  }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 10px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card ul { list-style: none; font-family: var(--sans); font-size: 13.5px; }
+  .card ul li {
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .card ul li:last-child { border-bottom: none; }
+  .card ul li strong { color: var(--text); }
+
+  /* BODY LIST */
+  ul.body-list {
+    list-style: none;
+    font-family: var(--sans);
+    font-size: 15px;
+    padding: 0;
+    margin: 12px 0 20px;
+  }
+  ul.body-list li {
+    padding: 5px 0 5px 18px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  ul.body-list li:last-child { border-bottom: none; }
+  ul.body-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--border2);
+    font-size: 12px;
+  }
+  ul.body-list li strong { color: var(--text); }
+
+  /* SPEC DIAGRAM (range bars) */
+  .spec-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: var(--sans);
+  }
+  .spec-diagram h4 {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .spec-bar-wrap { margin-bottom: 10px; }
+  .spec-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .spec-label strong { color: var(--text); }
+  .spec-bar {
+    height: 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .spec-fill {
+    height: 100%;
+    border-radius: 2px;
+  }
+  .fill-blue { background: #2c3e6b; }
+  .fill-green { background: #4caf50; }
+  .fill-amber { background: #ffc107; }
+  .fill-orange { background: #ff9800; }
+  .fill-red { background: #f44336; }
+  .fill-purple { background: #8e44ad; }
+  .fill-gray { background: #9e9e9e; }
+
+  /* BADGES */
+  .conn-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-weight: 600;
+    margin-right: 4px;
+  }
+  .badge-wifi { background: #e3f2fd; color: #1565c0; border: 1px solid #90caf9; }
+  .badge-cell { background: #f3e5f5; color: #6a1b9a; border: 1px solid #ce93d8; }
+  .badge-bt { background: #e8f5e9; color: #1b5e20; border: 1px solid #a5d6a7; }
+  .badge-nfc { background: #fff3e0; color: #e65100; border: 1px solid #ffcc80; }
+  .badge-poe { background: #fdf2f1; color: #c0392b; border: 1px solid #e8b4ae; }
+
+  /* SCALE / RANGE LADDER (for network type sizes) */
+  .scale-ladder {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: var(--sans);
+  }
+  .scale-ladder h4 {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .scale-row {
+    display: grid;
+    grid-template-columns: 90px 1fr 130px;
+    align-items: center;
+    gap: 14px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .scale-row:last-child { border-bottom: none; }
+  .scale-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .scale-track {
+    height: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .scale-fill { height: 100%; border-radius: 3px; }
+  .scale-desc { font-size: 12px; color: var(--muted); text-align: right; }
+
+  /* CODE */
+  code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: var(--accent);
+  }
+
+  .key-term { font-style: italic; font-weight: 500; color: var(--accent2); }
+
+  /* SUMMARY BOX */
+  .summary-box {
+    background: var(--text);
+    color: #f0ede6;
+    border-radius: 6px;
+    padding: 28px 32px;
+    margin: 40px 0;
+  }
+  .summary-box h3 {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 18px;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 32px;
+  }
+  .summary-item {
+    font-family: var(--sans);
+    font-size: 13.5px;
+    color: #c4bfb4;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .summary-item .s-sym {
+    color: #fff;
+    font-weight: 600;
+    min-width: 175px;
+    line-height: 1.4;
+  }
+
+  .ch-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--border2), transparent);
+    margin: 48px 0;
+  }
+
+  /* INDICATOR DOTS */
+  .malware-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .ind-high { background: var(--accent); }
+  .ind-med { background: var(--accent4); }
+  .ind-low { background: var(--accent3); }
+
+  @media (max-width: 680px) {
+    .page { padding: 0 20px 60px; }
+    .summary-grid, .card-grid { grid-template-columns: 1fr; }
+    .def-item { grid-template-columns: 1fr; gap: 4px; }
+    .scale-row { grid-template-columns: 70px 1fr; }
+    .scale-desc { grid-column: 1 / -1; text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV — update href values to match your actual file names -->
+<nav class="top-nav">
+  <div class="top-nav-left">
+    <a class="nav-home" href="../index.html">Study Guide</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current"><strong>2.7</strong> Internet Connection Types, Network Types, and Characteristics</span>
+  </div>
+  <div class="top-nav-right">
+    <!-- Point these to the adjacent section files, or remove if not applicable -->
+    <a class="nav-prev" href="./2_6-Configure-SOHO-Networks.html">2.6</a>
+    <a class="nav-next" href="./2_8-Networking-Tools.html">2.8</a>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- HEADER -->
+<div class="book-header">
+  <div class="book-eyebrow">
+    <span>2.7</span>
+    CompTIA A+ · Core 1 (220-1201) · Domain 2 — Networking
+  </div>
+  <h1 class="book-title">Internet Connection Types,<br>Network Types, and Characteristics</h1>
+  <div class="book-subtitle">
+    <span>Objective 2.7</span>
+    <span>Domain weight: 20%</span>
+    <span>6 internet types · 6 network types</span>
+  </div>
+</div>
+
+<!-- INTRO -->
+<h2 class="chapter"><span class="ch-num">OVERVIEW</span>Introduction</h2>
+
+<p>Objective 2.7 covers two related but distinct ideas. The first half — <span class="key-term">internet connection types</span> — is about <em>how a building gets connected to the internet</em>: what physical medium or wireless technology carries that "last mile" connection from an ISP to a home or business. The second half — <span class="key-term">network types</span> — is about <em>scale and purpose</em>: how big is the network, and what is it organizing (devices in one room, one building, one city, or storage traffic between servers)?</p>
+
+<p>The exam tests this objective almost entirely through comparison: "which connection type is best for a remote location with no wired infrastructure," "which network type connects buildings across a city," "what's the difference between a LAN and a WLAN." Success here comes from being able to rank and contrast options, not just define them in isolation.</p>
+
+<!-- ═══ PART 1: INTERNET CONNECTION TYPES ═══ -->
+<h2 class="chapter"><span class="ch-num">PART 1</span>Internet Connection Types</h2>
+
+<p>An internet connection type describes the physical or wireless medium an ISP uses to deliver internet access to a customer's location — often called the <span class="key-term">last mile</span>, since the core internet backbone is the same regardless of how any one customer connects to it. Each option differs significantly in speed, latency, reliability, cost, and availability, which is exactly what the exam wants you to be able to compare.</p>
+
+<h3 class="section">Satellite</h3>
+
+<p><span class="key-term">Satellite internet</span> delivers connectivity via a dish that communicates with an orbiting satellite, which relays traffic back to a ground station connected to the internet backbone. Its single biggest advantage is <strong>availability</strong> — it can reach locations no wired infrastructure ever will, including remote rural areas, ships, and disaster-recovery sites.</p>
+
+<p>Traditional geostationary satellite internet has historically suffered from very high <span class="key-term">latency</span> (often 500–600+ ms round trip) because of the enormous physical distance the signal must travel to a satellite roughly 22,000 miles above the equator and back. Newer <span class="key-term">low Earth orbit (LEO)</span> satellite services (e.g., Starlink) orbit much closer to Earth, dramatically reducing latency to a range much closer to terrestrial broadband (commonly 20–50 ms), while still offering the same key advantage of working virtually anywhere with a clear view of the sky.</p>
+
+<h3 class="section">Fiber</h3>
+
+<p><span class="key-term">Fiber internet</span> uses fiber-optic cable — glass or plastic strands that carry data as pulses of light — to deliver internet service. It is terminated at the customer's premises by an <span class="key-term">Optical Network Terminal (ONT)</span>, covered in objective 2.5. Fiber offers the highest realistic speeds and lowest latency of any common consumer internet type, along with symmetrical upload/download speeds in most modern fiber offerings (unlike cable or DSL, where upload is typically much slower than download).</p>
+
+<p>Fiber's main limitation is <strong>availability</strong> — it requires significant infrastructure investment to run fiber to each premises, so it's far less universally available than cable or DSL, particularly outside dense urban and suburban areas.</p>
+
+<h3 class="section">Cable</h3>
+
+<p><span class="key-term">Cable internet</span> uses the same coaxial cable infrastructure that delivers cable television, via a cable modem (objective 2.5) using the DOCSIS standard. Cable offers strong download speeds and wide availability in developed areas, but bandwidth is typically <strong>shared</strong> among subscribers in the same neighborhood segment, meaning speeds can degrade during peak usage hours as more neighbors are active simultaneously.</p>
+
+<h3 class="section">DSL</h3>
+
+<p><span class="key-term">Digital Subscriber Line (DSL)</span> delivers internet over existing copper telephone lines, as covered in objective 2.5. DSL offers a dedicated (non-shared) connection back to the provider's central office, but speed degrades significantly with distance from that central office, and overall speeds are generally lower than cable or fiber. It remains relevant mainly in areas where cable or fiber infrastructure hasn't been built out.</p>
+
+<h3 class="section">Cellular</h3>
+
+<p><span class="key-term">Cellular internet</span> uses the mobile phone network (4G LTE or 5G) to provide internet access, either directly to a phone/tablet, through a dedicated cellular hotspot device, or via a fixed wireless cellular gateway/router installed at a home or business (sometimes marketed as "5G home internet"). Its key advantage is mobility and rapid deployment — no physical line needs to be run at all.</p>
+
+<p>Cellular data is typically subject to <strong>data caps</strong> and can be more expensive per gigabyte than wired alternatives. Signal strength and speed are highly dependent on proximity to a cell tower and network congestion, and performance can degrade significantly in areas with poor coverage or during high-usage periods (a crowded venue, for example).</p>
+
+<h3 class="section">Wireless Internet Service Provider (WISP)</h3>
+
+<p>A <span class="key-term">Wireless Internet Service Provider (WISP)</span> delivers internet access using fixed point-to-point or point-to-multipoint wireless radio links rather than cellular networks or cable/fiber. A WISP typically installs a small dish or directional antenna at the customer's premises, which has a clear line-of-sight connection back to a tower or relay point that is, in turn, connected to the wired internet backbone.</p>
+
+<p>WISPs are common in rural areas where running cable, fiber, or even DSL is not economically practical, but cellular coverage is also weak. Because it relies on a <strong>line-of-sight</strong> radio link, performance is sensitive to obstructions (trees, terrain, new construction) and weather conditions, and installation usually requires professional placement and alignment of the customer antenna.</p>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle — Speed vs. Availability Tradeoff</p>
+  <p>A recurring theme across this entire section: the connection types with the <strong>best performance</strong> (fiber, cable) tend to have the <strong>most limited availability</strong> (urban/suburban areas with built-out infrastructure), while the connection types with the <strong>widest availability</strong> (satellite, cellular, WISP) tend to have <strong>weaker performance characteristics</strong> (higher latency, lower speed, or data caps). If a scenario describes a remote or rural location, expect the correct answer to be satellite, cellular, or WISP — not fiber or cable.</p>
+</div>
+
+<table class="data-table">
+  <thead><tr><th>Connection Type</th><th>Medium</th><th>Typical Speed</th><th>Latency</th><th>Best Fit</th></tr></thead>
+  <tbody>
+    <tr><td>Fiber</td><td>Fiber-optic cable</td><td>Very high; often symmetrical</td><td>Lowest</td><td>Urban/suburban areas with fiber buildout</td></tr>
+    <tr><td>Cable</td><td>Coaxial cable</td><td>High download; lower upload</td><td>Low</td><td>Most developed residential/business areas</td></tr>
+    <tr><td>DSL</td><td>Copper phone line</td><td>Moderate; degrades with distance</td><td>Moderate</td><td>Areas without cable/fiber buildout</td></tr>
+    <tr><td>Cellular</td><td>4G LTE / 5G radio</td><td>Variable; depends on tower proximity</td><td>Low–moderate</td><td>Mobile use; backup connectivity; areas with strong cell coverage</td></tr>
+    <tr><td>WISP</td><td>Fixed point-to-point radio</td><td>Moderate; depends on line of sight</td><td>Low–moderate</td><td>Rural areas without wired infrastructure</td></tr>
+    <tr><td>Satellite</td><td>Orbiting satellite relay</td><td>Moderate (LEO) to low (geostationary)</td><td>High (geostationary) to low (LEO)</td><td>Remote/rural locations with no other option</td></tr>
+  </tbody>
+</table>
+
+<!-- ═══ PART 2: NETWORK TYPES ═══ -->
+<h2 class="chapter"><span class="ch-num">PART 2</span>Network Types</h2>
+
+<p>Where internet connection types describe <em>how you connect to the internet</em>, network types describe <em>the scope and purpose of a network itself</em> — which can exist entirely independent of any internet connection at all. The exam expects you to rank these by physical scale and recognize the distinguishing purpose of each.</p>
+
+<div class="scale-ladder">
+  <h4>Network Types Ranked by Typical Physical Scale</h4>
+  <div class="scale-row"><span class="scale-tag">PAN</span><div class="scale-track"><div class="scale-fill fill-purple" style="width:8%"></div></div><span class="scale-desc">A few feet</span></div>
+  <div class="scale-row"><span class="scale-tag">LAN / WLAN</span><div class="scale-track"><div class="scale-fill fill-blue" style="width:25%"></div></div><span class="scale-desc">One room / building</span></div>
+  <div class="scale-row"><span class="scale-tag">SAN</span><div class="scale-track"><div class="scale-fill fill-amber" style="width:25%"></div></div><span class="scale-desc">One data center (by purpose, not distance)</span></div>
+  <div class="scale-row"><span class="scale-tag">MAN</span><div class="scale-track"><div class="scale-fill fill-orange" style="width:60%"></div></div><span class="scale-desc">A city or campus</span></div>
+  <div class="scale-row"><span class="scale-tag">WAN</span><div class="scale-track"><div class="scale-fill fill-red" style="width:100%"></div></div><span class="scale-desc">Cities, countries, the globe</span></div>
+</div>
+
+<h3 class="section">LAN (Local Area Network)</h3>
+
+<p>A <span class="key-term">LAN (Local Area Network)</span> connects devices within a single, limited physical location — a home, a single office, or a single building. A LAN is typically owned, controlled, and maintained entirely by the organization or individual using it, built from switches, cabling, and (optionally) wireless access points, as covered in objective 2.5. The LAN is the most fundamental network type and the building block that other network types connect together.</p>
+
+<h3 class="section">WAN (Wide Area Network)</h3>
+
+<p>A <span class="key-term">WAN (Wide Area Network)</span> connects multiple LANs across a large geographic area — different cities, states, or countries. The internet itself is the largest possible example of a WAN. A private corporate WAN might connect a company's branch offices in different cities back to a central headquarters, typically using leased lines, VPN tunnels over the public internet, or dedicated WAN links provided by a telecommunications carrier.</p>
+
+<div class="callout callout-info">
+  <p class="callout-title">LAN vs. WAN — The Core Distinction</p>
+  <p>The defining difference is <strong>who owns and controls the connecting infrastructure</strong>, not just distance. A LAN's cabling and equipment are owned by the organization using it. A WAN, by contrast, typically depends on infrastructure owned by third-party telecommunications carriers or ISPs to connect geographically separated locations, since no single organization can practically run its own cabling between cities.</p>
+</div>
+
+<h3 class="section">PAN (Personal Area Network)</h3>
+
+<p>A <span class="key-term">PAN (Personal Area Network)</span> is the smallest network type, typically spanning just a few feet around a single person — connecting personal devices like a phone, smartwatch, wireless earbuds, and laptop. PANs are most commonly implemented wirelessly via <strong>Bluetooth</strong>, though wired PANs (like a phone tethered to a laptop via USB) also fit the definition. The key identifying trait of a PAN is its extremely short range and its focus on connecting an individual's personal devices to each other rather than to a broader infrastructure.</p>
+
+<h3 class="section">MAN (Metropolitan Area Network)</h3>
+
+<p>A <span class="key-term">MAN (Metropolitan Area Network)</span> spans a geographic area larger than a single LAN but smaller than a WAN — typically a city, or a large college/corporate campus with multiple buildings. A MAN might connect several school buildings across a city school district, or link multiple office buildings owned by the same company within a metropolitan area, often using technologies like metro Ethernet or municipal fiber rings.</p>
+
+<h3 class="section">SAN (Storage Area Network)</h3>
+
+<p>A <span class="key-term">SAN (Storage Area Network)</span> is fundamentally different from the other network types on this list — it is defined by <strong>purpose</strong> rather than primarily by geographic scale. A SAN is a dedicated, high-speed network that connects servers to shared pools of storage (disk arrays, tape libraries), making that storage appear to each server as if it were locally attached, even though it physically lives elsewhere on the network. SANs typically use specialized high-throughput protocols and hardware such as <span class="key-term">Fibre Channel</span> or <span class="key-term">iSCSI</span> (which runs over standard Ethernet), and they are most commonly found inside enterprise data centers.</p>
+
+<div class="callout callout-warn">
+  <p class="callout-title">Common Pitfall — Don't Confuse SAN With "Storage on the LAN"</p>
+  <p>A SAN is not just "a file server on the regular network." It's a dedicated network — often physically separate, with its own switches and cabling — built specifically to give servers extremely fast, low-latency block-level access to shared storage. Ordinary file sharing over a LAN (e.g., a mapped network drive) is a completely different concept and does not require SAN technology.</p>
+</div>
+
+<h3 class="section">WLAN (Wireless Local Area Network)</h3>
+
+<p>A <span class="key-term">WLAN (Wireless Local Area Network)</span> is simply a LAN implemented using wireless technology (Wi-Fi/802.11 standards) instead of, or in addition to, physical Ethernet cabling. Devices connect to the network through one or more wireless access points rather than (or in addition to) Ethernet ports. Functionally, a WLAN provides the same local connectivity as a wired LAN — same building, same organization, same general scope — the only difference is the physical (or rather, the lack of physical) medium connecting client devices to the network.</p>
+
+<div class="callout callout-tip">
+  <p class="callout-title">WLAN Is a Subset of LAN, Not a Separate Category</p>
+  <p>Don't think of WLAN as competing with LAN on the same list — a WLAN <em>is</em> a LAN, just using radio waves instead of cabling for the "last hop" to client devices. Most real-world networks today are actually hybrids: wired LAN connections for desktops, servers, and infrastructure, plus a WLAN extension via access points for laptops, phones, and other wireless clients, all part of the same overall local network.</p>
+</div>
+
+<table class="data-table">
+  <thead><tr><th>Network Type</th><th>Typical Scale</th><th>Defining Characteristic</th></tr></thead>
+  <tbody>
+    <tr><td>PAN</td><td>A few feet (personal devices)</td><td>Connects one person's own devices; usually Bluetooth</td></tr>
+    <tr><td>LAN</td><td>One room/building</td><td>Owned/controlled by a single organization; wired backbone</td></tr>
+    <tr><td>WLAN</td><td>One room/building</td><td>A LAN implemented wirelessly via Wi-Fi access points</td></tr>
+    <tr><td>SAN</td><td>Usually one data center</td><td>Defined by purpose: high-speed shared storage access for servers</td></tr>
+    <tr><td>MAN</td><td>A city or large campus</td><td>Connects multiple buildings/sites within one metro area</td></tr>
+    <tr><td>WAN</td><td>Cities, countries, global</td><td>Connects multiple LANs over carrier/ISP-owned infrastructure</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>Expect direct matching/scenario questions: "A company links its New York and London offices" → <strong>WAN</strong>. "A hospital connects all its buildings across town" → <strong>MAN</strong>. "A user's smartwatch syncs with their phone" → <strong>PAN</strong>. "A laptop connects to the office Wi-Fi" → <strong>WLAN</strong>. "Servers in a data center access a shared disk array over Fibre Channel" → <strong>SAN</strong>. The internet itself, when referenced as a network type in a question, is the ultimate example of a <strong>WAN</strong>.</p>
+</div>
+
+<!-- MASTER REFERENCE -->
+<div class="ch-divider"></div>
+
+<div class="summary-box">
+  <h3>Master Reference — Connection Types and Network Types</h3>
+  <div class="summary-grid">
+    <div class="summary-item"><span class="s-sym">Satellite</span><span>Works almost anywhere; geostationary = high latency, LEO = much lower</span></div>
+    <div class="summary-item"><span class="s-sym">Fiber</span><span>Highest speed/lowest latency; often symmetrical; limited availability</span></div>
+    <div class="summary-item"><span class="s-sym">Cable</span><span>Coax/DOCSIS; fast but shared bandwidth in the neighborhood</span></div>
+    <div class="summary-item"><span class="s-sym">DSL</span><span>Copper phone line; dedicated but distance-limited speed</span></div>
+    <div class="summary-item"><span class="s-sym">Cellular</span><span>4G/5G; mobile, fast deployment, often capped/metered</span></div>
+    <div class="summary-item"><span class="s-sym">WISP</span><span>Fixed line-of-sight radio link; rural alternative to wired</span></div>
+    <div class="summary-item"><span class="s-sym">LAN</span><span>Single location; org-owned infrastructure</span></div>
+    <div class="summary-item"><span class="s-sym">WAN</span><span>Multiple LANs across cities/countries; carrier-owned links</span></div>
+    <div class="summary-item"><span class="s-sym">PAN</span><span>A few feet; personal devices; usually Bluetooth</span></div>
+    <div class="summary-item"><span class="s-sym">MAN</span><span>City/campus scale; between LAN and WAN</span></div>
+    <div class="summary-item"><span class="s-sym">SAN</span><span>Purpose-defined; high-speed shared storage for servers</span></div>
+    <div class="summary-item"><span class="s-sym">WLAN</span><span>A LAN implemented wirelessly via Wi-Fi access points</span></div>
+  </div>
+</div>
+
+<!-- QUICK REFERENCE TOOLS -->
+<h2 class="chapter"><span class="ch-num">REFERENCE</span>2.7 Quick Reference</h2>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>Best Connection Type By Scenario</h4>
+    <ul>
+      <li><strong>Remote rural cabin, no infrastructure</strong> → Satellite</li>
+      <li><strong>Dense city, performance matters most</strong> → Fiber</li>
+      <li><strong>Typical residential area</strong> → Cable</li>
+      <li><strong>Older area, no cable/fiber buildout</strong> → DSL</li>
+      <li><strong>Field technician, mobile, no fixed site</strong> → Cellular</li>
+      <li><strong>Rural area, line of sight to a tower available</strong> → WISP</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Best Network Type By Scenario</h4>
+    <ul>
+      <li><strong>One office, wired desktops</strong> → LAN</li>
+      <li><strong>One office, laptops over Wi-Fi</strong> → WLAN</li>
+      <li><strong>Multiple offices, different cities</strong> → WAN</li>
+      <li><strong>Multiple buildings, same city</strong> → MAN</li>
+      <li><strong>Phone + smartwatch + earbuds</strong> → PAN</li>
+      <li><strong>Servers sharing a disk array</strong> → SAN</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout callout-exam" style="margin-top: 28px;">
+  <p class="callout-title">Final Exam Reminders</p>
+  <p><strong>Speed/availability tradeoff</strong> = fiber and cable perform best but are least available; satellite, cellular, and WISP are most available but generally perform worse.</p>
+  <p><strong>Geostationary satellite</strong> = very high latency due to distance. <strong>LEO satellite</strong> (e.g., Starlink) = much lower latency, closer to terrestrial broadband.</p>
+  <p><strong>Cable</strong> = shared neighborhood bandwidth. <strong>DSL</strong> = dedicated but distance-sensitive. <strong>Fiber</strong> = best of both — dedicated and fast.</p>
+  <p><strong>WISP</strong> = fixed wireless, requires line of sight to a tower — not the same as cellular.</p>
+  <p><strong>LAN vs. WAN</strong> = ownership/control of the infrastructure, not just distance. LAN = org-owned. WAN = carrier-owned links between LANs.</p>
+  <p><strong>WLAN</strong> = not a separate category from LAN — it's a LAN using Wi-Fi instead of cabling.</p>
+  <p><strong>PAN</strong> = smallest scale; personal devices; almost always Bluetooth.</p>
+  <p><strong>MAN</strong> = bigger than a LAN, smaller than a WAN; city or campus scale.</p>
+  <p><strong>SAN</strong> = defined by purpose (shared high-speed storage for servers), not primarily by distance.</p>
+</div>
+
+</div>
+</body>
+</html>

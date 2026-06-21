@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CompTIA A+ 2.3 — Summarize Services Provided by Networked Hosts</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --surface2: #f5f4f0;
+    --border: #e5e2d9;
+    --border2: #d4d0c4;
+    --text: #1a1a18;
+    --muted: #6b6860;
+    --accent: #c0392b;
+    --accent2: #2c3e6b;
+    --accent3: #1a6b3a;
+    --accent4: #b5590a;
+    --accent-light: #fdf2f1;
+    --accent2-light: #f0f2f8;
+    --accent3-light: #f0f8f3;
+    --accent4-light: #fdf5ed;
+    --serif: 'Crimson Pro', Georgia, serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── TOP NAV ── */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .top-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .nav-home {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+  .nav-home:hover { color: var(--accent2); }
+  .nav-home::before {
+    content: '←';
+    font-size: 12px;
+  }
+  .nav-sep {
+    font-size: 12px;
+    color: var(--border2);
+    flex-shrink: 0;
+  }
+  .nav-current {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nav-current strong {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    margin-right: 6px;
+  }
+  .top-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .nav-prev, .nav-next {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 4px 9px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    white-space: nowrap;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .nav-prev:hover, .nav-next:hover {
+    border-color: var(--border2);
+    color: var(--accent2);
+  }
+  .nav-prev::before { content: '← '; }
+  .nav-next::after  { content: ' →'; }
+
+  @media (max-width: 600px) {
+    .top-nav { padding: 0 16px; }
+    .nav-current { display: none; }
+    .nav-sep { display: none; }
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  .page { max-width: 860px; margin: 0 auto; padding: 0 40px 80px; }
+
+  /* HEADER */
+  .book-header {
+    border-bottom: 3px double var(--border2);
+    padding: 56px 0 32px;
+    margin-bottom: 48px;
+  }
+  .book-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .book-eyebrow span {
+    background: var(--accent);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-right: 10px;
+    font-size: 10px;
+  }
+  .book-title {
+    font-family: var(--serif);
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+  .book-subtitle {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .book-subtitle span { display: flex; align-items: center; gap: 6px; }
+  .book-subtitle span::before { content: '·'; color: var(--border2); }
+  .book-subtitle span:first-child::before { display: none; }
+
+  /* HEADINGS */
+  h2.chapter {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 600;
+    margin: 52px 0 6px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    letter-spacing: -0.01em;
+  }
+  h2.chapter .ch-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+    letter-spacing: 0.1em;
+    font-weight: 400;
+  }
+  h3.section {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    margin: 36px 0 12px;
+  }
+  h3.section::before { content: '§ '; color: var(--muted); font-weight: 300; }
+
+  p { margin-bottom: 16px; }
+
+  /* CALLOUTS */
+  .callout {
+    border-left: 3px solid;
+    padding: 14px 20px;
+    margin: 24px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 15.5px;
+  }
+  .callout p { margin-bottom: 6px; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout-title {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px !important;
+  }
+  .callout-exam { border-color: var(--accent); background: var(--accent-light); }
+  .callout-exam .callout-title { color: var(--accent); }
+  .callout-info { border-color: var(--accent2); background: var(--accent2-light); }
+  .callout-info .callout-title { color: var(--accent2); }
+  .callout-tip { border-color: var(--accent3); background: var(--accent3-light); }
+  .callout-tip .callout-title { color: var(--accent3); }
+  .callout-warn { border-color: var(--accent4); background: var(--accent4-light); }
+  .callout-warn .callout-title { color: var(--accent4); }
+
+  /* TABLES */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+    font-family: var(--sans);
+    margin: 16px 0 24px;
+  }
+  .data-table thead th {
+    background: var(--surface2);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 9px 13px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .data-table tbody tr { border-bottom: 1px solid var(--border); }
+  .data-table tbody tr:last-child { border-bottom: none; }
+  .data-table td { padding: 9px 13px; vertical-align: top; line-height: 1.5; }
+  .data-table td:first-child {
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 13.5px;
+  }
+
+  /* PROCESS FLOW */
+  .process-flow {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: var(--sans);
+    font-size: 14px;
+  }
+  .flow-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .flow-step:last-child { border-bottom: none; }
+  .flow-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+    min-width: 24px;
+    padding-top: 2px;
+  }
+  .flow-text { color: var(--text); line-height: 1.55; }
+  .flow-text strong { font-weight: 600; }
+
+  /* DEF LIST */
+  .def-list { margin: 16px 0 24px; }
+  .def-item {
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 210px 1fr;
+    gap: 20px;
+    font-size: 15px;
+  }
+  .def-item:last-child { border-bottom: none; }
+  .def-term {
+    font-family: var(--sans);
+    font-weight: 600;
+    color: var(--accent2);
+    font-size: 14px;
+    padding-top: 1px;
+    line-height: 1.4;
+  }
+
+  /* GRID CARDS */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 16px 18px;
+  }
+  .card h4 {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 10px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card ul { list-style: none; font-family: var(--sans); font-size: 13.5px; }
+  .card ul li {
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .card ul li:last-child { border-bottom: none; }
+  .card ul li strong { color: var(--text); }
+
+  /* BODY LIST */
+  ul.body-list {
+    list-style: none;
+    font-family: var(--sans);
+    font-size: 15px;
+    padding: 0;
+    margin: 12px 0 20px;
+  }
+  ul.body-list li {
+    padding: 5px 0 5px 18px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  ul.body-list li:last-child { border-bottom: none; }
+  ul.body-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--border2);
+    font-size: 12px;
+  }
+  ul.body-list li strong { color: var(--text); }
+
+  /* PORT BADGE */
+  .port-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-weight: 600;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    color: var(--accent2);
+    margin-right: 4px;
+  }
+
+  /* SERVER ROLE CARD */
+  .role-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-family: var(--sans);
+  }
+  .role-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .role-card-head h4 {
+    font-family: var(--serif);
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .role-card p {
+    font-size: 13.5px;
+    color: var(--muted);
+    margin-bottom: 0;
+    line-height: 1.55;
+  }
+
+  /* CODE */
+  code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: var(--accent);
+  }
+
+  .key-term { font-style: italic; font-weight: 500; color: var(--accent2); }
+
+  /* SUMMARY BOX */
+  .summary-box {
+    background: var(--text);
+    color: #f0ede6;
+    border-radius: 6px;
+    padding: 28px 32px;
+    margin: 40px 0;
+  }
+  .summary-box h3 {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 18px;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 32px;
+  }
+  .summary-item {
+    font-family: var(--sans);
+    font-size: 13.5px;
+    color: #c4bfb4;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .summary-item .s-sym {
+    color: #fff;
+    font-weight: 600;
+    min-width: 175px;
+    line-height: 1.4;
+  }
+
+  .ch-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--border2), transparent);
+    margin: 48px 0;
+  }
+
+  /* INDICATOR DOTS */
+  .malware-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .ind-high { background: var(--accent); }
+  .ind-med { background: var(--accent4); }
+  .ind-low { background: var(--accent3); }
+
+  @media (max-width: 680px) {
+    .page { padding: 0 20px 60px; }
+    .summary-grid, .card-grid { grid-template-columns: 1fr; }
+    .def-item { grid-template-columns: 1fr; gap: 4px; }
+    .role-card-head { flex-direction: column; align-items: flex-start; gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV — update href values to match your actual file names -->
+<nav class="top-nav">
+  <div class="top-nav-left">
+    <a class="nav-home" href="../index.html">Study Guide</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current"><strong>2.3</strong> Services Provided by Networked Hosts</span>
+  </div>
+  <div class="top-nav-right">
+    <!-- Point these to the adjacent section files, or remove if not applicable -->
+    <a class="nav-prev" href="./2_2-Wireless-Networking-Technologies.html">2.2</a>
+    <a class="nav-next" href="./2_4-Common-Network-Configuration.html">2.4</a>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- HEADER -->
+<div class="book-header">
+  <div class="book-eyebrow">
+    <span>2.3</span>
+    CompTIA A+ · Core 1 (220-1201) · Domain 2 — Networking
+  </div>
+  <h1 class="book-title">Services Provided<br>by Networked Hosts</h1>
+  <div class="book-subtitle">
+    <span>Objective 2.3</span>
+    <span>Domain weight: 20%</span>
+    <span>10 server roles · 4 appliances · SCADA · IoT</span>
+  </div>
+</div>
+
+<!-- INTRO -->
+<h2 class="chapter"><span class="ch-num">OVERVIEW</span>Introduction</h2>
+
+<p>Every network exists to provide <em>services</em> — and those services are delivered by hosts that have been configured to perform a specific role. Objective 2.3 asks you to recognize the most common server roles and network appliances by name, understand the core function each one performs, and be able to match a real-world scenario ("users can't resolve website names," "a device needs to spread incoming traffic across several web servers") to the correct role or appliance.</p>
+
+<p>This objective is organized into three groups. <span class="key-term">Server roles</span> are software services — often run on dedicated hardware, but conceptually defined by the function they perform regardless of the underlying box. <span class="key-term">Internet appliances</span> are devices (hardware or virtual) that sit at a strategic point in the network, usually the perimeter, to inspect, filter, or distribute traffic. <span class="key-term">Legacy/embedded systems and IoT</span> covers a category of devices that don't fit the traditional "server" or "appliance" mold but are increasingly common on modern networks and carry their own unique risk profile.</p>
+
+<div class="callout callout-info">
+  <p class="callout-title">Role vs. Hardware</p>
+  <p>A "server role" describes <strong>what a host does</strong>, not what physical box it runs on. A single physical server can run multiple roles simultaneously (a small business might run DNS, DHCP, and file sharing all on one machine), or a single role can be spread across many physical servers for redundancy and load (a large company's web servers). Don't assume "one role = one box" — the exam tests your understanding of the function, independent of deployment.</p>
+</div>
+
+<!-- ═══ PART 1: SERVER ROLES ═══ -->
+<h2 class="chapter"><span class="ch-num">PART 1</span>Server Roles</h2>
+
+<p>The following ten roles represent the core services that make a modern network usable — resolving names, assigning addresses, sharing files and printers, delivering mail and web content, logging events, authenticating users, storing structured data, and keeping every device's clock in sync.</p>
+
+<div class="role-card">
+  <div class="role-card-head"><h4>DNS — Domain Name System</h4><span class="port-badge">PORT 53</span></div>
+  <p>Translates human-readable domain names (e.g., <code>google.com</code>) into IP addresses that computers actually use to route traffic, and vice versa. Without DNS, users would have to memorize and type numeric IP addresses for every website and service they wanted to reach. A DNS server maintains records mapping names to addresses and answers lookup requests from clients.</p>
+</div>
+
+<div class="role-card">
+  <div class="role-card-head"><h4>DHCP — Dynamic Host Configuration Protocol</h4><span class="port-badge">PORT 67/68</span></div>
+  <p>Automatically assigns IP addresses, subnet masks, default gateways, and DNS server addresses to client devices joining the network, eliminating the need to manually configure every device (see the DORA process covered in objective 2.6). Most SOHO routers run a built-in DHCP server; larger organizations typically run DHCP on a dedicated server.</p>
+</div>
+
+<div class="role-card">
+  <div class="role-card-head"><h4>Fileshare (File Server)</h4><span class="port-badge">SMB / NFS</span></div>
+  <p>Provides centralized storage that multiple users and devices can access over the network, typically presented as mapped network drives or shared folders. Centralizing files this way makes backup, access control, and collaboration far simpler than scattering files across individual local machines. Common protocols include <strong>SMB</strong> (Windows-native file sharing) and <strong>NFS</strong> (common in Linux/Unix environments).</p>
+</div>
+
+<div class="role-card">
+  <div class="role-card-head"><h4>Print Server</h4><span class="port-badge">PORT 631 (IPP)</span></div>
+  <p>Manages and queues print jobs from multiple client computers to one or more shared network printers, centralizing print drivers, permissions, and job queuing rather than requiring each printer to be configured individually on every computer. A print server can be a dedicated appliance, a role running on a general-purpose server, or even a printer itself with built-in network/print-server capability.</p>
+</div>
+
+<div class="role-card">
+  <div class="role-card-head"><h4>Mail Server</h4><span class="port-badge">SMTP / IMAP / POP3</span></div>
+  <p>Sends, receives, and stores email for an organization's users. Mail servers typically combine multiple protocols: <strong>SMTP</strong> (Simple Mail Transfer Protocol) handles outgoing/relay of mail between servers, while <strong>IMAP</strong> or <strong>POP3</strong> handle client retrieval of mail from the server's mailbox storage. (These protocols and their ports are explored in greater depth in a later networking objective.)</p>
+</div>
+
+<div class="role-card">
+  <div class="role-card-head"><h4>Syslog</h4><span class="port-badge">PORT 514</span></div>
+  <p>Provides centralized logging — network devices, servers, and applications send their log messages (errors, warnings, status events) to a central syslog server rather than keeping logs scattered locally on each device. This centralization is critical for security monitoring, troubleshooting, and compliance, since it allows an administrator to correlate events across many devices from one place instead of checking each device individually.</p>
+</div>
+
+<div class="role-card">
+  <div class="role-card-head"><h4>Web Server</h4><span class="port-badge">PORT 80 / 443</span></div>
+  <p>Hosts and serves website content (HTML, images, applications) to client browsers using <strong>HTTP</strong> (port 80, unencrypted) or <strong>HTTPS</strong> (port 443, encrypted via TLS). Common web server software includes Apache, Nginx, and Microsoft IIS. A single physical or virtual server can host many separate websites simultaneously.</p>
+</div>
+
+<div class="role-card">
+  <div class="role-card-head"><h4>AAA — Authentication, Authorization, and Accounting</h4><span class="port-badge">RADIUS / TACACS+</span></div>
+  <p>A framework — not a single protocol — describing three related security functions, often implemented together via services like RADIUS or TACACS+.</p>
+  <ul class="body-list" style="margin-top: 8px;">
+    <li><strong>Authentication</strong> — verifying that a user is who they claim to be (e.g., checking a username/password).</li>
+    <li><strong>Authorization</strong> — determining what an authenticated user is actually permitted to do or access.</li>
+    <li><strong>Accounting</strong> — logging and tracking what a user did and when, for auditing and billing purposes.</li>
+  </ul>
+</div>
+
+<div class="role-card">
+  <div class="role-card-head"><h4>Database Server</h4><span class="port-badge">e.g. 1433 / 3306</span></div>
+  <p>Stores, organizes, and serves structured data to client applications, typically using a query language such as SQL. Database servers run software like Microsoft SQL Server, MySQL, PostgreSQL, or Oracle, and are the backend behind most business applications, websites, and inventory/customer record systems — the application a user interacts with is usually just a front end querying a database server behind the scenes.</p>
+</div>
+
+<div class="role-card">
+  <div class="role-card-head"><h4>NTP — Network Time Protocol</h4><span class="port-badge">PORT 123</span></div>
+  <p>Synchronizes the system clocks of devices across a network to a common, accurate time reference. Accurate, synchronized time is critical for far more than just clock display — it's essential for correctly correlating timestamps in security logs, for many authentication protocols (e.g., Kerberos, which fails if client/server clocks drift too far apart), and for scheduled tasks and certificate validity checks across the network.</p>
+</div>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle — Match the Symptom to the Role</p>
+  <p>This objective is tested almost entirely through symptom-matching. "Users can reach a website by IP but not by name" → <strong>DNS</strong> problem. "A new device on the network has no IP address at all" → <strong>DHCP</strong> problem. "Security logs from different devices don't line up in time" → <strong>NTP</strong> problem. "An employee can log in but can't access the files they need" → an <strong>authorization</strong> failure (the "A" after authentication in AAA). Practice converting symptoms into role names — that's the actual exam skill.</p>
+</div>
+
+<!-- ═══ PART 2: INTERNET APPLIANCES ═══ -->
+<h2 class="chapter"><span class="ch-num">PART 2</span>Internet Appliances</h2>
+
+<p>Where server roles generally provide a service that users or applications directly consume, <span class="key-term">internet appliances</span> typically sit at a strategic chokepoint in the network — most often the perimeter, between the internal network and the internet — to inspect, filter, distribute, or relay traffic on behalf of other systems.</p>
+
+<h3 class="section">Spam Gateways</h3>
+
+<p>A <span class="key-term">spam gateway</span> sits in front of a mail server and filters incoming (and sometimes outgoing) email for spam, phishing attempts, and malicious attachments before that mail ever reaches end users' inboxes. It can be a dedicated hardware appliance, a software service, or a cloud-based filtering service that simply redirects mail flow through it before delivery to the real mail server.</p>
+
+<h3 class="section">Unified Threat Management (UTM)</h3>
+
+<p>A <span class="key-term">Unified Threat Management (UTM)</span> appliance consolidates multiple security functions into a single device: firewall, intrusion detection/prevention (IDS/IPS), antivirus/anti-malware scanning, content filtering, VPN termination, and often spam filtering — all managed from one console. The appeal of a UTM is simplified management and reduced hardware footprint compared to deploying each of those functions as a separate standalone device, which is the traditional enterprise approach.</p>
+
+<div class="callout callout-tip">
+  <p class="callout-title">UTM vs. Standalone Firewall</p>
+  <p>Recall from objective 2.5 that a basic firewall filters traffic by rule. A UTM is best understood as a <strong>"firewall and then some"</strong> — it includes firewall functionality but bundles many additional security layers into the same box. The tradeoff: a UTM is a single point of failure and can become a performance bottleneck under heavy load, since one device is now responsible for many security functions simultaneously.</p>
+</div>
+
+<h3 class="section">Load Balancers</h3>
+
+<p>A <span class="key-term">load balancer</span> distributes incoming network or application traffic across multiple servers, ensuring no single server becomes overwhelmed while the others sit idle. This serves two purposes simultaneously: improving performance (spreading the workload) and improving availability/redundancy (if one backend server fails, the load balancer can detect this and stop sending it traffic, routing requests to the remaining healthy servers instead).</p>
+
+<p>Load balancers are especially common in front of web server farms and database clusters, where a popular website or application needs more capacity than any single server could handle alone.</p>
+
+<h3 class="section">Proxy Servers</h3>
+
+<p>A <span class="key-term">proxy server</span> acts as an intermediary between client devices and the destination servers they're trying to reach, with the client's request passing through the proxy rather than going directly to the destination. Proxies serve several distinct purposes, often combined in the same device:</p>
+
+<ul class="body-list">
+  <li><strong>Content filtering</strong> — blocking access to specific websites or categories of content (common in schools and businesses).</li>
+  <li><strong>Caching</strong> — storing frequently requested content locally so repeat requests are served faster and external bandwidth usage is reduced.</li>
+  <li><strong>Anonymity/privacy</strong> — masking the client's real IP address from the destination server, since requests appear to originate from the proxy itself.</li>
+  <li><strong>Logging and monitoring</strong> — recording what sites/services users on the network are accessing.</li>
+</ul>
+
+<div class="callout callout-info">
+  <p class="callout-title">Forward Proxy vs. Reverse Proxy</p>
+  <p>A <strong>forward proxy</strong> sits in front of clients, handling outbound requests on their behalf to external destinations (the typical "company internet filter" scenario). A <strong>reverse proxy</strong> sits in front of servers instead, handling inbound requests from external clients on behalf of one or more backend servers — often blurring into load-balancer territory, since a reverse proxy frequently distributes incoming requests across multiple backend servers as part of its job.</p>
+</div>
+
+<table class="data-table">
+  <thead><tr><th>Appliance</th><th>Core Function</th><th>Typical Placement</th></tr></thead>
+  <tbody>
+    <tr><td>Spam gateway</td><td>Filters spam/phishing before it reaches the mail server</td><td>In front of the mail server</td></tr>
+    <tr><td>UTM</td><td>Consolidates firewall + IDS/IPS + antivirus + content filtering + VPN</td><td>Network perimeter</td></tr>
+    <tr><td>Load balancer</td><td>Distributes traffic across multiple servers for performance/redundancy</td><td>In front of a server farm/cluster</td></tr>
+    <tr><td>Proxy server</td><td>Intermediary for client requests; filtering, caching, anonymity</td><td>Between clients and the internet (forward) or in front of servers (reverse)</td></tr>
+  </tbody>
+</table>
+
+<!-- ═══ PART 3: LEGACY/EMBEDDED SYSTEMS ═══ -->
+<h2 class="chapter"><span class="ch-num">PART 3</span>Legacy/Embedded Systems</h2>
+
+<h3 class="section">SCADA — Supervisory Control and Data Acquisition</h3>
+
+<p>A <span class="key-term">SCADA (Supervisory Control and Data Acquisition)</span> system monitors and controls industrial processes and physical infrastructure — power grids, water treatment plants, manufacturing lines, oil and gas pipelines, and similar industrial environments. SCADA systems collect real-time data from sensors and control physical equipment (valves, pumps, switches) spread across a facility or a wide geographic area.</p>
+
+<div class="callout callout-warn">
+  <p class="callout-title">Why SCADA Security Is Different</p>
+  <p>SCADA systems are frequently built on <strong>legacy hardware and software</strong> that may be decades old, were never designed with modern network security in mind, and often cannot be patched or updated without risking disruption to critical physical processes (a water treatment plant can't simply "reboot to apply updates" the way an office workstation can). This combination — old, hard-to-patch software controlling physically critical infrastructure — makes SCADA environments a uniquely sensitive security concern, and they are typically isolated from general business networks specifically because of this risk.</p>
+</div>
+
+<!-- ═══ PART 4: IOT DEVICES ═══ -->
+<h2 class="chapter"><span class="ch-num">PART 4</span>Internet of Things (IoT) Devices</h2>
+
+<p><span class="key-term">Internet of Things (IoT) devices</span> are everyday physical objects embedded with sensors, software, and network connectivity, allowing them to collect and exchange data over a network. Common examples include smart thermostats, smart speakers/assistants, security cameras, smart door locks, wearable fitness trackers, and connected appliances.</p>
+
+<ul class="body-list">
+  <li><strong>Purpose-built, single-function</strong> — unlike a general-purpose computer, an IoT device is usually designed to do one specific job (monitor temperature, capture video, play audio) and little else.</li>
+  <li><strong>Often resource-constrained</strong> — limited processing power, memory, and storage compared to traditional computers, which can limit the security features (encryption, robust authentication) the device is capable of supporting.</li>
+  <li><strong>Frequently under-patched</strong> — many IoT devices receive infrequent firmware updates, or stop receiving updates entirely after a few years, leaving known vulnerabilities unaddressed indefinitely.</li>
+  <li><strong>Default credentials</strong> — a major and well-documented real-world security issue: many IoT devices ship with default usernames/passwords that are never changed by the end user, making them easy targets for automated attacks and botnets.</li>
+</ul>
+
+<div class="callout callout-exam">
+  <p class="callout-title">Exam Angle</p>
+  <p>SCADA and IoT are grouped together here because the exam wants you to recognize a shared theme: both categories involve devices that are <strong>connected to the network but were not designed with network security as a primary concern</strong>, and both are commonly addressed in practice by <strong>network segmentation</strong> — placing these devices on a separate, isolated VLAN or network segment so that a compromise of one of these devices doesn't expose the rest of the network.</p>
+</div>
+
+<!-- MASTER REFERENCE -->
+<div class="ch-divider"></div>
+
+<div class="summary-box">
+  <h3>Master Reference — Networked Host Services</h3>
+  <div class="summary-grid">
+    <div class="summary-item"><span class="s-sym">DNS</span><span>Name ↔ IP address resolution</span></div>
+    <div class="summary-item"><span class="s-sym">DHCP</span><span>Auto-assigns IP config to clients</span></div>
+    <div class="summary-item"><span class="s-sym">Fileshare</span><span>Centralized network storage (SMB/NFS)</span></div>
+    <div class="summary-item"><span class="s-sym">Print server</span><span>Centralizes print queues/drivers</span></div>
+    <div class="summary-item"><span class="s-sym">Mail server</span><span>Send/receive/store email (SMTP/IMAP/POP3)</span></div>
+    <div class="summary-item"><span class="s-sym">Syslog</span><span>Centralized log collection from many devices</span></div>
+    <div class="summary-item"><span class="s-sym">Web server</span><span>Serves website content (HTTP/HTTPS)</span></div>
+    <div class="summary-item"><span class="s-sym">AAA</span><span>Authentication + Authorization + Accounting</span></div>
+    <div class="summary-item"><span class="s-sym">Database server</span><span>Stores/serves structured data via queries</span></div>
+    <div class="summary-item"><span class="s-sym">NTP</span><span>Synchronizes device clocks network-wide</span></div>
+    <div class="summary-item"><span class="s-sym">Spam gateway</span><span>Filters spam/phishing before the mail server</span></div>
+    <div class="summary-item"><span class="s-sym">UTM</span><span>Firewall + IDS/IPS + AV + filtering, all-in-one</span></div>
+    <div class="summary-item"><span class="s-sym">Load balancer</span><span>Spreads traffic across multiple servers</span></div>
+    <div class="summary-item"><span class="s-sym">Proxy server</span><span>Intermediary: filtering, caching, anonymity</span></div>
+    <div class="summary-item"><span class="s-sym">SCADA</span><span>Controls industrial/physical infrastructure</span></div>
+    <div class="summary-item"><span class="s-sym">IoT</span><span>Single-purpose connected devices; often under-secured</span></div>
+  </div>
+</div>
+
+<!-- QUICK REFERENCE TOOLS -->
+<h2 class="chapter"><span class="ch-num">REFERENCE</span>Symptom-to-Service Quick Reference</h2>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>Common Symptom → Role</h4>
+    <ul>
+      <li><strong>Can ping by IP, not by name</strong> → DNS</li>
+      <li><strong>New device gets no IP address</strong> → DHCP</li>
+      <li><strong>Logs from different devices don't align in time</strong> → NTP</li>
+      <li><strong>User logged in but denied access to a resource</strong> → AAA (authorization)</li>
+      <li><strong>App backend queries are slow/failing</strong> → Database server</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Common Symptom → Appliance</h4>
+    <ul>
+      <li><strong>Inbox flooded with phishing email</strong> → Spam gateway</li>
+      <li><strong>One server overloaded while others idle</strong> → Load balancer</li>
+      <li><strong>Need firewall + AV + IDS in one box</strong> → UTM</li>
+      <li><strong>Need to block/filter outbound websites</strong> → Forward proxy</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>AAA Broken Down</h4>
+    <ul>
+      <li><strong>Authentication</strong> → "Who are you?" (login)</li>
+      <li><strong>Authorization</strong> → "What can you do?" (permissions)</li>
+      <li><strong>Accounting</strong> → "What did you do?" (logging)</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>SCADA &amp; IoT — Shared Risk Theme</h4>
+    <ul>
+      <li><strong>Legacy/embedded</strong> → Hard to patch, security an afterthought</li>
+      <li><strong>Resource-constrained</strong> → Limited security features possible</li>
+      <li><strong>Default credentials</strong> → Common, often unchanged</li>
+      <li><strong>Mitigation</strong> → Network segmentation/isolated VLAN</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout callout-exam" style="margin-top: 28px;">
+  <p class="callout-title">Final Exam Reminders</p>
+  <p><strong>DNS</strong> = names ↔ IPs. <strong>DHCP</strong> = automatic IP configuration. These two are the most frequently tested roles in this objective.</p>
+  <p><strong>AAA</strong> = three distinct functions — don't collapse "authentication" and "authorization" into the same thing; a user can be authenticated but not authorized.</p>
+  <p><strong>NTP</strong> = accurate time matters for log correlation and authentication protocols like Kerberos, not just for clock display.</p>
+  <p><strong>UTM</strong> = many security functions bundled into one appliance; tradeoff is a single point of failure.</p>
+  <p><strong>Load balancer</strong> = performance AND redundancy — distributes load and routes around failed servers.</p>
+  <p><strong>Forward proxy</strong> = protects/filters for clients going out. <strong>Reverse proxy</strong> = sits in front of servers handling inbound requests.</p>
+  <p><strong>SCADA</strong> = industrial/physical infrastructure control; legacy systems, hard to patch, high-stakes if compromised.</p>
+  <p><strong>IoT</strong> = single-purpose connected devices; default credentials and infrequent updates are the recurring exam theme.</p>
+</div>
+
+</div>
+</body>
+</html>
